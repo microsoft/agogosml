@@ -1,14 +1,32 @@
 
-# Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.microsoft.com.
+## Quick Links
 
-When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+- [Intro](#Intro)
+- [Contributing](./CONTRIBUTING.md)
+- [License](./LICENSE.md)
+- [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/)
+  
+## Intro
+agogosml is a data processing pipeline project that addresses the common need for operationalizing ML models. This covers the complete workflow of training, deploying, scoring and monitoring the models in production at scale. The key focus will be on production ready re-training and scoring. The taken approach will be agnostic to the data science workflow of building the models, but the initial project will be scoped towards traditional ML techniques (non deep-learning) but might be extended when required/requested through additional customer engagements.
+Key functionality split into four milestones:
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+## Milestone 0: Automated data processing pipeline
+-	Re-usable/canonical data processing pipeline supporting multiple data streaming technologies (Kafka, Spark Structured Streaming, EventHub,…. ) as well as different choices for deploying the backend services (K8s, Serverless, …)
+-	CI/CD pipeline to deploy versioned and immutable pipeline 
+-	Blue/Green deployments, automatic role-backs or redeployment of a specific version
+
+## Milestone 1: Automated ML pipeline
+-	Automated model training, testing, deploying and scoring 
+-	Model scoring at scale leveraging micro services/containers
+-	Green/Blue testing and deployment role-backs
+
+## Milestone 2: Model logging and monitoring
+-	Dashboard to explore real-time and historical model input, predictions and performance 
+-	Model monitoring to detect unexpected changes in input data and predictions
+-	Triggers to take actions if input or predictions diverge from expected ranges
+
+## Milestone 3: GDPR compliant ML pipeline
+-	Anonymize/remove PII data and keep track of PII data used for model training
+-	Revoke and retrain models if certain records need to be removed due to customers that want their data revoked 
+

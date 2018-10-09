@@ -1,0 +1,9 @@
+{
+    "name": "dotnetcore-sample",
+    "plugins": [
+        "nuget-pkg"
+    ],
+    "tests": [{
+        "name": "Sanity Check"
+    }]
+}

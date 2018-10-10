@@ -1,11 +1,11 @@
 {
-    "name": "dotnetcore-sample",
+    "name": "node",
     "plugins": {
-        "nuget-pkg|assemblyname.dll": "1.0.x"
+        "consoleoutputter": "1.0.x"
     },
     "tests": [{
         "name": "Sanity Check",
-        "type": "Namespace.InMemoryTestClass",
+        "type": "language-specific",
         "input": "in.json",
         "output": "out.json",
         "outputFormatter": "ConsoleOutputFormatterClass"

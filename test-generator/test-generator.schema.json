@@ -28,7 +28,17 @@
                     },
                     "type": {
                         "description": "Test Classname or Python Module or Node Package",
-                        "type": "string"
+                        "type": ["string", "object"],
+                        "properties": {
+                            "assemblyName": {
+                                "description": "Assembly for C#",
+                                "type": "string"
+                            },
+                            "className": {
+                                "description": "Class Name for C#",
+                                "type": "string"
+                            }
+                        }
                     },
                     "input": {
                         "description": "Input object describing inputs for the test",

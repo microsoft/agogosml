@@ -66,4 +66,4 @@ for row in $(cat eventhubs.json | jq -r ".[] | .name"); do
 done
 
 # Todo: Deploy image to acr
-docker push ${acrLoginServer}/aci-helloworld:v1
+# docker push ${acrLoginServer}/aci-helloworld:v1

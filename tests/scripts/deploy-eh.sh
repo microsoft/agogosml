@@ -47,7 +47,15 @@ command -v az >/dev/null 2>&1 || { echo >&2 "I require azure cli but it's not in
 # USER PARAMETERS
 
 build_number="${1-}"
-parent_path=$(pwd -P)
 
-. "${parent_path}/tests/scripts/cleanup-eh.sh" "${build_number}"
-. "${parent_path}/tests/scripts/cleanup-storage.sh" "${build_number}"
+while [[ -z $build_number ]]; do
+    read -rp "$(echo -e ${ORANGE}"Enter a prefix to the Event Hubs that should be created: "${NC})" build_number
+done
+
+# Creating the pipeline event hubs under the provided namespace
+IFS=';' read -ra ehInstancesArray <<< "$EVENTHUBS_INSTANCES"
+for ehName in "${ehInstancesArray[@]}"; do
+    declare eh_name="${build_number}-${ehName}"
+    echo "Creating event hub [${eh_name}] in event hub namespace [${EVENTHUBS_NAMESPACE}] in resource group [${RESOURCE_GROUP_NAME}]"
+    declare result=$(az eventhubs eventhub create --resource-group "${RESOURCE_GROUP_NAME}" --namespace-name "${EVENTHUBS_NAMESPACE}" --name "${eh_name}")
+done

@@ -331,3 +331,6 @@ ASALocalRun/
 
 # Private files
 *.private.*
+
+# Env file
+.env

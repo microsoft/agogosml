@@ -31,39 +31,23 @@ set -o pipefail
 set -o nounset
 #set -o xtrace
 
+# Constants
+RED='\033[0;31m'
+ORANGE='\033[0;33m'
+NC='\033[0m'
+
 ###################
 # SETUP
 
 # Check if required utilities are installed
 command -v jq >/dev/null 2>&1 || { echo >&2 "I require jq but it's not installed. See https://stedolan.github.io/jq/.  Aborting."; exit 1; }
 command -v az >/dev/null 2>&1 || { echo >&2 "I require azure cli but it's not installed. See https://bit.ly/2Gc8IsS. Aborting."; exit 1; }
-command -v docker >/dev/null 2>&1 || { echo >&2 "I require docker but it's not installed. See https://bit.ly/2Gc8IsS. Aborting."; exit 1; }
 
 ###################
 # USER PARAMETERS
 
-rg_name="${1-}"
-eh_namespace="${2-}"
-eh_prefix="${3-}"
-acrLoginServer="${4}"
+build_number="${1-}"
+parent_path=$(pwd -P)
 
-while [[ -z $rg_name ]]; do
-    read -rp "$(echo -e ${ORANGE}"Enter Resource Group name: "${NC})" rg_name
-done
-
-while [[ -z $eh_namespace ]]; do
-    read -rp "$(echo -e ${ORANGE}"Enter Event Hubs Namespace name: "${NC})" eh_namespace
-done
-
-while [[ -z $eh_prefix ]]; do
-    read -rp "$(echo -e ${ORANGE}"Enter a prefix to the Event Hubs that should be created: "${NC})" eh_prefix
-done
-
-for row in $(cat eventhubs.json | jq -r ".[] | .name"); do
-  declare eh_name="${eh_prefix}-${row}"
-  echo "Creating event hub [${eh_name}] in event hub namespace [${eh_namespace}] in resource group [${rg_name}]"
-  declare result=$(az eventhubs eventhub create --resource-group "${rg_name}" --namespace-name "${eh_namespace}" --name "${eh_name}")
-done
-
-# Todo: Deploy image to acr
-# docker push ${acrLoginServer}/aci-helloworld:v1
+. "${parent_path}/tests/scripts/deploy-eh.sh" "${build_number}"
+. "${parent_path}/tests/scripts/deploy-storage.sh" "${build_number}"

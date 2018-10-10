@@ -10,13 +10,11 @@
             "type": "string"
         },
         "plugins": {
-            "description": "List of plugins to load",
-            "type": "array",
-            "items": {
+            "description": "List of plugins to load (name: semver) pairs",
+            "type": "object",      
+            "additionalProperties": {
                 "type": "string"
-            },
-            "minItems": 0,
-            "uniqueItems": true
+            }
         },
         "tests": {
             "description": "List of tests",
@@ -27,11 +25,51 @@
                     "name": {
                         "description": "Name of test",
                         "type": "string"
+                    },
+                    "type": {
+                        "description": "Test Classname or Python Module or Node Package",
+                        "type": "string"
+                    },
+                    "input": {
+                        "description": "Input object describing inputs for the test",
+                        "type": ["string", "object"],
+                        "properties": {
+                            "type": {
+                                "description": "type of input",
+                                "type": "string"
+                            },
+                            "value": {}
+                        }
+                    },
+                    "output": {
+                        "description": "Output object describing inputs for the test",
+                        "type": ["string", "object"],
+                        "properties": {
+                            "type": {
+                                "description": "type of output",
+                                "type": "string"
+                            },
+                            "value": {}
+                        }
+                    },
+                    "options": {},
+                    "outputFormatter": {
+                        "description": "Output formatter to use",
+                        "type": "string"
+                    },
+                    "enabled": {
+                        "description": "Enable test",
+                        "type": "boolean"
                     }
-                }
+                },
+                "required": [
+                    "name",
+                    "type",
+                    "input",
+                    "output"
+                ]
             },
             "minItems": 0
         }
-    },
-    "required": [ "name" ]
+    }
 }

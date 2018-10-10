@@ -37,6 +37,7 @@ set -o nounset
 # Check if required utilities are installed
 command -v jq >/dev/null 2>&1 || { echo >&2 "I require jq but it's not installed. See https://stedolan.github.io/jq/.  Aborting."; exit 1; }
 command -v az >/dev/null 2>&1 || { echo >&2 "I require azure cli but it's not installed. See https://bit.ly/2Gc8IsS. Aborting."; exit 1; }
+command -v docker >/dev/null 2>&1 || { echo >&2 "I require docker but it's not installed. See https://bit.ly/2Gc8IsS. Aborting."; exit 1; }
 
 ###################
 # USER PARAMETERS
@@ -44,6 +45,7 @@ command -v az >/dev/null 2>&1 || { echo >&2 "I require azure cli but it's not in
 rg_name="${1-}"
 eh_namespace="${2-}"
 eh_prefix="${3-}"
+acrLoginServer="${4}"
 
 while [[ -z $rg_name ]]; do
     read -rp "$(echo -e ${ORANGE}"Enter Resource Group name: "${NC})" rg_name
@@ -62,3 +64,6 @@ for row in $(cat eventhubs.json | jq -r ".[] | .name"); do
   echo "Creating event hub [${eh_name}] in event hub namespace [${eh_namespace}] in resource group [${rg_name}]"
   declare result=$(az eventhubs eventhub create --resource-group "${rg_name}" --namespace-name "${eh_namespace}" --name "${eh_name}")
 done
+
+# Todo: Deploy image to acr
+docker push ${acrLoginServer}/aci-helloworld:v1

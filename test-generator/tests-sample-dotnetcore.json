@@ -1,0 +1,24 @@
+{
+    "name": "dotnetcore-sample",
+    "plugins": {
+        "nuget-pkg|assemblyname.dll": "1.0.x"
+    },
+    "tests": [{
+        "name": "Sanity Check",
+        "type": {
+            "assemblyName": "assemblyname.dll",
+            "className": "SanityCheck"
+        },
+        "input": "in.json",
+        "output": "out.json",
+        "outputFormatter": "ConsoleOutputFormatterClass"
+    }, {
+        "name": "Test One Kafka",
+        "type": "KafkaTestClass",
+        "input": "in.json",
+        "output": "out.json",
+        "options": {
+            "auth_token": "1234"
+        }
+    }]
+}

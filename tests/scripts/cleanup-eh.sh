@@ -49,7 +49,7 @@ command -v az >/dev/null 2>&1 || { echo >&2 "I require azure cli but it's not in
 build_number="${1-}"
 
 while [[ -z $build_number ]]; do
-    read -rp "$(echo -e ${ORANGE}"Enter a prefix to the Event Hubs that should be created: "${NC})" build_number
+    read -rp "$(echo -e ${ORANGE}"Enter a prefix to the Event Hubs that should be deleted: "${NC})" build_number
 done
 
 # Creating the pipeline event hubs under the provided namespace

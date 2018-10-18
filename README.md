@@ -4,7 +4,7 @@
 
 - [Intro](#Intro)
 - [Contributing](./CONTRIBUTING.md)
-- [License](./LICENSE.md)
+- [License](./LICENSE)
 - [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/)
 - [Backlog](https://waffle.io/Microsoft/agogosml)
   

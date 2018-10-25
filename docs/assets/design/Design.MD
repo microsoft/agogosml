@@ -8,8 +8,7 @@ This Azure DevOps pipeline is responsible to get the latest (or specified) branc
 
 ## Requirements
 
-- The customer's application is a place holder for any application image. The only requirement is to implement the HTTP endpoints protocol (TBD)
-- The Azure DevOps pipeline is executes the following:
+- The Azure DevOps pipeline executes the following:
   - Clone the latest (or specific) branches of a Github repository.
   - Build the repo.
   - Run linting and unit tests.

@@ -23,7 +23,7 @@
 ## Testing
 
 - Testing of the complete data pipeline will run on each DevOps build pipeline to ensure the quality of the pipeline and that messages are processed properly
-- Testing components are deployed (ran) on the same docker client as the Input/Output components and acts as both events producer and events consumer (such as EventHub mock)
+- Testing components are instanciated on the same docker client as the Input/Output components and acts as both events producer and events consumer (such as EventHub mock)
   - communication is internal to the docker cluster and ensures sufficient performance
 - The DevOps pipeline will continuously check the tests containers exit code and accordingly will decide if the new version is passed the validation
 

@@ -4,8 +4,11 @@
 
 ![architecure diagram](./ASB-cicd-pipeline.png)
 
+This Azure DevOps pipeline is responsible to get the latest (or specified) branchs of Github code, clone, build run unit tests, linting tests, E2E tests and finally if all tests passed, push the new docker images to a container registry
+
 ## Requirements
 
+- The customer's application is a place holder for any application image. The only requirement is to implement the HTTP endpoints protocol (TBD)
 - The Azure DevOps pipeline is executes the following:
   - Clone the latest (or specific) branches of a Github repository.
   - Build the repo.
@@ -18,7 +21,9 @@
 - The Input/Output components handle the following areas of the data pipeline:
   - Connectivity to the different types of events sources, such as Azure EventHubs, Kafka and HTTP (for batching)
   - Retrying failed messages
-  - responsible for logging / auditing
+- Logging and auditing libraries will be created to be used across all images
+- The retry mechanism is optional and configurable
+  - If enabled, a "Message Processed" confirmation is required
 
 ## Testing
 

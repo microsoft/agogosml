@@ -10,7 +10,7 @@ The CLI and Scaffolding tools (agogosml-cli) was developed to help the Data Engi
 $ agogosml command [OPTIONS]
 ```
 
-![CLI User Usage Flow](assets/cli/cli-user-usage-flow.png)
+![CLI User Usage Flow](../docs/assets/cli/cli-user-usage-flow.png)
 
 The Data Engineer installs the agogosml-cli and runs `agogosml init` to generate a manifest.json file. The data engineer will then modify the manifest.json and add their configuration files. The data engineer runs `agogosml generate` to generate the agogosml project. The generated scaffold will include the following files:
 

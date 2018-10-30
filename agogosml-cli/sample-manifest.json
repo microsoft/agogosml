@@ -1,8 +1,5 @@
 {
-    "name": "node",
-    "plugins": {
-        "consoleoutputter": "1.0.x"
-    },
+    "name": "my-data-pipeline",
     "tests": [{
         "name": "Sanity Check",
         "type": "language-specific",
@@ -16,9 +13,6 @@
             "type": "plugin",
             "value": "InputGeneratorClass"
         },
-        "output": "out.json",
-        "options": {
-            "auth_token": "1234"
-        }
+        "output": "out.json"
     }]
 }

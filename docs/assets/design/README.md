@@ -1,10 +1,23 @@
 # CI/CD and Data pipeline design
 
-## Overview
+# Architecture Diagram
 
-![architecure diagram - ci/cd pipeline](./agogosml-CI_CD.png)
+## Basic Pipeline Building Block
+![Architecure Diagram - Basic Pipeline Building Block](./agogosml.draw-io-input-output-app-simple.png)
 
-![architecure diagram - data pipeline](./agogosml-Architecture.png)
+## CI/CD
+![Architecure Diagram - ci/cd](./agogosml.draw-io-CI-CD.png)
+
+## Production Architecture
+![Architecure Diagram - production architecture](./agogosml.draw-io-Production.png)
+
+## Test Architecture
+![Architecure Diagram - test architecture](./agogosml.draw-io-Test.png)
+
+## Pipeline Building Blobk Description
+![Architecure Diagram - Pipeline Building Blobk Description](./agogosml.draw-io-input-app-output-desc.png)
+
+# Overview
 
 This Azure DevOps pipeline is responsible to build, validate and create new docker images of the data pipeline. This design is the 'Build' pipeline which produce the artifact of a validated and tagged new release, which will be deployed using another dedicated pipeline (Release).
 
@@ -22,7 +35,7 @@ Each pipeline:
 - Execute Integration/Validation/E2E tests.
 - If all the tests have passed, push the new docker images to an Azure Container Registry.
 
-## Requirements
+# Requirements
 
 - The Azure DevOps pipelines delivers a new tagged and verified release version
 - The Sample Application container is a place holder for any customer application image. That image needs to answer to the following conditions:
@@ -35,7 +48,7 @@ Each pipeline:
 - The retry mechanism is optional and configurable
   - If enabled, a "Message Processed" confirmation is required
 
-## Testing
+# Testing
 
 - Each sub pipeline will consist of one or more testing procedures (unit tests/Integration)
 - Once the sub pipelines are finished and tagged images are pushed to the container registry, E2E tests will run to validate the complete flow.
@@ -43,7 +56,7 @@ Each pipeline:
   - communication is internal to the docker cluster and ensures sufficient performance
 - The DevOps pipeline will continuously check the tests containers exit code and accordingly will decide if the new version is passed the validation
 
-## Open issues
+# Open issues
 
 - Verify docker client can be run locally on a agent VM -> Done
 - Verify Kafka/EH producers/consumers mocks are available

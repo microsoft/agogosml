@@ -13,14 +13,23 @@ fi
 
 . tf.config.private.sh
 
-if [[ -z "${ARM_SUBSCRIPTION_ID}" ]]; then echo "ARM_SUBSCRIPTION_ID environment variable doesn't exists"; exit 1; fi
-if [[ -z "${ARM_CLIENT_ID}" ]]; then echo "ARM_CLIENT_ID environment variable doesn't exists"; exit 1; fi
-if [[ -z "${ARM_CLIENT_SECRET}" ]]; then echo "ARM_CLIENT_SECRET environment variable doesn't exists"; exit 1; fi
-if [[ -z "${ARM_TENANT_ID}" ]]; then echo "ARM_TENANT_ID environment variable doesn't exists"; exit 1; fi
-if [[ -z "${ARM_ENVIRONMENT}" ]]; then echo "ARM_ENVIRONMENT environment variable doesn't exists"; exit 1; fi
-if [[ -z "${STORAGE_ACCOUNT_NAME}" ]]; then echo "STORAGE_ACCOUNT_NAME environment variable doesn't exists"; exit 1; fi
-if [[ -z "${STORAGE_ACCOUNT_KEY}" ]]; then echo "STORAGE_ACCOUNT_KEY environment variable doesn't exists"; exit 1; fi
-if [[ -z "${ARM_ACCESS_KEY}" ]]; then echo "ARM_ACCESS_KEY environment variable doesn't exists"; exit 1; fi
+check_variable_exists () {
+    declare variable_name="$1"
+    declare variable_value=$(printf '%s\n' "${!variable_name}")
+    if [[ -z "${variable_value}" ]]; then
+        echo "${variable_name} environment variable doesn't exists";
+        exit 1;
+    fi
+}
+
+check_variable_exists "ARM_SUBSCRIPTION_ID"
+check_variable_exists "ARM_CLIENT_ID"
+check_variable_exists "ARM_CLIENT_SECRET"
+check_variable_exists "ARM_TENANT_ID"
+check_variable_exists "ARM_ENVIRONMENT"
+check_variable_exists "STORAGE_ACCOUNT_NAME"
+check_variable_exists "STORAGE_ACCOUNT_KEY"
+check_variable_exists "ARM_ACCESS_KEY"
 
 az storage container create -n tfstate --account-name $STORAGE_ACCOUNT_NAME --account-key $STORAGE_ACCOUNT_KEY
 terraform init

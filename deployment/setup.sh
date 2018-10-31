@@ -11,8 +11,10 @@ if [ ! -f ./tf.config.private.sh ]; then
     exit 1
 fi
 
+# Load environment variables defined by user
 . tf.config.private.sh
 
+# Check for an environment variable name if it exists and exit if not
 check_variable_exists () {
     declare variable_name="$1"
     declare variable_value=$(printf '%s\n' "${!variable_name}")

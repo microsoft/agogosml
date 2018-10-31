@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  input-adapter:
+    build: ../src/input-adapter/
+    image: agogosacr.azurecr.io/input-adapter:${TAG}
+    ports: 
+      - '3000:3000'
+    expose:
+      - '3000'
+    networks:
+      mynet:
+        aliases:
+          - input-adapter.agogosml.com
+
+  output-adapter:
+    build: ../src/output-adapter/
+    image: agogosacr.azurecr.io/output-adapter:${TAG}
+    expose:
+      - '3001'
+    ports: 
+      - '3001:3001'
+    networks:
+      mynet:
+        aliases:
+          - output-adapter.agogosml.com
+  
+networks:
+  mynet:
+    driver: bridge
+
+  #generic-app:
+  #  image: redis:alpine
+  #  container_name: redis
+  #  ports: ["6379"]

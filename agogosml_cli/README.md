@@ -32,10 +32,10 @@ Coming soon.
 #### init - Creates a manifest.json file
 
 ```bash
-$ agogosml init [--force|-f] <name>
+$ agogosml init [--force|-f] <folder>
 ```
 
-`agogosml init <name>` will generate a manifest file that contains all the configuration variables for an agogosml project. `<name>` is the name you would like to give your agogosml project.
+`agogosml init <folder>` will generate a manifest file that contains all the configuration variables for an agogosml project. `<folder>` is the folder you would like to give use for your agogosml project.
 
 #### generate - Generates an agogosml project
 

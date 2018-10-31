@@ -2,9 +2,11 @@
 
 ## Overview
 
-![architecure diagram - ci/cd pipeline](./agogosml-CI_CD.png)
-
-![architecure diagram - data pipeline](./agogosml-Architecture.png)
+![architecure diagram - simple topple](./agogosml.draw-io-input-output-app-simple.png)
+![architecure diagram - ci/cd](./agogosml.draw-io-CI-CD.png)
+![architecure diagram - production architecture](./agogosml.draw-io-Production.png)
+![architecure diagram - test architecture](./agogosml.draw-io-Test.png)
+![architecure diagram - topple desc](./agogosml.draw-io-input-app-output-desc.png)
 
 This Azure DevOps pipeline is responsible to build, validate and create new docker images of the data pipeline. This design is the 'Build' pipeline which produce the artifact of a validated and tagged new release, which will be deployed using another dedicated pipeline (Release).
 

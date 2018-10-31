@@ -28,8 +28,3 @@ services:
 networks:
   mynet:
     driver: bridge
-
-  #generic-app:
-  #  image: redis:alpine
-  #  container_name: redis
-  #  ports: ["6379"]

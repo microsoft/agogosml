@@ -1,0 +1,1 @@
+# Replace this mock input adapter app with the actual one

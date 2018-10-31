@@ -2,12 +2,9 @@
 
 """Tests for `agogosml_cli` package."""
 
-import pytest
-
 from click.testing import CliRunner
 
 import cli.cli
-import cli.agogosml_cli
 
 
 def test_command_line_interface():

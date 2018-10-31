@@ -1,21 +1,23 @@
 # CI/CD and Data pipeline design
 
-## Overview
+## Architecture Diagram
 
-### simple topple
-![architecure diagram - simple topple](./agogosml.draw-io-input-output-app-simple.png)
+### Basic Pipeline Building Block
+![Architecure Diagram - Basic Pipeline Building Block](./agogosml.draw-io-input-output-app-simple.png)
 
 ### CI/CD
-![architecure diagram - ci/cd](./agogosml.draw-io-CI-CD.png)
+![Architecure Diagram - ci/cd](./agogosml.draw-io-CI-CD.png)
 
 # Production Architecture
-![architecure diagram - production architecture](./agogosml.draw-io-Production.png)
+![Architecure Diagram - production architecture](./agogosml.draw-io-Production.png)
 
 # Test Architecture
-![architecure diagram - test architecture](./agogosml.draw-io-Test.png)
+![Architecure Diagram - test architecture](./agogosml.draw-io-Test.png)
 
-# Topple Description
-![architecure diagram - topple desc](./agogosml.draw-io-input-app-output-desc.png)
+# Pipeline Building Blobk Description
+![Architecure Diagram - Pipeline Building Blobk Description](./agogosml.draw-io-input-app-output-desc.png)
+
+## Overview
 
 This Azure DevOps pipeline is responsible to build, validate and create new docker images of the data pipeline. This design is the 'Build' pipeline which produce the artifact of a validated and tagged new release, which will be deployed using another dedicated pipeline (Release).
 

@@ -68,6 +68,7 @@ Ready to contribute? Here's how to set up `agogosml_cli` for local development.
 
     $ cd agogosml/agogosml_cli/
     $ pipenv install --dev
+    $ pipenv shell
 
 4. Create a branch for local development::
 

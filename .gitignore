@@ -101,5 +101,15 @@ ENV/
 # mkdocs documentation
 /site
 
+<<<<<<< HEAD
 # mypy
 .mypy_cache/
+=======
+# Env file
+.env
+
+# Terraform
+.terraform
+*.tfstate.backup
+out.plan
+>>>>>>> add terraform files

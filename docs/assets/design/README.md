@@ -29,7 +29,7 @@ In practice the pipeline is composed of multiple sub pipelines:
 
 Each pipeline:
 
-- Clones the latest (or specific) branche of a Github repository.
+- Clones the latest (or specific) branch of a Github repository.
 - Build the repo.
 - Run linting and unit tests.
 - Execute Integration/Validation/E2E tests.
@@ -37,7 +37,7 @@ Each pipeline:
 
 # Requirements
 
-- The Azure DevOps pipelines delivers a new tagged and verified release version
+- The Azure DevOps pipelines delivers a new tagged, tested and verified release version
 - The Sample Application container is a place holder for any customer application image. That image needs to answer to the following conditions:
   - Implement the HTTP endpoints protocol (TBD).
   - [Optional] Return message handling statuses to the input handler to enable a retry mechanism (Retry mechanism design is TBD)
@@ -52,9 +52,9 @@ Each pipeline:
 
 - Each sub pipeline will consist of one or more testing procedures (unit tests/Integration)
 - Once the sub pipelines are finished and tagged images are pushed to the container registry, E2E tests will run to validate the complete flow.
-- Testing components are deployed on the same docker client as the Input/Output components and acts as both events producer and events consumer (such as EventHub mock)
+- Testing components are deployed on the same docker client as the Input/Output components and acts as both events producer and events consumer (mock event generators)
   - communication is internal to the docker cluster and ensures sufficient performance
-- The DevOps pipeline will continuously check the tests containers exit code and accordingly will decide if the new version is passed the validation
+- The DevOps pipeline will continuously check the tests containers exit code and accordingly will decide if a new version passed validation.
 
 # Open issues
 

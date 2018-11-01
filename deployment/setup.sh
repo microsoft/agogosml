@@ -30,10 +30,17 @@ check_variable_exists "ARM_CLIENT_SECRET"
 check_variable_exists "ARM_TENANT_ID"
 check_variable_exists "ARM_ENVIRONMENT"
 check_variable_exists "STORAGE_ACCOUNT_NAME"
-check_variable_exists "STORAGE_ACCOUNT_KEY"
 check_variable_exists "ARM_ACCESS_KEY"
 
-az storage container create -n tfstate --account-name $STORAGE_ACCOUNT_NAME --account-key $STORAGE_ACCOUNT_KEY
-terraform init
+# The tfstate file will be upload to azure storage to maintain consistency and future destruction of the resources.
+az storage container create -n tfstate --account-name $STORAGE_ACCOUNT_NAME --account-key $ARM_ACCESS_KEY
+
+# Initializing and deploying terraform deployment
+terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME"
 terraform plan -out out.plan
 terraform apply out.plan
+
+# Configuring k8s credentials and getting nodes
+echo "$(terraform output kube_config)" > ./azurek8s
+export KUBECONFIG=./azurek8s
+kubectl get nodes

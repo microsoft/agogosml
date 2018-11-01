@@ -1,9 +1,9 @@
 variable "client_id" {
-    # default = "[CENSORED]"
+    default = "[CENSORED]"
 }
 
 variable "client_secret" {
-    # default = "[CENSORED]"
+    default = "[CENSORED]"
 }
 
 variable "agent_count" {
@@ -28,4 +28,8 @@ variable resource_group_name {
 
 variable location {
     default = "Central US"
+}
+
+variable storage_account_name {
+    default = "agogosml"
 }

@@ -112,4 +112,8 @@ ENV/
 .terraform
 *.tfstate.backup
 out.plan
+<<<<<<< HEAD
 >>>>>>> add terraform files
+=======
+deployment/azurek8s
+>>>>>>> update according to code review

@@ -11,5 +11,5 @@ RUN pipenv run make clean && \
     pipenv run make lint && \
     pipenv run make test && \
     # pipenv run make test-all <- FIXME: Tox is broken.
-    pipenv run make coverage 
-    # && \ make docs
+    pipenv run make coverage && \
+    pipenv run make docs

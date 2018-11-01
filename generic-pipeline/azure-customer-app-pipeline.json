@@ -1,0 +1,90 @@
+{
+    "options": [],
+    "triggers": [
+        {
+            "pollingInterval": 0,
+            "triggerType": 2
+        }
+    ],
+    "properties": {},
+    "buildNumberFormat": "$(date:yyyyMMdd)$(rev:.r)",
+    "process": {
+        "phases": [
+            {
+                "steps": [
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Docker compose: Build",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "6975e2d1-96d3-4afc-8a41-498b5d34ea19",
+                            "versionSpec": "0.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerregistrytype": "Azure Container Registry",
+                            "dockerRegistryEndpoint": "",
+                            "azureSubscriptionEndpoint": "",
+                            "azureContainerRegistry": "",
+                            "dockerComposeFile": "**/app-docker-compose.yml",
+                            "additionalDockerComposeFiles": "",
+                            "dockerComposeFileArgs": "TAG=$(Build.BuildId)",
+                            "projectName": "$(Build.Repository.Name)",
+                            "qualifyImageNames": "true",
+                            "action": "Run a Docker Compose command",
+                            "additionalImageTags": "",
+                            "includeSourceTags": "false",
+                            "includeLatestTag": "false",
+                            "buildImages": "true",
+                            "serviceName": "",
+                            "containerName": "",
+                            "ports": "",
+                            "workDir": "",
+                            "entrypoint": "",
+                            "containerCommand": "",
+                            "detached": "true",
+                            "abortOnContainerExit": "true",
+                            "imageDigestComposeFile": "$(Build.StagingDirectory)/docker-compose.images.yml",
+                            "removeBuildOptions": "false",
+                            "baseResolveDirectory": "",
+                            "outputDockerComposeFile": "$(Build.StagingDirectory)/docker-compose.yml",
+                            "dockerComposeCommand": "build",
+                            "dockerHostEndpoint": "",
+                            "nopIfNoDockerComposeFile": "false",
+                            "requireAdditionalDockerComposeFiles": "false",
+                            "cwd": "$(System.DefaultWorkingDirectory)"
+                        }
+                    }
+                ],
+                "name": "Customer-App-Build-CI",
+                "refName": "Phase_1",
+                "condition": "succeeded()",
+                "target": {
+                    "executionOptions": {
+                        "type": 0
+                    },
+                    "allowScriptsAuthAccessOption": false,
+                    "type": 1
+                },
+                "jobAuthorizationScope": 1,
+                "jobCancelTimeoutInMinutes": 1
+            }
+        ],
+        "type": 1
+    },
+    "repository": {
+        "properties": {},
+        "clean": "true",
+        "checkoutSubmodules": false
+    },
+    "processParameters": {},
+    "quality": 1,
+    "drafts": [],
+    "name": "customer-build-CI",
+    "path": "\\",
+    "type": 2
+}

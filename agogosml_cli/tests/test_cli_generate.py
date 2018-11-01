@@ -25,6 +25,7 @@ You want to test the ff. commands (lets start w/ one test case for now):
     * should fail if any yml file is not valid yaml.
 """
 
+
 def test_generate():
     """
     RUN: agogosml generate

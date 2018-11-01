@@ -8,7 +8,6 @@ from click.testing import CliRunner
 import cli.init as init
 
 
-
 def test_init_generate_valid_json():
     """Test of init command: generated manifest contains valid json"""
     runner = CliRunner()

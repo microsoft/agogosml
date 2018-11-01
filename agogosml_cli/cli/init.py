@@ -13,9 +13,9 @@ DEFAULT_MANIFEST_FILE = 'default-manifest.json'
 
 @click.command()
 @click.option('--force', '-f', is_flag=True, default=False, required=False,
-             help='Ovewrite existing manifest file')
+              help='Ovewrite existing manifest file')
 @click.option('--project-name', prompt=True, required=False,
-             help='Name of your project')
+              help='Name of your project')
 @click.argument('folder', type=click.Path(), default='.', required=False)
 def init(force, project_name, folder):
     """Initializes an agogosml project by creating a manifest file"""

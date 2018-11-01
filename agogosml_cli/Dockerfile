@@ -1,9 +1,9 @@
-FROM python:3.7-stretch as build
+FROM python:3.7-alpine3.8
 
 WORKDIR /usr/src/agogosml_cli
 COPY . .
 
-RUN pip install --upgrade pip && \
+RUN apk add --update make && \ 
     pip install pipenv && \
     pipenv install --dev
 

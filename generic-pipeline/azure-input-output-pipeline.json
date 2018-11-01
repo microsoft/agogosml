@@ -4,24 +4,6 @@
         {
             "pollingInterval": 0,
             "triggerType": 2
-        },
-        {
-            "definition": {
-                "id": 19,
-                "path": "\\",
-                "queueStatus": 0,
-                "project": {
-                    "name": "agogosml",
-                    "description": "Input-Output CI pipeline",
-                    "state": 1,
-                    "visibility": "public"
-                }
-            },
-            "requiresSuccessfulBuild": true,
-            "branchFilters": [
-                "+azure-pipelines-build"
-            ],
-            "triggerType": 128
         }
     ],
     "properties": {},

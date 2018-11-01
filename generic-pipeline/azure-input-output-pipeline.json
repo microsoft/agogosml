@@ -95,7 +95,7 @@
                             "dockerRegistryEndpoint": "",
                             "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": "",
-                            "dockerComposeFile": "**/docker-compose.yml",
+                            "dockerComposeFile": "**/input-output-docker-compose.yml",
                             "additionalDockerComposeFiles": "",
                             "dockerComposeFileArgs": "TAG=$(Build.BuildId)",
                             "projectName": "$(Build.Repository.Name)",

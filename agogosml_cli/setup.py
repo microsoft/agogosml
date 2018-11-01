@@ -44,7 +44,7 @@ setup(
     include_package_data=True,
     keywords='agogosml_cli',
     name='agogosml_cli',
-    packages=find_packages(include=['agogosml_cli']),
+    packages=find_packages(include=['agogosml_cli', 'cli']),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,

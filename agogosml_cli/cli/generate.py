@@ -6,9 +6,10 @@ import click
 
 
 @click.command()
-def generate(args=None):
+@click.option('--config', '-c', required=False,
+              help='Path to manifest.json file')
+@click.argument('folder', type=click.Path(), default='.', required=False)
+def generate(config, folder):
     """Generates an agogosml project"""
-    click.echo("Replace this message by putting your code into "
-               "agogosml_cli.cli.main")
-    click.echo("See click documentation at http://click.pocoo.org/")
+    click.echo("NOT IMPLMENTED")
     return 0

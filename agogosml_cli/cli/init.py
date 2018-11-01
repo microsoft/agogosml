@@ -40,7 +40,7 @@ def build_manifest(project_name):
     """Builds the Manifest python object"""
     manifest_json = retrieve_json_from_file(DEFAULT_MANIFEST_FILE)
     manifest_json['name'] = project_name
-    # default_manifest_json['tests'] = ???
+    # default_manifest_json['tests'] = ??? Prompt user?
     validate_manifest(manifest_json)
     return manifest_json
 

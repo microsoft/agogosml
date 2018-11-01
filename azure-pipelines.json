@@ -2,21 +2,12 @@
     "options": [],
     "triggers": [
         {
-            "branchFilters": [],
-            "pathFilters": [],
-            "batchChanges": false,
-            "maxConcurrentBuildsPerBranch": 1,
             "pollingInterval": 0,
             "triggerType": 2
         }
     ],
     "properties": {},
-    "tags": [],
     "buildNumberFormat": "$(date:yyyyMMdd)$(rev:.r)",
-    "jobAuthorizationScope": 1,
-    "jobTimeoutInMinutes": 60,
-    "jobCancelTimeoutInMinutes": 5,
-    "badgeEnabled": true,
     "process": {
         "phases": [
             {
@@ -131,8 +122,8 @@
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": "6a98bbc0-8ba3-4a57-bbe9-ba2db95160f8",
-                            "azureContainerRegistry": "agogosacr.azurecr.io",
+                            "azureSubscriptionEndpoint": "",
+                            "azureContainerRegistry": "",
                             "command": "Push an image",
                             "dockerFile": "**/Dockerfile",
                             "arguments": "",

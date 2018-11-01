@@ -58,7 +58,7 @@ class ClientBroker:
     def create_topic(self, topic):
         if not self.topic_exists(topic):
             self.admin.create_topics([admin.NewTopic(topic, 1)])
-
+        # add in functionality for Eventhub client
             
     def get_producer(self, *args, **kwargs):
         '''
@@ -122,7 +122,7 @@ class ClientBroker:
         if self.framework == 'eventhub':
             self.client.run()
             try:
-                self.producer.send(self.mutated_message))
+                self.producer.send(self.mutated_message)
             except:
                 pass
             finally:
@@ -135,13 +135,14 @@ class ClientBroker:
         We are going to need documentation for kafka & Eventhub
         to ensure proper syntax is clear
 
-        '''
+        ''' 
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
         mutated_message = self.mutate_message(message)
         if self.framework == 'kafka':
             self.consumer.subscribe([self.topic])
             while True:
+                #NEED OFFSETS/CHECKPOINTS!!!
                 message = self.consumer.poll(1/sys.float_info.max)
 
                 if message is None:
@@ -156,7 +157,7 @@ class ClientBroker:
         # / Do we even what to do that?
         # question to Itye + Tomer
         if self.framework == 'eventhub':
-            consumer = self.get_cunsumer()
+            consumer = self.get_consumer()
             self.client.run()
             try:
                 self.consumer.receive())

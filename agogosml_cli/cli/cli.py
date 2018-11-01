@@ -4,14 +4,18 @@
 import sys
 import click
 
+import cli.init as init
+import cli.generate as generate
 
-@click.command()
-def main(args=None):
-    """Console script for agogosml_cli."""
-    click.echo("Replace this message by putting your code into "
-               "agogosml_cli.cli.main")
-    click.echo("See click documentation at http://click.pocoo.org/")
-    return 0
+
+@click.group()
+def main():
+    """CLI and scaffold generation tool for agogosml"""
+    pass
+
+
+main.add_command(init.init)
+main.add_command(generate.generate)
 
 
 if __name__ == "__main__":

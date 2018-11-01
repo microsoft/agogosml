@@ -45,7 +45,6 @@
                             "value": {}
                         }
                     },
-                    "options": {},
                     "enabled": {
                         "description": "Enable test",
                         "type": "boolean"

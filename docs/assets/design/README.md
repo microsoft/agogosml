@@ -3,9 +3,14 @@
 # Architecture Diagram
 
 ## Basic Pipeline Building Block
+
+The following is a basic, data pipeline, building block consisting of an <input, app, output> sequence. The input/output containers implement connector to various messaging services and act as a message procy between the and the app container. This sequence removes the need to implement connector to various messaging service, and focus on building the business logic inside the app container.
+
 ![Architecure Diagram - Basic Pipeline Building Block](./agogosml.draw-io-input-output-app-simple.png)
 
-## CI/CD
+See [here](#pipeline-building-blobk-description) for a detailed diagram.
+
+## CI/CD Pipeline
 ![Architecure Diagram - ci/cd](./agogosml.draw-io-CI-CD.png)
 
 ## Production Architecture

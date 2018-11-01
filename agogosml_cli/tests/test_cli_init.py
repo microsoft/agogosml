@@ -6,23 +6,29 @@ from click.testing import CliRunner
 
 import cli.init as init
 import os
+import json
 
 
-def test_init_generate_empty_json():
-    # http://click.palletsprojects.com/en/7.x/testing/
-    # Tests if init creates a valid json file
-    print("")
+def test_init_generate_valid_json():
+    """Test of init command: generated manifest contains valid json"""
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        result = runner.invoke(init.init, input='proj_name')
+        assert result.exit_code == 0
+        assert os.path.exists('./manifest.json')
+        with open('./manifest.json') as f:
+            json.load(f)  # This will fail if not valid JSON
 
 
 def test_init():
-    """Tests of init command"""
+    """Tests of init command w/o <folder> specified"""
     runner = CliRunner()
     with runner.isolated_filesystem():
         """
         RUN: agogosml init
         RESULT: Produces a manifest.json in the current working directory
         """
-        result = runner.invoke(init.init, input='my_project_name')
+        result = runner.invoke(init.init, input='proj_name')
         assert result.exit_code == 0
         assert os.path.exists('./manifest.json')
 
@@ -48,7 +54,7 @@ def test_init():
 
 
 def test_init_folder():
-    """Tests of init <folder> command"""
+    """Tests of init command with <folder> specified"""
     runner = CliRunner()
     with runner.isolated_filesystem():
         """

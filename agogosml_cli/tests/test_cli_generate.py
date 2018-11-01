@@ -3,7 +3,7 @@
 """Tests for `agogosml_cli` package."""
 
 # from click.testing import CliRunner
-# import cli.init
+# import cli.generate as generate
 
 
 def test_generate_schema():
@@ -23,4 +23,3 @@ def test_generate():
             tests/e2e/, tests/validation exist
         * should fail if any yml file is not valid yaml.
     """
-    print("")

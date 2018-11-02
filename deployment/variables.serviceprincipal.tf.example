@@ -1,0 +1,8 @@
+
+variable client_id {
+    default = "[CENSORED]"
+}
+
+variable client_secret {
+    default = "[CENSORED]"
+}

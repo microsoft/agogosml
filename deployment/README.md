@@ -7,7 +7,7 @@
 - Make sure to run `az login` to run the deployment script
 - Install the ask cli: `az aks install-cli`
 - Copy `tf.config.sh` to `tf.config.private.sh` and update the values according to [Configuration Values](#configuration-values)
-- Copy `variables.tf.example` to `variables.tf` and update `client_id` and `client_secret` with the service principal values
+- Copy `variables.serviceprincipal.tf.example` to `variables.serviceprincipal.private.tf` and update `client_id` and `client_secret` with the service principal values
 
 # Configuration Values
 

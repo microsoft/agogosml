@@ -1,11 +1,14 @@
-from abstract_client_broker import AbstractClientBroker
+"""Kafka client broker"""
+
+from .abstract_client_broker import AbstractClientBroker
 from azure.eventhub import EventHubClient, EventData
+
 
 class EventHubClientBroker(AbstractClientBroker):
     def __init__(self,
-                 address='': str,
-                 user='': str,
-                 key='': str):
+                 address ='': str,
+                 user ='': str,
+                 key ='': str):
         """
         Class to create an eventhub client broker instance.
 
@@ -46,7 +49,7 @@ class EventHubClientBroker(AbstractClientBroker):
         """
         self.consumer = self.client.add_receiver(*args, **kwargs)
 
-    def mutate_message(self, message: str):
+    def mutate_message(message: str):
         """
         Mutates input message.
         """
@@ -62,18 +65,19 @@ class EventHubClientBroker(AbstractClientBroker):
         """
         '''
         TODO:
-        We are going to need documentation forEventhub
+        We are going to need documentation for Eventhub
         to ensure proper syntax is clear
 
         '''
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
         mutated_message = self.mutate_message(message)
+        producer = self.get_producer(*args, **kwargs)
         self.client.run()
         try:
-            self.producer.send(mutated_message)
+            producer.send(mutated_message)
         except:
-            pass
+            raise
         finally:
             await self.client.stop()
 
@@ -90,11 +94,11 @@ class EventHubClientBroker(AbstractClientBroker):
         '''
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
-        consumer = self.get_consumer()
+        consumer = self.get_consumer(*args, **kwargs)
         self.client.run()
         try:
-            self.consumer.receive()
+            consumer.receive()
         except:
-            pass
+            raise
         finally:
             await self.client.stop()

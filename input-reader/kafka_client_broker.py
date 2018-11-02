@@ -1,5 +1,9 @@
-from abstract_client_broker import AbstractClientBroker
+"""Kafka client broker"""
+
+from .abstract_client_broker import AbstractClientBroker
 from confluent_kafka import Producer, Consumer, admin
+import sys
+
 
 class KafkaClientBroker(AbstractClientBroker):
     def __init__(self, config, topic):
@@ -76,7 +80,7 @@ class KafkaClientBroker(AbstractClientBroker):
             raise TypeError('str type expected for message')
         mutated_message = self.mutate_message(message)
         self.producer.poll(0)
-        self.producer.produce(self.mutated_message, *args, **kwargs)
+        self.producer.produce(mutated_message, *args, **kwargs)
 
     async def receive(self, *args, **kwargs):
         """

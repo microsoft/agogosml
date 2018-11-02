@@ -1,3 +1,5 @@
+"""Abstract client broker class"""
+
 from abc import ABC, abstractmethod
 
 
@@ -30,4 +32,3 @@ class AbstractClientBroker(ABC):
     async def receive(self, message: str):
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
-

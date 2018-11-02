@@ -66,7 +66,7 @@ class EventHubClientBroker(AbstractClientBroker):
     async def _send(self, sender, message:str, partition_key:str):
         mutated_message = self.mutate_message(message)
         mutated_message.partition_key = self.mutate_partition_key(partition_key)
-        await sender.send(data)
+        await sender.send(mutated_message)
             
     def send(self, message: str, partition_key: str, *args, **kwargs):
         """
@@ -90,7 +90,7 @@ class EventHubClientBroker(AbstractClientBroker):
                 self._run_send(message, partition_key),
                 self._run_send(message, partition_key))
             loop.run_until_complete(tasks)
-            loop.run_until_complete(client.stop_async())
+            loop.run_until_complete(self.client.stop_async())
             loop.close()
 
         except KeyboardInterrupt:
@@ -98,7 +98,7 @@ class EventHubClientBroker(AbstractClientBroker):
 
     async def _receiver(self, partition):
         OFFSET = Offset("-1")
-        receiver = client.add_async_receiver(self.consumer_group, partition, OFFSET, prefetch=5)
+        receiver = self.client.add_async_receiver(self.consumer_group, partition, OFFSET, prefetch=5)
         await self.client.run_async()
         for event_data in await receiver.receive(timeout=10):
             last_offset = event_data.offset
@@ -111,7 +111,7 @@ class EventHubClientBroker(AbstractClientBroker):
                 asyncio.ensure_future(self._receive("0")),
                 asyncio.ensure_future(self._receive("1"))]
             loop.run_until_complete(asyncio.wait(tasks))
-            loop.run_until_complete(client.stop_async())
+            loop.run_until_complete(self.client.stop_async())
             loop.close()
 
         except KeyboardInterrupt:

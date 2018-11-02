@@ -3,7 +3,7 @@
 from .abstract_client_broker import AbstractClientBroker
 from confluent_kafka import Producer, Consumer, admin
 import sys
-
+from confluent_kafka import KafkaException, KafkaError
 
 class KafkaClientBroker(AbstractClientBroker):
     def __init__(self, config, topic):
@@ -39,6 +39,7 @@ class KafkaClientBroker(AbstractClientBroker):
         self.producer = Producer(self.config)
         self.consumer = Consumer(self.config)
 
+        
     def topic_exists(self, topic):
         """
         Verifies whether a kafka topic already exists.
@@ -49,6 +50,7 @@ class KafkaClientBroker(AbstractClientBroker):
         )
         return result[topic].result() is not None
 
+    
     def create_topic(self, topic, max_partitions=1):
         """
         Creates a new kafka topic given a string input name
@@ -60,6 +62,7 @@ class KafkaClientBroker(AbstractClientBroker):
         if not self.topic_exists(topic):
             self.admin.create_topics([admin.NewTopic(topic, max_partitions)])
 
+            
     def mutate_message(self, message: str):
         """
         Mutate the input string message.
@@ -69,6 +72,7 @@ class KafkaClientBroker(AbstractClientBroker):
         """
         return message.encode('utf-8')
 
+    
     async def send(self, message: str, *args, **kwargs):
         """
         Upload a message to a kafka topic.
@@ -82,6 +86,7 @@ class KafkaClientBroker(AbstractClientBroker):
         self.producer.poll(0)
         self.producer.produce(mutated_message, *args, **kwargs)
 
+
     async def receive(self, *args, **kwargs):
         """
         Receive messages from a kafka topic.
@@ -93,22 +98,36 @@ class KafkaClientBroker(AbstractClientBroker):
 
         '''
         self.consumer.subscribe([self.topic])
-        while True:
-            # NEED OFFSETS/CHECKPOINTS!!!
-            message = self.consumer.poll(1 / sys.float_info.max)
+        # Read messages from Kafka, print to stdout
+        try:
+            while True:
+                msg = self.consumer.poll(timeout=1.0)
+                if msg is None:
+                    continue
+                if msg.error():
+                    # Error or event
+                    if msg.error().code() == KafkaError._PARTITION_EOF:
+                        # End of partition event
+                        sys.stderr.write('%% %s [%d] reached end at offset %d\n' %
+                                         (msg.topic(), msg.partition(), msg.offset()))
+                    else:
+                        # Error
+                        raise KafkaException(msg.error())
+                else:
+                    # Proper message
+                    sys.stderr.write('%% %s [%d] at offset %d with key %s:\n' %
+                                     (msg.topic(), msg.partition(), msg.offset(),
+                                      str(msg.key())))
+                    yield msg.value()
+                
+        except KeyboardInterrupt:
+            sys.stderr.write('%% Aborted by user\n')
+    
+        finally:
+            # Close down consumer to commit final offsets.
+            c.close()
 
-            if message is None:
-                continue
-
-            if message.error():
-                return message.error().code()
-
-            yield message
-        # TODO:
-        # How do we close out the consumer stream when we've seen all objects
-        # / Do we even what to do that?
-        # question to Itye + Tomer
-
+            
     def is_empty(dictionary: dict) -> bool:
         """
         Checks if a dictionary is empty.

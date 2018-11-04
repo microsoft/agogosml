@@ -4,7 +4,7 @@
 
 ## Data Pipeline Building Block
 
-The following is a basic, data pipeline, building block consisting of an <input, app, output> sequence. The input/output containers implement connector to various messaging services and act as a message procy between the and the app container. This sequence removes the need to implement connector to various messaging service, and focus on building the business logic inside the app container.
+The following is a basic, data pipeline, building block consisting of an <input, app, output> sequence. The input/output containers implement connector to various messaging services and act as a message proxy between the messaging services and the app container. This sequence removes the need to implement connector to various messaging services, and focus on building the business logic inside the app container.
 
 ![Architecure Diagram - Basic Pipeline Building Block](./agogosml.draw-io-input-output-app-simple.png)
 
@@ -12,13 +12,13 @@ See [here](#pipeline-building-blobk-description) for a detailed diagram.
 
 ## CI/CD Pipeline
 
-The CI/CD pipeline runs on Azure Devops (also Azure Pipelines). It consist of three separate pipelines - two, that are triggered on code check of to the Customer Application or the Input/Output application, then build them with unit testing, then push them to Azure Container Registry (also ACR); And another pipeline that is triggered when a new image is pushed to the ACR, then pulls the updated images, and runs both integration tests and E2E tests.
+The CI/CD pipeline runs on Azure DevOps (also Azure Pipelines). It consists of three separate pipelines - The Customer application and the Input/Output applications. The pipelines are triggered on code commit and build the application while running unit tests. After the build is successful, the container images are pushed to Azure Container Registry (also ACR); The third pipeline, is triggered when a new image is pushed to the ACR, pulls the updated images, and runs both integration tests and E2E tests.
 
 ![Architecure Diagram - ci/cd](./agogosml.draw-io-CI-CD.png)
 
 ## Data Pipeline - Production Architecture
 
-The production architecture uses Kubernetes to host and connect between different containers in the registry and uses kafka containers to act as a Messaging Service.
+The production architecture leverages the concept of [Kubernetes pods](https://kubernetes.io/docs/concepts/workloads/pods/pod/) to host and connect between the Input/Output containers and the customer container.
 
 ![Architecure Diagram - production architecture](./agogosml.draw-io-Production.png)
 
@@ -28,11 +28,11 @@ The test architecture runs both unit tests and integration tests locally on the 
 
 ![Architecure Diagram - test architecture](./agogosml.draw-io-Test.png)
 
-## Data Pipeline Building Blobk Description
+## Data Pipeline Building Block Description
 
 The following is a detailed description of the Data Pipeline Building Block and all the elemets connecting between the different containers in this block.
 
-![Architecure Diagram - Pipeline Building Blobk Description](./agogosml.draw-io-input-app-output-desc.png)
+![Architecure Diagram - Pipeline Building Block Description](./agogosml.draw-io-input-app-output-desc.png)
 
 # Overview
 

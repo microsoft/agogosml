@@ -10,6 +10,7 @@
 - Install the ask cli: `az aks install-cli`
 - Copy `tf.config.sh` to `tf.config.private.sh` and update the values according to [Configuration Values](#configuration-values)
 - Copy `variables.serviceprincipal.tf.example` to `variables.serviceprincipal.private.tf` and update `client_id` and `client_secret` with the service principal values
+- Run `. setup.sh`
 
 # Configuration Values
 

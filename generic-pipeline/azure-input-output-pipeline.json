@@ -30,7 +30,7 @@
                             "dockerRegistryEndpoint": "",
                             "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": "",
-                            "dockerComposeFile": "**/input-output-docker-compose.yml",
+                            "dockerComposeFile": "**/generic-pipeline/input-output-docker-compose.yml",
                             "additionalDockerComposeFiles": "",
                             "dockerComposeFileArgs": "TAG=$(Build.BuildId)",
                             "projectName": "$(Build.Repository.Name)",

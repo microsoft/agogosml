@@ -1,1 +1,0 @@
-# Replace this mock output adapter app with the actual one

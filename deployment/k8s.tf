@@ -25,7 +25,7 @@ resource azurerm_subnet k8s {
 }
 
 resource azurerm_log_analytics_workspace k8s {
-  name                = "${var.log_solution_name}"
+  name                = "${var.prefix}-${var.log_solution_name}"
   location            = "${azurerm_resource_group.k8s.location}"
   resource_group_name = "${azurerm_resource_group.k8s.name}"
   sku                 = "${var.log_solution_sku}"
@@ -62,9 +62,9 @@ resource azurerm_kubernetes_cluster k8s {
     agent_pool_profile {
         name            = "default"
         count           = "${var.agent_count}"
-        vm_size         = "Standard_DS2_v2"
+        vm_size         = "${var.agent_size}"
         os_type         = "Linux"
-        os_disk_size_gb = 30
+        os_disk_size_gb = "${var.agent_disk_size_gb}"
 
         # Required for advanced networking
         vnet_subnet_id = "${azurerm_subnet.k8s.id}"
@@ -83,7 +83,7 @@ resource azurerm_kubernetes_cluster k8s {
     }
 
     network_profile {
-        network_plugin = "azure"
+        network_plugin = "${var.network_plugin}"
     }
 
     tags {

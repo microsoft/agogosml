@@ -19,3 +19,7 @@ variable address_space {
 variable address_prefix {
   default = "10.1.0.0/24"
 }
+
+variable network_plugin {
+  default = "azure"
+}

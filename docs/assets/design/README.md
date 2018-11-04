@@ -2,7 +2,7 @@
 
 # Architecture Diagram
 
-## Basic Pipeline Building Block
+## Data Pipeline Building Block
 
 The following is a basic, data pipeline, building block consisting of an <input, app, output> sequence. The input/output containers implement connector to various messaging services and act as a message procy between the and the app container. This sequence removes the need to implement connector to various messaging service, and focus on building the business logic inside the app container.
 
@@ -11,15 +11,27 @@ The following is a basic, data pipeline, building block consisting of an <input,
 See [here](#pipeline-building-blobk-description) for a detailed diagram.
 
 ## CI/CD Pipeline
+
+The CI/CD pipeline runs on Azure Devops (also Azure Pipelines). It consist of three separate pipelines - two, that are triggered on code check of to the Customer Application or the Input/Output application, then build them with unit testing, then push them to Azure Container Registry (also ACR); And another pipeline that is triggered when a new image is pushed to the ACR, then pulls the updated images, and runs both integration tests and E2E tests.
+
 ![Architecure Diagram - ci/cd](./agogosml.draw-io-CI-CD.png)
 
-## Production Architecture
+## Data Pipeline - Production Architecture
+
+The production architecture uses Kubernetes to host and connect between different containers in the registry and uses kafka containers to act as a Messaging Service.
+
 ![Architecure Diagram - production architecture](./agogosml.draw-io-Production.png)
 
-## Test Architecture
+## Data Pipeline - Test Architecture
+
+The test architecture runs both unit tests and integration tests locally on the test machine - In our case, the Azure Devops machine. It runs the tested containers as well as the testing helper containers locally, while the testing container are responsibe for pushing data into the pipeline and checking that the data coming from the other end of the pipeline is as expected.
+
 ![Architecure Diagram - test architecture](./agogosml.draw-io-Test.png)
 
-## Pipeline Building Blobk Description
+## Data Pipeline Building Blobk Description
+
+The following is a detailed description of the Data Pipeline Building Block and all the elemets connecting between the different containers in this block.
+
 ![Architecure Diagram - Pipeline Building Blobk Description](./agogosml.draw-io-input-app-output-desc.png)
 
 # Overview
@@ -44,7 +56,7 @@ Each pipeline:
 
 - The Azure DevOps pipelines delivers a new tagged, tested and verified release version
 - The Sample Application container is a place holder for any customer application image. That image needs to answer to the following conditions:
-  - Implement the HTTP endpoints protocol (TBD).
+  - Implement the HTTP endpoints protocol [[See Issue](https://github.com/Microsoft/agogosml/issues/95)].
   - [Optional] Return message handling statuses to the input handler to enable a retry mechanism (Retry mechanism design is TBD)
 - The Input/Output components handle the following areas of the data pipeline:
   - Connectivity to the different types of events sources, such as Azure EventHubs, Kafka and HTTP (for batching)
@@ -63,5 +75,4 @@ Each pipeline:
 
 # Open issues
 
-- Verify docker client can be run locally on a agent VM -> Done
-- Verify Kafka/EH producers/consumers mocks are available
+- Verify Kafka/EH producers/consumers mocks are available [See Issue]

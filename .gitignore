@@ -334,3 +334,9 @@ ASALocalRun/
 
 # Env file
 .env
+
+# Terraform
+.terraform
+*.tfstate.backup
+out.plan
+deployment/azurek8s

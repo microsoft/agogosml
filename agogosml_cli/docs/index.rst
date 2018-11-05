@@ -1,5 +1,5 @@
 Welcome to Agogosml CLI's documentation!
-======================================
+========================================
 
 .. toctree::
    :maxdepth: 2

@@ -1,0 +1,5 @@
+hypothesis
+python-dotenv
+jsonschema
+pytest
+pylint

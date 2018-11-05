@@ -48,7 +48,7 @@
                             "dockerRegistryEndpoint": "",
                             "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": "",
-                            "dockerComposeFile": "**/generic-pipeline/app-docker-compose.yml",
+                            "dockerComposeFile": "**/generic-pipeline/instance-app-docker-compose.yml",
                             "additionalDockerComposeFiles": "",
                             "dockerComposeFileArgs": "TAG=$(Build.BuildId)",
                             "projectName": "$(Build.Repository.Name)",

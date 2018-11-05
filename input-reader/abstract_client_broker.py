@@ -11,13 +11,6 @@ class AbstractClientBroker(ABC):
     def create_topic(self, topic):
         pass
 
-    @abstractmethod
-    def get_producer(self):
-        pass
-
-    @abstractmethod
-    def get_consumer(self):
-        pass
 
     @abstractmethod
     def mutate_message(self, message: str):
@@ -25,10 +18,8 @@ class AbstractClientBroker(ABC):
 
     @abstractmethod
     async def send(self, message: str):
-        if not isinstance(message, str):
-            raise TypeError('str type expected for message')
-
+        pass
+    
     @abstractmethod
     async def receive(self, message: str):
-        if not isinstance(message, str):
-            raise TypeError('str type expected for message')
+        pass

@@ -1,12 +1,12 @@
 """Kafka client broker"""
 
-from abstract_client_broker import AbstractClientBroker
+from .abstract_client_broker import AbstractClientBroker
 from confluent_kafka import Producer, Consumer, admin
 import sys
 from confluent_kafka import KafkaException, KafkaError
 
 class KafkaClientBroker(AbstractClientBroker):
-    def __init__(self, config):
+    def __init__(self, config, topic):
         """
         Class to create a kafka client broker instance.
 
@@ -22,7 +22,8 @@ class KafkaClientBroker(AbstractClientBroker):
             topic: A string kafka topic.
         """
         self.config = config
-        if is_empty(self.config):
+        self.topic = topic
+        if self.is_empty(self.config):
             raise Exception('''
             Hosts must be defined to use kafka!
             ''')
@@ -127,11 +128,11 @@ class KafkaClientBroker(AbstractClientBroker):
             c.close()
 
             
-def is_empty(dictionary: dict) -> bool:
-    """
-    Checks if a dictionary is empty.
-    Empty dictionaries resolve to false when
-    converted to booleans in Python.
-    """
-    return not bool(dictionary)
+    def is_empty(dictionary: dict) -> bool:
+        """
+        Checks if a dictionary is empty.
+        Empty dictionaries resolve to false when
+        converted to booleans in Python.
+        """
+        return not bool(dictionary)
 

@@ -2,6 +2,8 @@
 from pykafka import KafkaClient
 import sys
 
+from io_base.abstract_client_broker import AbstractClientBroker
+
 
 class KafkaClientBroker(AbstractClientBroker):
     def __init__(self):

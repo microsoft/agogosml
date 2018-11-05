@@ -53,7 +53,7 @@
                             "dockerComposeFileArgs": "TAG=$(Build.BuildId)",
                             "projectName": "$(Build.Repository.Name)",
                             "qualifyImageNames": "true",
-                            "action": "Build the app using docker compose",
+                            "action": "Build services",
                             "additionalImageTags": "",
                             "includeSourceTags": "false",
                             "includeLatestTag": "false",

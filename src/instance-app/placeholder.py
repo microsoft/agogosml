@@ -1,9 +1,11 @@
+""" Entrypoint for customer sample application. Listens for HTTP requests from
+the input reader, and sends the transformed message to the output writer. """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.request
 import urllib.parse
 import os
-from dotenv import load_dotenv
 import logging
+from dotenv import load_dotenv
 import datahelper
 
 load_dotenv()
@@ -23,7 +25,7 @@ class Socket(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/html')
         self.end_headers()
 
-    def do_POST(self):
+    def do_POST(self):  # pylint: disable=C0103
         """Handles a POST request to the server.
         Sends 400 error if there is an issue, otherwise sends a success message.
 
@@ -76,6 +78,7 @@ def run(server_class=HTTPServer, handler_class=Socket):
 
     server_address = (HOST, int(PORT))
     httpd = server_class(server_address, handler_class)
+    logging.info('Running server on host ${HOST} and port ${PORT}')
     httpd.serve_forever()
 
 

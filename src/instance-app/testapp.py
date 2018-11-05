@@ -1,3 +1,4 @@
+""" Unit tests for the sample customer instance app """
 import os
 import json
 from dotenv import load_dotenv
@@ -5,7 +6,9 @@ from hypothesis import given
 from hypothesis.strategies import fixed_dictionaries, text, characters, integers
 import datahelper
 
-load_dotenv()
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
+
 SCHEMA_FILEPATH = os.getenv('SCHEMA_FILEPATH')
 
 # TO DO: Make Unit Tests More Robust

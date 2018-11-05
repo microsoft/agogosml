@@ -1,7 +1,8 @@
+""" Helper functions for the sample customer application """
 import json
 from jsonschema import validate
 
-in_memory_files = {}
+IN_MEMORY_FILES = {}
 
 
 def validate_schema(data: object, schema_filepath: str):
@@ -10,15 +11,16 @@ def validate_schema(data: object, schema_filepath: str):
 
         Args: serialized json object that server has retrieved
     """
-    if schema_filepath not in in_memory_files.keys():
-        print("it's not in memory")
+    if schema_filepath is None:
+        schema_filepath = 'schema_example.json'
+    if schema_filepath not in IN_MEMORY_FILES.keys():
         with open(schema_filepath, 'r') as schema:
             schema_data = schema.read()
         sample_schema = json.loads(schema_data)
-        in_memory_files[schema_filepath] = sample_schema
+        IN_MEMORY_FILES[schema_filepath] = sample_schema
 
     parsed_json = json.loads(data)
-    validate(parsed_json, in_memory_files[schema_filepath])
+    validate(parsed_json, IN_MEMORY_FILES[schema_filepath])
 
 
 def transform(data: object):

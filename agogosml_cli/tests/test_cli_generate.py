@@ -4,6 +4,7 @@
 
 import os
 import json
+import pytest
 from click.testing import CliRunner
 import cli.generate as generate
 
@@ -26,6 +27,7 @@ You want to test the ff. commands (lets start w/ one test case for now):
 """
 
 
+@pytest.mark.skip(reason="Not Implemented yet")
 def test_generate():
     """
     RUN: agogosml generate

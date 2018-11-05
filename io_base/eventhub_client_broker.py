@@ -1,5 +1,7 @@
 import sys
 
+from io_base.abstract_client_broker import AbstractClientBroker
+
 
 class EventHubClientBroker(AbstractClientBroker):
     def __init__(self):

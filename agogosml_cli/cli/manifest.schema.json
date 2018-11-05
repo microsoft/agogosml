@@ -1,23 +1,16 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://microsoft.github.io/agogosml/test-generator/test-generator.schema.json#",
-    "title": "Test Generator Schema",
-    "description": "Schema to describe the json file used by various test runner for agogosml.",
+    "$id": "http://microsoft.github.io/agogosml/agogosml-cli/manifest.schema.json#",
+    "title": "Agogosml Manifest Schema",
+    "description": "Schema to describe various configuration variables for the agogosml-cli tool.",
     "type": "object",
     "properties": {
         "name": {
-            "description": "Name of the test runner?",
+            "description": "Name of the Project",
             "type": "string"
         },
-        "plugins": {
-            "description": "List of plugins to load (name: semver) pairs",
-            "type": "object",      
-            "additionalProperties": {
-                "type": "string"
-            }
-        },
         "tests": {
-            "description": "List of tests",
+            "description": "List of tests to generate",
             "type": "array",
             "items": {
                 "type": "object",
@@ -27,21 +20,11 @@
                         "type": "string"
                     },
                     "type": {
-                        "description": "Test Classname or Python Module or Node Package",
-                        "type": ["string", "object"],
-                        "properties": {
-                            "assemblyName": {
-                                "description": "Assembly for C#",
-                                "type": "string"
-                            },
-                            "className": {
-                                "description": "Class Name for C#",
-                                "type": "string"
-                            }
-                        }
+                        "description": "Test Python Module",
+                        "type": ["string"]
                     },
                     "input": {
-                        "description": "Input object describing inputs for the test",
+                        "description": "Input object describing input data for the test",
                         "type": ["string", "object"],
                         "properties": {
                             "type": {
@@ -52,7 +35,7 @@
                         }
                     },
                     "output": {
-                        "description": "Output object describing inputs for the test",
+                        "description": "Output object describing the output data for the test",
                         "type": ["string", "object"],
                         "properties": {
                             "type": {
@@ -61,11 +44,6 @@
                             },
                             "value": {}
                         }
-                    },
-                    "options": {},
-                    "outputFormatter": {
-                        "description": "Output formatter to use",
-                        "type": "string"
                     },
                     "enabled": {
                         "description": "Enable test",

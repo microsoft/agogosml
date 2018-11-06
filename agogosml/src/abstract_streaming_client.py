@@ -1,4 +1,6 @@
-from abc import ABC
+"""Abstract streaming client class"""
+
+from abc import ABC, abstractmethod
 
 
 class KafkaClientBroker(ABC):
@@ -25,5 +27,4 @@ class KafkaClientBroker(ABC):
     @abstractmethod
     async def receive(self, *args, **kwargs):
         pass
-            
-    
+

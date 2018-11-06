@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 
 
-class KafkaClientBroker(ABC):
+class AbstractStreamingClient(ABC):
     @abstractmethod
     def __init__(self):
         pass

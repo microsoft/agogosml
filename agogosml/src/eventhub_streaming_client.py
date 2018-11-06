@@ -1,10 +1,11 @@
-"""EventHub client broker"""
+"""EventHub streaming client"""
 
-from .abstract_client_broker import AbstractClientBroker
+from .abstract_streaming_client import AbstractStreamingClient
 from azure.eventhub import EventData, EventHubClientAsync, AsyncSender, AsyncReceiver, Offset
 import asyncio
 
-class EventHubClientBroker(AbstractClientBroker):
+
+class EventHubStreamingClient(AbstractStreamingClient):
     def __init__(self,
                  address ='': str,
                  user ='': str,

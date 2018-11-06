@@ -1,12 +1,12 @@
-"""Kafka client broker"""
+"""Kafka streaming client"""
 
-from abstract_client_broker import AbstractClientBroker
+from .abstract_streaming_client import AbstractStreamingClient
 from confluent_kafka import Producer, Consumer, admin
 import sys
 from confluent_kafka import KafkaException, KafkaError
 
 
-class KafkaClientBroker(AbstractClientBroker):
+class KafkaStreamingClient(AbstractStreamingClient):
     def __init__(self, config):
         """
         Class to create a kafka client broker instance.
@@ -23,7 +23,7 @@ class KafkaClientBroker(AbstractClientBroker):
             topic: A string kafka topic.
         """
         self.config = config
-        if is_empty(self.config):
+        if self.is_empty(self.config):
             raise Exception('''
             Hosts must be defined to use kafka!
             ''')
@@ -75,7 +75,6 @@ class KafkaClientBroker(AbstractClientBroker):
         
         '''
         self.consumer.subscribe([self.topic])
-        logging.info("subscribed")
         # Read messages from Kafka, print to stdout
         try:
             while True:
@@ -107,11 +106,12 @@ class KafkaClientBroker(AbstractClientBroker):
         finally:
             # Close down consumer to commit final offsets.
             self.consumer.close()
-            
-def is_empty(dictionary: dict) -> bool:
-    """
-    Checks if a dictionary is empty.
-    Empty dictionaries resolve to false when
-    converted to booleans in Python.
-    """
-    return not bool(dictionary)
+
+    @staticmethod
+    def is_empty(dictionary: dict) -> bool:
+        """
+        Checks if a dictionary is empty.
+        Empty dictionaries resolve to false when
+        converted to booleans in Python.
+        """
+        return not bool(dictionary)

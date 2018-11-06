@@ -1,29 +1,33 @@
 version: '2.2'
 services:
+  kafka:
+    image: spotify/kafka
+    ports:
+    - "2181:2181"
+    - "9092:9092"
+    #hostname: kafka
+    container_name: kafka
+    environment:
+    - "ADVERTISED_HOST=localhost"
+    - "ADVERTISED_PORT=9092"
+    - "AUTO_CREATE_TOPICS=true"
+    command: >
+        bash -c
+        "(sleep 15s &&
+        /opt/kafka_2.11-0.10.1.0/bin/kafka-topics.sh
+        --create
+        --zookeeper
+        localhost:2181 --replication-factor 1 --partitions 1
+        --topic dummytopic &) && (supervisord -n)"
+
   app:
     build: .
     environment:
       - MODE=dev
-      - KAFKA_HOST=127.0.0.1
+      - KAFKA_HOST=kafka
       - KAFKA_PORT=9092
-      - ZOOKEEPER_HOST=127.0.0.1
+      - KAFKA_TOPIC="dummytopic"
+      - ZOOKEEPER_HOST=kafka
       - ZOOKEEPER_PORT=2181
     depends_on:
       - kafka
-
-
-  kafka:
-    image: spotify/kafka:latest
-    container_name: kafka
-    environment:
-      - ADVERTISED_HOST=127.0.0.1
-      - ADVERTISED_PORT=9092
-    ports:
-      - 9092:9092
-      - 2181:2181
-    networks:
-      - kafkanet
-
-
-networks:
-  kafkanet:

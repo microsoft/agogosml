@@ -1,9 +1,10 @@
 """EventHub streaming client"""
 
 from .abstract_streaming_client import AbstractStreamingClient
-from azure.eventhub import EventHubClient #EventData, EventHubClientAsync, AsyncSender, AsyncReceiver, Offset
+from azure.eventhub import EventHubClient, EventData #EventHubClientAsync, AsyncSender, AsyncReceiver, Offset
 from azure.eventprocessorhost import AbstractEventProcessor, AzureStorageCheckpointLeaseManager, \
             EventHubConfig, EventProcessorHost, EPHOptions
+from azure.eventhub import EventHubClient
 import asyncio
 import logging
 
@@ -12,7 +13,7 @@ logger = logging.getLogger('logger_1')
 
 class EventProcessor(AbstractEventProcessor):
     """
-    Example Implmentation of AbstractEventProcessor
+    Example Implementation of AbstractEventProcessor
     """
 
     def __init__(self, params=None):
@@ -42,7 +43,7 @@ class EventProcessor(AbstractEventProcessor):
 
     async def process_events_async(self, context, messages):
         """TODO: Need to iterate through each message in messages and make an http request
-        to the sample app"""
+        to the sample app. This looks to be writing the messages?!"""
         """
         Called by the processor host when a batch of events has arrived.
         This is where the real work of the event processor is done.
@@ -51,6 +52,10 @@ class EventProcessor(AbstractEventProcessor):
         :param messages: The events to be processed.
         :type messages: list[~azure.eventhub.common.EventData]
         """
+        for message in messages:
+            message_str = message.body_as_str(encoding='UTF-8')
+            #TODO: Need to do something with the message_str...?!
+
         logger.info("Events processed {}".format(context.sequence_number))
         await context.checkpoint_async()
 
@@ -72,19 +77,17 @@ async def wait_and_close(host):
     await asyncio.sleep(60)
     await host.close_async()
 
-class EventHubStreamingClient(AbstractStreamingClient):
+
+class EventHubStreamingClient(AbstractStreamingClient, EventProcessor):
     def __init__(self, config):
         """
         Class to create an eventhub streaming client instance.
 
         Args:
-            address: Address string can be in either of these formats:
-                    "amqps://<URL-encoded-SAS-policy>:<URL-encoded-SAS-key>@<mynamespace>.servicebus.windows.net/myeventhub"
-                    "amqps://<mynamespace>.servicebus.windows.net/myeventhub".
-            user: User account string.
-            key: A name space SAS key string.
+            config: dictionary file with all the relevant paramenters
 
         """
+        EventProcessor.__init__(self, "EventProcessor")
         self.config = config
         self.storage_account_name = self.config.get("AZURE_STORAGE_ACCOUNT")
         self.storage_key = self.config.get("AZURE_STORAGE_ACCESS_KEY")
@@ -101,13 +104,13 @@ class EventHubStreamingClient(AbstractStreamingClient):
         self.storage_manager = AzureStorageCheckpointLeaseManager(
             self.storage_account_name, self.storage_key, self.lease_container_name)
 
-
-    def run(self):
+    def receive(self):
+        #Confused as to whether it is receiving or sending the messages, what is context?
         try:
             loop = asyncio.get_event_loop()
             host = EventProcessorHost(
                                     EventProcessor,
-                                    self.eh_config,
+                                    self.client,
                                     self.storage_manager,
                                     ep_params=["param1", "param2"],
                                     eph_options=self.eh_options,
@@ -115,6 +118,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
             tasks = asyncio.gather(
                 host.open_async(),
+                host.process_events_async(),
                 wait_and_close(host)
             )
             loop.run_until_complete(tasks)
@@ -129,29 +133,21 @@ class EventHubStreamingClient(AbstractStreamingClient):
         finally:
             loop.stop()
 
-
-    def send(self):
+    def send(self, message):
         try:
             "amqps://<URL-encoded-SAS-policy>:<URL-encoded-SAS-key>@<mynamespace>.servicebus.windows.net/myeventhub"
-            address = "amqps://" + self.user + ":" + self.key + "@" + self.namespace + ".servicebus.windows.net/myeventhub"
+            address = "amqps://" + self.user + ":" + self.key + "@" + self.namespace + ".servicebus.windows.net/" + self.eventhub
             client = EventHubClient(address, debug=False, username=self.user, password=self.key)
             sender = client.add_sender(partition="0")
             client.run()
-
+            try:
+                sender.send(EventData(message))
+            except:
+                raise
         except:
             pass
-
-
-    def create_topic(self, topic):
-        """
-        Creates a topic in eventhub.
-
-        Args:
-            topic: A string topic.
-
-        """
-        # add in functionality for Eventhub client
-        pass
+        finally:
+            client.stop()
 
     def get_producer(self, *args, **kwargs):
         """
@@ -174,8 +170,6 @@ class EventHubStreamingClient(AbstractStreamingClient):
         #return EventData(message)
         pass
 
-    async def receive(self):
-        pass
 
     # async def _run_send(self, message:str, partition_key:str):
     #     sender = self.client.add_async_sender()

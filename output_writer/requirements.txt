@@ -1,3 +1,5 @@
 flask
 requests
 pykafka
+azure-eventhub
+confluent-kafka

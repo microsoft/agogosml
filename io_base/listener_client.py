@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 
 
-class AbstractListener(ABC):
+class ListenerClient(ABC):
     def __init__(self):
         pass
 

@@ -1,4 +1,5 @@
 from io_base.abstract_client_broker import AbstractClientBroker
+from io_base.listener_client import ListenerClient
 from output_writer.output_writer import OutputWriter
 
 # Can't move to separate file due to errors I can't solve.
@@ -21,16 +22,27 @@ class ClientBrokerMock(AbstractClientBroker):
       pass
 
 
+class ListenerClientMock(ListenerClient):
+
+    def start(self, port, message_broker):
+        pass
+
+    def stop(self):
+        pass
+
+
 def test_when_ctor_instance_created():
     cbm = ClientBrokerMock()
-    ow = OutputWriter(cbm)
+    clm = ListenerClientMock()
+    ow = OutputWriter(cbm, clm)
     assert ow is not None
 
 
 async def test_when_send_executing_broker_called():
     cbm = ClientBrokerMock()
-    ow = OutputWriter(cbm)
-    await ow.send('test')
+    clm = ListenerClientMock()
+    ow = OutputWriter(cbm, clm)
+    await ow.on_message_received('test')
     assert cbm.send_called
 
 

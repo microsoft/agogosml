@@ -20,7 +20,11 @@ class KafkaClientBroker:
         )
 
     def get_consumer(self, *args, **kwargs):
-        self.client.get_balanced_consumer(*args, **kwargs)
+        self.client.get_balanced_consumer(
+            consumer_group=,
+            zookeeper_connect="localhost:2181",
+            auto_commit-enable=True,
+        use_rdkafka=True)
         
     def create_topic(self, topic):
         """

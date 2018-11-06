@@ -334,3 +334,7 @@ ASALocalRun/
 
 # Env file
 .env
+.vscode
+
+# Terraform
+.terraform

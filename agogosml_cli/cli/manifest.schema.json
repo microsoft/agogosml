@@ -1,0 +1,63 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://microsoft.github.io/agogosml/agogosml-cli/manifest.schema.json#",
+    "title": "Agogosml Manifest Schema",
+    "description": "Schema to describe various configuration variables for the agogosml-cli tool.",
+    "type": "object",
+    "properties": {
+        "name": {
+            "description": "Name of the Project",
+            "type": "string"
+        },
+        "tests": {
+            "description": "List of tests to generate",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Name of test",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "Test Python Module",
+                        "type": ["string"]
+                    },
+                    "input": {
+                        "description": "Input object describing input data for the test",
+                        "type": ["string", "object"],
+                        "properties": {
+                            "type": {
+                                "description": "type of input",
+                                "type": "string"
+                            },
+                            "value": {}
+                        }
+                    },
+                    "output": {
+                        "description": "Output object describing the output data for the test",
+                        "type": ["string", "object"],
+                        "properties": {
+                            "type": {
+                                "description": "type of output",
+                                "type": "string"
+                            },
+                            "value": {}
+                        }
+                    },
+                    "enabled": {
+                        "description": "Enable test",
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "name",
+                    "type",
+                    "input",
+                    "output"
+                ]
+            },
+            "minItems": 0
+        }
+    }
+}

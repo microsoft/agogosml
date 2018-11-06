@@ -7,7 +7,8 @@
 - [License](./LICENSE)
 - [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/)
 - [Backlog](https://waffle.io/Microsoft/agogosml)
-  
+- [Design and Architecture](./docs/assets/design/README.md)
+
 ## Intro
 agogosml is a data processing pipeline project that addresses the common need for operationalizing ML models. This covers the complete workflow of training, deploying, scoring and monitoring the models in production at scale. The key focus will be on production ready re-training and scoring. The taken approach will be agnostic to the data science workflow of building the models, but the initial project will be scoped towards traditional ML techniques (non deep-learning) but might be extended when required/requested through additional customer engagements.
 Key functionality split into four milestones:

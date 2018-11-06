@@ -1,0 +1,22 @@
+{
+  "name": "agogosml-test-generator",
+  "version": "1.0.0",
+  "description": "Agogosml test generator package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "validate-schema": "npx ajv validate -s test-generator.schema.json -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Microsoft/agogosml.git"
+  },
+  "author": "Rami Sayar",
+  "bugs": {
+    "url": "https://github.com/Microsoft/agogosml/issues"
+  },
+  "homepage": "https://github.com/Microsoft/agogosml#readme",
+  "devDependencies": {
+    "ajv-cli": "^3.0.0"
+  }
+}

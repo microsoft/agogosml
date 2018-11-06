@@ -1,0 +1,85 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://microsoft.github.io/agogosml/test-generator/test-generator.schema.json#",
+    "title": "Test Generator Schema",
+    "description": "Schema to describe the json file used by various test runner for agogosml.",
+    "type": "object",
+    "properties": {
+        "name": {
+            "description": "Name of the test runner?",
+            "type": "string"
+        },
+        "plugins": {
+            "description": "List of plugins to load (name: semver) pairs",
+            "type": "object",      
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "tests": {
+            "description": "List of tests",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Name of test",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "Test Classname or Python Module or Node Package",
+                        "type": ["string", "object"],
+                        "properties": {
+                            "assemblyName": {
+                                "description": "Assembly for C#",
+                                "type": "string"
+                            },
+                            "className": {
+                                "description": "Class Name for C#",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "input": {
+                        "description": "Input object describing inputs for the test",
+                        "type": ["string", "object"],
+                        "properties": {
+                            "type": {
+                                "description": "type of input",
+                                "type": "string"
+                            },
+                            "value": {}
+                        }
+                    },
+                    "output": {
+                        "description": "Output object describing inputs for the test",
+                        "type": ["string", "object"],
+                        "properties": {
+                            "type": {
+                                "description": "type of output",
+                                "type": "string"
+                            },
+                            "value": {}
+                        }
+                    },
+                    "options": {},
+                    "outputFormatter": {
+                        "description": "Output formatter to use",
+                        "type": "string"
+                    },
+                    "enabled": {
+                        "description": "Enable test",
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "name",
+                    "type",
+                    "input",
+                    "output"
+                ]
+            },
+            "minItems": 0
+        }
+    }
+}

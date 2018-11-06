@@ -101,26 +101,19 @@ ENV/
 # mkdocs documentation
 /site
 
-<<<<<<< HEAD
 # mypy
 .mypy_cache/
-=======
 # Env file
 .env
-<<<<<<< HEAD
+.vscode
 
 # Terraform
 .terraform
 *.tfstate.backup
 out.plan
-<<<<<<< HEAD
->>>>>>> add terraform files
-=======
 deployment/azurek8s
->>>>>>> update according to code review
-=======
 .vscode
 
 # Terraform
 .terraform
->>>>>>> update gitignore
+deployment/azurek8s

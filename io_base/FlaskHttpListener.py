@@ -13,8 +13,8 @@ class FlaskHttpListener(AbstractListener):
     def start(self, port, message_broker):
         app = Flask(__name__)
 
-        @app.route("/input", methods=["POST"])
-        def server_input():
+        @app.route("/", methods=["POST"])
+        def on_input():
 
             msg = request.get_json(force=True)
             message_broker.send(msg)

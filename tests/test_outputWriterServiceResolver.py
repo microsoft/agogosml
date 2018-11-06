@@ -1,6 +1,6 @@
 import pytest
 
-from output_writer.output_writer_manager import OutputWriterManager
+from output_writer.output_writer_service_resolver import OutputWriterServiceResolver
 
 
 def test_when_known_broker_instance_created():
@@ -15,14 +15,14 @@ def test_when_known_broker_instance_created():
         'type': 'flask'
       }
     }
-    owm = OutputWriterManager(config)
+    owm = OutputWriterServiceResolver(config)
     assert owm is not None
 
 
 def test_when_unknown_broker_throw():
     config = {'broker': {'type': 'aaa'}}
     with pytest.raises(Exception):
-      owm = OutputWriterManager(config)
+      owm = OutputWriterServiceResolver(config)
 
 
 def test_when_unknown_listener_throw():
@@ -38,7 +38,7 @@ def test_when_unknown_listener_throw():
       }
     }
     with pytest.raises(Exception):
-      owm = OutputWriterManager(config)
+      owm = OutputWriterServiceResolver(config)
 
 
 if __name__ == '__main__':

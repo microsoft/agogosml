@@ -6,7 +6,7 @@ from io_base.eventhub_client_broker import EventHubClientBroker
 from io_base.kafka_client_broker import KafkaClientBroker
 
 
-class OutputWriterManager:
+class OutputWriterServiceResolver:
     def __init__(self, config):
         self.config = config
 
@@ -47,7 +47,7 @@ class OutputWriterManager:
         pass
 
     def start_incoming_messages(self):
-        port = os.environ['OUTPUT_READER_PORT']
+        port = os.environ['OUTPUT_WRITER_PORT']
         self.listener.start(port, self.broker)
         pass
 

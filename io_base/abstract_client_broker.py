@@ -11,7 +11,6 @@ class AbstractClientBroker(ABC):
     def create_topic(self, topic):
         pass
 
-
     @abstractmethod
     def mutate_message(self, message: str):
         pass
@@ -19,7 +18,7 @@ class AbstractClientBroker(ABC):
     @abstractmethod
     async def send(self, message: str):
         pass
-    
+
     @abstractmethod
     async def receive(self, message: str):
         pass

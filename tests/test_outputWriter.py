@@ -35,4 +35,6 @@ async def test_when_send_executing_broker_called():
 
 
 if __name__ == '__main__':
+    test_when_ctor_instance_created()
+    test_when_send_executing_broker_called()
     pass

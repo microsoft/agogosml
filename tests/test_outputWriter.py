@@ -1,25 +1,27 @@
-from io_base.abstract_client_broker import AbstractClientBroker
-from io_base.listener_client import ListenerClient
+from agogosml.streaming_client.abstract_client_broker import AbstractClientBroker
+from agogosml.streaming_client.listener_client import ListenerClient
 from output_writer.output_writer import OutputWriter
 
 # Can't move to separate file due to errors I can't solve.
+
+
 class ClientBrokerMock(AbstractClientBroker):
     def __init__(self):
-      self.send_called = False
-      pass
+        self.send_called = False
+        pass
 
     def create_topic(self, topic):
-      pass
+        pass
 
     def mutate_message(self, message: str):
-      pass
+        pass
 
     async def send(self, message: str):
-      self.send_called = True
-      pass
+        self.send_called = True
+        pass
 
     async def receive(self, message: str):
-      pass
+        pass
 
 
 class ListenerClientMock(ListenerClient):

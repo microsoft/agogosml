@@ -1,11 +1,9 @@
-"""Kafka client broker"""
-from pykafka import KafkaClient
 import sys
 
-from io_base.abstract_client_broker import AbstractClientBroker
+from streaming_client.abstract_client_broker import AbstractClientBroker
 
 
-class KafkaClientBroker(AbstractClientBroker):
+class EventHubClientBroker(AbstractClientBroker):
     def __init__(self):
         pass
 
@@ -29,7 +27,8 @@ class KafkaClientBroker(AbstractClientBroker):
 
     def receive(self, *args, **kwargs):
         pass
-            
+
+
 def is_empty(dictionary: dict) -> bool:
     """
     Checks if a dictionary is empty.
@@ -37,4 +36,3 @@ def is_empty(dictionary: dict) -> bool:
     converted to booleans in Python.
     """
     return not bool(dictionary)
-

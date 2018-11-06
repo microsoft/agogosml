@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, request
 
-from io_base.listener_client import ListenerClient
+from streaming_client.listener_client import ListenerClient
 
 
 class FlaskHttpListenerClient(ListenerClient):

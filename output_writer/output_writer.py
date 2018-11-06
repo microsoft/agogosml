@@ -1,7 +1,7 @@
 import os
 
-from io_base.abstract_client_broker import AbstractClientBroker
-from io_base.listener_client import ListenerClient
+from agogosml.streaming_client.abstract_client_broker import AbstractClientBroker
+from agogosml.streaming_client.listener_client import ListenerClient
 
 
 class OutputWriter:

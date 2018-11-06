@@ -1,4 +1,5 @@
 from io_base.abstract_client_broker import AbstractClientBroker
+from io_base.listener_client import ListenerClient
 
 
 class ClientBrokerMock(AbstractClientBroker):
@@ -20,4 +21,10 @@ class ClientBrokerMock(AbstractClientBroker):
         pass
 
 
+class ListenerClientMock(ListenerClient):
 
+    def start(self, port, message_broker):
+        pass
+
+    def stop(self):
+        pass

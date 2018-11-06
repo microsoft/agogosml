@@ -2,22 +2,22 @@ import os
 
 from flask import Flask, request
 
-from io_base.abstract_listener import AbstractListener
+from io_base.listener_client import ListenerClient
 
 
-class FlaskHttpListener(AbstractListener):
+class FlaskHttpListenerClient(ListenerClient):
 
     def __init__(self):
         pass
 
-    def start(self, port, message_broker):
+    def start(self, port, on_message_received):
         app = Flask(__name__)
 
         @app.route("/", methods=["POST"])
         def on_input():
 
             msg = request.get_json(force=True)
-            message_broker.send(msg)
+            on_message_received(msg)
 
         app.run(debug=True, port=port)
         pass

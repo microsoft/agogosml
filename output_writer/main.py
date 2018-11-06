@@ -1,4 +1,4 @@
-from output_writer.output_writer_service_resolver import OutputWriterServiceResolver
+from output_writer.output_writer_factory import OutputWriterFactory
 
 if __name__ == "__main__":
 
@@ -14,5 +14,6 @@ if __name__ == "__main__":
             'type': 'flask'
         }
     }
-    owm = OutputWriterServiceResolver(config)
+    output_writer = OutputWriterFactory.create(config)
+    output_writer.start_incoming_messages()
     pass

@@ -3,6 +3,9 @@ from jsonschema import validate
 
 in_memory_files = {}
 
+from utils.logging.log import Logger
+logger = Logger()
+
 
 def validate_schema(data: object, schema_filepath: str):
     """ Validates the input json data against our schema
@@ -11,7 +14,7 @@ def validate_schema(data: object, schema_filepath: str):
         Args: serialized json object that server has retrieved
     """
     if schema_filepath not in in_memory_files.keys():
-        print("it's not in memory")
+        logger.info("it's not in memory")
         with open(schema_filepath, 'r') as schema:
             schema_data = schema.read()
         sample_schema = json.loads(schema_data)

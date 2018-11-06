@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 import logging
 import datahelper
 
+from utils.logging.log import Logger
+logger = Logger()
+
 load_dotenv()
 
 HOST = os.getenv("HOST")
@@ -40,7 +43,7 @@ class Socket(BaseHTTPRequestHandler):
         except BaseException:
             self.send_error(
                 400, 'Incorrect data format. Please check JSON schema.')
-            logging.error('Incorrect data format. Please check JSON schema.')
+            logger.error('Incorrect data format. Please check JSON schema.')
             raise
 
         try:
@@ -50,7 +53,7 @@ class Socket(BaseHTTPRequestHandler):
             self.wfile.write(bytes("Data successfully consumed", 'utf8'))
         except BaseException:
             self.send_error(400, 'Error when sending output message')
-            logging.error('Error when sending output message')
+            logger.error('Error when sending output message')
             raise
 
 
@@ -64,7 +67,7 @@ def output_message(data: object):
     encoded_data = urllib.parse.urlencode(data).encode('utf-8')
     req = urllib.request.Request(OUTPUT_URL, encoded_data)
     response = urllib.request.urlopen(req)
-    logging.info('Response received from output writer')
+    logger.info('Response received from output writer')
     # TO DO: Design retry policy based on BL. For now, print result
     print(response.read().decode('utf-8'))
 

@@ -1,3 +1,4 @@
 hypothesis
 python-dotenv
 jsonschema
+pyyaml

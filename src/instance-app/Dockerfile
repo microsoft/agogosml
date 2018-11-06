@@ -2,7 +2,8 @@ FROM python:3
 
 WORKDIR /instance-app
 
-COPY . /instance-app
+COPY ./instance-app /instance-app
+ADD ./utils /instance-app/utils
 
 RUN pip install -r requirements.txt
 

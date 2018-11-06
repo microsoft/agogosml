@@ -107,6 +107,7 @@ ENV/
 =======
 # Env file
 .env
+<<<<<<< HEAD
 
 # Terraform
 .terraform
@@ -117,3 +118,9 @@ out.plan
 =======
 deployment/azurek8s
 >>>>>>> update according to code review
+=======
+.vscode
+
+# Terraform
+.terraform
+>>>>>>> update gitignore

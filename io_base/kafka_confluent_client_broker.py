@@ -39,26 +39,9 @@ class KafkaClientBroker(AbstractClientBroker):
         self.producer = Producer(self.config)
         self.consumer = Consumer(self.config)
 
-    # def topic_exists(self, topic):
-    #     """
-    #     Verifies whether a kafka topic already exists.
-    #     """
-    #     result = self.admin.create_topics(
-    #         [admin.NewTopic(topic, 1)],
-    #         validate_only=True
-    #     )
-    #     return result[topic].result() is not None
-
-    def create_topic(self, topic, max_partitions=1):
-        """
-        Creates a new kafka topic given a string input name
-
-        Args:
-            topic: A string input.
-            max_partitions: Maximum number of partitions to use.
-        """
-        self.admin.create_topics([admin.NewTopic(topic, max_partitions)])
-
+    def set_topic(self, topic):
+        self.topic = topic
+        
     def mutate_message(self, message: str):
         """
         Mutate the input string message.
@@ -68,7 +51,7 @@ class KafkaClientBroker(AbstractClientBroker):
         """
         return message.encode('utf-8')
 
-    async def send(self, message: str, *args, **kwargs):
+    def send(self, message: str, *args, **kwargs):
         """
         Upload a message to a kafka topic.
 
@@ -79,10 +62,9 @@ class KafkaClientBroker(AbstractClientBroker):
             raise TypeError('str type expected for message')
         mutated_message = self.mutate_message(message)
         self.producer.poll(0)
-        await self.producer.produce(self.topic, mutated_message, *args, **kwargs)
+        self.producer.produce(self.topic, mutated_message, *args, **kwargs)
         
-
-    async def receive(self, *args, **kwargs):
+    def receive(self, *args, **kwargs):
         """
         Receive messages from a kafka topic.
         """
@@ -90,9 +72,10 @@ class KafkaClientBroker(AbstractClientBroker):
         TODO:
         We are going to need documentation for Kafka
         to ensure proper syntax is clear
-
+        
         '''
         self.consumer.subscribe([self.topic])
+        logging.info("subscribed")
         # Read messages from Kafka, print to stdout
         try:
             while True:
@@ -103,25 +86,27 @@ class KafkaClientBroker(AbstractClientBroker):
                     # Error or event
                     if msg.error().code() == KafkaError._PARTITION_EOF:
                         # End of partition event
-                        sys.stderr.write('%% %s [%d] reached end at offset %d\n' %
-                                         (msg.topic(), msg.partition(), msg.offset()))
+                        sys.stderr.write(
+                            '%% %s [%d] reached end at offset %d\n' %
+                            (msg.topic(), msg.partition(), msg.offset()))
                     else:
                         # Error
                         raise KafkaException(msg.error())
                 else:
                     # Proper message
-                    sys.stderr.write('%% %s [%d] at offset %d with key %s:\n' %
-                                     (msg.topic(), msg.partition(), msg.offset(),
-                                      str(msg.key())))
-                    yield msg.value()
-                
+                    sys.stderr.write('%% %s [%d] at offset %d with key %s:\n'
+                                     % (msg.topic(), msg.partition(),
+                                        msg.offset(), str(msg.key())))
+                    t = msg.value()
+                    self.consumer.commit(msg)
+                    return t
+
         except KeyboardInterrupt:
             sys.stderr.write('%% Aborted by user\n')
-    
+
         finally:
             # Close down consumer to commit final offsets.
             self.consumer.close()
-
             
 def is_empty(dictionary: dict) -> bool:
     """

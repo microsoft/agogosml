@@ -10,9 +10,11 @@ import cli.utils as utils
 
 PROJ_FILES = ['.env',
               'Pipfile',
-              'azure-customer-app-pipeline.json',
+              'azure-sample-app-pipeline.json',
               'azure-input-output-pipeline.json',
-              'azure-integration-pipeline.json']
+              'azure-integration-pipeline.json',
+              'input-output-docker-compose.yml',
+              'sample-app-docker-compose.yml']
 
 
 @click.command()

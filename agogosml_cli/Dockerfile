@@ -24,4 +24,4 @@ COPY --from=builder /usr/src/agogosml_cli/dist /
 
 RUN pip install /agogosml_cli-0.1.0.tar.gz
 
-ENTRYPOINT ["agogosml" ]
+ENTRYPOINT ["agogosml"]

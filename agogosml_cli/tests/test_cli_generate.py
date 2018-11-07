@@ -55,7 +55,7 @@ def test_generate():
         assert result.exit_code == 0
         assert os.path.exists('./.env')
         assert os.path.exists('./Pipfile')
-        assert os.path.exists('./azure-customer-app-pipeline.json')
+        assert os.path.exists('./azure-sample-app-pipeline.json')
         assert os.path.exists('./azure-input-output-pipeline.json')
         assert os.path.exists('./azure-integration-pipeline.json')
 

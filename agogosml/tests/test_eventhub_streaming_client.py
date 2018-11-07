@@ -25,8 +25,8 @@ def test_send():
     streaming_client = EventHubStreamingClient(config)
     #messages = ["making a list", "of various", "messages that", "need to be tested" ]
     messages = [
-        {"type": "object", "properties": {"key": {"type": "string"}, "intValue": {"type": "integer"}}},
-         {"type": "object", "properties": {"key": {"type": "string"}, "intValue": {"type": "integer"}}}
+        '{"type": "object", "properties": {"key": {"type": "string"}, "intValue": {"type": "integer"}}}',
+        '{"type": "object", "properties": {"key": {"type": "string"}, "intValue": {"type": "integer"}}}'
     ]
     for message in messages:
         streaming_client.send(message)
@@ -45,7 +45,7 @@ def test_receive():
               }
     streaming_client = EventHubStreamingClient(config)
     # TODO: Feeding in the HTTP endpoint as env variables, make sure this is correct and add success of post
-    request = streaming_client.receive()
+    streaming_client.receive(timeout=2)
     print("This worked")
 
 

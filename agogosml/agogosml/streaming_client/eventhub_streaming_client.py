@@ -34,7 +34,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
         self.storage_manager = AzureStorageCheckpointLeaseManager(
             self.storage_account_name, self.storage_key, self.lease_container_name)
 
-    def receive(self):
+    def receive(self, timeout=None):
         try:
             loop = asyncio.get_event_loop()
             host = EventProcessorHost(
@@ -50,7 +50,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
             # TODO: How pass back that request was successful?
             tasks = asyncio.gather(
                 host.open_async(),
-                #self.wait_and_close(host)
+                self.wait_and_close(host, timeout)
             )
             # Check that is works as expected - ie continues running indefinitely if there are more messages
             loop.run_until_complete(tasks)
@@ -82,10 +82,16 @@ class EventHubStreamingClient(AbstractStreamingClient):
         except:
             raise
 
-    # @staticmethod
-    # async def wait_and_close(host):
-    #     """
-    #     Run EventProcessorHost for 2 minutes then shutdown.
-    #     """
-    #     await asyncio.sleep(10)  # 60
-    #     await host.close_async()
+    @staticmethod
+    async def wait_and_close(host, timeout):
+        """
+        Run EventProcessorHost indefinitely
+        """
+        if timeout is None:
+            while True:
+                await asyncio.sleep(1)
+            await host.close_async()
+
+        else:
+            await asyncio.sleep(timeout)
+            await host.close_async()

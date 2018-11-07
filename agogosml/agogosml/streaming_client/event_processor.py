@@ -12,6 +12,7 @@ logger = logging.getLogger('logger')
 HOST = os.getenv("HOST")
 PORT = os.getenv("PORT")
 
+
 class EventProcessor(AbstractEventProcessor):
     """
     Example Implementation of AbstractEventProcessor
@@ -43,8 +44,6 @@ class EventProcessor(AbstractEventProcessor):
             context.sequence_number))
 
     async def process_events_async(self, context, messages):
-        """TODO: Need to iterate through each message in messages and make an http request
-        to the sample app. This looks to be writing the messages?!"""
         """
         Called by the processor host when a batch of events has arrived.
         This is where the real work of the event processor is done.
@@ -54,14 +53,16 @@ class EventProcessor(AbstractEventProcessor):
         :type messages: list[~azure.eventhub.common.EventData]
         """
         for message in messages:
-            message_json = message.body_as_json(encoding='UTF-8')
-            # TODO: fix endpoint passing and add checks for data format
-            server_address = (HOST, int(PORT))
-            request = requests.post(server_address, data=message_json)
-            if request.status_code != 200:
-                logger.info("Error with a request {} and message not sent was {}".format(
-                    request.status_code, message_json))
-            # TODO: Need to log every however many messages, cant be after all of them.
+            try:
+                message_str = message.body_as_str(encoding='UTF-8')
+                # TODO: fix endpoint passing and add checks for data format
+                server_address = (HOST, int(PORT))
+                request = requests.post(server_address, data=message_str)
+                if request.status_code != 200:
+                    logger.error("Error with a request {} and message not sent was {}".format(
+                        request.status_code, message_str))
+            except:
+                pass
         logger.info("Events processed {}".format(context.sequence_number))
         await context.checkpoint_async()
 
@@ -75,11 +76,3 @@ class EventProcessor(AbstractEventProcessor):
         :param error: The error that occured.
         """
         logger.error("Event Processor Error {!r}".format(error))
-
-
-async def wait_and_close(host):
-    """
-    Run EventProcessorHost for 2 minutes then shutdown.
-    """
-    await asyncio.sleep(10)#60
-    await host.close_async()

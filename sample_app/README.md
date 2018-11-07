@@ -1,4 +1,4 @@
-To run the instance app separately from the pipeline in src/instance-app: 
+To run the instance app separately from the pipeline in src/sample_app: 
 
 Locally:
 run `python placeholder.py`

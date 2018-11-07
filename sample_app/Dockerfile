@@ -1,19 +1,22 @@
 # Base image
 FROM python:3.7-alpine3.8 AS base
 
-WORKDIR /instance-app
-COPY . /instance-app
+WORKDIR /sample_app
+COPY . /sample_app
+
+RUN pip install -r requirements.txt
+
+# Tests image
+FROM base as tests
+
+COPY --from=base /sample_app /sample_app
 
 RUN pip install -r requirements-dev.txt
 
 # Run tests, linter
-RUN pytest testapp.py
-RUN pylint *.py
+RUN python -m pytest testapp.py
+RUN python -m pylint *.py
 
-# Release 
-FROM python:3.7-alpine3.8
-WORKDIR /instance-app
-COPY --from=base /instance-app /instance-app
-RUN pip install -r requirements.txt
-
-CMD ["python", "placeholder.py"]
+# Release image
+FROM base
+COPY --from=base /sample_app /sample_app

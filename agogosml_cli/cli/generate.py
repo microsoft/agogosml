@@ -8,6 +8,13 @@ import json
 import cli.utils as utils
 
 
+PROJ_FILES = ['.env',
+              'Pipfile',
+              'azure-customer-app-pipeline.json',
+              'azure-input-output-pipeline.json',
+              'azure-integration-pipeline.json']
+
+
 @click.command()
 @click.option('--force', '-f', is_flag=True, default=False, required=False,
               help='Ovewrite existing manifest file')
@@ -26,25 +33,21 @@ def generate(force, config, folder):
     else:
         click.echo('manifest.json not found. Please run agogosml init first.')
         raise click.Abort()
-    # Check if Files exists
-    if (os.path.exists(os.path.join(folder, '.env')) or
-        os.path.exists(os.path.join(folder, 'Pipefile')) or
-        os.path.exists(os.path.join(folder, 'azure-customer-app-pipeline.json')) or  # noqa: E501
-        os.path.exists(os.path.join(folder, 'azure-input-output-pipeline.json')) or  # noqa: E501
-        os.path.exists(os.path.join(folder, 'azure-integration-pipeline.json'))):  # noqa: E501
-        if not force:
-            click.echo('Files already exists. Use --force to overwrite')
-            raise click.Abort()
     # Create folder if not exists
     if not os.path.isdir(folder):
         os.makedirs(folder)
-    # Copy files as if from default
-    utils.copy_module_artifacts('.env', folder)
-    utils.copy_module_artifacts('Pipfile', folder)
-    # Modify file from defaults
-    write_mod_pipeline('azure-customer-app-pipeline.json', folder, proj_name)
-    write_mod_pipeline('azure-input-output-pipeline.json', folder, proj_name)
-    write_mod_pipeline('azure-integration-pipeline.json', folder, proj_name)
+    for proj_file in PROJ_FILES:
+        # Check if Files exists
+        if (os.path.exists(os.path.join(folder, proj_file))):
+            if not force:
+                click.echo('Files already exists. Use --force to overwrite')
+                raise click.Abort()
+        if proj_file.endswith('-pipeline.json'):  # Must end w/ -pipeline.json
+            # Modify pipeline file from defaults
+            write_mod_pipeline(proj_file, folder, proj_name)
+        else:
+            # Copy files as is from default
+            utils.copy_module_artifacts(proj_file, folder)
 
 
 def write_mod_pipeline(pipeline_file, outfolder, proj_name):

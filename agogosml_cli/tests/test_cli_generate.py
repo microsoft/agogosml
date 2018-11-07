@@ -8,10 +8,6 @@ from click.testing import CliRunner
 import cli.generate as generate
 
 
-def test_generate_schema():
-    print("TEST SCHEMA VALIDATION BY GIVING IT A VALID AND INVALID SCHEMA...")
-
-
 """
 http://click.palletsprojects.com/en/7.x/testing/
 You want to test the ff. commands (lets start w/ one test case for now):
@@ -62,3 +58,29 @@ def test_generate():
         assert os.path.exists('./azure-customer-app-pipeline.json')
         assert os.path.exists('./azure-input-output-pipeline.json')
         assert os.path.exists('./azure-integration-pipeline.json')
+
+
+def test_generate_invalid_schema():
+    """
+    RUN: agogosml generate (with invalid manifest file)
+    RESULT: Produces the ff in the current working directory:
+        - .env
+        - datapipeline.yml
+        - cicd.yml
+        - Pipfile
+        - test/e2e
+        - tests/validation
+    """
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        manifest_str = """
+        {
+            "dummy": "abc"
+        }
+        """
+        manifest = json.loads(manifest_str)
+        with open('manifest.json', 'w') as f:
+            json.dump(manifest, f, indent=4)
+
+        result = runner.invoke(generate.generate)
+        assert result.exit_code == 1

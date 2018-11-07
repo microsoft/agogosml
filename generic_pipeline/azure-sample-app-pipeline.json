@@ -14,6 +14,20 @@
             "triggerType": 2
         },
         {
+            "branchFilters": [
+                "+master"
+            ],
+            "forks": {
+                "enabled": false,
+                "allowSecrets": false
+            },
+            "pathFilters": [
+                "+/sample_app"
+            ],
+            "isCommentRequiredForPullRequest": false,
+            "triggerType": 64
+        },
+        {
             "definition": {
                 "id": 19,
                 "path": "\\",

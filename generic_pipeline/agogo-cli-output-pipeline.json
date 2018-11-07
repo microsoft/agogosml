@@ -12,6 +12,20 @@
             "maxConcurrentBuildsPerBranch": 1,
             "pollingInterval": 0,
             "triggerType": 2
+        },
+        {
+            "branchFilters": [
+                "+master"
+            ],
+            "forks": {
+                "enabled": false,
+                "allowSecrets": false
+            },
+            "pathFilters": [
+                "+/agogosml_cli"
+            ],
+            "isCommentRequiredForPullRequest": false,
+            "triggerType": 64
         }
     ],
     "properties": {},

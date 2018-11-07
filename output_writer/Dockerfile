@@ -20,40 +20,38 @@ WORKDIR /root/librdkafka
 RUN /root/librdkafka/configure && make && make install
 
 # Copy the app and the common modules
-WORKDIR /root/output_writer
-COPY ./output_writer /root/output_writer
-COPY ./agogosml/streaming_client/ /root/agogosml/streaming_client
+WORKDIR /output_writer
+COPY ./output_writer /output_writer
+COPY ./agogosml/streaming_client/ /agogosml/streaming_client
 
 # Install needed production requirements
 RUN pip install -r requirements.txt
 
 FROM base AS tests
 
-WORKDIR /root/output_writer
-COPY --from=base /root/output_writer /root/output_writer
-COPY --from=base /root/agogosml/streaming_client /root/agogosml/streaming_client
-COPY ./tests/ /root/tests
+WORKDIR /output_writer
+COPY --from=base /output_writer /output_writer
+COPY --from=base /agogosml/streaming_client /agogosml/streaming_client
+COPY ./tests/ /tests
 
 # Install testing requirements
 RUN pip install -r requirements-dev.txt
 
 # Run tests, linter
-#WORKDIR /root
-#RUN pylint output_writer/*.py
+WORKDIR /
+RUN python -m pylint output_writer/*.py
 
-# Todo: fix module load issue
-#WORKDIR /root/tests
-#RUN pytest test_outputWriter.py
-#RUN pytest test_outputWriterServiceResolver.py
+RUN python -m pytest tests/test_outputWriter.py
+RUN python -m pytest tests/test_outputWriterServiceResolver.py
 
 
 # Release
 FROM base AS release
 
-WORKDIR /root/output_writer
+WORKDIR /output_writer
 
-COPY --from=base /root/output_writer /root/output_writer
-COPY --from=base /root/agogosml/streaming_client /root/agogosml/streaming_client
+COPY --from=base /output_writer /output_writer
+COPY --from=base /agogosml/streaming_client /agogosml/streaming_client
 
 # Cleanup
 RUN apk del .build-deps

@@ -1,9 +1,9 @@
 from flask import Flask, request
 import os
 
-from agogosml.streaming_client.flask_http_listener_client import FlaskHttpListenerClient
-from agogosml.streaming_client.eventhub_client_broker import EventHubClientBroker
-from agogosml.streaming_client.kafka_client_broker import KafkaClientBroker
+from agogosml.agogosml.streaming_client.flask_http_listener_client import FlaskHttpListenerClient
+from agogosml.agogosml.streaming_client.eventhub_client_broker import EventHubClientBroker
+from agogosml.agogosml.streaming_client.kafka_client_broker import KafkaClientBroker
 from output_writer.output_writer import OutputWriter
 
 

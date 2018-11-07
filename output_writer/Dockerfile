@@ -22,7 +22,7 @@ RUN /root/librdkafka/configure && make && make install
 # Copy the app and the common modules
 WORKDIR /output_writer
 COPY ./output_writer /output_writer
-COPY ./agogosml/streaming_client/ /agogosml/streaming_client
+COPY ./agogosml/agogosml/streaming_client/ /agogosml/agogosml/streaming_client
 
 # Install needed production requirements
 RUN pip install -r requirements.txt
@@ -31,7 +31,7 @@ FROM base AS tests
 
 WORKDIR /output_writer
 COPY --from=base /output_writer /output_writer
-COPY --from=base /agogosml/streaming_client /agogosml/streaming_client
+COPY --from=base /agogosml/agogosml/streaming_client /agogosml/agogosml/streaming_client
 COPY ./tests/ /tests
 
 # Install testing requirements
@@ -51,7 +51,7 @@ FROM base AS release
 WORKDIR /output_writer
 
 COPY --from=base /output_writer /output_writer
-COPY --from=base /agogosml/streaming_client /agogosml/streaming_client
+COPY --from=base /agogosml/agogosml/streaming_client /agogosml/agogosml/streaming_client
 
 # Cleanup
 RUN apk del .build-deps

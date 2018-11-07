@@ -1,5 +1,5 @@
-from agogosml.streaming_client.abstract_client_broker import AbstractClientBroker
-from agogosml.streaming_client.listener_client import ListenerClient
+from agogosml.agogosml.streaming_client.abstract_client_broker import AbstractClientBroker
+from agogosml.agogosml.streaming_client.listener_client import ListenerClient
 from output_writer.output_writer import OutputWriter
 
 # Can't move to separate file due to errors I can't solve.

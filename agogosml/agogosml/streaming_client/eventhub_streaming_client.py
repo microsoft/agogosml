@@ -1,84 +1,15 @@
 """EventHub streaming client"""
 
 from .abstract_streaming_client import AbstractStreamingClient
-from azure.eventhub import EventHubClient, EventData #EventHubClientAsync, AsyncSender, AsyncReceiver, Offset
-from azure.eventprocessorhost import AbstractEventProcessor, AzureStorageCheckpointLeaseManager, \
-            EventHubConfig, EventProcessorHost, EPHOptions
-from azure.eventhub import EventHubClient
+from .event_processor import *
+from azure.eventhub import EventHubClient, EventData
 import asyncio
 import logging
 
 logger = logging.getLogger('logger_1')
 
 
-class EventProcessor(AbstractEventProcessor):
-    """
-    Example Implementation of AbstractEventProcessor
-    """
-
-    def __init__(self, params=None):
-        """
-        Init Event processor
-        """
-        super().__init__(params)
-        self._msg_counter = 0
-
-    async def open_async(self, context):
-        """
-        Called by processor host to initialize the event processor.
-        """
-        logger.info("Connection established {}".format(context.partition_id))
-
-    async def close_async(self, context, reason):
-        """
-        Called by processor host to indicate that the event processor is being stopped.
-        :param context: Information about the partition
-        :type context: ~azure.eventprocessorhost.PartitionContext
-        """
-        logger.info("Connection closed (reason {}, id {}, offset {}, sq_number {})".format(
-            reason,
-            context.partition_id,
-            context.offset,
-            context.sequence_number))
-
-    async def process_events_async(self, context, messages):
-        """TODO: Need to iterate through each message in messages and make an http request
-        to the sample app. This looks to be writing the messages?!"""
-        """
-        Called by the processor host when a batch of events has arrived.
-        This is where the real work of the event processor is done.
-        :param context: Information about the partition
-        :type context: ~azure.eventprocessorhost.PartitionContext
-        :param messages: The events to be processed.
-        :type messages: list[~azure.eventhub.common.EventData]
-        """
-        for message in messages:
-            message_str = message.body_as_str(encoding='UTF-8')
-            #TODO: Need to do something with the message_str...?!
-
-        logger.info("Events processed {}".format(context.sequence_number))
-        await context.checkpoint_async()
-
-    async def process_error_async(self, context, error):
-        """
-        Called when the underlying client experiences an error while receiving.
-        EventProcessorHost will take care of recovering from the error and
-        continuing to pump messages,so no action is required from
-        :param context: Information about the partition
-        :type context: ~azure.eventprocessorhost.PartitionContext
-        :param error: The error that occured.
-        """
-        logger.error("Event Processor Error {!r}".format(error))
-
-async def wait_and_close(host):
-    """
-    Run EventProcessorHost for 2 minutes then shutdown.
-    """
-    await asyncio.sleep(60)
-    await host.close_async()
-
-
-class EventHubStreamingClient(AbstractStreamingClient, EventProcessor):
+class EventHubStreamingClient(AbstractStreamingClient):
     def __init__(self, config):
         """
         Class to create an eventhub streaming client instance.
@@ -87,7 +18,6 @@ class EventHubStreamingClient(AbstractStreamingClient, EventProcessor):
             config: dictionary file with all the relevant paramenters
 
         """
-        EventProcessor.__init__(self, "EventProcessor")
         self.config = config
         self.storage_account_name = self.config.get("AZURE_STORAGE_ACCOUNT")
         self.storage_key = self.config.get("AZURE_STORAGE_ACCESS_KEY")
@@ -105,7 +35,6 @@ class EventHubStreamingClient(AbstractStreamingClient, EventProcessor):
             self.storage_account_name, self.storage_key, self.lease_container_name)
 
     def receive(self):
-        #Confused as to whether it is receiving or sending the messages, what is context?
         try:
             loop = asyncio.get_event_loop()
             host = EventProcessorHost(
@@ -116,11 +45,14 @@ class EventHubStreamingClient(AbstractStreamingClient, EventProcessor):
                                     eph_options=self.eh_options,
                                     loop=loop)
 
+            # TODO: Changed from wait_and_close in the loop to just run_until_complete
+            # TODO: Implement a way of stopping the loop from CI/some external event
+            # TODO: How pass back that request was successful?
             tasks = asyncio.gather(
                 host.open_async(),
-                host.process_events_async(),
-                wait_and_close(host)
+                #self.wait_and_close(host)
             )
+            # Check that is works as expected - ie continues running indefinitely if there are more messages
             loop.run_until_complete(tasks)
 
         except KeyboardInterrupt:
@@ -134,98 +66,26 @@ class EventHubStreamingClient(AbstractStreamingClient, EventProcessor):
             loop.stop()
 
     def send(self, message):
+        "amqps://<URL-encoded-SAS-policy>:<URL-encoded-SAS-key>@<mynamespace>.servicebus.windows.net/myeventhub"
+        address = "amqps://" + self.namespace + ".servicebus.windows.net/" + self.eventhub
+        # address = "amqps://" + self.user + ":" + self.key + "@" + self.namespace + ".servicebus.windows.net/" + self.eventhub
         try:
-            "amqps://<URL-encoded-SAS-policy>:<URL-encoded-SAS-key>@<mynamespace>.servicebus.windows.net/myeventhub"
-            address = "amqps://" + self.user + ":" + self.key + "@" + self.namespace + ".servicebus.windows.net/" + self.eventhub
             client = EventHubClient(address, debug=False, username=self.user, password=self.key)
-            sender = client.add_sender(partition="0")
+            sender = client.add_sender()
             client.run()
             try:
                 sender.send(EventData(message))
             except:
                 raise
+            finally:
+                client.stop()
         except:
-            pass
-        finally:
-            client.stop()
+            raise
 
-    def get_producer(self, *args, **kwargs):
-        """
-        Creates producer object.
-        """
-        #self.producer = self.client.add_sender(*args, **kwargs)
-        pass
-
-    def get_consumer(self, *args, **kwargs):
-        """
-        Creates consumer object.
-        """
-        #self.consumer = self.client.add_receiver(*args, **kwargs)
-        pass
-
-    def mutate_message(message: str):
-        """
-        Mutates input message.
-        """
-        #return EventData(message)
-        pass
-
-
-    # async def _run_send(self, message:str, partition_key:str):
-    #     sender = self.client.add_async_sender()
-    #     await self.client.run_async()
-    #     await self._send(sender, message, partition_key)
-    #
-    # async def _send(self, sender, message:str, partition_key:str):
-    #     mutated_message = self.mutate_message(message)
-    #     mutated_message.partition_key = self.mutate_partition_key(partition_key)
-    #     await sender.send(mutated_message)
-
-    # def send(self, message: str, partition_key: str, *args, **kwargs):
+    # @staticmethod
+    # async def wait_and_close(host):
     #     """
-    #      Upload a message to a eventhub topic.
-    #
-    #     Args:
-    #         message: A string input to upload to eventhub.
+    #     Run EventProcessorHost for 2 minutes then shutdown.
     #     """
-    #     '''
-    #     TODO:
-    #     We are going to need documentation for Eventhub
-    #     to ensure proper syntax is clear
-    #
-    #     '''
-    #     if not isinstance(message, str):
-    #         raise TypeError('str type expected for message')
-    #
-    #     try:
-    #         loop = asyncio.get_event_loop()
-    #         tasks = asyncio.gather(
-    #             self._run_send(message, partition_key),
-    #             self._run_send(message, partition_key))
-    #         loop.run_until_complete(tasks)
-    #         loop.run_until_complete(self.client.stop_async())
-    #         loop.close()
-    #
-    #     except KeyboardInterrupt:
-    #         pass
-    #
-    # async def _receiver(self, partition):
-    #     OFFSET = Offset("-1")
-    #     receiver = self.client.add_async_receiver(self.consumer_group, partition, OFFSET, prefetch=5)
-    #     await self.client.run_async()
-    #     for event_data in await receiver.receive(timeout=10):
-    #         last_offset = event_data.offset
-    #         last_sn = event_data.sequence_number
-    #
-    # def receive(self):
-    #     try:
-    #         loop = asyncio.get_event_loop()
-    #         tasks = [
-    #             asyncio.ensure_future(self._receive("0")),
-    #             asyncio.ensure_future(self._receive("1"))]
-    #         loop.run_until_complete(asyncio.wait(tasks))
-    #         loop.run_until_complete(self.client.stop_async())
-    #         loop.close()
-    #
-    #     except KeyboardInterrupt:
-    #         pass
+    #     await asyncio.sleep(10)  # 60
+    #     await host.close_async()

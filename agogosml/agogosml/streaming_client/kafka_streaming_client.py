@@ -41,15 +41,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
 
     def set_topic(self, topic):
         self.topic = topic
-        
-    def mutate_message(self, message: str):
-        """
-        Mutate the input string message.
-
-        Args:
-            message: A string input.
-        """
-        return message.encode('utf-8')
 
     def send(self, message: str, *args, **kwargs):
         """
@@ -115,3 +106,13 @@ class KafkaStreamingClient(AbstractStreamingClient):
         converted to booleans in Python.
         """
         return not bool(dictionary)
+
+    @staticmethod
+    def mutate_message(message: str):
+        """
+        Mutate the input string message.
+
+        Args:
+            message: A string input.
+        """
+        return message.encode('utf-8')

@@ -12,7 +12,7 @@ RUN apk add --update make && \
 RUN pipenv run make clean && \
     pipenv run make lint && \
     # pipenv run make test && \ <-- FIXME: Tests relying on modified time not reliable in docker build, unfortunately
-    # pipenv run make test-all <- FIXME: Tox is broken.
+    # pipenv run make test-all  <- FIXME: Tox is broken.
     pipenv run make coverage && \
     pipenv run make docs && \
     pipenv run make dist

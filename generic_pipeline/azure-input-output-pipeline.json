@@ -2,6 +2,15 @@
     "options": [],
     "triggers": [
         {
+            "branchFilters": [
+                "+master"
+            ],
+            "pathFilters": [
+                "+/input_reader",
+                "+/output_writer"
+            ],
+            "batchChanges": false,
+            "maxConcurrentBuildsPerBranch": 1,
             "pollingInterval": 0,
             "triggerType": 2
         }

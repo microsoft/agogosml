@@ -4,7 +4,6 @@
 
 import os
 import json
-import pytest
 from click.testing import CliRunner
 import cli.generate as generate
 
@@ -27,7 +26,6 @@ You want to test the ff. commands (lets start w/ one test case for now):
 """
 
 
-@pytest.mark.skip(reason="Not Implemented yet")
 def test_generate():
     """
     RUN: agogosml generate
@@ -60,8 +58,7 @@ def test_generate():
         result = runner.invoke(generate.generate)
         assert result.exit_code == 0
         assert os.path.exists('./.env')
-        assert os.path.exists('./datapipeline.yml')
-        assert os.path.exists('./cicd.yml')
         assert os.path.exists('./Pipfile')
-        assert os.path.exists('./test/e2e')
-        assert os.path.exists('./test/validation')
+        assert os.path.exists('./azure-customer-app-pipeline.json')
+        assert os.path.exists('./azure-input-output-pipeline.json')
+        assert os.path.exists('./azure-integration-pipeline.json')

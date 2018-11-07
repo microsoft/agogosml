@@ -48,7 +48,7 @@
                             "dockerRegistryEndpoint": "",
                             "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": "",
-                            "dockerComposeFile": "**/generic_pipeline/instance-app-docker-compose.yml",
+                            "dockerComposeFile": "**/generic_pipeline/sample-app-docker-compose.yml",
                             "additionalDockerComposeFiles": "",
                             "dockerComposeFileArgs": "TAG=$(Build.BuildId)",
                             "projectName": "$(Build.Repository.Name)",
@@ -125,7 +125,7 @@
                         }
                     }
                 ],
-                "name": "Customer-App-Build-CI",
+                "name": "Sample-App-Build-CI",
                 "refName": "Phase_1",
                 "condition": "succeeded()",
                 "target": {

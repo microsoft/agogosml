@@ -14,18 +14,6 @@ class ClientMessagingMock(AbstractStreamingClient):
     def __init__(self):
         pass
 
-    def mutate_message(self, message: str):
-        pass
-
-    def get_producer(self):
-        pass
-
-    def get_consumer(self):
-        pass
-
-    async def send(self):
-        pass
-
     async def receive(self, message: str):
         pass
 

@@ -6,8 +6,8 @@
                 "+master"
             ],
             "pathFilters": [
-                "+/input_reader",
-                "+/output_writer"
+                "+/output_writer",
+                "+/agogosml/agogosml"
             ],
             "batchChanges": false,
             "maxConcurrentBuildsPerBranch": 1,
@@ -23,8 +23,8 @@
                 "allowSecrets": false
             },
             "pathFilters": [
-                "+/input_reader",
-                "+/output_writer"
+                "+/output_writer",
+                "+/agogosml/agogosml"
             ],
             "isCommentRequiredForPullRequest": false,
             "triggerType": 64
@@ -54,12 +54,12 @@
                             "dockerRegistryEndpoint": "",
                             "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": "",
-                            "dockerComposeFile": "**/generic_pipeline/input-output-docker-compose.yml",
+                            "dockerComposeFile": "**/generic_pipeline/output-app-docker-compose.yml",
                             "additionalDockerComposeFiles": "",
                             "dockerComposeFileArgs": "TAG=$(Build.BuildId)",
                             "projectName": "$(Build.Repository.Name)",
                             "qualifyImageNames": "true",
-                            "action": "Run a Docker Compose command",
+                            "action": "Build services",
                             "additionalImageTags": "",
                             "includeSourceTags": "false",
                             "includeLatestTag": "false",
@@ -88,7 +88,7 @@
                         "enabled": true,
                         "continueOnError": false,
                         "alwaysRun": false,
-                        "displayName": "Push input reader & output writer images",
+                        "displayName": "Push output writer app image",
                         "timeoutInMinutes": 0,
                         "condition": "succeeded()",
                         "task": {
@@ -106,10 +106,10 @@
                             "arguments": "",
                             "useDefaultContext": "true",
                             "buildContext": "",
-                            "pushMultipleImages": "true",
+                            "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "$(Build.Repository.Name):$(Build.BuildId)",
-                            "imageNamesPath": "generic_pipeline/input-output-images-names",
+                            "imageName": "output_writer:$(Build.BuildId)",
+                            "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
                             "includeLatestTag": "false",
@@ -131,7 +131,7 @@
                         }
                     }
                 ],
-                "name": "MessagingService-Build-CI",
+                "name": "OutputWriter-Build-CI",
                 "refName": "Phase_1",
                 "condition": "succeeded()",
                 "target": {
@@ -156,7 +156,7 @@
     "quality": 1,
     "drafts": [],
     "id": 13,
-    "name": "Input-Output-build-CI",
+    "name": "Output-Writer-build-CI",
     "path": "\\",
     "type": 2
 }

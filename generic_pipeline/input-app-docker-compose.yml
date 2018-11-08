@@ -1,6 +1,6 @@
 version: "3"
 
-services:
+#services:
   #input-reader:
   #  build: ../input_reader/
   #  image: agogosacr.azurecr.io/input_reader:${TAG}

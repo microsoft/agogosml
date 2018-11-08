@@ -1,9 +1,10 @@
 """
 Factory and instance resolving for input reader
 """
-from agogosml.agogosml.streaming_client.eventhub_streaming_client import EventHubStreamingClient
-from agogosml.agogosml.streaming_client.kafka_streaming_client import KafkaStreamingClient
-from input_reader.input_reader import InputReader
+from agogosml.agogosml.streaming_client import *
+from agogosml.agogosml.input_reader.input_reader import InputReader
+
+__all__ = ['InputReaderFactory']
 
 
 class InputReaderFactory:

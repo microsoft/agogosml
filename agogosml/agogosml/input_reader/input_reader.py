@@ -5,7 +5,9 @@ Input Reader
 or should it follow output_writer structure exactly?
 """
 
-from streaming_client import AbstractStreamingClient
+from agogosml.agogosml.streaming_client import AbstractStreamingClient
+
+__all__ = ['InputReader']
 
 
 class InputReader:  # pylint: disable=too-few-public-methods

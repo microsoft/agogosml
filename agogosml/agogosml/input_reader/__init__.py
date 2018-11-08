@@ -1,1 +1,3 @@
-from .streaming_client import *
+
+from agogosml.agogosml.input_reader.input_reader import InputReader
+from agogosml.agogosml.input_reader.input_reader_factory import InputReaderFactory

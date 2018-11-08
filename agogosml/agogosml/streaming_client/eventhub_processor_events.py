@@ -10,8 +10,8 @@ class EventProcessor(AbstractEventProcessor):
     """
     Example Implementation of AbstractEventProcessor
     """
-    app_host = ""
-    app_port = ""
+    #app_host = ""
+    #app_port = ""
 
     def __init__(self, params=None):
         """
@@ -51,7 +51,8 @@ class EventProcessor(AbstractEventProcessor):
         for message in messages:
             try:
                 message_str = message.body_as_str(encoding='UTF-8')
-                send_message(message_str, self.app_host, int(self.app_port))
+                send_message(message_str, self.app_host, self.app_port)
+                print("Received message: {}".format(message_str))  # TODO: REMOVE
             except:
                 pass
         logger.info("Events processed {}".format(context.sequence_number))

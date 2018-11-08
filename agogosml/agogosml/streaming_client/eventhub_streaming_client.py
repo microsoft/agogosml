@@ -1,10 +1,11 @@
 """EventHub streaming client"""
 
-from .abstract_streaming_client import AbstractStreamingClient
-from .eventhub_processor_events import *
+from agogosml.agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
+from agogosml.agogosml.streaming_client.eventhub_processor_events import *
 from azure.eventhub import EventHubClient, EventData
-from azure.eventprocessorhost import  AzureStorageCheckpointLeaseManager, \
+from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, \
             EventHubConfig, EventProcessorHost, EPHOptions
+
 import asyncio
 import logging
 
@@ -28,9 +29,10 @@ class EventHubStreamingClient(AbstractStreamingClient):
         self.lease_container_name = self.config.get("LEASE_CONTAINER_NAME")
         self.namespace = self.config.get("EVENT_HUB_NAMESPACE")
         self.eventhub = self.config.get("EVENT_HUB_NAME")
-        self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP")
+        #self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP")
         self.user = self.config.get("EVENT_HUB_SAS_POLICY")
         self.key = self.config.get("EVENT_HUB_SAS_KEY")
+        self.timeout = self.config.get("TIMEOUT")
 
         # Create EPH Client
         if self.storage_account_name is not None and self.storage_key is not None:
@@ -40,8 +42,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 self.namespace,
                 self.eventhub,
                 self.user,
-                self.key,
-                consumer_group=self.consumer_group)
+                self.key)#, consumer_group=self.consumer_group)
             self.eh_options = EPHOptions()
             self.eh_options.release_pump_on_timeout = True
             self.eh_options.debug_trace = False
@@ -62,7 +63,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 logger.error('Failed to init EH send client: ' + str(e))
                 raise
 
-    def receive(self, timeout=None):
+    def receive(self, timeout=1):
         loop = asyncio.get_event_loop()
         try:
             ep = EventProcessor
@@ -80,7 +81,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
             # TODO: Implement a way of stopping the loop from CI/some external event
             # TODO: How pass back that request was successful?
             tasks = asyncio.gather(host.open_async(),
-                                   self.wait_and_close(host, timeout))
+                                   self.wait_and_close(host, timeout)) # This has been set in the .env file
             # Check that is works as expected - ie continues running indefinitely if there are more messages
             loop.run_until_complete(tasks)
 
@@ -98,6 +99,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
         try:
             self.sender.send(EventData(message))
+            print("Sent message: {}".format(message)) #TODO: REMOVE
         except Exception as e:
             logger.error('Failed to send message to EH: ' + str(e))
 

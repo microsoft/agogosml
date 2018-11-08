@@ -11,8 +11,8 @@ RUN apk add --update make && \
 
 RUN pipenv run make clean && \
     pipenv run make lint && \
-    # pipenv run make test && \ <-- FIXME: Tests relying on modified time not reliable in docker build, unfortunately
-    # pipenv run make test-all  <- FIXME: Tox is broken.
+    pipenv run make test &&  \
+    # pipenv run make test-all && \ <- FIXME: Tox is broken, no py3.5, 3.6 interpreter in image
     pipenv run make coverage && \
     pipenv run make docs && \
     pipenv run make dist

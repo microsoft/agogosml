@@ -8,7 +8,7 @@ from azure.eventprocessorhost import  AzureStorageCheckpointLeaseManager, \
 import asyncio
 import logging
 
-logger = logging.getLogger("EH")
+logger = logging.getLogger("STREAM")
 logger.setLevel(logging.INFO)
 
 
@@ -31,17 +31,17 @@ class EventHubStreamingClient(AbstractStreamingClient):
         self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP")
         self.user = self.config.get("EVENT_HUB_SAS_POLICY")
         self.key = self.config.get("EVENT_HUB_SAS_KEY")
-        self.app_host = self.config.get("APP_HOST")
-        self.app_port = self.config.get("APP_PORT")
 
         # Create EPH Client
         if self.storage_account_name is not None and self.storage_key is not None:
+            self.app_host = self.config.get("APP_HOST")
+            self.app_port = self.config.get("APP_PORT")
             self.eph_client = EventHubConfig(
-              self.namespace,
-              self.eventhub,
-              self.user,
-              self.key,
-              consumer_group=self.consumer_group)
+                self.namespace,
+                self.eventhub,
+                self.user,
+                self.key,
+                consumer_group=self.consumer_group)
             self.eh_options = EPHOptions()
             self.eh_options.release_pump_on_timeout = True
             self.eh_options.debug_trace = False

@@ -1,10 +1,9 @@
 """EventProcessor host class for Event Hub"""
 
 from azure.eventprocessorhost import AbstractEventProcessor
-import logging
-import requests
+from .http_request import *
 
-logger = logging.getLogger("EH")
+logger = logging.getLogger("STREAM")
 logger.setLevel(logging.INFO)
 
 class EventProcessor(AbstractEventProcessor):
@@ -52,12 +51,7 @@ class EventProcessor(AbstractEventProcessor):
         for message in messages:
             try:
                 message_str = message.body_as_str(encoding='UTF-8')
-                server_address = (self.app_host, int(self.app_port))
-                request = requests.post(server_address, data=message_str)
-                if request.status_code != 200:
-                    logger.error(
-                        "Error with a request {} and message not sent was {}".
-                        format(request.status_code, message_str))
+                send_message(message_str, self.app_host, int(self.app_port))
             except:
                 pass
         logger.info("Events processed {}".format(context.sequence_number))

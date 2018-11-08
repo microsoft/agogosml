@@ -5,9 +5,9 @@
 import os
 import click
 import json
-from jsonschema import validate
+import cli.utils as utils
 
-SCHEMA_FILE = 'manifest.schema.json'
+
 DEFAULT_MANIFEST_FILE = 'default-manifest.json'
 
 
@@ -38,25 +38,8 @@ def init(force, project_name, folder):
 
 def build_manifest(project_name):
     """Builds the Manifest python object"""
-    manifest_json = retrieve_json_from_file(DEFAULT_MANIFEST_FILE)
+    manifest_json = utils.get_json_module_templates(DEFAULT_MANIFEST_FILE)
     manifest_json['name'] = project_name
     # default_manifest_json['tests'] = ??? Prompt user?
-    validate_manifest(manifest_json)
+    utils.validate_manifest(manifest_json)
     return manifest_json
-
-
-def validate_manifest(manifest_json):
-    """Validates a given JSON string against schema file.
-    Throws an error if invalid."""
-    schema_json = retrieve_json_from_file(SCHEMA_FILE)
-    validate(manifest_json, schema_json)
-    return
-
-
-def retrieve_json_from_file(file):
-    """Retrieve JSON from file"""
-    module_path = os.path.dirname(__file__)
-    schema_file = os.path.join(module_path, file)
-    with open(schema_file) as f:
-        schema = json.load(f)
-    return schema

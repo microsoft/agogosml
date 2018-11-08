@@ -4,14 +4,9 @@
 
 import os
 import json
-import pytest
 from click.testing import CliRunner
 import cli.generate as generate
-
-
-def test_generate_schema():
-    print("TEST SCHEMA VALIDATION BY GIVING IT A VALID AND INVALID SCHEMA...")
-
+import tests.test_utils as test_utils
 
 """
 http://click.palletsprojects.com/en/7.x/testing/
@@ -26,11 +21,98 @@ You want to test the ff. commands (lets start w/ one test case for now):
     * should fail if any yml file is not valid yaml.
 """
 
+PROJ_FILES = ['.env',
+              'Pipfile',
+              'azure-sample-app-pipeline.json',
+              'azure-input-output-pipeline.json',
+              'azure-integration-pipeline.json',
+              'input-output-docker-compose.yml',
+              'sample-app-docker-compose.yml']
 
-@pytest.mark.skip(reason="Not Implemented yet")
+
 def test_generate():
+    """Tests of generate command w/o <folder> specified"""
+    runner = CliRunner()
     """
     RUN: agogosml generate
+    RESULT: Produces the correct files in the current working directory
+    """
+    with runner.isolated_filesystem():
+        _create_test_manifest()
+        result = runner.invoke(generate.generate)
+        assert result.exit_code == 0
+        _assert_template_files_exist()
+
+    """
+    RUN: agogosml generate -f
+    RESULT: Overwrite existing files
+    """
+    with runner.isolated_filesystem():
+        _create_test_manifest()
+        _create_dummy_template_files()
+        prevmd5 = _get_md5_template_files()
+        result = runner.invoke(generate.generate, ['--force'])
+        assert result.exit_code == 0
+        assert set(prevmd5) != set(_get_md5_template_files())
+        _assert_template_files_exist()
+
+    """
+    RUN: agogosml generate
+    RESULT: Fail since files already exist and should NOT overwite
+    """
+    with runner.isolated_filesystem():
+        _create_test_manifest()
+        _create_dummy_template_files()
+        prevmd5 = _get_md5_template_files()
+        result = runner.invoke(generate.generate)
+        assert result.exit_code == 1
+        assert set(prevmd5) == set(_get_md5_template_files())
+        _assert_template_files_exist()
+
+
+def test_generate_folder():
+    """Test of generate command with folder specified"""
+    runner = CliRunner()
+    """
+    RUN: agogosml generate <folder>
+    RESULT: Produces the correct files in the specified directory
+    """
+    with runner.isolated_filesystem():
+        _create_test_manifest()
+        result = runner.invoke(generate.generate, ['folder'])
+        assert result.exit_code == 0
+        _assert_template_files_exist('folder')
+
+    """
+    RUN: agogosml generate -f <folder>
+    RESULT: Overwrite existing files in the specified directory
+    """
+    with runner.isolated_filesystem():
+        _create_test_manifest()
+        _create_dummy_template_files('folder')
+        prevmd5 = _get_md5_template_files('folder')
+        result = runner.invoke(generate.generate, ['--force', 'folder'])
+        assert result.exit_code == 0
+        assert set(prevmd5) != set(_get_md5_template_files('folder'))
+        _assert_template_files_exist('folder')
+
+    """
+    RUN: agogosml generate <folder>
+    RESULT: Fail since files already exist and should NOT overwite
+    """
+    with runner.isolated_filesystem():
+        _create_test_manifest()
+        _create_dummy_template_files('folder')
+        prevmd5 = _get_md5_template_files('folder')
+        result = runner.invoke(generate.generate, ['folder'])
+        assert result.exit_code == 1
+        assert set(prevmd5) == set(_get_md5_template_files('folder'))
+        _assert_template_files_exist('folder')
+
+
+def test_generate_invalid_schema():
+    """
+    RUN: agogosml generate (with invalid manifest file)
     RESULT: Produces the ff in the current working directory:
         - .env
         - datapipeline.yml
@@ -43,14 +125,7 @@ def test_generate():
     with runner.isolated_filesystem():
         manifest_str = """
         {
-            "name": "my-data-pipeline",
-            "tests": [{
-                "name": "Sanity Check",
-                "type": "language-specific",
-                "input": "in.json",
-                "output": "out.json",
-                "outputFormatter": "ConsoleOutputFormatterClass"
-            }]
+            "dummy": "abc"
         }
         """
         manifest = json.loads(manifest_str)
@@ -58,10 +133,49 @@ def test_generate():
             json.dump(manifest, f, indent=4)
 
         result = runner.invoke(generate.generate)
-        assert result.exit_code == 0
-        assert os.path.exists('./.env')
-        assert os.path.exists('./datapipeline.yml')
-        assert os.path.exists('./cicd.yml')
-        assert os.path.exists('./Pipfile')
-        assert os.path.exists('./test/e2e')
-        assert os.path.exists('./test/validation')
+        assert result.exit_code == 1
+
+
+def _assert_template_files_exist(folder='.'):
+    for proj_file in PROJ_FILES:
+        assert os.path.exists(os.path.join(folder, proj_file))
+
+
+def _create_test_manifest(folder='.'):
+    manifest_str = """
+    {
+        "name": "test manifest",
+        "tests": [{
+            "name": "Sanity Check",
+            "type": "language-specific",
+            "input": "in.json",
+            "output": "out.json",
+            "outputFormatter": "ConsoleOutputFormatterClass"
+        }]
+    }
+    """
+    manifest = json.loads(manifest_str)
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+    outfile = os.path.join(folder, 'manifest.json')
+    with open(outfile, 'w') as f:
+        json.dump(manifest, f, indent=4)
+
+
+def _create_dummy_template_files(folder='.'):
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+    for proj_file in PROJ_FILES:
+        outfile = os.path.join(folder, proj_file)
+        with open(outfile, 'w') as f:
+            json.dump("test content", f, indent=4)
+
+
+def _get_md5_template_files(folder='.'):
+    """Get the md5 hashes of the project files. Used to know if files were
+    overwritten"""
+    allmd5 = []
+    for proj_file in PROJ_FILES:
+        outfile = os.path.join(folder, proj_file)
+        allmd5.append(test_utils.md5(outfile))
+    return allmd5

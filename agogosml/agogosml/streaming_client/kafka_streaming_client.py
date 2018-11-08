@@ -4,43 +4,49 @@ from .abstract_streaming_client import AbstractStreamingClient
 from confluent_kafka import Producer, Consumer, admin
 import sys
 from confluent_kafka import KafkaException, KafkaError
+from .http_request import *
+
+logger = logging.getLogger("STREAM")
+logger.setLevel(logging.INFO)
 
 
 class KafkaStreamingClient(AbstractStreamingClient):
+
     def __init__(self, config):
         """
-        Class to create a kafka client broker instance.
+        Class to create a kafka streaming client instance.
 
         Args:
-            config: A dict config file with following structure:
-                    config = {
-                                'bootstrap.servers': '127.0.0.1:9092',
-                                'group.id': 'group1',
-                                'enable.auto.commit': False
-                            }
-                    Must specify "bootstrap.servers" and "group.id".
-                    Docs here https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
+            config: dictionary file with all the relevant parameters
             topic: A string kafka topic.
         """
-        self.config = config
-        if self.is_empty(self.config):
-            raise Exception('''
-            Hosts must be defined to use kafka!
-            ''')
-        if self.config.get("bootstrap.servers") is None:
-            raise Exception('''
-            bootstrap.servers must be defined with at least one broker.
-            ''')
-        if self.config.get("group.id") is None:
-            raise Exception('''
-            group.id must be defined with some group id
-            ''')
-        self.admin = admin.AdminClient(self.config)
-        self.producer = Producer(self.config)
-        self.consumer = Consumer(self.config)
 
-    def set_topic(self, topic):
-        self.topic = topic
+        self.topic = config.get("KAFKA_TOPIC")
+
+        kafka_config = self.create_kafka_config(config)
+        self.admin = admin.AdminClient(kafka_config)
+
+        if config.get("KAFKA_CONSUMER_GROUP") is None:
+            self.producer = Producer(kafka_config)
+        else:
+            self.app_host = config.get("APP_HOST")
+            self.app_port = config.get("APP_PORT")
+            self.consumer = Consumer(kafka_config)
+
+    @staticmethod
+    def create_kafka_config(user_config):
+
+        config = {
+          "bootstrap.servers": user_config.get("KAFKA_ADDRESS"),
+          "enable.auto.commit": False,
+          "auto.offset.reset": "earliest"
+        }
+
+        consumer_group = user_config.get("KAFKA_CONSUMER_GROUP")
+        if consumer_group is not None:
+            config["group.id"] = consumer_group
+
+        return config
 
     def send(self, message: str, *args, **kwargs):
         """
@@ -51,10 +57,14 @@ class KafkaStreamingClient(AbstractStreamingClient):
         """
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
-        mutated_message = self.mutate_message(message)
+        mutated_message = message.encode('utf-8')
         self.producer.poll(0)
         self.producer.produce(self.topic, mutated_message, *args, **kwargs)
-        
+        self.producer.flush()
+
+    def close_send_client(self, *args, **kwargs):
+        pass
+
     def receive(self, *args, **kwargs):
         """
         Receive messages from a kafka topic.
@@ -76,7 +86,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
                     # Error or event
                     if msg.error().code() == KafkaError._PARTITION_EOF:
                         # End of partition event
-                        sys.stderr.write(
+                        logger.error(
                             '%% %s [%d] reached end at offset %d\n' %
                             (msg.topic(), msg.partition(), msg.offset()))
                     else:
@@ -84,12 +94,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
                         raise KafkaException(msg.error())
                 else:
                     # Proper message
-                    sys.stderr.write('%% %s [%d] at offset %d with key %s:\n'
-                                     % (msg.topic(), msg.partition(),
-                                        msg.offset(), str(msg.key())))
-                    t = msg.value()
+                    send_message(msg.value(), self.app_host, self.app_port)
                     self.consumer.commit(msg)
-                    return t
 
         except KeyboardInterrupt:
             sys.stderr.write('%% Aborted by user\n')
@@ -98,21 +104,3 @@ class KafkaStreamingClient(AbstractStreamingClient):
             # Close down consumer to commit final offsets.
             self.consumer.close()
 
-    @staticmethod
-    def is_empty(dictionary: dict) -> bool:
-        """
-        Checks if a dictionary is empty.
-        Empty dictionaries resolve to false when
-        converted to booleans in Python.
-        """
-        return not bool(dictionary)
-
-    @staticmethod
-    def mutate_message(message: str):
-        """
-        Mutate the input string message.
-
-        Args:
-            message: A string input.
-        """
-        return message.encode('utf-8')

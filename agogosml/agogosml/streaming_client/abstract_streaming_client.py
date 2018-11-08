@@ -9,9 +9,14 @@ class AbstractStreamingClient(ABC):
         pass
     
     @abstractmethod
-    async def send(self):
+    def send(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    async def receive(self, *args, **kwargs):
+    def close_send_client(self, *args, **kwargs):
+        pass
+
+
+    @abstractmethod
+    def receive(self, *args, **kwargs):
         pass

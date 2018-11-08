@@ -1,22 +1,18 @@
 """EventProcessor host class for Event Hub"""
 
-from azure.eventprocessorhost import AbstractEventProcessor, AzureStorageCheckpointLeaseManager, \
-            EventHubConfig, EventProcessorHost, EPHOptions
-import asyncio
+from azure.eventprocessorhost import AbstractEventProcessor
 import logging
 import requests
-import os
 
-logger = logging.getLogger('logger')
-
-HOST = os.getenv("HOST")
-PORT = os.getenv("PORT")
-
+logger = logging.getLogger("EH")
+logger.setLevel(logging.INFO)
 
 class EventProcessor(AbstractEventProcessor):
     """
     Example Implementation of AbstractEventProcessor
     """
+    app_host = ""
+    app_port = ""
 
     def __init__(self, params=None):
         """
@@ -39,11 +35,10 @@ class EventProcessor(AbstractEventProcessor):
         :param reason: Reason for closing the async loop
         :type reason: string
         """
-        logger.info("Connection closed (reason {}, id {}, offset {}, sq_number {})".format(
-            reason,
-            context.partition_id,
-            context.offset,
-            context.sequence_number))
+        logger.info(
+            "Connection closed (reason {}, id {}, offset {}, sq_number {})".
+            format(reason, context.partition_id, context.offset,
+                   context.sequence_number))
 
     async def process_events_async(self, context, messages):
         """
@@ -57,11 +52,12 @@ class EventProcessor(AbstractEventProcessor):
         for message in messages:
             try:
                 message_str = message.body_as_str(encoding='UTF-8')
-                server_address = (HOST, int(PORT))
+                server_address = (self.app_host, int(self.app_port))
                 request = requests.post(server_address, data=message_str)
                 if request.status_code != 200:
-                    logger.error("Error with a request {} and message not sent was {}".format(
-                        request.status_code, message_str))
+                    logger.error(
+                        "Error with a request {} and message not sent was {}".
+                        format(request.status_code, message_str))
             except:
                 pass
         logger.info("Events processed {}".format(context.sequence_number))

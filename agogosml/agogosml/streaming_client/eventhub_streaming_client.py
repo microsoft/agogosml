@@ -15,7 +15,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
         Class to create an eventhub streaming client instance.
 
         Args:
-            config: dictionary file with all the relevant paramenters
+            config: dictionary file with all the relevant parameters
 
         """
         self.config = config
@@ -68,7 +68,6 @@ class EventHubStreamingClient(AbstractStreamingClient):
     def send(self, message):
         "amqps://<URL-encoded-SAS-policy>:<URL-encoded-SAS-key>@<mynamespace>.servicebus.windows.net/myeventhub"
         address = "amqps://" + self.namespace + ".servicebus.windows.net/" + self.eventhub
-        # address = "amqps://" + self.user + ":" + self.key + "@" + self.namespace + ".servicebus.windows.net/" + self.eventhub
         try:
             client = EventHubClient(address, debug=False, username=self.user, password=self.key)
             sender = client.add_sender()

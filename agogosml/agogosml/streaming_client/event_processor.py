@@ -36,6 +36,8 @@ class EventProcessor(AbstractEventProcessor):
         Called by processor host to indicate that the event processor is being stopped.
         :param context: Information about the partition
         :type context: ~azure.eventprocessorhost.PartitionContext
+        :param reason: Reason for closing the async loop
+        :type reason: string
         """
         logger.info("Connection closed (reason {}, id {}, offset {}, sq_number {})".format(
             reason,
@@ -55,7 +57,6 @@ class EventProcessor(AbstractEventProcessor):
         for message in messages:
             try:
                 message_str = message.body_as_str(encoding='UTF-8')
-                # TODO: fix endpoint passing and add checks for data format
                 server_address = (HOST, int(PORT))
                 request = requests.post(server_address, data=message_str)
                 if request.status_code != 200:

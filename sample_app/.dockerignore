@@ -1,4 +1,3 @@
-.env
 .env.example
 .hypothesis
 .pytest_cache

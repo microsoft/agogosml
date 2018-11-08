@@ -19,6 +19,8 @@ if __name__ == "__main__":
                 'EVENT_HUB_NAME': os.getenv("EVENT_HUB_NAME"),
                 'EVENT_HUB_SAS_POLICY': os.getenv("EVENT_HUB_SAS_POLICY"),
                 'EVENT_HUB_SAS_KEY': os.getenv("EVENT_HUB_SAS_KEY"),
+                'APP_HOST': os.getenv('APP_HOST'),
+                'APP_PORT': os.getenv('APP_PORT')
             },
             'args': {  # NOT SURE WHAT THIS IS FOR.
                 'topic': 'testing'
@@ -38,5 +40,5 @@ if __name__ == "__main__":
             }}
     }
 
-    INPUT = InputReaderFactory.create(KAFKA_CONFIG)
+    INPUT = InputReaderFactory.create(EVENTHUB_CONFIG)
     INPUT.receive_messages()  # initiate receiving

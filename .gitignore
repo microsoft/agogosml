@@ -82,7 +82,7 @@ celerybeat-schedule
 
 # dotenv
 .env
-!agogosml_cli/cli/artifacts/.env
+!agogosml_cli/cli/templates/.env
 
 # virtualenv
 .venv

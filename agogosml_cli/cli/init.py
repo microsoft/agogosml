@@ -38,7 +38,7 @@ def init(force, project_name, folder):
 
 def build_manifest(project_name):
     """Builds the Manifest python object"""
-    manifest_json = utils.get_json_module_artifacts(DEFAULT_MANIFEST_FILE)
+    manifest_json = utils.get_json_module_templates(DEFAULT_MANIFEST_FILE)
     manifest_json['name'] = project_name
     # default_manifest_json['tests'] = ??? Prompt user?
     utils.validate_manifest(manifest_json)

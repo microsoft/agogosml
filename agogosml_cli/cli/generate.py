@@ -49,7 +49,7 @@ def generate(force, config, folder):
             write_mod_pipeline(proj_file, folder, proj_name)
         else:
             # Copy files as is from default
-            utils.copy_module_artifacts(proj_file, folder)
+            utils.copy_module_templates(proj_file, folder)
 
 
 def write_mod_pipeline(pipeline_file, outfolder, proj_name):
@@ -59,7 +59,7 @@ def write_mod_pipeline(pipeline_file, outfolder, proj_name):
         outfolder (string): Name of the output folder
         proj_name (string): Value to overwrite - name of the agogosml project
     """
-    pipeline_json = utils.get_json_module_artifacts(pipeline_file)
+    pipeline_json = utils.get_json_module_templates(pipeline_file)
     mod_pipeline_json = modify_pipeline_json(pipeline_json, proj_name)
     full_out_file = os.path.join(outfolder, pipeline_file)
     with open(full_out_file, 'w') as f:

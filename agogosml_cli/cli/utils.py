@@ -36,8 +36,11 @@ def copy_module_templates(file, out):
 
 
 def validate_manifest(manifest_json):
-    """Validates a given JSON string against schema file.
-    Throws an error if invalid."""
-    schema_json = get_json_module_templates(SCHEMA_FILE)
+    """Validates a manifest file against
+    the scheme Throws an error if invalid."""
+    module_path = os.path.dirname(__file__)
+    schema_file = os.path.join(module_path, SCHEMA_FILE)
+    with open(schema_file) as f:
+        schema_json = json.load(f)
     validate(manifest_json, schema_json)
     return

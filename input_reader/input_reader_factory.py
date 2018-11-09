@@ -2,9 +2,7 @@
 Factory and instance resolving for input reader
 """
 from agogosml.agogosml.streaming_client import *
-from agogosml.agogosml.input_reader.input_reader import InputReader
-
-__all__ = ['InputReaderFactory']
+from input_reader import InputReader
 
 
 class InputReaderFactory:

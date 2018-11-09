@@ -1,6 +1,6 @@
 """Kafka streaming client"""
 
-from agogosml.agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
+from .abstract_stream_client import AbstractStreamingClient
 from confluent_kafka import Producer, Consumer, admin
 import sys
 from confluent_kafka import KafkaException, KafkaError

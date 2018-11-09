@@ -105,3 +105,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+.vscode
+
+_build

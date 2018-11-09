@@ -2,24 +2,24 @@
 FROM python:3.7-alpine3.8 AS base
 
 # Install librdkafka
-#RUN apk add --no-cache --virtual .build-deps \
-#    bash \
-#    g++ \
-#    libressl-dev \
-#    make \
-#    musl-dev \
-#    zlib-dev \
-#    git \
-#    libffi-dev \
-#    cmake
-#
-## Install librdkafka
-#WORKDIR /root
-#RUN git clone -b v0.11.6 --single-branch https://github.com/edenhill/librdkafka.git
-#WORKDIR /root/librdkafka
-#RUN /root/librdkafka/configure && make && make install
-#
-#RUN rm -rf /root/librdkafka
+RUN apk add --no-cache --virtual .build-deps \
+    bash \
+    g++ \
+    libressl-dev \
+    make \
+    musl-dev \
+    zlib-dev \
+    git \
+    libffi-dev \
+    cmake
+
+# Install librdkafka
+WORKDIR /root
+RUN git clone -b v0.11.6 --single-branch https://github.com/edenhill/librdkafka.git
+WORKDIR /root/librdkafka
+RUN /root/librdkafka/configure && make && make install
+
+RUN rm -rf /root/librdkafka
 
 # Copy the app and the common modules
 WORKDIR /input_reader
@@ -46,7 +46,7 @@ WORKDIR /
 #RUN python -m pylint ./input_reader/input_reader_factory.py
 #RUN python -m pylint ./input_reader/main.py
 
-RUN python -m pytest tests/test_inputReader.py
+#RUN python -m pytest tests/test_inputReader.py
 
 # Release
 FROM base AS release

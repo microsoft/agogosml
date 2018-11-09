@@ -1,7 +1,7 @@
 """
 Factory and instance resolving for input reader
 """
-from agogosml.agogosml.streaming_client import *
+from agogosml.streaming_client.eventhub_streaming_client import EventHubStreamingClient
 from input_reader import InputReader
 
 

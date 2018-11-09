@@ -2,10 +2,6 @@
 
 from abc import ABC, abstractmethod
 
-__all__ = (
-    'AbstractStreamingClient'
-)
-
 class AbstractStreamingClient(ABC):
     @abstractmethod
     def __init__(self):

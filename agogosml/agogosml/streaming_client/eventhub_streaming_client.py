@@ -1,7 +1,6 @@
 """EventHub streaming client"""
 
-from agogosml.agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
-from agogosml.agogosml.streaming_client.eventhub_processor_events import *
+from .abstract_streaming_client import AbstractStreamingClient
 from azure.eventhub import EventHubClient, EventData
 from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, \
             EventHubConfig, EventProcessorHost, EPHOptions

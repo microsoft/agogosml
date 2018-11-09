@@ -1,3 +1,4 @@
 azure-eventhub
 confluent-kafka
 python-dotenv
+requests

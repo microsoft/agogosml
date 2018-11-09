@@ -7,8 +7,6 @@ or should it follow output_writer structure exactly?
 
 from agogosml.agogosml.streaming_client import AbstractStreamingClient
 
-__all__ = ['InputReader']
-
 
 class InputReader:  # pylint: disable=too-few-public-methods
     """

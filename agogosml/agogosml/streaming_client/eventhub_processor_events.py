@@ -6,18 +6,21 @@ from .http_request import *
 logger = logging.getLogger("STREAM")
 logger.setLevel(logging.INFO)
 
+
 class EventProcessor(AbstractEventProcessor):
     """
     Example Implementation of AbstractEventProcessor
     """
-    #app_host = ""
-    #app_port = ""
+    # app_host = ""
+    # app_port = ""
 
-    def __init__(self, params=None):
+    def __init__(self, params):
         """
         Init Event processor
         """
-        super().__init__(params)
+        super().__init__()
+        self.app_host = params[0]
+        self.app_port = params[1]
         self._msg_counter = 0
 
     async def open_async(self, context):

@@ -63,17 +63,18 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 logger.error('Failed to init EH send client: ' + str(e))
                 raise
 
-    def receive(self, timeout=1):
+    def receive(self, timeout=5):
         loop = asyncio.get_event_loop()
         try:
-            ep = EventProcessor
-            ep.app_host = self.app_host
-            ep.app_port = self.app_port
+            # ep = EventProcessor
+            # ep.app_host = self.app_host
+            # ep.app_port = self.app_port
             host = EventProcessorHost(
-                ep,
+                # ep,
+                EventProcessor,
                 self.eph_client,
                 self.storage_manager,
-                ep_params=["param1", "param2"],
+                ep_params=[self.app_host, self.app_port],
                 eph_options=self.eh_options,
                 loop=loop)
 

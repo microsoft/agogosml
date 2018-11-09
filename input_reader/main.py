@@ -3,7 +3,8 @@ Main entry point for input reader
 """
 import os  # temp
 from dotenv import load_dotenv  # temp
-from agogosml.agogosml.input_reader.input_reader_factory import InputReaderFactory
+
+from input_reader_factory import InputReaderFactory
 
 load_dotenv()  # temp
 
@@ -45,4 +46,5 @@ if __name__ == "__main__":
 
     INPUT = InputReaderFactory.create(EVENTHUB_CONFIG)
     INPUT.receive_messages()  # initiate receiving
+    print("DONE")
 

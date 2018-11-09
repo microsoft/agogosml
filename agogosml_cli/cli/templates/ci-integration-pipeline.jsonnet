@@ -11,7 +11,7 @@
                 "path": "\\",
                 "queueStatus": 0,
                 "project": {
-                    "name": "agogosml",
+                    "name": std.extVar('PROJECT_NAME'),
                     "description": "Integration CI pipeline",
                     "state": 1,
                     "visibility": "public"

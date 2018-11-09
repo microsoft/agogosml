@@ -11,17 +11,13 @@ from shutil import copy
 SCHEMA_FILE = 'manifest.schema.json'
 TEMPLATES_FOLDER = 'templates'
 
-
-def get_json_module_templates(file):
-    """Retrieve JSON from file in module templates
+def get_template_full_filepath(file):
+    """Get full file path for template file. 
     Args:
-        file (string):  Name of the file in module
+        file (string): Name of the file in module
     """
     module_path = os.path.dirname(__file__)
-    full_file = os.path.join(module_path, TEMPLATES_FOLDER, file)
-    with open(full_file) as f:
-        file_json = json.load(f)
-    return file_json
+    return os.path.join(module_path, TEMPLATES_FOLDER, file)
 
 
 def copy_module_templates(file, out):

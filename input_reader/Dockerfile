@@ -21,24 +21,26 @@ RUN /root/librdkafka/configure && make && make install
 
 RUN rm -rf /root/librdkafka
 
-# Copy the app and the common modules
+# Copy and install agogosml core package
+WORKDIR /agogosml
+COPY /agogosml /agogosml
+RUN python setup.py install
+
+# Copy the app
 WORKDIR /input_reader
-COPY . .
-#COPY ./agogosml/agogosml/streaming_client /agogosml/agogosml/streaming_client
-RUN python ./agogosml/setup.py install
+COPY /input_reader /input_reader
 
 # Install needed production requirements
-RUN pip install -r ./input_reader/requirements.txt
+RUN pip install -r requirements.txt
 
 FROM base AS tests
 
 WORKDIR /input_reader
 COPY --from=base /input_reader /input_reader
-#COPY --from=base ./agogosml/agogosml/streaming_client /agogosml/agogosml/streaming_client
 COPY ./tests/ /tests
 
 # Install testing requirements
-RUN pip install -r ./input_reader/requirements-dev.txt
+RUN pip install -r requirements-dev.txt
 
 # Run tests, linter
 WORKDIR /
@@ -52,9 +54,7 @@ WORKDIR /
 FROM base AS release
 
 WORKDIR /input_reader
-
 COPY --from=base /input_reader /input_reader
-#COPY --from=base ./agogosml/agogosml/streaming_client /agogosml/agogosml/streaming_client
 
 # Cleanup
 RUN apk del .build-deps

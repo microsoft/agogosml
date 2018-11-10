@@ -1,7 +1,7 @@
 """EventProcessor host class for Event Hub"""
 
 from azure.eventprocessorhost import AbstractEventProcessor
-from .http_request import *
+from agogosml.streaming_client.http_request import *
 
 logger = logging.getLogger("STREAM")
 logger.setLevel(logging.INFO)

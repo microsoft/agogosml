@@ -1,6 +1,6 @@
 """EventHub streaming client"""
-from .eventhub_processor_events import EventProcessor
-from .abstract_streaming_client import AbstractStreamingClient
+from agogosml.streaming_client.eventhub_processor_events import EventProcessor
+from agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
 from azure.eventhub import EventHubClient, EventData
 from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, \
             EventHubConfig, EventProcessorHost, EPHOptions
@@ -99,7 +99,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
         try:
             self.sender.send(EventData(message))
-            print("Sent message: {}".format(message)) #TODO: REMOVE
+            print("Sent message: {}".format(message))
         except Exception as e:
             logger.error('Failed to send message to EH: ' + str(e))
 

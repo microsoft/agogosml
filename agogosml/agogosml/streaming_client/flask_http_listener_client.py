@@ -4,7 +4,7 @@ import threading
 
 from flask import Flask, request
 
-from .listener_client import ListenerClient
+from agogosml.streaming_client.listener_client import ListenerClient
 
 
 class FlaskHttpListenerClient(ListenerClient):

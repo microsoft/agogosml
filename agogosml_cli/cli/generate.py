@@ -26,7 +26,7 @@ PROJ_FILES = ['.env',
 @click.option('--config', '-c', required=False, default='./manifest.json',
               help='Path to manifest.json file')
 @click.argument('folder', type=click.Path(), default='.', required=False)
-def generate(force, config, folder):
+def generate(force, config, folder) -> int:
     """Generates an agogosml project"""
     # Read Manifest file
     if os.path.isfile(config):
@@ -47,7 +47,8 @@ def generate(force, config, folder):
             if not force:
                 click.echo('Files already exists. Use --force to overwrite')
                 raise click.Abort()
-        if proj_file.endswith('-pipeline.jsonnet'):  # Must end w/ -pipeline.json
+        # Must end w/ -pipeline.json
+        if proj_file.endswith('-pipeline.jsonnet'):
             # Modify pipeline file from defaults
             write_pipeline_json(proj_file, folder, proj_name)
         else:
@@ -55,7 +56,8 @@ def generate(force, config, folder):
             utils.copy_module_templates(proj_file, folder)
 
 
-def write_pipeline_json(pipeline_file, outfolder, proj_name):
+def write_pipeline_json(pipeline_file: str,
+                        outfolder: str, proj_name: str) -> None:
     """Writes out a pipeline json file
     Args:
         pipeline_file (string):  Name of the pipeline file in module
@@ -65,6 +67,8 @@ def write_pipeline_json(pipeline_file, outfolder, proj_name):
     pipeline_json = json.loads(_jsonnet.evaluate_file(
         filename=utils.get_template_full_filepath(pipeline_file),
         ext_vars={'PROJECT_NAME': proj_name}))
-    full_out_file = os.path.join(outfolder, os.path.splitext(pipeline_file)[0] + '.json')
+    full_out_file = os.path.join(
+        outfolder,
+        os.path.splitext(pipeline_file)[0] + '.json')
     with open(full_out_file, 'w') as f:
         json.dump(pipeline_json, f, indent=4)

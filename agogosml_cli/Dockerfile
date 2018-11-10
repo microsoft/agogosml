@@ -5,7 +5,9 @@ FROM python:${PYTHON_VERSION} as builder
 WORKDIR /usr/src/agogosml_cli
 COPY . .
 
-RUN apk add --update make && \ 
+RUN apk add --update make \ 
+    cmake \
+    g++ && \ 
     pip install pipenv && \
     pipenv install --dev
 

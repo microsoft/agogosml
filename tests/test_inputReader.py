@@ -1,5 +1,5 @@
-from agogosml.agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
-from input_reader.input_reader import InputReader
+from agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
+from input_reader.input_reader import InputReader #TODO: Check if this import works, it might fail
 
 class ClientMessagingMock(AbstractStreamingClient):
 

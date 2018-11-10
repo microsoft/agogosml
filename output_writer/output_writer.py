@@ -3,8 +3,8 @@
 Output Writer
 """
 
-from agogosml.agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
-from agogosml.agogosml.streaming_client.listener_client import ListenerClient
+from agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
+from agogosml.streaming_client.listener_client import ListenerClient
 
 
 class OutputWriter:

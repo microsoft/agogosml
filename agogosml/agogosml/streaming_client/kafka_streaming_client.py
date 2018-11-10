@@ -1,10 +1,10 @@
 """Kafka streaming client"""
 
-from .abstract_stream_client import AbstractStreamingClient
+from agogosml.streaming_client.abstract_stream_client import AbstractStreamingClient
+from agogosml.streaming_client.http_request import *
 from confluent_kafka import Producer, Consumer, admin
-import sys
 from confluent_kafka import KafkaException, KafkaError
-from .http_request import *
+import sys
 
 logger = logging.getLogger("STREAM")
 logger.setLevel(logging.INFO)

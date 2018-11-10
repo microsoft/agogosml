@@ -1,7 +1,12 @@
 """
 Main entry point
 """
-from output_writer.output_writer_factory import OutputWriterFactory
+import os  # temp
+from dotenv import load_dotenv  # temp
+
+from output_writer_factory import OutputWriterFactory
+
+load_dotenv()  # temp
 
 if __name__ == "__main__":
 

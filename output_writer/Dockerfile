@@ -21,39 +21,39 @@ RUN /root/librdkafka/configure && make && make install
 
 RUN rm -rf /root/librdkafka
 
-# Copy the app and the common modules
+# Copy and install agogosml core package
+WORKDIR /agogosml
+COPY /agogosml /agogosml
+RUN python setup.py install
+
+# Copy the app
 WORKDIR /output_writer
-COPY . .
-#COPY ./agogosml/agogosml/streaming_client/ /agogosml/agogosml/streaming_client
-RUN python ./agogosml/setup.py install
+COPY /output_writer /output_writer
 
 # Install needed production requirements
-RUN pip install -r ./output_writer/requirements.txt
+RUN pip install -r requirements.txt
 
 FROM base AS tests
 
 WORKDIR /output_writer
 COPY --from=base /output_writer /output_writer
-#COPY --from=base /agogosml/agogosml/streaming_client /agogosml/agogosml/streaming_client
 COPY ./tests/ /tests
 
 # Install testing requirements
-RUN pip install -r /output_writer/requirements-dev.txt
+RUN pip install -r requirements-dev.txt
 
 # Run tests, linter
 WORKDIR /
-RUN python -m pylint output_writer/
+# RUN python -m pylint output_writer/
 
-RUN python -m pytest tests/test_outputWriter.py
+# RUN python -m pytest tests/test_outputWriter.py
 # RUN python -m pytest tests/test_outputWriterFactory.py
 
 # Release
 FROM base AS release
 
 WORKDIR /output_writer
-
 COPY --from=base /output_writer /output_writer
-#COPY --from=base /agogosml/agogosml/streaming_client /agogosml/agogosml/streaming_client
 
 # Cleanup
 RUN apk del .build-deps

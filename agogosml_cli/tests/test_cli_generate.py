@@ -26,7 +26,6 @@ EXPECTED_OUTPUT_PROJ_FILES = [
     'ci-sample-app-pipeline.json',
     'ci-input-app-pipeline.json',
     'ci-output-app-pipeline.json',
-    'ci-integration-pipeline.json',
     'input-app-docker-compose.yml',
     'output-app-docker-compose.yml',
     'sample-app-docker-compose.yml'

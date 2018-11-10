@@ -14,7 +14,6 @@ PROJ_FILES = ['.env',
               'ci-sample-app-pipeline.jsonnet',
               'ci-input-app-pipeline.jsonnet',
               'ci-output-app-pipeline.jsonnet',
-              'ci-integration-pipeline.jsonnet',
               'input-app-docker-compose.yml',
               'output-app-docker-compose.yml',
               'sample-app-docker-compose.yml']

@@ -5,10 +5,11 @@
 import os
 import click
 import json
+import _jsonnet
 import cli.utils as utils
 
 
-DEFAULT_MANIFEST_FILE = 'default-manifest.json'
+DEFAULT_MANIFEST_FILE = 'default-manifest.jsonnet'
 
 
 @click.command()
@@ -17,7 +18,7 @@ DEFAULT_MANIFEST_FILE = 'default-manifest.json'
 @click.option('--project-name', prompt=True, required=False,
               help='Name of your project')
 @click.argument('folder', type=click.Path(), default='.', required=False)
-def init(force, project_name, folder):
+def init(force, project_name, folder) -> int:
     """Initializes an agogosml project by creating a manifest file"""
     # Check if exists
     outfile = os.path.join(folder, 'manifest.json')
@@ -36,10 +37,10 @@ def init(force, project_name, folder):
     return 0
 
 
-def build_manifest(project_name):
+def build_manifest(project_name: str) -> object:
     """Builds the Manifest python object"""
-    manifest_json = utils.get_json_module_templates(DEFAULT_MANIFEST_FILE)
-    manifest_json['name'] = project_name
-    # default_manifest_json['tests'] = ??? Prompt user?
+    manifest_json = json.loads(_jsonnet.evaluate_file(
+        filename=utils.get_template_full_filepath(DEFAULT_MANIFEST_FILE),
+        ext_vars={'PROJECT_NAME': project_name}))
     utils.validate_manifest(manifest_json)
     return manifest_json

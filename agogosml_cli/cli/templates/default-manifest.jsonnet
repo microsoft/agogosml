@@ -1,5 +1,5 @@
 {
-    "name": "my-data-pipeline",
+    "name": std.extVar('PROJECT_NAME'),
     "tests": [{
         "name": "Sanity Check",
         "type": "language-specific",

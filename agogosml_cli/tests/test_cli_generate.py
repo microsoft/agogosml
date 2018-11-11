@@ -9,25 +9,27 @@ import cli.generate as generate
 import tests.test_utils as test_utils
 
 """
-http://click.palletsprojects.com/en/7.x/testing/
-You want to test the ff. commands (lets start w/ one test case for now):
 * agogosml generate
     * should fail if no manifest.json is in working directory
     * should fail if manifest.json is invalid
     * should fail if files we expect to generate already exist.
         Should it give warning and ask to overwrite?
-    * should generate .env file, datapipeline.yml, cicd.yml, Pipfile,
+    * should generate .env file, pipeline files, Pipfile,
         tests/e2e/, tests/validation exist
     * should fail if any yml file is not valid yaml.
+    * shoudl fail if any json file is not valid json.
 """
 
-PROJ_FILES = ['.env',
-              'Pipfile',
-              'azure-sample-app-pipeline.json',
-              'azure-input-output-pipeline.json',
-              'azure-integration-pipeline.json',
-              'input-output-docker-compose.yml',
-              'sample-app-docker-compose.yml']
+EXPECTED_OUTPUT_PROJ_FILES = [
+    '.env',
+    'Pipfile',
+    'ci-sample-app-pipeline.json',
+    'ci-input-app-pipeline.json',
+    'ci-output-app-pipeline.json',
+    'input-app-docker-compose.yml',
+    'output-app-docker-compose.yml',
+    'sample-app-docker-compose.yml'
+]
 
 
 def test_generate():
@@ -89,11 +91,11 @@ def test_generate_folder():
     """
     with runner.isolated_filesystem():
         _create_test_manifest()
-        _create_dummy_template_files('folder')
-        prevmd5 = _get_md5_template_files('folder')
+        _create_dummy_template_files(folder='folder')
+        prevmd5 = _get_md5_template_files(folder='folder')
         result = runner.invoke(generate.generate, ['--force', 'folder'])
         assert result.exit_code == 0
-        assert set(prevmd5) != set(_get_md5_template_files('folder'))
+        assert set(prevmd5) != set(_get_md5_template_files(folder='folder'))
         _assert_template_files_exist('folder')
 
     """
@@ -102,11 +104,11 @@ def test_generate_folder():
     """
     with runner.isolated_filesystem():
         _create_test_manifest()
-        _create_dummy_template_files('folder')
-        prevmd5 = _get_md5_template_files('folder')
+        _create_dummy_template_files(folder='folder')
+        prevmd5 = _get_md5_template_files(folder='folder')
         result = runner.invoke(generate.generate, ['folder'])
         assert result.exit_code == 1
-        assert set(prevmd5) == set(_get_md5_template_files('folder'))
+        assert set(prevmd5) == set(_get_md5_template_files(folder='folder'))
         _assert_template_files_exist('folder')
 
 
@@ -137,7 +139,7 @@ def test_generate_invalid_schema():
 
 
 def _assert_template_files_exist(folder='.'):
-    for proj_file in PROJ_FILES:
+    for proj_file in EXPECTED_OUTPUT_PROJ_FILES:
         assert os.path.exists(os.path.join(folder, proj_file))
 
 
@@ -162,20 +164,21 @@ def _create_test_manifest(folder='.'):
         json.dump(manifest, f, indent=4)
 
 
-def _create_dummy_template_files(folder='.'):
+def _create_dummy_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
     if not os.path.isdir(folder):
         os.makedirs(folder)
-    for proj_file in PROJ_FILES:
+    for proj_file in files:
         outfile = os.path.join(folder, proj_file)
+
         with open(outfile, 'w') as f:
             json.dump("test content", f, indent=4)
 
 
-def _get_md5_template_files(folder='.'):
+def _get_md5_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
     """Get the md5 hashes of the project files. Used to know if files were
     overwritten"""
     allmd5 = []
-    for proj_file in PROJ_FILES:
+    for proj_file in files:
         outfile = os.path.join(folder, proj_file)
         allmd5.append(test_utils.md5(outfile))
     return allmd5

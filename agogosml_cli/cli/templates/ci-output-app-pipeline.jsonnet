@@ -156,7 +156,7 @@
     "quality": 1,
     "drafts": [],
     "id": 13,
-    "name": "Output-Writer-build-CI",
+    "name": "Output-Writer-Build-CI",
     "path": "\\",
     "type": 2
 }

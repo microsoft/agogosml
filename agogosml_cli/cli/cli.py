@@ -9,7 +9,7 @@ import cli.generate as generate
 
 
 @click.group()
-def main():
+def main() -> None:
     """CLI and scaffold generation tool for agogosml"""
     pass
 

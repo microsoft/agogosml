@@ -20,6 +20,7 @@ pylint = "*"
 [packages]
 click = "*"
 jsonschema = "*"
+jsonnet = "*"
 
 [requires]
 python_version = "3.7"

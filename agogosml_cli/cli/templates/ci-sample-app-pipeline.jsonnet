@@ -33,7 +33,7 @@
                 "path": "\\",
                 "queueStatus": 0,
                 "project": {
-                    "name": "agogosml",
+                    "name": std.extVar('PROJECT_NAME'),
                     "description": "Input-Output CI pipeline",
                     "state": 1,
                     "visibility": "public"
@@ -171,7 +171,7 @@
     "processParameters": {},
     "quality": 1,
     "drafts": [],
-    "name": "Sample-App-build-CI",
+    "name": "Sample-App-Build-CI",
     "path": "\\",
     "type": 2
 }

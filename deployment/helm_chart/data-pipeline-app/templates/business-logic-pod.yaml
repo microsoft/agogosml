@@ -1,0 +1,38 @@
+{{ $fullname := include "data-pipeline-app.business-logic.fullname" . }}
+# For each instance app, we create a pair of instance_app+output_writer containers (in a single pod)
+{{- $root := . -}}
+{{- range .Values.instance_apps }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ $fullname }}-{{ .name | replace "_" "-" }}
+  labels:
+    app: {{ $fullname }}-{{ .name | replace "_" "-" }}
+spec:
+  containers:
+    - name: {{ $fullname }}-{{ .name | replace "_" "-" }}-app
+      image: {{ $root.Values.registry }}/{{ .name }}:{{ default "latest" .tag }}
+      imagePullPolicy: {{ default "IfNotPresent" .pullPolicy }}
+      ports:
+      - containerPort: {{ .service.internalPort }}
+      #resources:
+      #  requests:
+      #    memory: "1500Mi"
+      #    cpu: "1500m"
+      #  limits:
+      #    memory: "3000Mi"
+      #    cpu: "2000m"
+    - name: {{ $fullname }}-{{ .name | replace "_" "-" }}-output-writer
+      image: {{ $root.Values.registry }}/{{ $root.Values.output_writer.name }}:{{ default "latest" $root.Values.output_writer.tag }}
+      imagePullPolicy: {{ default "IfNotPresent" $root.Values.output_writer.pullPolicy }}
+      #resources:
+      #  requests:
+      #    memory: "1500Mi"
+      #    cpu: "1500m"
+      #  limits:
+      #    memory: "3000Mi"
+      #    cpu: "2000m"
+  imagePullSecrets:
+    - name: acr-auth
+---
+{{- end }}

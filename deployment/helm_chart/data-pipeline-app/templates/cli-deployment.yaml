@@ -1,0 +1,35 @@
+{{ $fullname := include "data-pipeline-app.cli.fullname" . }}
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ $fullname }}
+  labels:
+    app: {{ $fullname }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ quote .Release.Name }}
+    heritage: {{ quote .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ quote $fullname }}
+  template:
+    metadata:
+      labels:
+        app: {{ quote $fullname }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.registry }}/{{ .Values.cli.name }}:{{ default "latest" .Values.cli.tag }}
+          imagePullPolicy: {{ default "IfNotPresent" .Values.cli.pullPolicy }}
+          ports:
+          - containerPort: {{ .Values.cli.service.internalPort }}
+          resources:
+            requests:
+              memory: "1500Mi"
+              cpu: "1500m"
+            limits:
+              memory: "3000Mi"
+              cpu: "2000m"
+      imagePullSecrets:
+        - name: acr-auth

@@ -4,32 +4,49 @@
 
 replicaCount: 1
 
-image:
-  #repository: nginx
-  #tag: stable
-  pullPolicy: IfNotPresent
+registry: ""
 
 nameOverride: ""
 fullnameOverride: ""
 
-service:
-  type: ClusterIP
-  #port: 80
+namespace: default
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+input_reader:
+  name: input_reader
+  # tag: 
+  imagePullPolicy: IfNotPresent
 
-nodeSelector: {}
+output_writer:
+  name: output_writer
+  # tag: 
+  imagePullPolicy: IfNotPresent
 
-tolerations: []
+instance_apps:
+  - name: sample_app
+    # tag: 
+    imagePullPolicy: IfNotPresent
+    service:
+      type: ClusterIP
+      externalPort: 5000
+      internalPort: 5000
 
-affinity: {}
+  # Example of multiple apps
+  #- name: sample_app2
+  #  # tag: 
+  #  imagePullPolicy: IfNotPresent
+  #  service:
+  #    type: ClusterIP
+  #    externalPort: 5000
+  #    internalPort: 5000
+
+cli:
+  name: agogosml_cli
+  # tag: 
+  imagePullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    externalPort: 3001
+    internalPort: 3001
+
+# configuration for the rbac namespaces, service accounts, roles and binding names
+rbac:

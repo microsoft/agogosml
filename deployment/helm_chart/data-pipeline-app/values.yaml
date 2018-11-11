@@ -21,6 +21,7 @@ instance_apps:
   - name: sample_app
     # tag: 
     imagePullPolicy: IfNotPresent
+    deployment: "green"
     service:
       type: ClusterIP
       externalPort: 5000

@@ -1,0 +1,19 @@
+{{ $fullname := include "data-pipeline-app.instance-app.fullname" . }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullname }}
+  labels:
+    app: {{ $fullname }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ quote .Release.Name }}
+    heritage: {{ quote .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ quote $fullname }}
+  template:
+    metadata:
+      labels:
+        app: {{ quote $fullname }}

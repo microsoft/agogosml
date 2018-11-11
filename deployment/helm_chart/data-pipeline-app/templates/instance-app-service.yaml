@@ -19,5 +19,6 @@ spec:
       name: {{ .name | replace "_" "-" }}
   selector:
     app: {{ $fullname }}
+    deployment: { .deployment }
 ---
 {{- end }}

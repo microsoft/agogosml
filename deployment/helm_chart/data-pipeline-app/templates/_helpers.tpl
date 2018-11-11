@@ -3,7 +3,7 @@
 Expand the name of the chart.
 */}}
 {{- define "data-pipeline-app.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "data-pipeline-app.fullname" -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- $name := .Chart.Name -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -19,12 +19,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{ include "data-pipeline-app.fullname" . | printf "%s-in-rdr" }}
 {{- end -}}
 
-{{- define "data-pipeline-app.business-logic.fullname" -}}
-{{ include "data-pipeline-app.fullname" . | printf "%s-bl" }}
-{{- end -}}
-
-{{- define "data-pipeline-app.cli.fullname" -}}
-{{ include "data-pipeline-app.fullname" . | printf "%s-cli" }}
+{{- define "data-pipeline-app.instance-app.fullname" -}}
+{{ include "data-pipeline-app.fullname" . | printf "%s-ia" }}
 {{- end -}}
 
 {{- define "rbac.version" }}rbac.authorization.k8s.io/v1beta1{{ end -}}

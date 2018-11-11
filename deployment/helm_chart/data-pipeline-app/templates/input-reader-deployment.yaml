@@ -1,5 +1,5 @@
 {{ $fullname := include "data-pipeline-app.input_reader.fullname" . }}
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ $fullname }}
@@ -9,7 +9,7 @@ metadata:
     release: {{ quote .Release.Name }}
     heritage: {{ quote .Release.Service }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.input_reader.replicaCount }}
   selector:
     matchLabels:
       app: {{ quote $fullname }}

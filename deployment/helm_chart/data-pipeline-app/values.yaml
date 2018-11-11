@@ -2,12 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-
 registry: ""
-
-nameOverride: ""
-fullnameOverride: ""
 
 namespace: default
 
@@ -15,6 +10,7 @@ input_reader:
   name: input_reader
   # tag: 
   imagePullPolicy: IfNotPresent
+  replicaCount: 1
 
 output_writer:
   name: output_writer
@@ -47,6 +43,3 @@ cli:
     type: ClusterIP
     externalPort: 3001
     internalPort: 3001
-
-# configuration for the rbac namespaces, service accounts, roles and binding names
-rbac:

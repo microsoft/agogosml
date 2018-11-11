@@ -1,4 +1,4 @@
-{{ $fullname := include "data-pipeline-app.business-logic.fullname" . }}
+{{ $fullname := include "data-pipeline-app.instance-app.fullname" . }}
 # For each instance app, we create its own service
 {{- $root := . -}}
 {{- range .Values.instance_apps }}

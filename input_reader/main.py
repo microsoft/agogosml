@@ -38,10 +38,8 @@ if __name__ == "__main__":
                 'bootstrap.servers': '127.0.0.1:9092',
                 'group.id': 'testgroup',
                 'enable.auto.commit': False
-            },
-            'args': {
-                'topic': 'testing'
-            }}
+            }
+        }
     }
 
     INPUT = InputReaderFactory.create(EVENTHUB_CONFIG)

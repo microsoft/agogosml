@@ -40,7 +40,7 @@ setup(
     include_package_data=True,
     keywords='agogosml',
     name='agogosml',
-    #packages=find_packages(include=['agogosml**']),
+    packages=find_packages(include=['agogosml**']),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,

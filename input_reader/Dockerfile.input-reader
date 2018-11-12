@@ -21,14 +21,13 @@ RUN /root/librdkafka/configure && make && make install
 
 RUN rm -rf /root/librdkafka
 
-# Copy and install agogosml core package
-WORKDIR /agogosml
-COPY /agogosml /agogosml
-RUN python setup.py install
-
 # Copy the app
 WORKDIR /input_reader
-COPY /input_reader /input_reader
+COPY ./input_reader .
+
+# Assume We Have Not Published to PyPI
+#TODO: copy output from dockerfile of agogosml
+RUN pip install agogosml-0.1.0.tar.gz
 
 # Install needed production requirements
 RUN pip install -r requirements.txt
@@ -40,7 +39,7 @@ COPY --from=base /input_reader /input_reader
 COPY ./tests/ /tests
 
 # Install testing requirements
-RUN pip install -r requirements-dev.txt
+#RUN pip install -r requirements-dev.txt
 
 # Run tests, linter
 WORKDIR /

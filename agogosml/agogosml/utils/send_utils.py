@@ -1,5 +1,6 @@
 import requests
 import logging
+import json
 
 logger = logging.getLogger("STREAM")
 logger.setLevel(logging.INFO)
@@ -9,11 +10,14 @@ def send_message(message, app_host, app_port):
 
     try:
         server_address = "http://" + app_host + ":" + app_port
-        request = requests.post(server_address, data=message)
+        # TODO: Add retries as some of the messages are failing to send
+        request = requests.post(server_address, data=json.dumps(message))
         if request.status_code != 200:
             logger.error(
               "Error with a request {} and message not sent was {}".
               format(request.status_code, message))
+            print("Error with a request {} and message not sent was {}".
+                  format(request.status_code, message))
             return False
         return True
 

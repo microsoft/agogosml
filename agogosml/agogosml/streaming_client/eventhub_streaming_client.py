@@ -1,10 +1,10 @@
 """EventHub streaming client"""
-
+from .eventhub_processor_events import EventProcessor
 from .abstract_streaming_client import AbstractStreamingClient
-from .eventhub_processor_events import *
 from azure.eventhub import EventHubClient, EventData
-from azure.eventprocessorhost import  AzureStorageCheckpointLeaseManager, \
+from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, \
             EventHubConfig, EventProcessorHost, EPHOptions
+
 import asyncio
 import logging
 
@@ -28,20 +28,21 @@ class EventHubStreamingClient(AbstractStreamingClient):
         self.lease_container_name = self.config.get("LEASE_CONTAINER_NAME")
         self.namespace = self.config.get("EVENT_HUB_NAMESPACE")
         self.eventhub = self.config.get("EVENT_HUB_NAME")
-        self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP")
+        # self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP")
         self.user = self.config.get("EVENT_HUB_SAS_POLICY")
         self.key = self.config.get("EVENT_HUB_SAS_KEY")
+        self.timeout = self.config.get("TIMEOUT")
 
         # Create EPH Client
-        if self.storage_account_name is not None and self.storage_key is not None:
+        if self.storage_account_name is not None and \
+           self.storage_key is not None:
             self.app_host = self.config.get("APP_HOST")
             self.app_port = self.config.get("APP_PORT")
             self.eph_client = EventHubConfig(
                 self.namespace,
                 self.eventhub,
                 self.user,
-                self.key,
-                consumer_group=self.consumer_group)
+                self.key)  # consumer_group=self.consumer_group)
             self.eh_options = EPHOptions()
             self.eh_options.release_pump_on_timeout = True
             self.eh_options.debug_trace = False
@@ -51,8 +52,8 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
         # Create Send client
         else:
-            "amqps://<URL-encoded-SAS-policy>:<URL-encoded-SAS-key>@<mynamespace>.servicebus.windows.net/myeventhub"
-            address = "amqps://" + self.namespace + ".servicebus.windows.net/" + self.eventhub
+            address = "amqps://" + self.namespace + \
+                      ".servicebus.windows.net/" + self.eventhub
             try:
                 self.send_client = EventHubClient(
                   address, debug=False, username=self.user, password=self.key)
@@ -62,26 +63,23 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 logger.error('Failed to init EH send client: ' + str(e))
                 raise
 
-    def receive(self, timeout=None):
+    def receive(self, timeout=5):
         loop = asyncio.get_event_loop()
         try:
-            ep = EventProcessor
-            ep.app_host = self.app_host
-            ep.app_port = self.app_port
+            # ep = EventProcessor
+            # ep.app_host = self.app_host
+            # ep.app_port = self.app_port
             host = EventProcessorHost(
-                ep,
+                # ep,
+                EventProcessor,
                 self.eph_client,
                 self.storage_manager,
-                ep_params=["param1", "param2"],
+                ep_params=[self.app_host, self.app_port],
                 eph_options=self.eh_options,
                 loop=loop)
 
-            # TODO: Changed from wait_and_close in the loop to just run_until_complete
-            # TODO: Implement a way of stopping the loop from CI/some external event
-            # TODO: How pass back that request was successful?
             tasks = asyncio.gather(host.open_async(),
                                    self.wait_and_close(host, timeout))
-            # Check that is works as expected - ie continues running indefinitely if there are more messages
             loop.run_until_complete(tasks)
 
         except KeyboardInterrupt:
@@ -98,6 +96,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
         try:
             self.sender.send(EventData(message))
+            logger.debug("Sent message: {}".format(message))
         except Exception as e:
             logger.error('Failed to send message to EH: ' + str(e))
 
@@ -107,7 +106,6 @@ class EventHubStreamingClient(AbstractStreamingClient):
             self.send_client.stop()
         except Exception as e:
             logger.error('Failed to close send client: ' + str(e))
-
 
     @staticmethod
     async def wait_and_close(host, timeout):

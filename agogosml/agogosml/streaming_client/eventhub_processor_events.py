@@ -1,23 +1,27 @@
 """EventProcessor host class for Event Hub"""
 
 from azure.eventprocessorhost import AbstractEventProcessor
-from .http_request import *
+from agogosml.utils.send_utils import send_message
+import logging
 
 logger = logging.getLogger("STREAM")
 logger.setLevel(logging.INFO)
+
 
 class EventProcessor(AbstractEventProcessor):
     """
     Example Implementation of AbstractEventProcessor
     """
-    app_host = ""
-    app_port = ""
+    # app_host = ""
+    # app_port = ""
 
-    def __init__(self, params=None):
+    def __init__(self, params):
         """
         Init Event processor
         """
-        super().__init__(params)
+        super().__init__()
+        self.app_host = params[0]
+        self.app_port = params[1]
         self._msg_counter = 0
 
     async def open_async(self, context):
@@ -28,7 +32,8 @@ class EventProcessor(AbstractEventProcessor):
 
     async def close_async(self, context, reason):
         """
-        Called by processor host to indicate that the event processor is being stopped.
+        Called by processor host to indicate that the event processor
+        is being stopped.
         :param context: Information about the partition
         :type context: ~azure.eventprocessorhost.PartitionContext
         :param reason: Reason for closing the async loop
@@ -49,11 +54,9 @@ class EventProcessor(AbstractEventProcessor):
         :type messages: list[~azure.eventhub.common.EventData]
         """
         for message in messages:
-            try:
-                message_str = message.body_as_str(encoding='UTF-8')
-                send_message(message_str, self.app_host, int(self.app_port))
-            except:
-                pass
+            message_str = message.body_as_str(encoding='UTF-8')
+            send_message(message_str, self.app_host, self.app_port)
+            logger.debug("Received message: {}".format(message_str))
         logger.info("Events processed {}".format(context.sequence_number))
         await context.checkpoint_async()
 

@@ -1,0 +1,17 @@
+FROM agogosml/agogosml as builder
+
+WORKDIR /usr/src/agogosml
+COPY ./input_reader ./input_reader
+COPY ./tests/ ./tests
+
+#RUN pip install pytest pytest-runner pylint && \
+#    pylint ./input_reader/*.py && \
+#    pytest ./tests/*.py
+
+# Release
+FROM agogosml/agogosml AS input_reader
+
+WORKDIR /input_reader
+COPY --from=builder /usr/src/agogosml/input_reader /input_reader
+
+CMD ["python", "main.py"]

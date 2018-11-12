@@ -2,7 +2,7 @@ version: "3"
 
 services:
   output-writer:
-    build: ../output_writer/
+    build: ../../output_writer/
     image: agogosacr.azurecr.io/output_writer:${TAG}
     expose:
       - '3001'

@@ -1,0 +1,28 @@
+FROM agogosml/agogosml as base
+
+# Copy the app
+WORKDIR /usr/src/agogosml
+COPY ./output_writer ./output_writer
+COPY ./tests/ ./tests
+
+# Install needed production requirements 
+# Technically this is redundant since you're using the agogosml base image.
+#RUN pip install -r requirements.txt
+
+# Install testing requirements
+#RUN pip install -r requirements-dev.txt
+
+# Run tests, linter
+# TODO: fix this to use pipenv with proper dependencies tracking...
+# RUN python -m pylint output_writer/
+
+# RUN python -m pytest tests/test_outputWriter.py
+# RUN python -m pytest tests/test_outputWriterFactory.py
+
+# Release
+FROM base AS release
+
+WORKDIR /output_writer
+COPY --from=base /usr/src/agogosml/output_writer /output_writer
+
+CMD ["python", "main.py"]

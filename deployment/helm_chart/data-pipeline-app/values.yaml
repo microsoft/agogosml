@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 registry: ""
+imagePullSecret: ""
 
 namespace: default
 
@@ -28,19 +29,11 @@ instance_apps:
       internalPort: 5000
 
   # Example of multiple apps
-  #- name: sample_app2
-  #  # tag: 
-  #  imagePullPolicy: IfNotPresent
-  #  service:
-  #    type: ClusterIP
-  #    externalPort: 5000
-  #    internalPort: 5000
-
-cli:
-  name: agogosml_cli
-  # tag: 
-  imagePullPolicy: IfNotPresent
-  service:
-    type: ClusterIP
-    externalPort: 3001
-    internalPort: 3001
+  - name: another_sample_app
+    # tag: 
+    imagePullPolicy: IfNotPresent
+    service:
+      type: ClusterIP
+      externalPort: 5000
+      internalPort: 5000
+    deployment: "green"

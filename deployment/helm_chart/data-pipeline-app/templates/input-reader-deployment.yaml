@@ -30,4 +30,4 @@ spec:
           #    memory: "3000Mi"
           #    cpu: "2000m"
       imagePullSecrets:
-        - name: acr-auth
+        - name: {{ .Values.imagePullSecret}}

@@ -1,11 +1,11 @@
 {{ $fullname := include "data-pipeline-app.instance-app.fullname" . }}
 # For each instance app, we create its own service
 {{- $root := . -}}
-{{- range .Values.instance_apps }}
+{{- range $index, $value := .Values.instance_apps }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $fullname }}-{{ .name | replace "_" "-" }}
+  name: {{ $fullname }}-{{ .name | replace "_" "-" }}-{{ $index }}
   labels:
     chart: "{{ $root.Chart.Name }}-{{ $root.Chart.Version | replace "+" "_" }}"
     release: {{ $root.Release.Name }}
@@ -18,7 +18,7 @@ spec:
       protocol: TCP
       name: {{ .name | replace "_" "-" }}
   selector:
-    app: {{ $fullname }}
-    deployment: { .deployment }
+    app: {{ $fullname }}-{{ .name | replace "_" "-" }}
+    deployment: {{ .deployment }}
 ---
 {{- end }}

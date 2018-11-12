@@ -6,7 +6,8 @@
 import pytest
 from dotenv import load_dotenv
 import os
-from agogosml.agogosml.streaming_client import *
+from agogosml.streaming_client import *
+
 load_dotenv()
 
 def test_send():

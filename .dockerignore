@@ -1,0 +1,16 @@
+.git/
+**/.env
+build
+dist
+*.egg-info
+*.egg/
+*.pyc
+*.swp
+**/.pytest_cache
+.tox
+.vscode
+.coverage
+html/*
+**/__pycache__
+# Compiled Documentation
+docs/_build

@@ -1,28 +1,17 @@
-FROM agogosml/agogosml as base
+FROM agogosml/agogosml as builder
 
-# Copy the app
 WORKDIR /usr/src/agogosml
 COPY ./input_reader ./input_reader
 COPY ./tests/ ./tests
 
-# Install needed production requirements 
-# Technically this is redundant since you're using the agogosml base image.
-#RUN pip install -r requirements.txt
-
-# Install testing requirements
-#RUN pip install -r requirements-dev.txt
-
-# Run tests, linter
-# TODO: fix this to use pipenv with proper dependencies tracking...
-#RUN python -m pylint ./input_reader/input_reader.py
-#RUN python -m pylint ./input_reader/input_reader_factory.py
-#RUN python -m pylint ./input_reader/main.py
-#RUN python -m pytest ./tests/test_inputReader.py
+#RUN pip install pytest pytest-runner pylint && \
+#    pylint ./input_reader/*.py && \
+#    pytest ./tests/*.py
 
 # Release
-FROM base AS release
+FROM agogosml/agogosml AS input_reader
 
 WORKDIR /input_reader
-COPY --from=base /usr/src/agogosml/input_reader /input_reader
+COPY --from=builder /usr/src/agogosml/input_reader /input_reader
 
 CMD ["python", "main.py"]

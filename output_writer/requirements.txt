@@ -1,5 +1,0 @@
-flask
-requests
-azure-eventhub
-confluent-kafka
-python-dotenv

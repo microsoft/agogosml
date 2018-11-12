@@ -36,12 +36,14 @@ RUN pip install pipenv && \
     # pipenv run make coverage && \
     pipenv run make docs && \
     pipenv run make dist && \
+    pipenv lock --requirements > requirements.txt && \
     pipenv --rm
-
-# Clean Up
-RUN rm -rf /root/librdkafka && apk del .build-deps
 
 FROM builder as agogosml
 
+RUN pip install -r requirements.txt
 RUN pip install /usr/src/agogosml/dist/agogosml-*.tar.gz
+
+# Clean Up
 RUN rm -rf /usr/src/agogosml
+RUN rm -rf /root/librdkafka && apk del .build-deps

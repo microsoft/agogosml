@@ -13,7 +13,7 @@ if __name__ == "__main__":
     msg_type = os.getenv("MESSAGING_TYPE")
     CFG = None
 
-    if msg_type == 'evenhub':
+    if msg_type == 'eventhub':
         # FOR NOW, LOAD THE CONFIG VARS IN FROM .ENV
         CFG = {
             'broker': {

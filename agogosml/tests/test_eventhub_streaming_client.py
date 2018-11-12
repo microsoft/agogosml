@@ -6,7 +6,7 @@
 import pytest
 from dotenv import load_dotenv
 import os
-from agogosml.streaming_client import *
+from agogosml.streaming_client import eventhub_streaming_client
 
 load_dotenv()
 
@@ -17,7 +17,7 @@ def test_send():
               "EVENT_HUB_SAS_POLICY": os.getenv("EVENT_HUB_SAS_POLICY"),
               "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY")
               }
-    streaming_client = EventHubStreamingClient(config)
+    streaming_client = eventhub_streaming_client.EventHubStreamingClient(config)
     messages = [
         '{"key": "dfkdsflk", "intValue": 23}',
         '{"key": "kjjioud", "intValue": 73}',

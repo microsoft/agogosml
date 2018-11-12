@@ -1,7 +1,7 @@
 """Kafka streaming client"""
 
-from agogosml.streaming_client.abstract_stream_client import AbstractStreamingClient
-from agogosml.streaming_client.http_request import *
+from .abstract_streaming_client import AbstractStreamingClient
+from agogosml.utils.send_utils import send_message
 from confluent_kafka import Producer, Consumer, admin
 from confluent_kafka import KafkaException, KafkaError
 import sys

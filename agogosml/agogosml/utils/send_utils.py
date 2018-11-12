@@ -17,7 +17,7 @@ def send_message(message, app_host, app_port):
               "Error with a request {} and message not sent was {}".
               format(request.status_code, message))
             print("Error with a request {} and message not sent was {}".
-              format(request.status_code, message))
+                  format(request.status_code, message))
             return False
         return True
 

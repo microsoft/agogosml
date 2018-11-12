@@ -32,7 +32,8 @@ class EventProcessor(AbstractEventProcessor):
 
     async def close_async(self, context, reason):
         """
-        Called by processor host to indicate that the event processor is being stopped.
+        Called by processor host to indicate that the event processor
+        is being stopped.
         :param context: Information about the partition
         :type context: ~azure.eventprocessorhost.PartitionContext
         :param reason: Reason for closing the async loop
@@ -53,12 +54,9 @@ class EventProcessor(AbstractEventProcessor):
         :type messages: list[~azure.eventhub.common.EventData]
         """
         for message in messages:
-            try:
-                message_str = message.body_as_str(encoding='UTF-8')
-                send_message(message_str, self.app_host, self.app_port)
-                print("Received message: {}".format(message_str))  # TODO: REMOVE
-            except:
-                pass
+            message_str = message.body_as_str(encoding='UTF-8')
+            send_message(message_str, self.app_host, self.app_port)
+            logger.debug("Received message: {}".format(message_str))
         logger.info("Events processed {}".format(context.sequence_number))
         await context.checkpoint_async()
 

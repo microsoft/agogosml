@@ -5,6 +5,7 @@ from agogosml.utils.send_utils import send_message
 from confluent_kafka import Producer, Consumer, admin
 from confluent_kafka import KafkaException, KafkaError
 import sys
+import logging
 
 logger = logging.getLogger("STREAM")
 logger.setLevel(logging.INFO)
@@ -73,7 +74,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
         TODO:
         We are going to need documentation for Kafka
         to ensure proper syntax is clear
-        
         '''
         self.consumer.subscribe([self.topic])
         # Read messages from Kafka, print to stdout
@@ -103,4 +103,3 @@ class KafkaStreamingClient(AbstractStreamingClient):
         finally:
             # Close down consumer to commit final offsets.
             self.consumer.close()
-

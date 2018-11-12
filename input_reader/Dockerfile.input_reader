@@ -1,4 +1,7 @@
-FROM agogosml/agogosml as builder
+ARG CONTAINER_REG
+ARG AGOGOSML_TAG="latest"
+
+FROM ${CONTAINER_REG}agogosml/agogosml:${AGOGOSML_TAG} as builder
 
 WORKDIR /usr/src/agogosml
 COPY ./input_reader ./input_reader
@@ -9,7 +12,7 @@ COPY ./tests/ ./tests
 #    pytest ./tests/*.py
 
 # Release
-FROM agogosml/agogosml AS input_reader
+FROM ${CONTAINER_REG}agogosml/agogosml:${AGOGOSML_TAG} AS input_reader
 
 WORKDIR /input_reader
 COPY --from=builder /usr/src/agogosml/input_reader /input_reader

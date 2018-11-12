@@ -10,8 +10,17 @@
 
 ## Installation
 
-Install the chart using the 'helm install command'. provide different options using the --set command. Example:
+Install the chart using the 'helm install command'. provide different options using the -f command and supply a file with the updated settings. Example:
 
 ```bash
-$ helm install . --set input_reader.tag=latest --set output_writer.tag=latest --set registry=myacr.azurecr.io --set imagePullSecret=acr-auth
+$ helm install . -f ../values.private.yaml
+```
+
+## Advanced usage
+
+To control the blue/green deployment a simple update to the instance app service is needed.
+change the label to either blue/green to redirect traffic:
+
+```bash
+TBD
 ```

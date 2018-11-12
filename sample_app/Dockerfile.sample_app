@@ -1,9 +1,9 @@
 
 # Base image
-FROM python:3.7-alpine3.8 AS base
+FROM agogosml/agogosml as builder
 
-WORKDIR /sample_app
-COPY . /sample_app
+WORKDIR /usr/src/sample_app
+COPY ./sample_app /usr/src/sample_app
 
 RUN pip install -r requirements-dev.txt
 
@@ -12,9 +12,9 @@ RUN pytest testapp.py
 RUN pylint *.py
 
 # Release 
-FROM python:3.7-alpine3.8
+FROM agogosml/agogosml
 WORKDIR /sample_app
-COPY --from=base /sample_app /sample_app
+COPY --from=builder /usr/src/sample_app /sample_app
 RUN pip install -r requirements.txt
 
 CMD ["python", "main.py"]

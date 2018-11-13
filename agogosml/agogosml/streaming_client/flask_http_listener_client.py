@@ -1,10 +1,9 @@
 """ Flask client to receive messages from customer app"""
 from flask import Flask, request
-from listener_client import ListenerClient
+from .listener_client import ListenerClient
 
 
 class FlaskHttpListenerClient(ListenerClient):
-
     def __init__(self, port):
         self.port = port
         pass
@@ -24,9 +23,3 @@ class FlaskHttpListenerClient(ListenerClient):
     def stop(self):
         self.shutdown_server()
         pass
-
-    def shutdown_server(self):
-        func = request.environ.get('werkzeug.server.shutdown')
-        if func is None:
-            raise RuntimeError('Not running with the Werkzeug Server')
-        func()

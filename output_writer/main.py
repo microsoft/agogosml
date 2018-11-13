@@ -19,16 +19,11 @@ if __name__ == "__main__":
             'broker': {
                 'type': 'eventhub',
                 'config': {
-                    'AZURE_STORAGE_ACCOUNT': os.getenv("AZURE_STORAGE_ACCOUNT"),
-                    'AZURE_STORAGE_ACCESS_KEY': os.getenv("AZURE_STORAGE_ACCESS_KEY"),
                     'EVENT_HUB_NAMESPACE': os.getenv("EVENT_HUB_NAMESPACE"),
                     'EVENT_HUB_NAME': os.getenv("EVENT_HUB_NAME"),
                     'EVENT_HUB_SAS_POLICY': os.getenv("EVENT_HUB_SAS_POLICY"),
                     'EVENT_HUB_SAS_KEY': os.getenv("EVENT_HUB_SAS_KEY"),
-                    'LEASE_CONTAINER_NAME': os.getenv("LEASE_CONTAINER_NAME"),
-                    'APP_HOST': os.getenv('APP_HOST'),
-                    'APP_PORT': os.getenv('APP_PORT'),
-                    'TIMEOUT': 1
+                    'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
                 }
             }
         }
@@ -38,13 +33,10 @@ if __name__ == "__main__":
                 'type': 'kafka',
                 'config': {
                     'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),
-                    'KAFKA_CONSUMER_GROUP': os.getenv("KAFKA_CONSUMER_GROUP"),
-                    'APP_HOST': os.getenv("APP_HOST"),
-                    'APP_PORT': os.getenv("APP_PORT"),
-                    'KAFKA_ADDRESS': os.getenv("APP_PORT"),
-
+                    'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
+                    'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
                 }
             }
         }
-    OUTPUT = OutputWriterFactory.create(CFG, None, None)
+    OUTPUT = OutputWriterFactory.create(CFG)
     OUTPUT.start_incoming_messages()

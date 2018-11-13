@@ -1,6 +1,8 @@
+import pytest
+
 from agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
 from agogosml.streaming_client.listener_client import ListenerClient
-from output_writer.output_writer import OutputWriter
+from agogosml.writer.output_writer import OutputWriter
 
 
 # Can't move to separate file due to errors I can't solve.
@@ -64,10 +66,3 @@ def test_on_listener_event_sent_called():
     ow.start_incoming_messages()
     clm.mock_new_incoming_message()
     assert cbm.get_sent()
-
-
-if __name__ == '__main__':
-    test_when_ctor_instance_created()
-    test_on_message_received_sent_called()
-    test_on_listener_event_sent_called()
-    pass

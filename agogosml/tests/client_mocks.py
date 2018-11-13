@@ -1,10 +1,8 @@
-from agogosml.streaming_client.abstract_streaming_client \
-    import AbstractStreamingClient
+from agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
 from agogosml.streaming_client.listener_client import ListenerClient
 
 
 class ClientMessagingMock(AbstractStreamingClient):
-
     def __init__(self):
         self.sent = False
         pass
@@ -19,12 +17,9 @@ class ClientMessagingMock(AbstractStreamingClient):
     def receive(self, *args, **kwargs):
         pass
 
-    def get_sent(self):
-        return self.sent
 
 
 class ListenerClientMock(ListenerClient):
-
     def __init__(self, port):
         self.callback = None
 

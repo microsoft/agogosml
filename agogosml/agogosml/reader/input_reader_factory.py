@@ -3,8 +3,7 @@ Factory and instance resolving for input reader
 """
 from agogosml.streaming_client.eventhub_streaming_client import EventHubStreamingClient
 from agogosml.streaming_client.kafka_streaming_client import KafkaStreamingClient
-
-from input_reader import InputReader
+from .input_reader import InputReader
 
 
 class InputReaderFactory:

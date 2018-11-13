@@ -165,7 +165,12 @@
     },
     "repository": {
         "properties": {},
-        "clean": "true",
+        "id": "Microsoft/agogosml",
+        "type": "GitHub",
+        "name": "Microsoft/agogosml",
+        "url": "https://github.com/Microsoft/agogosml.git",
+        "defaultBranch": "master",
+        "clean": "false",
         "checkoutSubmodules": false
     },
     "processParameters": {},

@@ -15,7 +15,7 @@ class OutputWriterFactory:
     """
 
     @staticmethod
-    def create(config: dict, streaming_client, listener_client):
+    def create(config: dict):
         """
         Create a new instance
         :param listener_client: An instance of a listener instead of config
@@ -26,49 +26,30 @@ class OutputWriterFactory:
 
         broker = None
 
-        if streaming_client is None:
-            if OutputWriterFactory.is_empty(config):
-                raise Exception('''
-                No config were set for the Output Writer Manager
-                ''')
+        if OutputWriterFactory.is_empty(config):
+            raise Exception('''
+            No config were set for the Output Writer Manager
+            ''')
 
-            if config.get("broker") is None:
-                raise Exception('''
-                broker cannot be empty
-                ''')
+        if config.get("broker") is None:
+            raise Exception('''
+            broker cannot be empty
+            ''')
 
-            client_config = config.get("broker")["config"]
-            if config.get("broker")["type"] == "kafka":
-                broker = KafkaStreamingClient(client_config)
+        client_config = config.get("broker")["config"]
+        if config.get("broker")["type"] == "kafka":
+            broker = KafkaStreamingClient(client_config)
 
-            if config.get("broker")["type"] == "eventhub":
-                broker = EventHubStreamingClient(client_config)
+        if config.get("broker")["type"] == "eventhub":
+            broker = EventHubStreamingClient(client_config)
 
-            if broker is None:
-                raise Exception('''
-                Unknown broker type
-                ''')
-        else:
-            broker = streaming_client
+        if broker is None:
+            raise Exception('''
+            Unknown broker type
+            ''')
 
-        listener = None
-
-        if listener_client is None:
-            port = os.environ['OUTPUT_WRITER_PORT']
-            if config.get("listener") is None:
-                raise Exception('''
-                listener cannot be empty
-                ''')
-
-            if config.get("listener")["type"] == "flask":
-                listener = FlaskHttpListenerClient(port)
-
-            if listener is None:
-                raise Exception('''
-                Unknown listener type
-                ''')
-        else:
-            listener = listener_client
+        port = os.environ['OUTPUT_WRITER_PORT']
+        listener = FlaskHttpListenerClient(port)
 
         return OutputWriter(broker, listener)
 

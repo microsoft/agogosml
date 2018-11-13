@@ -4,7 +4,7 @@ Main entry point for input reader
 import os  # temp
 from dotenv import load_dotenv  # temp
 
-from input_reader_factory import InputReaderFactory
+from agogosml.reader.input_reader_factory import InputReaderFactory
 
 load_dotenv()  # temp
 

@@ -1,7 +1,7 @@
 import pytest
 
 from agogosml.streaming_client.listener_client import ListenerClient
-from output_writer.output_writer_factory import OutputWriterFactory
+from agogosml.writer.output_writer_factory import OutputWriterFactory
 
 
 class ListenerClientMock(ListenerClient):
@@ -84,9 +84,3 @@ def test_when_unknown_listener_throw():
 #     listener.mock_new_incoming_message()
 #
 #     assert ow is not None
-
-
-if __name__ == '__main__':
-    test_when_known_broker_instance_created()
-    test_when_unknown_broker_throw()
-    test_when_unknown_listener_throw()

@@ -1,7 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Tests for `eventhub_streaming_client` module."""
+
 # TODO: Write mocked unit tests and improve integration tests.
+
+import pytest
 
 from dotenv import load_dotenv
 import os

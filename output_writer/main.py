@@ -4,7 +4,7 @@ Main entry point
 import os  # temp
 from dotenv import load_dotenv  # temp
 
-from output_writer_factory import OutputWriterFactory
+from agogosml.writer.output_writer_factory import OutputWriterFactory
 
 load_dotenv()  # temp
 

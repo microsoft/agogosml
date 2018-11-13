@@ -26,11 +26,17 @@ spec:
         - name: {{ $fullname }}-{{ .name | replace "_" "-" }}-app
           image: {{ $root.Values.registry }}/{{ .name }}:{{ default "latest" .tag }}
           imagePullPolicy: {{ default "IfNotPresent" .pullPolicy }}
+          envFrom:
+          - configMapRef:
+              name: {{ .name | replace "_" "-" }}-{{ $index }}-config
           ports:
           - containerPort: {{ .service.internalPort }}
         - name: {{ $fullname }}-{{ .name | replace "_" "-" }}-output-writer
           image: {{ $root.Values.registry }}/{{ $root.Values.output_writer.name }}:{{ default "latest" $root.Values.output_writer.tag }}
           imagePullPolicy: {{ default "IfNotPresent" $root.Values.output_writer.pullPolicy }}
+          envFrom:
+          - configMapRef:
+              name: output-writer-config
       imagePullSecrets:
         - name: {{ $root.Values.imagePullSecret}}
 ---

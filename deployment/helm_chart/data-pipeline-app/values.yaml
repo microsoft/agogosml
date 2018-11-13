@@ -12,11 +12,37 @@ input_reader:
   # tag: 
   imagePullPolicy: IfNotPresent
   replicaCount: 1
+  env:
+    MESSAGING_TYPE: ""
+    AZURE_STORAGE_ACCOUNT: ""
+    AZURE_STORAGE_ACCESS_KEY: ""
+    EVENT_HUB_NAMESPACE: ""
+    EVENT_HUB_NAME: ""
+    EVENT_HUB_SAS_POLICY: ""
+    EVENT_HUB_SAS_KEY: ""
+    LEASE_CONTAINER_NAME: ""
+    APP_HOST: ""
+    APP_PORT: ""
+    KAFKA_TOPIC: ""
+    KAFKA_CONSUMER_GROUP: ""
+    APP_HOST: ""
+    APP_PORT: ""
+    KAFKA_ADDRESS: ""
+
 
 output_writer:
   name: output_writer
   # tag: 
   imagePullPolicy: IfNotPresent
+  env:
+    MESSAGING_TYPE: ""
+    EVENT_HUB_NAMESPACE: ""
+    EVENT_HUB_NAME: ""
+    EVENT_HUB_SAS_POLICY: ""
+    EVENT_HUB_SAS_KEY: ""
+    KAFKA_TOPIC: ""
+    KAFKA_ADDRESS: ""
+    OUTPUT_WRITER_PORT: ""
 
 instance_apps:
   - name: sample_app
@@ -27,6 +53,11 @@ instance_apps:
       type: ClusterIP
       externalPort: 5000
       internalPort: 5000
+    env:
+      HOST: ""
+      PORT: ""
+      OUTPUT_URL: ""
+      SCHEMA_FILEPATH: ""
 
   # Example of multiple apps
   - name: another_sample_app

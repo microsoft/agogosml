@@ -22,12 +22,8 @@ spec:
         - name: {{ .Chart.Name }}
           image: {{ .Values.registry }}/{{ .Values.input_reader.name }}:{{ default "latest" .Values.input_reader.tag }}
           imagePullPolicy: {{ default "IfNotPresent" .Values.input_reader.pullPolicy }}
-          #resources:
-          #  requests:
-          #    memory: "1500Mi"
-          #    cpu: "1500m"
-          #  limits:
-          #    memory: "3000Mi"
-          #    cpu: "2000m"
+          envFrom:
+          - configMapRef:
+              name: input-reader-config
       imagePullSecrets:
         - name: {{ .Values.imagePullSecret}}

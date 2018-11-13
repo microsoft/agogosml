@@ -51,8 +51,6 @@ instance_apps:
     deployment: "green"
     service:
       type: ClusterIP
-      externalPort: 5000
-      internalPort: 5000
     env:
       HOST: ""
       PORT: ""
@@ -65,6 +63,4 @@ instance_apps:
     imagePullPolicy: IfNotPresent
     service:
       type: ClusterIP
-      externalPort: 5000
-      internalPort: 5000
     deployment: "green"

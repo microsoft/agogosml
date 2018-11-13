@@ -12,11 +12,6 @@ metadata:
     heritage: {{ $root.Release.Service }}
 spec:
   type: {{ .service.type }}
-  ports:
-    - port: {{ .service.externalPort }}
-      targetPort: {{ .service.internalPort }}
-      protocol: TCP
-      name: {{ .name | replace "_" "-" }}
   selector:
     app: {{ $fullname }}-{{ .name | replace "_" "-" }}
     deployment: {{ .deployment }}

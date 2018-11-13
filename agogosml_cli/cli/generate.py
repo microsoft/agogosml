@@ -7,6 +7,7 @@ import click
 import json
 import _jsonnet
 import validators
+import giturlparse
 import cli.utils as utils
 
 
@@ -31,7 +32,12 @@ PROJ_FILES = {
 @click.argument('folder', type=click.Path(), default='.', required=False)
 def generate(force, config, folder) -> int:
     """Generates an agogosml project"""
-    injected_variables = {}
+    injected_variables = {
+        "REPOSITORY_TYPE": "GitHub",
+        "REPOSITORY_URL": "https://github.com/Microsoft/agogosml.git",
+        "REPOSITORY_OWNER": "Microsoft",
+        "REPOSITORY_REPO": "agogosml"
+    }
     cloud_vendor = None
 
     # Read Manifest file
@@ -42,6 +48,7 @@ def generate(force, config, folder) -> int:
             # Retrieve values
             injected_variables['PROJECT_NAME'] = manifest['name']
             injected_variables['SUBSCRIPTION_ID'] = manifest['cloud']['subscriptionId']
+            # Add cloud vender specific variables
             cloud_vendor = manifest['cloud']['vendor']
             if cloud_vendor == 'azure':
                 azure_props = manifest['cloud']['otherProperties']
@@ -54,6 +61,15 @@ def generate(force, config, folder) -> int:
                     injected_variables['AZURE_CONTAINER_REGISTRY'] = acr
                     injected_variables['AZURE_DOCKER_BUILDARGS'] = \
                         '--build-arg CONTAINER_REG=%s --build-arg AGOGOSML_TAG=latest ' % acr
+            # Add git repository variables
+            if 'repository' in manifest:
+                # if it is in the manifest then it is validated by the schema to be complete.
+                parsed_giturl = giturlparse.parse(manifest['repository']['url'])
+                injected_variables['REPOSITORY_TYPE'] = manifest['repository']['type']
+                injected_variables['REPOSITORY_URL'] = manifest['repository']['url']
+                injected_variables['REPOSITORY_OWNER'] = parsed_giturl.owner
+                injected_variables['REPOSITORY_REPO'] = parsed_giturl.name
+
     else:
         click.echo('manifest.json not found. Please run agogosml init first.')
         raise click.Abort()

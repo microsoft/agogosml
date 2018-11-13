@@ -150,6 +150,10 @@ def _create_test_manifest_azure(folder='.'):
                 "azureContainerRegistry": "https://acr.acr.io"
             }
         },
+        "repository": {
+            "type": "GitHub",
+            "url": "https://github.com/Microsoft/agogosml.git"
+        },
         "tests": [{
             "name": "Sanity Check",
             "type": "language-specific",

@@ -1,3 +1,5 @@
+local repository = import 'pipeline-repository.libsonnet';
+
 {
     "options": [],
     "triggers": [
@@ -147,16 +149,7 @@
         ],
         "type": 1
     },
-    "repository": {
-        "properties": {},
-        "id": "Microsoft/agogosml",
-        "type": "GitHub",
-        "name": "Microsoft/agogosml",
-        "url": "https://github.com/Microsoft/agogosml.git",
-        "defaultBranch": "master",
-        "clean": "false",
-        "checkoutSubmodules": false
-    },
+    "repository": repository.Repository(std.extVar('REPOSITORY_TYPE'), std.extVar('REPOSITORY_URL'), std.extVar('REPOSITORY_OWNER'), std.extVar('REPOSITORY_REPO')),
     "processParameters": {},
     "quality": 1,
     "drafts": [],

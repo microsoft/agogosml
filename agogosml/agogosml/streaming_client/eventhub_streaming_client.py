@@ -22,13 +22,14 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
         """
         super().__init__()
+        self.message_callback = None
         self.config = config
         self.storage_account_name = self.config.get("AZURE_STORAGE_ACCOUNT")
         self.storage_key = self.config.get("AZURE_STORAGE_ACCESS_KEY")
         self.lease_container_name = self.config.get("LEASE_CONTAINER_NAME")
         self.namespace = self.config.get("EVENT_HUB_NAMESPACE")
         self.eventhub = self.config.get("EVENT_HUB_NAME")
-        # self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP")
+        # self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP") # TODO: get consumer groups working
         self.user = self.config.get("EVENT_HUB_SAS_POLICY")
         self.key = self.config.get("EVENT_HUB_SAS_KEY")
         self.timeout = self.config.get("TIMEOUT")
@@ -66,15 +67,11 @@ class EventHubStreamingClient(AbstractStreamingClient):
     def receive(self, timeout=5):
         loop = asyncio.get_event_loop()
         try:
-            # ep = EventProcessor
-            # ep.app_host = self.app_host
-            # ep.app_port = self.app_port
             host = EventProcessorHost(
-                # ep,
                 EventProcessor,
                 self.eph_client,
                 self.storage_manager,
-                ep_params=[self.app_host, self.app_port],
+                ep_params=[self.app_host, self.app_port, self.message_callback],
                 eph_options=self.eh_options,
                 loop=loop)
 

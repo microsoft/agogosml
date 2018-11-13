@@ -22,6 +22,7 @@ class EventProcessor(AbstractEventProcessor):
         super().__init__()
         self.app_host = params[0]
         self.app_port = params[1]
+        self.message_callback = params[2]
         self._msg_counter = 0
 
     async def open_async(self, context):
@@ -54,9 +55,11 @@ class EventProcessor(AbstractEventProcessor):
         :type messages: list[~azure.eventhub.common.EventData]
         """
         for message in messages:
-            message_str = message.body_as_str(encoding='UTF-8')
-            send_message(message_str, self.app_host, self.app_port)
-            logger.debug("Received message: {}".format(message_str))
+            message_json = message.body_as_json(encoding='UTF-8')
+            # send_message(message_str, self.app_host, self.app_port)
+            if self.message_callback is not None:
+                self.message_callback(message_json, self.app_host, self.app_port)
+                logger.debug("Received message: {}".format(message_json))
         logger.info("Events processed {}".format(context.sequence_number))
         await context.checkpoint_async()
 

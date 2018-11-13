@@ -5,7 +5,7 @@ from jsonschema import validate
 IN_MEMORY_FILES = {}
 
 
-def validate_schema(data: object, schema_filepath: str):
+def validate_schema(data, schema_filepath: str):
     """ Validates the input json data against our schema
         defined in schema_example.json
 

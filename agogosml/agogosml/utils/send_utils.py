@@ -7,7 +7,13 @@ logger.setLevel(logging.INFO)
 
 
 def send_message(message, app_host, app_port):
+    """
+    Sends messages to specified address via HTTP
 
+    :param message:  json formatted message
+    :param app_host: host of address
+    :param app_port: port of address 
+    """
     try:
         server_address = "http://" + app_host + ":" + app_port
         # TODO: Add retries as some of the messages are failing to send

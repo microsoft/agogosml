@@ -56,3 +56,9 @@ def test_receive():
     # make sure this is correct and add success of post
     streaming_client.receive(timeout=2)
     # assert streaming_client is not None
+
+
+if __name__ == "__main__":
+    for i in range(2):
+        test_send()
+    print("Finished")

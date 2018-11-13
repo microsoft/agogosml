@@ -37,7 +37,7 @@ def test_generate():
     RESULT: Produces the correct files in the current working directory
     """
     with runner.isolated_filesystem():
-        _create_test_manifest()
+        _create_test_manifest_azure()
         result = runner.invoke(generate.generate)
         assert result.exit_code == 0
         _assert_template_files_exist()
@@ -47,7 +47,7 @@ def test_generate():
     RESULT: Overwrite existing files
     """
     with runner.isolated_filesystem():
-        _create_test_manifest()
+        _create_test_manifest_azure()
         _create_dummy_template_files()
         prevmd5 = _get_md5_template_files()
         result = runner.invoke(generate.generate, ['--force'])
@@ -60,7 +60,7 @@ def test_generate():
     RESULT: Fail since files already exist and should NOT overwite
     """
     with runner.isolated_filesystem():
-        _create_test_manifest()
+        _create_test_manifest_azure()
         _create_dummy_template_files()
         prevmd5 = _get_md5_template_files()
         result = runner.invoke(generate.generate)
@@ -77,7 +77,7 @@ def test_generate_folder():
     RESULT: Produces the correct files in the specified directory
     """
     with runner.isolated_filesystem():
-        _create_test_manifest()
+        _create_test_manifest_azure()
         result = runner.invoke(generate.generate, ['folder'])
         assert result.exit_code == 0
         _assert_template_files_exist('folder')
@@ -87,7 +87,7 @@ def test_generate_folder():
     RESULT: Overwrite existing files in the specified directory
     """
     with runner.isolated_filesystem():
-        _create_test_manifest()
+        _create_test_manifest_azure()
         _create_dummy_template_files(folder='folder')
         prevmd5 = _get_md5_template_files(folder='folder')
         result = runner.invoke(generate.generate, ['--force', 'folder'])
@@ -100,7 +100,7 @@ def test_generate_folder():
     RESULT: Fail since files already exist and should NOT overwite
     """
     with runner.isolated_filesystem():
-        _create_test_manifest()
+        _create_test_manifest_azure()
         _create_dummy_template_files(folder='folder')
         prevmd5 = _get_md5_template_files(folder='folder')
         result = runner.invoke(generate.generate, ['folder'])
@@ -114,11 +114,10 @@ def test_generate_invalid_schema():
     RUN: agogosml generate (with invalid manifest file)
     RESULT: Produces the ff in the current working directory:
         - .env
-        - datapipeline.yml
-        - cicd.yml
         - Pipfile
-        - test/e2e
-        - tests/validation
+        - ci-sample-app-pipeline.json
+        - ci-input-app-pipeline.json
+        - ci-output-app-pipeline.json
     """
     runner = CliRunner()
     with runner.isolated_filesystem():
@@ -140,10 +139,17 @@ def _assert_template_files_exist(folder='.'):
         assert os.path.exists(os.path.join(folder, proj_file))
 
 
-def _create_test_manifest(folder='.'):
+def _create_test_manifest_azure(folder='.'):
     manifest_str = """
     {
         "name": "test manifest",
+        "cloud": {
+            "vendor": "azure",
+            "subscriptionId": "123-123-123-123",
+            "otherProperties": {
+                "azureContainerRegistry": "https://acr.acr.io"
+            }
+        },
         "tests": [{
             "name": "Sanity Check",
             "type": "language-specific",

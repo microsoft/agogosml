@@ -6,7 +6,8 @@
                 "+master"
             ],
             "pathFilters": [
-                "+/sample_app"
+                "+/input_reader",
+                "+/agogosml/agogosml"
             ],
             "batchChanges": false,
             "maxConcurrentBuildsPerBranch": 1,
@@ -22,28 +23,11 @@
                 "allowSecrets": false
             },
             "pathFilters": [
-                "+/sample_app"
+                "+/input_reader",
+                "+/agogosml/agogosml"
             ],
             "isCommentRequiredForPullRequest": false,
             "triggerType": 64
-        },
-        {
-            "definition": {
-                "id": 19,
-                "path": "\\",
-                "queueStatus": 0,
-                "project": {
-                    "name": std.extVar('PROJECT_NAME'),
-                    "description": "Input-Output CI pipeline",
-                    "state": 1,
-                    "visibility": "public"
-                }
-            },
-            "requiresSuccessfulBuild": true,
-            "branchFilters": [
-                "+master"
-            ],
-            "triggerType": 128
         }
     ],
     "properties": {},
@@ -68,16 +52,16 @@
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('AZURE_SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
-                            "dockerFile": "**/sample_app/Dockerfile.sample_app",
-                            "arguments": "--build-arg CONTAINER_REG=std.extVar('ACR_LOGIN_SERVER')/ --build-arg AGOGOSML_TAG=latest ",
+                            "dockerFile": "**/input_reader/Dockerfile.input_reader",
+                            "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
                             "useDefaultContext": "false",
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "sample_app:$(Build.BuildId)",
+                            "imageName": "input_reader:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -104,7 +88,7 @@
                         "enabled": true,
                         "continueOnError": false,
                         "alwaysRun": false,
-                        "displayName": "Push instance app image",
+                        "displayName": "Push input reader app image",
                         "timeoutInMinutes": 0,
                         "condition": "succeeded()",
                         "task": {
@@ -115,7 +99,7 @@
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('AZURE_SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Push an image",
                             "dockerFile": "**/Dockerfile",
@@ -124,7 +108,7 @@
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "sample_app:$(Build.BuildId)",
+                            "imageName": "input_reader:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -147,7 +131,7 @@
                         }
                     }
                 ],
-                "name": "Sample-App-Build-CI",
+                "name": "InputReader-Build-CI",
                 "refName": "Phase_1",
                 "condition": "succeeded()",
                 "target": {
@@ -176,7 +160,8 @@
     "processParameters": {},
     "quality": 1,
     "drafts": [],
-    "name": "Sample-App-Build-CI",
+    "id": 13,
+    "name": "Input-Reader-Build-CI",
     "path": "\\",
     "type": 2
 }

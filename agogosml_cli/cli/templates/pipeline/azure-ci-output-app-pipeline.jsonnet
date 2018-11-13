@@ -6,7 +6,7 @@
                 "+master"
             ],
             "pathFilters": [
-                "+/input_reader",
+                "+/output_writer",
                 "+/agogosml/agogosml"
             ],
             "batchChanges": false,
@@ -23,7 +23,7 @@
                 "allowSecrets": false
             },
             "pathFilters": [
-                "+/input_reader",
+                "+/output_writer",
                 "+/agogosml/agogosml"
             ],
             "isCommentRequiredForPullRequest": false,
@@ -52,16 +52,16 @@
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('AZURE_SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
-                            "dockerFile": "**/input_reader/Dockerfile.input_reader",
-                            "arguments": "--build-arg CONTAINER_REG=std.extVar('ACR_LOGIN_SERVER')/ --build-arg AGOGOSML_TAG=latest ",
+                            "dockerFile": "**/output_writer/Dockerfile.output_writer",
+                            "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
                             "useDefaultContext": "false",
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "input_reader:$(Build.BuildId)",
+                            "imageName": "output_writer:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -88,7 +88,7 @@
                         "enabled": true,
                         "continueOnError": false,
                         "alwaysRun": false,
-                        "displayName": "Push input reader app image",
+                        "displayName": "Push output writer app image",
                         "timeoutInMinutes": 0,
                         "condition": "succeeded()",
                         "task": {
@@ -99,7 +99,7 @@
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('AZURE_SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Push an image",
                             "dockerFile": "**/Dockerfile",
@@ -108,7 +108,7 @@
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "input_reader:$(Build.BuildId)",
+                            "imageName": "output_writer:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -131,7 +131,7 @@
                         }
                     }
                 ],
-                "name": "InputReader-Build-CI",
+                "name": "OutputWriter-Build-CI",
                 "refName": "Phase_1",
                 "condition": "succeeded()",
                 "target": {
@@ -161,7 +161,7 @@
     "quality": 1,
     "drafts": [],
     "id": 13,
-    "name": "Input-Reader-build-CI",
+    "name": "Output-Writer-Build-CI",
     "path": "\\",
     "type": 2
 }

@@ -8,8 +8,8 @@ from jsonschema import validate
 from shutil import copy
 
 
-SCHEMA_FILE = 'manifest.schema.json'
-TEMPLATES_FOLDER = 'templates'
+SCHEMA_FILE = os.path.join(os.path.dirname(__file__), 'manifest.schema.json')
+TEMPLATES_FOLDER = os.path.join(os.path.dirname(__file__), 'templates')
 
 
 def get_template_full_filepath(file: str) -> str:
@@ -17,8 +17,7 @@ def get_template_full_filepath(file: str) -> str:
     Args:
         file (string): Name of the file in module
     """
-    module_path = os.path.dirname(__file__)
-    return os.path.join(module_path, TEMPLATES_FOLDER, file)
+    return os.path.join(TEMPLATES_FOLDER, file)
 
 
 def copy_module_templates(src: str, dst: str) -> str:
@@ -26,7 +25,7 @@ def copy_module_templates(src: str, dst: str) -> str:
     Throws SameFileError if both file and destination are the same.
     Args:
         src (string):  Name of the source template file
-        dst (string):  Destination to copy
+        dst (string):  Destination folder to copy to
     """
     module_path = os.path.dirname(__file__)
     full_file = os.path.join(module_path, TEMPLATES_FOLDER, src)

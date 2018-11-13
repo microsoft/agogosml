@@ -21,6 +21,7 @@ pylint = "*"
 click = "*"
 jsonschema = "*"
 jsonnet = "*"
+validators = "*"
 
 [requires]
 python_version = "3.7"

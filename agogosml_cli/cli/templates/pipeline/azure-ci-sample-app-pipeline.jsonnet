@@ -6,8 +6,7 @@
                 "+master"
             ],
             "pathFilters": [
-                "+/output_writer",
-                "+/agogosml/agogosml"
+                "+/sample_app"
             ],
             "batchChanges": false,
             "maxConcurrentBuildsPerBranch": 1,
@@ -23,11 +22,28 @@
                 "allowSecrets": false
             },
             "pathFilters": [
-                "+/output_writer",
-                "+/agogosml/agogosml"
+                "+/sample_app"
             ],
             "isCommentRequiredForPullRequest": false,
             "triggerType": 64
+        },
+        {
+            "definition": {
+                "id": 19,
+                "path": "\\",
+                "queueStatus": 0,
+                "project": {
+                    "name": std.extVar('PROJECT_NAME'),
+                    "description": "Input-Output CI pipeline",
+                    "state": 1,
+                    "visibility": "public"
+                }
+            },
+            "requiresSuccessfulBuild": true,
+            "branchFilters": [
+                "+master"
+            ],
+            "triggerType": 128
         }
     ],
     "properties": {},
@@ -52,16 +68,16 @@
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('AZURE_SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
-                            "dockerFile": "**/output_writer/Dockerfile.output_writer",
-                            "arguments": "--build-arg CONTAINER_REG=std.extVar('ACR_LOGIN_SERVER')/ --build-arg AGOGOSML_TAG=latest ",
+                            "dockerFile": "**/sample_app/Dockerfile.sample_app",
+                            "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
                             "useDefaultContext": "false",
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "output_writer:$(Build.BuildId)",
+                            "imageName": "sample_app:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -88,7 +104,7 @@
                         "enabled": true,
                         "continueOnError": false,
                         "alwaysRun": false,
-                        "displayName": "Push output writer app image",
+                        "displayName": "Push instance app image",
                         "timeoutInMinutes": 0,
                         "condition": "succeeded()",
                         "task": {
@@ -99,7 +115,7 @@
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('AZURE_SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Push an image",
                             "dockerFile": "**/Dockerfile",
@@ -108,7 +124,7 @@
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "output_writer:$(Build.BuildId)",
+                            "imageName": "sample_app:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -131,7 +147,7 @@
                         }
                     }
                 ],
-                "name": "OutputWriter-Build-CI",
+                "name": "Sample-App-Build-CI",
                 "refName": "Phase_1",
                 "condition": "succeeded()",
                 "target": {
@@ -160,8 +176,7 @@
     "processParameters": {},
     "quality": 1,
     "drafts": [],
-    "id": 13,
-    "name": "Output-Writer-Build-CI",
+    "name": "Sample-App-Build-CI",
     "path": "\\",
     "type": 2
 }

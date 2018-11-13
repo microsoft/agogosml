@@ -42,7 +42,12 @@ class InputReaderFactory:
             Unknown broker type
             ''')
 
-        return InputReader(broker)
+        # these are NOT in use now as we are passing up the
+        # host and port from the client 
+        app_host = config.get("broker")["config"]["APP_HOST"]
+        app_port = config.get("broker")["config"]["APP_PORT"]
+
+        return InputReader(broker, app_host, app_port)
 
     @staticmethod
     def is_empty(dictionary: dict) -> bool:

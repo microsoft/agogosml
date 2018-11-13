@@ -36,6 +36,7 @@ class Socket(BaseHTTPRequestHandler):
         """
         content_length = int(self.headers['Content-Length'])
         data = self.rfile.read(content_length)
+        data = data.decode("utf-8")
 
         try:
             datahelper.validate_schema(data, SCHEMA_FILEPATH)

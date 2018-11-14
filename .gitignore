@@ -109,3 +109,6 @@ ENV/
 .vscode
 
 _build
+
+# Private files
+*.private.*

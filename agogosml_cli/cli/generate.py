@@ -59,6 +59,8 @@ def generate(force, config, folder) -> int:
                 else:
                     acr = manifest['cloud']['otherProperties']['azureContainerRegistry']
                     injected_variables['AZURE_CONTAINER_REGISTRY'] = acr
+                    if not acr.endswith('/'):
+                        acr += '/'
                     injected_variables['AZURE_DOCKER_BUILDARGS'] = \
                         '--build-arg CONTAINER_REG=%s --build-arg AGOGOSML_TAG=latest ' % acr
             # Add git repository variables

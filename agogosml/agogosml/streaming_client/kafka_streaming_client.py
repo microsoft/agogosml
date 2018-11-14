@@ -38,9 +38,9 @@ class KafkaStreamingClient(AbstractStreamingClient):
     def create_kafka_config(user_config):
 
         config = {
-          "bootstrap.servers": user_config.get("KAFKA_ADDRESS"),
-          "enable.auto.commit": False,
-          "auto.offset.reset": "earliest"
+            "bootstrap.servers": user_config.get("KAFKA_ADDRESS"),
+            "enable.auto.commit": False,
+            "auto.offset.reset": "earliest"
         }
 
         consumer_group = user_config.get("KAFKA_CONSUMER_GROUP")

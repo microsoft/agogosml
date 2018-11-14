@@ -1,12 +1,11 @@
+import logging
+import asyncio
 """EventHub streaming client"""
 from .eventhub_processor_events import EventProcessor
 from .abstract_streaming_client import AbstractStreamingClient
 from azure.eventhub import EventHubClient, EventData
-from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, \
-            EventHubConfig, EventProcessorHost, EPHOptions
+from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, EventHubConfig, EventProcessorHost, EPHOptions
 
-import asyncio
-import logging
 
 logger = logging.getLogger("STREAM")
 logger.setLevel(logging.INFO)
@@ -56,7 +55,10 @@ class EventHubStreamingClient(AbstractStreamingClient):
                       ".servicebus.windows.net/" + self.eventhub
             try:
                 self.send_client = EventHubClient(
-                  address, debug=False, username=self.user, password=self.key)
+                    address,
+                    debug=False,
+                    username=self.user,
+                    password=self.key)
                 self.sender = self.send_client.add_sender()
                 self.send_client.run()
             except Exception as e:

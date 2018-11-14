@@ -23,7 +23,7 @@ def test_when_ctor_instance_created(MockStreamingClient, MockListenerClient):
 
 def test_on_message_received_sent_called(MockStreamingClient, MockListenerClient):
     ow = OutputWriter(MockStreamingClient, MockListenerClient)
-    ow.on_message_received('test')
+    ow.on_message_received(MockListenerClient, 'test')
     assert MockStreamingClient.get_sent()
 
 

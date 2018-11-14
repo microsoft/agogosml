@@ -2,14 +2,7 @@
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from .listener_client import ListenerClient
-import urllib.request
-import urllib.parse
-import os
 import logging
-from dotenv import load_dotenv
-from functools import partial
-
-load_dotenv()
 
 
 class HttpListener(BaseHTTPRequestHandler, ListenerClient):

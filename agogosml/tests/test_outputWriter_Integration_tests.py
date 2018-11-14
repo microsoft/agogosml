@@ -4,7 +4,6 @@ from agogosml.writer.output_writer_factory import OutputWriterFactory
 from dotenv import load_dotenv
 from .client_mocks import ListenerClientMock, ClientMessagingMock
 import os
-import json
 
 
 load_dotenv()
@@ -64,7 +63,7 @@ def test_integration_listenerclient(MockStreamingClient):
     }
 
     ow = OutputWriterFactory.create(config)
-    #ow.messaging_client = MockStreamingClient
+    # ow.messaging_client = MockStreamingClient
     assert ow is not None
     # def message_received_callback(listener, msg):
     #     assert msg is not None

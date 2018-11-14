@@ -42,7 +42,7 @@ def test_when_known_broker_instance_created():
 def test_when_unknown_broker_throw():
     config = {'broker': {'type': 'aaa'}}
     with pytest.raises(Exception):
-        owm = OutputWriterFactory.create(config)
+        OutputWriterFactory.create(config)
 
 
 def test_when_unknown_listener_throw():
@@ -58,7 +58,7 @@ def test_when_unknown_listener_throw():
         }
     }
     with pytest.raises(Exception):
-        owm = OutputWriterFactory.create(config)
+        OutputWriterFactory.create(config)
 
 
 # def test_integration():

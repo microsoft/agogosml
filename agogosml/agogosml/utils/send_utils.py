@@ -14,8 +14,8 @@ def send_message(message, app_host, app_port):
         request = requests.post(server_address, data=json.dumps(message))
         if request.status_code != 200:
             logger.error(
-              "Error with a request {} and message not sent was {}".
-              format(request.status_code, message))
+                "Error with a request {} and message not sent was {}".
+                format(request.status_code, message))
             print("Error with a request {} and message not sent was {}".
                   format(request.status_code, message))
             return False

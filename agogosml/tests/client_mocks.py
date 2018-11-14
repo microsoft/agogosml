@@ -18,7 +18,6 @@ class ClientMessagingMock(AbstractStreamingClient):
         pass
 
 
-
 class ListenerClientMock(ListenerClient):
     def __init__(self, port):
         self.callback = None

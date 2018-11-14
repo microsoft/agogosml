@@ -21,6 +21,8 @@ pylint = "*"
 click = "*"
 jsonschema = "*"
 jsonnet = "*"
+validators = "*"
+git-url-parse = "*"
 
 [requires]
 python_version = "3.7"

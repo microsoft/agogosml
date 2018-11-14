@@ -1,3 +1,5 @@
+local repository = import 'pipeline-repository.libsonnet';
+
 {
     "options": [],
     "triggers": [
@@ -52,11 +54,11 @@
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": "",
-                            "azureContainerRegistry": "",
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
                             "dockerFile": "**/input_reader/Dockerfile.input_reader",
-                            "arguments": "--build-arg CONTAINER_REG=xxx.azurecr.io/ --build-arg AGOGOSML_TAG=latest ",
+                            "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
                             "useDefaultContext": "false",
                             "buildContext": "",
                             "pushMultipleImages": "false",
@@ -99,8 +101,8 @@
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": "",
-                            "azureContainerRegistry": "",
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Push an image",
                             "dockerFile": "**/Dockerfile",
                             "arguments": "",
@@ -147,16 +149,12 @@
         ],
         "type": 1
     },
-    "repository": {
-        "properties": {},
-        "clean": "true",
-        "checkoutSubmodules": false
-    },
+    "repository": repository.Repository(std.extVar('REPOSITORY_TYPE'), std.extVar('REPOSITORY_URL'), std.extVar('REPOSITORY_OWNER'), std.extVar('REPOSITORY_REPO')),
     "processParameters": {},
     "quality": 1,
     "drafts": [],
     "id": 13,
-    "name": "Input-Reader-build-CI",
+    "name": "Input-Reader-Build-CI",
     "path": "\\",
     "type": 2
 }

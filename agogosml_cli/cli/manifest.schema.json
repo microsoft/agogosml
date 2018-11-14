@@ -9,6 +9,44 @@
             "description": "Name of the Project",
             "type": "string"
         },
+        "cloud": {
+            "description": "Cloud Settings",
+            "type": "object",
+            "properties": {
+                "vendor": {
+                    "description": "Cloud vendor used e.g. azure|aws|gcp",
+                    "type": "string"
+                },
+                "subscriptionId": {
+                    "description": "Cloud vendor subscription id",
+                    "type": "string"
+                },
+                "otherProperties": {
+                    "description": "Other properties to pass into the generator.",
+                    "type": "object"
+                }
+            },
+            "required": [
+                "vendor", 
+                "subscriptionId"
+            ]
+        },
+        "repository": {
+            "description": "Specify the place where your code lives. This is helpful for people who want to contribute.",
+            "type": ["object", "string"],
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              }
+            }, 
+            "required": [
+                "type",
+                "url"
+            ]
+        },
         "tests": {
             "description": "List of tests to generate",
             "type": "array",
@@ -59,5 +97,9 @@
             },
             "minItems": 0
         }
-    }
+    },
+    "required": [
+        "name",
+        "cloud"
+    ]
 }

@@ -11,7 +11,7 @@ local repository = import 'pipeline-repository.libsonnet';
                 "queueStatus": 0,
                 "project": {
                     "id": "0634c848-f8d0-4293-9c2a-570bab0d8457",
-                    "name": "agogosml",
+                    "name": std.extVar('PROJECT_NAME'),
                     "description": "Azure Pipelines for agogosml repo",
                     "url": "",
                     "state": 1,

@@ -62,7 +62,7 @@ def generate(force, config, folder) -> int:
                     if not acr.endswith('/'):
                         acr += '/'
                     injected_variables['AZURE_DOCKER_BUILDARGS'] = \
-                        '--build-arg CONTAINER_REG=%s --build-arg AGOGOSML_TAG=latest ' % acr
+                        '--build-arg CONTAINER_REG=%s --build-arg AGOGOSML_TAG=$(Build.TriggeredBy.BuildId)' % acr
             # Add git repository variables
             if 'repository' in manifest:
                 # if it is in the manifest then it is validated by the schema to be complete.

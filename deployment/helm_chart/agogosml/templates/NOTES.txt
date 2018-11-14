@@ -1,0 +1,5 @@
+The image was installed!
+
+For more details, run:
+
+$ helm status {{ .Release.Name }}

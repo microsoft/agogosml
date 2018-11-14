@@ -1,7 +1,6 @@
 import pytest
 
-from agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
-from agogosml.reader.input_reader import InputReader 
+from agogosml.reader.input_reader import InputReader
 from client_mocks import ClientMessagingMock
 
 

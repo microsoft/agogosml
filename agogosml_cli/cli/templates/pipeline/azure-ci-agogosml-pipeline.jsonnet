@@ -2,28 +2,38 @@ local repository = import 'pipeline-repository.libsonnet';
 
 {
     "options": [],
-    "triggers": [
+     "triggers": [
         {
-            "definition": {
-                "id": 35,
-                "url": "",
-                "path": "\\",
-                "queueStatus": 0,
-                "project": {
-                    "id": "0634c848-f8d0-4293-9c2a-570bab0d8457",
-                    "name": "agogosml",
-                    "description": "Azure Pipelines for agogosml repo",
-                    "url": "",
-                    "state": 1,
-                    "revision": 47,
-                    "visibility": 2
-                }
-            },
-            "requiresSuccessfulBuild": true,
+            "branchFilters": [
+                "+refs/heads/master"
+            ],
+            "pathFilters": [
+                "+/agogosml",
+                "+/input_reader",
+                "+/output_writer",
+                "+/sample_app"
+            ],
+            "batchChanges": false,
+            "maxConcurrentBuildsPerBranch": 1,
+            "pollingInterval": 0,
+            "triggerType": 2
+        },
+        {
             "branchFilters": [
                 "+master"
             ],
-            "triggerType": 128
+            "forks": {
+                "enabled": false,
+                "allowSecrets": false
+            },
+            "pathFilters": [
+                "+/agogosml",
+                "+/input_reader",
+                "+/output_writer",
+                "+/sample_app"
+            ],
+            "isCommentRequiredForPullRequest": false,
+            "triggerType": 64
         }
     ],
     "properties": {},
@@ -48,16 +58,16 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
-                            "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
+                            "azureSubscriptionEndpoint": "",
+                            "azureContainerRegistry": "",
                             "command": "Build an image",
-                            "dockerFile": "**/sample_app/Dockerfile.sample_app",
-                            "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
-                            "useDefaultContext": "false",
+                            "dockerFile": "agogosml/Dockerfile.agogosml",
+                            "arguments": "",
+                            "useDefaultContext": "true",
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "sample_app:$(Build.BuildId)",
+                            "imageName": "agogosml:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -95,16 +105,16 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
-                            "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
+                            "azureSubscriptionEndpoint": "",
+                            "azureContainerRegistry": "",
                             "command": "Push an image",
-                            "dockerFile": "**/Dockerfile",
+                            "dockerFile": "**/agogosml/Dockerfile.agogosml",
                             "arguments": "",
                             "useDefaultContext": "true",
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "sample_app:$(Build.BuildId)",
+                            "imageName": "agogosml:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -127,7 +137,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         }
                     }
                 ],
-                "name": "Sample-App-Build-CI",
+                "name": "Agogosml-Build-CI",
                 "refName": "Phase_1",
                 "condition": "succeeded()",
                 "target": {
@@ -147,7 +157,9 @@ local repository = import 'pipeline-repository.libsonnet';
     "processParameters": {},
     "quality": 1,
     "drafts": [],
-    "name": "Sample-App-Build-CI",
+    "id": "0634c848-f8d0-4293-9c2a-570bab0d8457",
+    "name": "agogosml",
+    "description": "Azure Pipelines for agogosml repo",
     "path": "\\",
     "type": 2
 }

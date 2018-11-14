@@ -49,12 +49,13 @@ def test_receive():
         "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY"),
         "EVENT_HUB_CONSUMER_GROUP": os.getenv("EVENT_HUB_CONSUMER_GROUP"),
         "APP_HOST": os.getenv("APP_HOST"),
-        "APP_PORT": os.getenv("APP_PORT")
+        "APP_PORT": os.getenv("APP_PORT"),
+        "TIMEOUT": os.getenv("TIMEOUT")
     }
     streaming_client = EventHubStreamingClient(config)
     # TODO: Feeding in the HTTP endpoint as env variables,
     # make sure this is correct and add success of post
-    streaming_client.start_receiving(timeout=2)
+    streaming_client.start_receiving_messages()
     # assert common is not None
 
 

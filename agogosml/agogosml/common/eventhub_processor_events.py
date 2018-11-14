@@ -51,7 +51,6 @@ class EventProcessor(AbstractEventProcessor):
         """
         for message in messages:
             message_json = message.body_as_json(encoding='UTF-8')
-            # send_message(message_str, self.app_host, self.app_port)
             if self.on_message_received_callback is not None:
                 self.on_message_received_callback(message_json)
                 logger.debug("Received message: {}".format(message_json))

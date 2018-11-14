@@ -57,5 +57,5 @@ if __name__ == "__main__":
         }
 
     INPUT = InputReaderFactory.create(CFG)
-    INPUT.receive_messages()  # initiate receiving
+    INPUT.start_receiving_messages()  # initiate receiving
     print("DONE")

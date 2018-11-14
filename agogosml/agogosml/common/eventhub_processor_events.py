@@ -1,7 +1,6 @@
 """EventProcessor host class for Event Hub"""
 
 from azure.eventprocessorhost import AbstractEventProcessor
-from agogosml.utils.send_utils import send_message
 import logging
 
 logger = logging.getLogger("STREAM")
@@ -12,16 +11,13 @@ class EventProcessor(AbstractEventProcessor):
     """
     Example Implementation of AbstractEventProcessor
     """
-    # app_host = ""
-    # app_port = ""
 
     def __init__(self, params):
         """
         Init Event processor
         """
         super().__init__()
-        self.app_host = params[0]
-        self.app_port = params[1]
+        self.on_message_received_callback = params[0]
         self._msg_counter = 0
 
     async def open_async(self, context):
@@ -54,9 +50,10 @@ class EventProcessor(AbstractEventProcessor):
         :type messages: list[~azure.eventhub.common.EventData]
         """
         for message in messages:
-            message_str = message.body_as_str(encoding='UTF-8')
-            send_message(message_str, self.app_host, self.app_port)
-            logger.debug("Received message: {}".format(message_str))
+            message_json = message.body_as_json(encoding='UTF-8')
+            if self.on_message_received_callback is not None:
+                self.on_message_received_callback(message_json)
+                logger.debug("Received message: {}".format(message_json))
         logger.info("Events processed {}".format(context.sequence_number))
         await context.checkpoint_async()
 

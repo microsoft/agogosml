@@ -3,11 +3,9 @@
 
 # TODO: Write mocked unit tests and improve integration tests.
 
-import pytest
-
 from dotenv import load_dotenv
 import os
-from agogosml.streaming_client.eventhub_streaming_client \
+from agogosml.common.eventhub_streaming_client \
     import EventHubStreamingClient
 
 load_dotenv()
@@ -35,7 +33,7 @@ def test_send():
         streaming_client.send(message)
         print(message)
 
-    streaming_client.close_send_client()
+    streaming_client.stop()
 
 
 def test_receive():
@@ -49,10 +47,24 @@ def test_receive():
         "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY"),
         "EVENT_HUB_CONSUMER_GROUP": os.getenv("EVENT_HUB_CONSUMER_GROUP"),
         "APP_HOST": os.getenv("APP_HOST"),
-        "APP_PORT": os.getenv("APP_PORT")
+        "APP_PORT": os.getenv("APP_PORT"),
+        "TIMEOUT": os.getenv("TIMEOUT")
     }
     streaming_client = EventHubStreamingClient(config)
+
+    def start_receiving_callback(*args, **kwargs):
+        for value in args:
+            print(value)
+        for key, value in kwargs.items():
+            print("{0} = {1}".format(key, value))
+
     # TODO: Feeding in the HTTP endpoint as env variables,
     # make sure this is correct and add success of post
-    streaming_client.receive(timeout=2)
-    # assert streaming_client is not None
+    streaming_client.start_receiving(start_receiving_callback)
+    # assert common is not None
+
+
+if __name__ == "__main__":
+    for i in range(2):
+        test_send()
+    print("Finished")

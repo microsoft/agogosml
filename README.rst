@@ -73,3 +73,18 @@ Related projects and useful resources
    architecture <https://microsoft.sharepoint.com/teams/CECRMSP/Shared%20with%20Microsoft/Forms/AllItems.aspx?slrid=0c878a9e%2Da0d2%2D0000%2Db062%2Dfea03d1c2137&RootFolder=%2Fteams%2FCECRMSP%2FShared%20with%20Microsoft%2FAI%20CAT%20Materials%2FCustom%20AI%20Reference%20Architectures&FolderCTID=0x012000CC11EAFABCEF3D40B8E0D96CF1BA4810>`__
 -  `Case Study on fraud
    detection <https://azure.microsoft.com/en-us/blog/two-seconds-to-take-a-bite-out-of-mobile-bank-fraud-with-artificial-intelligence/>`__
+
+## Steps to run
+
+### Making tests run
+
+```
+cd agogosml
+# install dependencies in the virtual environment
+pipenv install && pipenv install --dev
+# installs agogosml locally
+pipenv run python setup.py install
+# run the tests
+pipenv run make test
+```
+

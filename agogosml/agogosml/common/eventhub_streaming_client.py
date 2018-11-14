@@ -4,7 +4,8 @@ import asyncio
 from .eventhub_processor_events import EventProcessor
 from .abstract_streaming_client import AbstractStreamingClient
 from azure.eventhub import EventHubClient, EventData
-from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, EventHubConfig, EventProcessorHost, EPHOptions
+from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, \
+    EventHubConfig, EventProcessorHost, EPHOptions
 
 
 logger = logging.getLogger("STREAM")
@@ -21,22 +22,26 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
         """
         super().__init__()
+        self.message_callback = None
         self.config = config
         self.storage_account_name = self.config.get("AZURE_STORAGE_ACCOUNT")
         self.storage_key = self.config.get("AZURE_STORAGE_ACCESS_KEY")
         self.lease_container_name = self.config.get("LEASE_CONTAINER_NAME")
         self.namespace = self.config.get("EVENT_HUB_NAMESPACE")
         self.eventhub = self.config.get("EVENT_HUB_NAME")
-        # self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP")
+        # self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP") # TODO: get consumer groups working
         self.user = self.config.get("EVENT_HUB_SAS_POLICY")
         self.key = self.config.get("EVENT_HUB_SAS_KEY")
-        self.timeout = self.config.get("TIMEOUT")
+        if self.config.get("TIMEOUT"):
+            try:
+                self.timeout = int(self.config.get("TIMEOUT"))
+            except ValueError:
+                self.timeout = None
+        else:
+            self.timeout = None
 
         # Create EPH Client
-        if self.storage_account_name is not None and \
-           self.storage_key is not None:
-            self.app_host = self.config.get("APP_HOST")
-            self.app_port = self.config.get("APP_PORT")
+        if self.storage_account_name is not None and self.storage_key is not None:
             self.eph_client = EventHubConfig(
                 self.namespace,
                 self.eventhub,
@@ -65,31 +70,20 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 logger.error('Failed to init EH send client: ' + str(e))
                 raise
 
-    def receive(self, timeout=5):
+    def start_receiving(self, on_message_received_callback):
         loop = asyncio.get_event_loop()
         try:
-            # ep = EventProcessor
-            # ep.app_host = self.app_host
-            # ep.app_port = self.app_port
             host = EventProcessorHost(
-                # ep,
                 EventProcessor,
                 self.eph_client,
                 self.storage_manager,
-                ep_params=[self.app_host, self.app_port],
+                ep_params=[on_message_received_callback],
                 eph_options=self.eh_options,
                 loop=loop)
 
             tasks = asyncio.gather(host.open_async(),
-                                   self.wait_and_close(host, timeout))
+                                   self.wait_and_close(host, self.timeout))
             loop.run_until_complete(tasks)
-
-        except KeyboardInterrupt:
-            # Canceling pending tasks and stopping the loop
-            for task in asyncio.Task.all_tasks():
-                task.cancel()
-            loop.run_forever()
-            tasks.exception()
 
         finally:
             loop.stop()
@@ -98,11 +92,11 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
         try:
             self.sender.send(EventData(message))
-            logger.debug("Sent message: {}".format(message))
+            logger.debug('Sent message: {}'.format(message))
         except Exception as e:
             logger.error('Failed to send message to EH: ' + str(e))
 
-    def close_send_client(self):
+    def stop(self):
 
         try:
             self.send_client.stop()

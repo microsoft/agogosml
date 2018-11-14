@@ -25,5 +25,5 @@ spec:
           envFrom:
           - configMapRef:
               name: input-reader-config
-      imagePullSecrets:
-        - name: {{ .Values.imagePullSecret}}
+      {{ if .Values.registry }}imagePullSecrets:
+        - name: {{ .Values.imagePullSecret}}{{ end }}

@@ -4,8 +4,7 @@
 
 registry: ""
 imagePullSecret: ""
-
-namespace: default
+deployment: green
 
 input_reader:
   name: input_reader
@@ -34,7 +33,7 @@ input_reader:
 
 output_writer:
   name: output_writer
-  # tag: 
+  # tag:
   imagePullPolicy: IfNotPresent
   env:
     MESSAGING_TYPE: "" # kafka or eventhub
@@ -50,11 +49,12 @@ output_writer:
 
 instance_apps:
   - name: sample_app
-    # tag: 
+    tag: latest3
     imagePullPolicy: IfNotPresent
-    deployment: "green"
     service:
       type: ClusterIP
+      externalPort: 5000
+      internalPort: 5000
     env:
       HOST: ""
       PORT: ""
@@ -67,4 +67,6 @@ instance_apps:
     imagePullPolicy: IfNotPresent
     service:
       type: ClusterIP
-    deployment: "green"
+      externalPort: 5000
+      internalPort: 5000
+      

@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: output-writer-config
-  namespace: default
 data:
   MESSAGING_TYPE: {{ .Values.output_writer.env.MESSAGING_TYPE }}
   EVENT_HUB_NAMESPACE: {{ .Values.output_writer.env.EVENT_HUB_NAMESPACE }}

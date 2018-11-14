@@ -5,7 +5,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .name | replace "_" "-" }}-{{ $index }}-config
-  namespace: default
 data:
 {{- range $key, $value := .env }}
   {{ $key }}:{{ $value }}

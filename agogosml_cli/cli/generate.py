@@ -15,6 +15,7 @@ import cli.utils as utils
 PROJ_FILES = {
     '.env': '.env',
     'Pipfile': 'Pipfile',
+    'logging.yaml': 'logging.yaml',
     'pipeline/azure-ci-sample-app-pipeline.jsonnet':
         'ci-sample-app-pipeline.json',
     'pipeline/azure-ci-input-app-pipeline.jsonnet':

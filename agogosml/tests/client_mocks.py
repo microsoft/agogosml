@@ -16,9 +16,10 @@ class ClientMessagingMock(AbstractStreamingClient):
 
     def receive(self, *args, **kwargs):
         pass
-    
+
     def get_sent(self):
         return self.sent
+
 
 class ListenerClientMock(ListenerClient):
     def __init__(self, port):

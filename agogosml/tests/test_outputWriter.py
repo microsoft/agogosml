@@ -3,15 +3,18 @@ import pytest
 from agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
 from agogosml.streaming_client.listener_client import ListenerClient
 from agogosml.writer.output_writer import OutputWriter
-from .client_mocks import ClientMessagingMock,ListenerClientMock
+from .client_mocks import ClientMessagingMock, ListenerClientMock
+
 
 @pytest.fixture
 def MockStreamingClient():
     return ClientMessagingMock()
 
+
 @pytest.fixture
 def MockListenerClient():
     return ListenerClientMock(0)
+
 
 def test_when_ctor_instance_created(MockStreamingClient, MockListenerClient):
     ow = OutputWriter(MockStreamingClient, MockListenerClient)
@@ -30,6 +33,7 @@ def test_on_listener_event_sent_called(MockStreamingClient, MockListenerClient):
     MockListenerClient.mock_new_incoming_message()
     assert MockStreamingClient.get_sent()
     assert MockListenerClient.get_started()
+
 
 def test_on_stop_event_stop_called(MockStreamingClient, MockListenerClient):
     ow = OutputWriter(MockStreamingClient, MockListenerClient)

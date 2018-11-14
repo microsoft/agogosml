@@ -10,7 +10,7 @@ LOGGER = logging.getLogger("STREAM")
 LOGGER.setLevel(logging.INFO)
 
 
-class HttpMessageSender(MessageSender): # pylint: disable=too-few-public-methods
+class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-methods
     """
     HttpMessageSender
     """

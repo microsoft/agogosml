@@ -3,8 +3,6 @@
 
 # TODO: Write mocked unit tests and improve integration tests.
 
-import pytest
-
 from dotenv import load_dotenv
 import os
 from agogosml.common.eventhub_streaming_client \
@@ -38,7 +36,6 @@ def test_send():
     streaming_client.stop()
 
 
-
 def test_receive():
     config = {
         "AZURE_STORAGE_ACCOUNT": os.getenv("AZURE_STORAGE_ACCOUNT"),
@@ -54,13 +51,13 @@ def test_receive():
         "TIMEOUT": os.getenv("TIMEOUT")
     }
     streaming_client = EventHubStreamingClient(config)
-    
+
     def start_receiving_callback(*args, **kwargs):
         for value in args:
             print(value)
         for key, value in kwargs.items():
             print("{0} = {1}".format(key, value))
-    
+
     # TODO: Feeding in the HTTP endpoint as env variables,
     # make sure this is correct and add success of post
     streaming_client.start_receiving(start_receiving_callback)

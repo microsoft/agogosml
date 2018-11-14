@@ -55,8 +55,8 @@ class ListenerClientMock(ListenerClient):
     def get_stopped(self):
         return self.stopCalled
 
-class MessageSenderMock(MessageSender):
 
+class MessageSenderMock(MessageSender):
     def __init__(self):
         pass
 

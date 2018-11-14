@@ -1,7 +1,7 @@
 import pytest
 
-from agogosml.common.abstract_streaming_client import AbstractStreamingClient
-from agogosml.reader.input_reader import InputReader 
+# from agogosml.common.abstract_streaming_client import AbstractStreamingClient
+from agogosml.reader.input_reader import InputReader
 from .client_mocks import ClientMessagingMock, MessageSenderMock
 
 
@@ -9,16 +9,18 @@ from .client_mocks import ClientMessagingMock, MessageSenderMock
 def MockStreamingClient():
     return ClientMessagingMock()
 
+
 @pytest.fixture
 def MockMessageSender():
     return MessageSenderMock()
+
 
 def test_when_instance_created(MockStreamingClient, MockMessageSender):
     ir = InputReader(MockStreamingClient, MockMessageSender)
     assert ir is not None
 
+
 def test_when_start_receiving_then_messaging_client_starts(MockStreamingClient, MockMessageSender):
-    
     # arrange
     ir = InputReader(MockStreamingClient, MockMessageSender)
 
@@ -26,8 +28,8 @@ def test_when_start_receiving_then_messaging_client_starts(MockStreamingClient, 
     ir.start_receiving_messages()
     assert MockStreamingClient.get_receiving()
 
+
 def test_when_msg_received_callback_called(MockStreamingClient, MockMessageSender):
-    
     # arrange
     ir = InputReader(MockStreamingClient, MockMessageSender)
 

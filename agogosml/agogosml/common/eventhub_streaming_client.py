@@ -41,8 +41,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
             self.timeout = None
 
         # Create EPH Client
-        if self.storage_account_name is not None and \
-            self.storage_key is not None:
+        if self.storage_account_name is not None and self.storage_key is not None:
             self.eph_client = EventHubConfig(
                 self.namespace,
                 self.eventhub,

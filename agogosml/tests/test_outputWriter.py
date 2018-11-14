@@ -1,7 +1,7 @@
 import pytest
 
-from agogosml.common.abstract_streaming_client import AbstractStreamingClient
-from agogosml.common.listener_client import ListenerClient
+# from agogosml.common.abstract_streaming_client import AbstractStreamingClient
+# from agogosml.common.listener_client import ListenerClient
 from agogosml.writer.output_writer import OutputWriter
 from .client_mocks import ClientMessagingMock, ListenerClientMock
 

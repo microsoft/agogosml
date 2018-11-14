@@ -2,6 +2,7 @@ import os
 import logging.config
 import yaml
 
+
 class Logger(object):
 
     __instance = None
@@ -12,8 +13,8 @@ class Logger(object):
         level=logging.INFO,
         env_key='LOG_CFG'
     ):
-        """Setup logging configuration
-           
+        """
+        Setup logging configuration
         """
         path = log_path
         value = os.getenv(env_key, None)

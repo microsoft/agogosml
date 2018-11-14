@@ -1,7 +1,6 @@
 """Kafka streaming client"""
 
 from .abstract_streaming_client import AbstractStreamingClient
-from agogosml.utils.send_utils import send_message
 from confluent_kafka import Producer, Consumer, admin
 from confluent_kafka import KafkaException, KafkaError
 import sys
@@ -63,10 +62,10 @@ class KafkaStreamingClient(AbstractStreamingClient):
         self.producer.produce(self.topic, mutated_message, *args, **kwargs)
         self.producer.flush()
 
-    def close_send_client(self, *args, **kwargs):
+    def stop(self, *args, **kwargs):
         pass
 
-    def receive(self, *args, **kwargs):
+    def start_receiving(self, on_message_received_callback):
         """
         Receive messages from a kafka topic.
         """
@@ -94,7 +93,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
                         raise KafkaException(msg.error())
                 else:
                     # Proper message
-                    send_message(msg.value(), self.app_host, self.app_port)
+                    on_message_received_callback(msg.value())
                     self.consumer.commit(msg)
 
         except KeyboardInterrupt:

@@ -32,7 +32,13 @@ class EventHubStreamingClient(AbstractStreamingClient):
         # self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP") # TODO: get consumer groups working
         self.user = self.config.get("EVENT_HUB_SAS_POLICY")
         self.key = self.config.get("EVENT_HUB_SAS_KEY")
-        self.timeout = self.config.get("TIMEOUT")
+        if self.config.get("TIMEOUT"):
+            try:
+                self.timeout = int(self.config.get("TIMEOUT"))
+            except ValueError:
+                self.timeout = None
+        else:
+            self.timeout = None
 
         # Create EPH Client
         if self.storage_account_name is not None and \

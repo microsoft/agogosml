@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: output-writer-config
+data:
+  MESSAGING_TYPE: {{ .Values.output_writer.env.MESSAGING_TYPE }}
+  EVENT_HUB_NAMESPACE: {{ .Values.output_writer.env.EVENT_HUB_NAMESPACE }}
+  EVENT_HUB_NAME: {{ .Values.output_writer.env.EVENT_HUB_NAME }}
+  EVENT_HUB_SAS_POLICY: {{ .Values.output_writer.env.EVENT_HUB_SAS_POLICY }}
+  EVENT_HUB_SAS_KEY: {{ .Values.output_writer.env.EVENT_HUB_SAS_KEY }}
+  KAFKA_TOPIC: {{ .Values.output_writer.env.KAFKA_TOPIC }}
+  KAFKA_ADDRESS: {{ .Values.output_writer.env.KAFKA_ADDRESS }}
+  OUTPUT_WRITER_PORT: {{ .Values.output_writer.env.OUTPUT_WRITER_PORT }}

@@ -14,7 +14,7 @@ class FlaskHttpListenerClient(ListenerClient):
         @app.route("/", methods=["POST"])
         def on_input():
 
-            msg = request.get_json()
+            msg = request.data
             on_message_received(msg)
 
         app.run(port=self.port)

@@ -5,8 +5,8 @@ Input Reader
 or should it follow output_writer structure exactly?
 """
 
-from agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
-from agogosml.utils.send_utils import send_message
+from agogosml.common.abstract_streaming_client import AbstractStreamingClient
+from agogosml.common.message_sender import MessageSender
 
 
 class InputReader:  # pylint: disable=too-few-public-methods
@@ -14,30 +14,28 @@ class InputReader:  # pylint: disable=too-few-public-methods
     Accepts incoming messages and routes them to a configured output
     """
 
-    def __init__(self, streaming_client: AbstractStreamingClient, host: str, port: str): 
+    def __init__(self, streaming_client: AbstractStreamingClient, message_sender: MessageSender):
         """
         :param streaming_client: A client that can stream data out
         """
+        self.message_sender = message_sender
         self.messaging_client = streaming_client
-        self.messaging_client.message_callback = self.send_message_callback
-        # self.host = host
-        # self.port = port
 
-    def receive_messages(self):
+    def start_receiving_messages(self):
         """
         Start receiving messages
         :return:
         """
-        self.messaging_client.receive()
-    
+        self.messaging_client.start_receiving(self.on_message_received)
+
     def stop_incoming_messages(self):
         """
         Stop incoming messages from server
         """
-        self.messaging_client.close_send_client()
+        self.messaging_client.stop()
 
-    def send_message_callback(self, msg, host, port):
+    def on_message_received(self, msg):
         """
-        Send messages to  
+        Send messages onwards
         """
-        send_message(msg, host, port)
+        self.message_sender.send(msg)

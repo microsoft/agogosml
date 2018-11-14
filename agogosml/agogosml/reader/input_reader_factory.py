@@ -1,8 +1,9 @@
 """
 Factory and instance resolving for input reader
 """
-from agogosml.streaming_client.eventhub_streaming_client import EventHubStreamingClient
-from agogosml.streaming_client.kafka_streaming_client import KafkaStreamingClient
+from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
+from agogosml.common.http_message_sender import HttpMessageSender
+from agogosml.common.kafka_streaming_client import KafkaStreamingClient
 from .input_reader import InputReader
 
 
@@ -42,12 +43,13 @@ class InputReaderFactory:
             Unknown broker type
             ''')
 
-        # these are NOT in use now as we are passing up the
-        # host and port from the client 
+        # host and port from the client
         app_host = config.get("broker")["config"]["APP_HOST"]
         app_port = config.get("broker")["config"]["APP_PORT"]
 
-        return InputReader(broker, app_host, app_port)
+        msg_sender = HttpMessageSender(app_host, app_port)
+
+        return InputReader(broker, msg_sender)
 
     @staticmethod
     def is_empty(dictionary: dict) -> bool:

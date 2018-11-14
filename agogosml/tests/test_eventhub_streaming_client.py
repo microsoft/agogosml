@@ -7,7 +7,7 @@ import pytest
 
 from dotenv import load_dotenv
 import os
-from agogosml.streaming_client.eventhub_streaming_client \
+from agogosml.common.eventhub_streaming_client \
     import EventHubStreamingClient
 
 load_dotenv()
@@ -35,7 +35,7 @@ def test_send():
         streaming_client.send(message)
         print(message)
 
-    streaming_client.close_send_client()
+    streaming_client.stop()
 
 
 def test_receive():
@@ -54,8 +54,8 @@ def test_receive():
     streaming_client = EventHubStreamingClient(config)
     # TODO: Feeding in the HTTP endpoint as env variables,
     # make sure this is correct and add success of post
-    streaming_client.receive(timeout=2)
-    # assert streaming_client is not None
+    streaming_client.start_receiving(timeout=2)
+    # assert common is not None
 
 
 if __name__ == "__main__":

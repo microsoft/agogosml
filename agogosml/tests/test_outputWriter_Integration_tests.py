@@ -1,6 +1,6 @@
 import pytest
 
-from agogosml.streaming_client.listener_client import ListenerClient
+from agogosml.common.listener_client import ListenerClient
 from agogosml.writer.output_writer_factory import OutputWriterFactory
 
 

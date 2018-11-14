@@ -3,7 +3,7 @@ from .eventhub_processor_events import EventProcessor
 from .abstract_streaming_client import AbstractStreamingClient
 from azure.eventhub import EventHubClient, EventData
 from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, \
-            EventHubConfig, EventProcessorHost, EPHOptions
+    EventHubConfig, EventProcessorHost, EPHOptions
 
 import asyncio
 import logging
@@ -36,9 +36,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
         # Create EPH Client
         if self.storage_account_name is not None and \
-           self.storage_key is not None:
-            self.app_host = self.config.get("APP_HOST")
-            self.app_port = self.config.get("APP_PORT")
+            self.storage_key is not None:
             self.eph_client = EventHubConfig(
                 self.namespace,
                 self.eventhub,
@@ -57,34 +55,27 @@ class EventHubStreamingClient(AbstractStreamingClient):
                       ".servicebus.windows.net/" + self.eventhub
             try:
                 self.send_client = EventHubClient(
-                  address, debug=False, username=self.user, password=self.key)
+                    address, debug=False, username=self.user, password=self.key)
                 self.sender = self.send_client.add_sender()
                 self.send_client.run()
             except Exception as e:
                 logger.error('Failed to init EH send client: ' + str(e))
                 raise
 
-    def receive(self, timeout=5):
+    def start_receiving(self, on_message_received_callback):
         loop = asyncio.get_event_loop()
         try:
             host = EventProcessorHost(
                 EventProcessor,
                 self.eph_client,
                 self.storage_manager,
-                ep_params=[self.app_host, self.app_port, self.message_callback],
+                ep_params=[on_message_received_callback],
                 eph_options=self.eh_options,
                 loop=loop)
 
             tasks = asyncio.gather(host.open_async(),
-                                   self.wait_and_close(host, timeout))
+                                   self.wait_and_close(host, self.timeout))
             loop.run_until_complete(tasks)
-
-        except KeyboardInterrupt:
-            # Canceling pending tasks and stopping the loop
-            for task in asyncio.Task.all_tasks():
-                task.cancel()
-            loop.run_forever()
-            tasks.exception()
 
         finally:
             loop.stop()
@@ -97,7 +88,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
         except Exception as e:
             logger.error('Failed to send message to EH: ' + str(e))
 
-    def close_send_client(self):
+    def stop(self):
 
         try:
             self.send_client.stop()

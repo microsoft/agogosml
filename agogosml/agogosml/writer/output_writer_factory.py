@@ -3,9 +3,9 @@ Factory and instance resolving for output writer
 """
 import os
 
-from agogosml.streaming_client.flask_http_listener_client import FlaskHttpListenerClient
-from agogosml.streaming_client.eventhub_streaming_client import EventHubStreamingClient
-from agogosml.streaming_client.kafka_streaming_client import KafkaStreamingClient
+from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
+from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
+from agogosml.common.kafka_streaming_client import KafkaStreamingClient
 from .output_writer import OutputWriter
 
 
@@ -19,7 +19,7 @@ class OutputWriterFactory:
         """
         Create a new instance
         :param listener_client: An instance of a listener instead of config
-        :param streaming_client: An instance of a streaming client instead of config
+        :param common: An instance of a streaming client instead of config
         :param config: A configuration for output writer
         :return:
         """

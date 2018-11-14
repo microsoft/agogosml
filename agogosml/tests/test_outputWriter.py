@@ -1,7 +1,7 @@
 import pytest
 
-from agogosml.streaming_client.abstract_streaming_client import AbstractStreamingClient
-from agogosml.streaming_client.listener_client import ListenerClient
+from agogosml.common.abstract_streaming_client import AbstractStreamingClient
+from agogosml.common.listener_client import ListenerClient
 from agogosml.writer.output_writer import OutputWriter
 
 
@@ -18,10 +18,10 @@ class ClientMessagingMock(AbstractStreamingClient):
         self.sent = True
         pass
 
-    def close_send_client(self, *args, **kwargs):
+    def stop(self, *args, **kwargs):
         pass
 
-    def receive(self, *args, **kwargs):
+    def start_receiving(self, *args, **kwargs):
         pass
 
     def get_sent(self):

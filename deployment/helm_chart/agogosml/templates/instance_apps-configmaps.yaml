@@ -1,10 +1,10 @@
 # For each instance app, we create its own service
 {{- $root := . -}}
-{{- range $index, $value := .Values.instance_apps }}
+{{- range $appName, $value := .Values.instance_apps }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .name | replace "_" "-" }}-{{ $index }}-config
+  name: {{ $appName | replace "_" "-"}}-config
 data:
 {{- range $key, $value := .env }}
   {{ $key }}:{{ $value }}

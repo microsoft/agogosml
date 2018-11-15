@@ -26,7 +26,7 @@ spec:
           imagePullPolicy: {{ default "IfNotPresent" .pullPolicy }}
           envFrom:
           - configMapRef:
-              name: {{ $appName | replace "_" "-" }}-config
+              name: {{ $appName | replace "_" "-" }}-{{ .tag }}-config
           ports:
           - containerPort: {{ .service.internalPort }}
         - name: {{ $fullname }}-{{ $appName | replace "_" "-" }}-output-writer

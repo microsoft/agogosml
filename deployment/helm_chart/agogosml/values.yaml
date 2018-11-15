@@ -48,8 +48,9 @@ output_writer:
     OUTPUT_WRITER_PORT: ""
 
 instance_apps:
-  - name: sample_app
-    tag: latest3
+  sample_app_0:
+    name: sample_app
+    tag: latest
     imagePullPolicy: IfNotPresent
     service:
       type: ClusterIP
@@ -60,13 +61,4 @@ instance_apps:
       PORT: ""
       OUTPUT_URL: ""
       SCHEMA_FILEPATH: ""
-
-  # Example of multiple apps
-  - name: another_sample_app
-    # tag: 
-    imagePullPolicy: IfNotPresent
-    service:
-      type: ClusterIP
-      externalPort: 5000
-      internalPort: 5000
       

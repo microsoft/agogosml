@@ -38,7 +38,7 @@ if __name__ == "__main__":
                     'APP_PORT':
                     os.getenv('APP_PORT'),
                     'TIMEOUT':
-                    1
+                    os.getenv('TIMEOUT')
                 }
             }
         }
@@ -52,6 +52,7 @@ if __name__ == "__main__":
                     'APP_HOST': os.getenv("APP_HOST"),
                     'APP_PORT': os.getenv("APP_PORT"),
                     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
+                    'TIMEOUT': os.getenv('TIMEOUT')
                 }
             }
         }

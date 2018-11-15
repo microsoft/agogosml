@@ -48,6 +48,15 @@ class KafkaStreamingClient(AbstractStreamingClient):
 
         return config
 
+    def delivery_report(self, err, msg):
+        """ Called once for each message produced to indicate delivery result.
+        Triggered by poll() or flush(). """
+
+        if err is not None:
+            logger.error('Message delivery failed: {}'.format(err))
+        else:
+            logger.info('Message delivered to {} [{}]'.format(msg.topic(), msg.partition()))
+
     def send(self, message: str, *args, **kwargs):
         """
         Upload a message to a kafka topic.
@@ -59,7 +68,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             raise TypeError('str type expected for message')
         mutated_message = message.encode('utf-8')
         self.producer.poll(0)
-        self.producer.produce(self.topic, mutated_message, *args, **kwargs)
+        self.producer.produce(self.topic, mutated_message, callback=self.delivery_report)
         self.producer.flush()
 
     def stop(self, *args, **kwargs):

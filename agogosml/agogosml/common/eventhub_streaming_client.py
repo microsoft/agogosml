@@ -91,7 +91,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
     def send(self, message):
         try:
             self.sender.send(EventData(body=message))
-            logger.debug('Sent message: {}'.format(message))
+            logger.info('Sent message: {}'.format(message))
         except Exception as e:
             logger.error('Failed to send message to EH: ' + str(e))
 

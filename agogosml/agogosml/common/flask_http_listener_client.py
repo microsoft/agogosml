@@ -14,6 +14,7 @@ class FlaskHttpListenerClient(ListenerClient):
         def on_input():
             msg = str(request.data, 'utf-8', 'ignore')
             on_message_received(self, msg)
+            return ""
 
         app.run(port=self.port)
 

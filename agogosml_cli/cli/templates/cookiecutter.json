@@ -1,0 +1,9 @@
+{
+    "REPOSITORY_TYPE": "GitHub",
+    "REPOSITORY_URL": "https://github.com/Microsoft/agogosml.git",
+    "REPOSITORY_OWNER": "Microsoft",
+    "REPOSITORY_REPO": "agogosml",
+    "PROJECT_NAME": "sample_agogosml_project",
+    "PROJECT_NAME_SLUG": "sample_agogosml_project",
+    "SUBSCRIPTION_ID": ""
+}

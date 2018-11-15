@@ -3,11 +3,9 @@ the input reader, and sends the transformed message to the output writer. """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import os
 import logging
-from dotenv import load_dotenv
 import requests
 import datahelper
 
-load_dotenv()
 
 HOST = os.getenv("HOST")
 PORT = os.getenv("PORT")

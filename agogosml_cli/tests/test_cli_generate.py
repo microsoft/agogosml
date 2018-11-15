@@ -6,6 +6,8 @@ import json
 from click.testing import CliRunner
 import cli.generate as generate
 import tests.test_utils as test_utils
+
+
 """
 * agogosml generate
     * should fail if no manifest.json is in working directory
@@ -19,7 +21,13 @@ import tests.test_utils as test_utils
 """
 
 EXPECTED_OUTPUT_PROJ_FILES = [
-    '.env', 'Pipfile', 'logging.yaml', 'azure-ci-app-pipeline.json'
+    'ci-sample-app-pipeline.json',
+    'ci-agogosml-pipeline.json',
+    'testproject/dockerbuild.sh',
+    'testproject/.dockerignore',
+    'testproject/logging.yaml',
+    'testproject/Pipfile',
+    'testproject/README.md'
 ]
 
 
@@ -132,7 +140,7 @@ def _assert_template_files_exist(folder='.'):
 def _create_test_manifest_azure(folder='.'):
     manifest_str = """
     {
-        "name": "test manifest",
+        "name": "testproject",
         "cloud": {
             "vendor": "azure",
             "subscriptionId": "123-123-123-123",
@@ -164,6 +172,9 @@ def _create_test_manifest_azure(folder='.'):
 def _create_dummy_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
     if not os.path.isdir(folder):
         os.makedirs(folder)
+
+    os.makedirs(os.path.join(folder, 'testproject'))
+
     for proj_file in files:
         outfile = os.path.join(folder, proj_file)
 

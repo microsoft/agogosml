@@ -15,6 +15,4 @@ data:
   APP_PORT: {{ .Values.input_reader.env.APP_PORT }}
   KAFKA_TOPIC: {{ .Values.input_reader.env.KAFKA_TOPIC }}
   KAFKA_CONSUMER_GROUP: {{ .Values.input_reader.env.KAFKA_CONSUMER_GROUP }}
-  APP_HOST: {{ .Values.input_reader.env.APP_HOST }}
-  APP_PORT: {{ .Values.input_reader.env.APP_PORT }}
   KAFKA_ADDRESS: {{ .Values.input_reader.env.KAFKA_ADDRESS }}

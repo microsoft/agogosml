@@ -3,15 +3,13 @@
 from .abstract_streaming_client import AbstractStreamingClient
 from confluent_kafka import Producer, Consumer, admin
 from confluent_kafka import KafkaException, KafkaError
-import sys
 import logging
+import datetime
 
-logger = logging.getLogger("STREAM")
-logger.setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class KafkaStreamingClient(AbstractStreamingClient):
-
     def __init__(self, config):
         """
         Class to create a kafka streaming client instance.
@@ -22,6 +20,13 @@ class KafkaStreamingClient(AbstractStreamingClient):
         """
 
         self.topic = config.get("KAFKA_TOPIC")
+        if config.get("TIMEOUT"):
+            try:
+                self.timeout = int(config.get("TIMEOUT"))
+            except ValueError:
+                self.timeout = None
+        else:
+            self.timeout = None
 
         kafka_config = self.create_kafka_config(config)
         self.admin = admin.AdminClient(kafka_config)
@@ -55,7 +60,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
         if err is not None:
             logger.error('Message delivery failed: {}'.format(err))
         else:
-            logger.info('Message delivered to {} [{}]'.format(msg.topic(), msg.partition()))
+            logger.info('Message delivered to {} [{}]'.format(
+                msg.topic(), msg.partition()))
 
     def send(self, message: str, *args, **kwargs):
         """
@@ -68,7 +74,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
             raise TypeError('str type expected for message')
         mutated_message = message.encode('utf-8')
         self.producer.poll(0)
-        self.producer.produce(self.topic, mutated_message, callback=self.delivery_report)
+        self.producer.produce(
+            self.topic, mutated_message, callback=self.delivery_report)
         self.producer.flush()
 
     def stop(self, *args, **kwargs):
@@ -83,10 +90,16 @@ class KafkaStreamingClient(AbstractStreamingClient):
         We are going to need documentation for Kafka
         to ensure proper syntax is clear
         '''
-        self.consumer.subscribe([self.topic])
-        # Read messages from Kafka, print to stdout
         try:
+            self.consumer.subscribe([self.topic])
+            start = datetime.datetime.now()
+
             while True:
+                if self.timeout is not None:
+                    elapsed = datetime.datetime.now() - start
+                    if elapsed.seconds >= self.timeout:
+                        raise KeyboardInterrupt
+
                 msg = self.consumer.poll(timeout=1.0)
                 if msg is None:
                     continue
@@ -106,7 +119,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
                     self.consumer.commit(msg)
 
         except KeyboardInterrupt:
-            sys.stderr.write('%% Aborted by user\n')
+            logger.info('Aborting listener...')
 
         finally:
             # Close down consumer to commit final offsets.

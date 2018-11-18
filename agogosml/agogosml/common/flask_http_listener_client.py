@@ -2,7 +2,6 @@
 from flask import Flask, request
 from .listener_client import ListenerClient
 
-
 DEFAULT_HOST = '127.0.0.1'
 
 

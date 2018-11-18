@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 """
-Factory and instance resolving for output writer
+Factory for OutputWriter
 """
+
 import os
 
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
@@ -11,47 +14,46 @@ from .output_writer import OutputWriter
 
 class OutputWriterFactory:
     """
-    Factory and instance resolving for output writer
+    Factory for OutputWriter
     """
 
     @staticmethod
     def create(config: dict):
         """
         Create a new instance
-        :param listener_client: An instance of a listener instead of config
-        :param common: An instance of a streaming client instead of config
         :param config: A configuration for output writer
-        :return:
+        :return OutputWriter: An instance of an OutputWriter with a
+            streaming_client and listener
         """
 
-        broker = None
+        client = None
 
         if OutputWriterFactory.is_empty(config):
             raise Exception('''
-            No config were set for the Output Writer Manager
+            No config was set for the OutputWriterFactory
             ''')
 
-        if config.get("broker") is None:
+        if config.get("client") is None:
             raise Exception('''
-            broker cannot be empty
+            client cannot be empty
             ''')
 
-        client_config = config.get("broker")["config"]
-        if config.get("broker")["type"] == "kafka":
-            broker = KafkaStreamingClient(client_config)
+        client_config = config.get("client")["config"]
+        if config.get("client")["type"] == "kafka":
+            client = KafkaStreamingClient(client_config)
 
-        if config.get("broker")["type"] == "eventhub":
-            broker = EventHubStreamingClient(client_config)
+        if config.get("client")["type"] == "eventhub":
+            client = EventHubStreamingClient(client_config)
 
-        if broker is None:
+        if client is None:
             raise Exception('''
-            Unknown broker type
+            Unknown client type
             ''')
 
         port = os.environ['OUTPUT_WRITER_PORT']
         listener = FlaskHttpListenerClient(port)
 
-        return OutputWriter(broker, listener)
+        return OutputWriter(client, listener)
 
     @staticmethod
     def is_empty(dictionary: dict) -> bool:

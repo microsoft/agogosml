@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+
 """
-Factory and instance resolving for input reader
+Factory for InputReader
 """
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 from agogosml.common.http_message_sender import HttpMessageSender
@@ -17,39 +19,39 @@ class InputReaderFactory:
         """
         Create a new instance
         :param config: A configuration for input reader
-        :return:
+        :return InputReader: An instance of an InputReader with streaming_client and message_sender
         """
         if InputReaderFactory.is_empty(config):
             raise Exception('''
-            No config were set for the input reader Manager
+            No config were set for the InputReader manager
             ''')
 
-        broker = None
+        client = None
 
-        if config.get("broker") is None:
+        if config.get("client") is None:
             raise Exception('''
-            broker cannot be empty
+            client cannot be empty
             ''')
 
-        client_config = config.get("broker")["config"]
-        if config.get("broker")["type"] == "kafka":
-            broker = KafkaStreamingClient(client_config)
+        client_config = config.get("client")["config"]
+        if config.get("client")["type"] == "kafka":
+            client = KafkaStreamingClient(client_config)
 
-        if config.get("broker")["type"] == "eventhub":
-            broker = EventHubStreamingClient(client_config)
+        if config.get("client")["type"] == "eventhub":
+            client = EventHubStreamingClient(client_config)
 
-        if broker is None:
+        if client is None:
             raise Exception('''
-            Unknown broker type
+            Unknown client type
             ''')
 
         # host and port from the client
-        app_host = config.get("broker")["config"]["APP_HOST"]
-        app_port = config.get("broker")["config"]["APP_PORT"]
+        app_host = config.get("client")["config"]["APP_HOST"]
+        app_port = config.get("client")["config"]["APP_PORT"]
 
         msg_sender = HttpMessageSender(app_host, app_port)
 
-        return InputReader(broker, msg_sender)
+        return InputReader(client, msg_sender)
 
     @staticmethod
     def is_empty(dictionary: dict) -> bool:

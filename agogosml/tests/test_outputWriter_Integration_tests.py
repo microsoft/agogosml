@@ -25,7 +25,7 @@ def MockStreamingClient():
 #     Use this integration test to validate that a message was sent to eventhub as passed in by config.
 #     """
 #     config = {
-#         'broker': {
+#         'client': {
 #             'type': 'eventhub',
 #             'config': {
 #                 'EVENT_HUB_NAMESPACE': os.getenv("EVENT_HUB_NAMESPACE"),
@@ -50,7 +50,7 @@ def test_integration_listenerclient(MockStreamingClient):
     """
 
     config = {
-        'broker': {
+        'client': {
             'type': 'eventhub',
             'config': {
                 'EVENT_HUB_NAMESPACE': os.getenv("EVENT_HUB_NAMESPACE"),
@@ -74,9 +74,9 @@ def test_integration_listenerclient(MockStreamingClient):
     # ow.start_incoming_messages()
 
 
-# def test_when_known_broker_instance_created():
+# def test_when_known_client_instance_created():
 #     config = {
-#         'broker': {
+#         'client': {
 #             'type': 'kafka',
 #             'config': {
 #                 'bootstrap.servers': '127.0.0.1:9092',
@@ -93,15 +93,15 @@ def test_integration_listenerclient(MockStreamingClient):
 #     assert owm is not None
 
 
-def test_when_unknown_broker_throw():
-    config = {'broker': {'type': 'aaa'}}
+def test_when_unknown_client_throw():
+    config = {'client': {'type': 'aaa'}}
     with pytest.raises(Exception):
         OutputWriterFactory.create(config)
 
 
 # def test_when_unknown_listener_throw():
 #     config = {
-#         'broker': {
+#         'client': {
 #             'type': 'kafka',
 #             'config': {},
 #             'args': {
@@ -117,7 +117,7 @@ def test_when_unknown_broker_throw():
 
 # def test_integration():
 #     config = {
-#         'broker': {
+#         'client': {
 #             'type': 'kafka',
 #             'config': {
 #                 'bootstrap.servers': '127.0.0.1:9092',

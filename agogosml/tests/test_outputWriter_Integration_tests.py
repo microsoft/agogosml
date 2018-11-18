@@ -1,53 +1,107 @@
 import pytest
 
-from agogosml.common.listener_client import ListenerClient
 from agogosml.writer.output_writer_factory import OutputWriterFactory
+from dotenv import load_dotenv
+from .client_mocks import ListenerClientMock, ClientMessagingMock
+import os
 
 
-class ListenerClientMock(ListenerClient):
-
-    def __init__(self, port):
-        self.callback = None
-
-    def start(self, on_message_received):
-        self.callback = on_message_received
-        pass
-
-    def stop(self):
-        pass
-
-    def mock_new_incoming_message(self):
-        self.callback("{'some':'json'}")
+load_dotenv()
 
 
-def test_when_known_broker_instance_created():
+@pytest.fixture
+def MockListenerClient():
+    return ListenerClientMock(0)
+
+
+@pytest.fixture
+def MockStreamingClient():
+    return ClientMessagingMock()
+
+
+# THIS TEST IS NOT TESTED...
+# def test_integration_eventhub(MockListenerClient):
+#     """
+#     Use this integration test to validate that a message was sent to eventhub as passed in by config.
+#     """
+#     config = {
+#         'client': {
+#             'type': 'eventhub',
+#             'config': {
+#                 'EVENT_HUB_NAMESPACE': os.getenv("EVENT_HUB_NAMESPACE"),
+#                 'EVENT_HUB_NAME': os.getenv("EVENT_HUB_NAME"),
+#                 'EVENT_HUB_SAS_POLICY': os.getenv("EVENT_HUB_SAS_POLICY"),
+#                 'EVENT_HUB_SAS_KEY': os.getenv("EVENT_HUB_SAS_KEY"),
+#                 'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
+#             }
+#         }
+#     }
+
+#     ow = OutputWriterFactory.create(config)
+#     ow.listener = MockListenerClient
+#     assert ow is not None
+#     ow.start_incoming_messages()
+#     MockListenerClient.mock_new_incoming_message()
+#     assert MockListenerClient.get_started()
+
+def test_integration_listenerclient(MockStreamingClient):
+    """
+    Use this integration test to validate that a message was received by the output writer.
+    """
+
     config = {
-        'broker': {
-            'type': 'kafka',
+        'client': {
+            'type': 'eventhub',
             'config': {
-                'bootstrap.servers': '127.0.0.1:9092',
-                'group.id': ''
-            },
-            'args': {
-                'topic': 'test'
-            }},
-        'listener': {
-            'type': 'flask'
+                'EVENT_HUB_NAMESPACE': os.getenv("EVENT_HUB_NAMESPACE"),
+                'EVENT_HUB_NAME': os.getenv("EVENT_HUB_NAME"),
+                'EVENT_HUB_SAS_POLICY': os.getenv("EVENT_HUB_SAS_POLICY"),
+                'EVENT_HUB_SAS_KEY': os.getenv("EVENT_HUB_SAS_KEY"),
+                'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
+            }
         }
     }
-    owm = OutputWriterFactory.create(config)
-    assert owm is not None
+
+    ow = OutputWriterFactory.create(config)
+    # ow.messaging_client = MockStreamingClient
+    assert ow is not None
+    # def message_received_callback(listener, msg):
+    #     assert msg is not None
+    #     js = json.loads(msg)
+    #     print("Received message: %s" % msg)
+
+    # NOTE: THIS TEST NEVER ENDS DUE TO FLASK...
+    # ow.start_incoming_messages()
 
 
-def test_when_unknown_broker_throw():
-    config = {'broker': {'type': 'aaa'}}
+# def test_when_known_client_instance_created():
+#     config = {
+#         'client': {
+#             'type': 'kafka',
+#             'config': {
+#                 'bootstrap.servers': '127.0.0.1:9092',
+#                 'group.id': ''
+#             },
+#             'args': {
+#                 'topic': 'test'
+#             }},
+#         'listener': {
+#             'type': 'flask'
+#         }
+#     }
+#     owm = OutputWriterFactory.create(config)
+#     assert owm is not None
+
+
+def test_when_unknown_client_throw():
+    config = {'client': {'type': 'aaa'}}
     with pytest.raises(Exception):
         OutputWriterFactory.create(config)
 
 
 # def test_when_unknown_listener_throw():
 #     config = {
-#         'broker': {
+#         'client': {
 #             'type': 'kafka',
 #             'config': {},
 #             'args': {
@@ -63,7 +117,7 @@ def test_when_unknown_broker_throw():
 
 # def test_integration():
 #     config = {
-#         'broker': {
+#         'client': {
 #             'type': 'kafka',
 #             'config': {
 #                 'bootstrap.servers': '127.0.0.1:9092',
@@ -77,10 +131,10 @@ def test_when_unknown_broker_throw():
 #             'type': 'flask'
 #         }
 #     }
-#
+
 #     listener = ListenerClientMock(0)
-#     ow = OutputWriterFactory.create(config, None, listener)
+#     ow = OutputWriterFactory.create(config)
 #     ow.start_incoming_messages()
 #     listener.mock_new_incoming_message()
-#
+
 #     assert ow is not None

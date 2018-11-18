@@ -24,7 +24,7 @@ class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-method
         if host_endpoint == "":
             raise ValueError('Host endpoint cannot be empty.')
 
-        if port_endpoint <= 0:
+        if int(port_endpoint) <= 0:
             raise ValueError('Port cannot be 0 or less.')
 
         self.host_endpoint = host_endpoint

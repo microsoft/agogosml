@@ -1,13 +1,13 @@
 {{ $fullname := include "data-pipeline-app.instance-app.fullname" . }}
 # For each instance app, we create its own service
 {{- $root := . -}}
-{{- range $index, $value := .Values.instance_apps }}
+{{- range $appName, $value := .Values.instance_apps }}
 apiVersion: v1
 kind: Service
 metadata:
   # service name is not affected by release name
   # so it will be the same for different deployments
-  name: ia-{{ .name | replace "_" "-" }}-{{ $index }}
+  name: ia-{{ $appName | replace "_" "-" }}
   labels:
     chart: "{{ $root.Chart.Name }}-{{ $root.Chart.Version | replace "+" "_" }}"
     release: {{ $root.Release.Name }}
@@ -19,6 +19,6 @@ spec:
     - port: {{ .service.externalPort }}
       targetPort: {{ .service.internalPort }}
   selector:
-    app: ia-{{ .name | replace "_" "-" }}-{{ .tag }}-{{ $index }}
+    app: ia-{{ $appName | replace "_" "-" }}-{{ .tag }}
 ---
 {{- end }}

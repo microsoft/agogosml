@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 
 """
-Output Writer
+OutputWriter
 """
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
@@ -14,30 +15,32 @@ class OutputWriter:
 
     def __init__(self, streaming_client: AbstractStreamingClient, listener: ListenerClient):
         """
-        :param streaming_client: A client that can stream data out
+        :param streaming_client: A client that can stream data in
         :param listener: A client that accepts incoming messages
         """
         self.messaging_client = streaming_client
         self.listener = listener
 
-    def on_message_received(self, message: str):
+    def on_message_received(self, listener_client: ListenerClient, message: str):
+        # TODO: Should this take a listener_client?
         """
+        Send messages onwards
+
         :param message: a message to process
-        :return:
         """
         self.messaging_client.send(message)
 
-    def start_incoming_messages(self):
+    def start_incoming_messages(self, callback=None):
         """
         Start accepting messages
-        :return:
         """
-
-        self.listener.start(self.on_message_received)
+        if callback:
+            self.listener.start(callback)
+        else:
+            self.listener.start(self.on_message_received)
 
     def stop_incoming_messages(self):
         """
-        Stop accepting messages.
-        :return:
+        Stop accepting messages
         """
         self.listener.stop()

@@ -1,0 +1,295 @@
+{
+    "source": 2,
+    "revision": 28,
+    "description": null,
+    "createdOn": "2018-11-15T09:02:26.073Z",
+    "isDeleted": false,
+    "variables": {},
+    "variableGroups": [],
+    "environments": [
+        {
+            "id": 1,
+            "name": "Deploy chart",
+            "rank": 1,
+            "variables": {},
+            "variableGroups": [],
+            "preDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 1
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": false,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 1
+                }
+            },
+            "deployStep": {
+                "id": 2
+            },
+            "postDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 3
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": false,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 2
+                }
+            },
+            "deployPhases": [
+                {
+                    "deploymentInput": {
+                        "parallelExecution": {
+                            "parallelExecutionType": 0
+                        },
+                        "skipArtifactsDownload": false,
+                        "artifactsDownloadInput": {
+                            "downloadInputs": []
+                        },
+                        "queueId": 30,
+                        "demands": [],
+                        "enableAccessToken": false,
+                        "timeoutInMinutes": 0,
+                        "jobCancelTimeoutInMinutes": 1,
+                        "condition": "succeeded()",
+                        "overrideInputs": {}
+                    },
+                    "rank": 1,
+                    "phaseType": 1,
+                    "name": "Deploy Agogosml chart",
+                    "refName": null,
+                    "workflowTasks": [
+                        {
+                            "environment": {},
+                            "taskId": "068d5909-43e6-48c5-9e01-7c8a94816220",
+                            "version": "0.*",
+                            "name": "Install Helm 2.10.0",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "helmVersion": "2.10.0",
+                                "checkLatestHelmVersion": "true",
+                                "installKubeCtl": "true",
+                                "kubectlVersion": "1.8.9",
+                                "checkLatestKubeCtl": "true"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "afa7d54d-537b-4dc8-b60a-e0eeea2c9a87",
+                            "version": "0.*",
+                            "name": "helm upgrade",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "connectionType": "Azure Resource Manager",
+                                "azureSubscriptionEndpoint": "PLACEHOLDER-HERE",
+                                "azureResourceGroup": "PLACEHOLDER-HERE",
+                                "kubernetesCluster": "PLACEHOLDER-HERE",
+                                "kubernetesServiceEndpoint": "",
+                                "namespace": "",
+                                "command": "upgrade",
+                                "chartType": "FilePath",
+                                "chartName": "",
+                                "chartPath": "$(System.DefaultWorkingDirectory)/_Microsoft_agogosml/deployment/helm_chart/agogosml",
+                                "version": "",
+                                "releaseName": "",
+                                "overrideValues": "registry=agogosacr.azurecr.io,imagePullSecret=acr-auth,input_reader.tag=$(Release.Artifacts._Agogosml-build-CI.BuildId),output_writer.tag=$(Release.Artifacts._Agogosml-build-CI.BuildId),instance_apps.sample_app_0.tag=$(Release.Artifacts._Agogosml-build-CI.BuildId),input_reader.env.MESSAGING_TYPE=eventhub,input_reader.env.AZURE_STORAGE_ACCOUNT=agogsmltest,input_reader.env.AZURE_STORAGE_ACCESS_KEY=9...DA==,input_reader.env.EVENT_HUB_NAMESPACE=agogsml-test,input_reader.env.EVENT_HUB_NAME=test,input_reader.env.EVENT_HUB_SAS_POLICY=test,input_reader.env.EVENT_HUB_SAS_KEY=ta...Sqg8=,input_reader.env.LEASE_CONTAINER_NAME=leases,input_reader.env.APP_HOST=0.0.0.0,input_reader.env.APP_PORT=5000,input_reader.env.KAFKA_TOPIC=placeholder,input_reader.env.KAFKA_CONSUMER_GROUP=placeholder,input_reader.env.KAFKA_ADDRESS=placeholder,output_writer.env.MESSAGING_TYPE=eventhub,output_writer.env.EVENT_HUB_NAMESPACE=agogsml-test,output_writer.env.EVENT_HUB_NAME=test,output_writer.env.EVENT_HUB_SAS_POLICY=test,output_writer.env.EVENT_HUB_SAS_KEY=taKu...qg8=,output_writer.env.KAFKA_TOPIC=placeholder,output_writer.env.KAFKA_ADDRESS=placeholder,output_writer.env.OUTPUT_WRITER_PORT=6000,instance_apps.sample_app_0.env.HOST=0.0.0.0,instance_apps.sample_app_0.env.PORT=5000,instance_apps.sample_app_0.env.OUTPUT_URL=http://0.0.0.0:6000,instance_apps.sample_app_0.env.SCHEMA_FILEPATH=schema_example.json",
+                                "valueFile": "",
+                                "destination": "$(Build.ArtifactStagingDirectory)",
+                                "canaryimage": "false",
+                                "upgradetiller": "true",
+                                "updatedependency": "false",
+                                "save": "true",
+                                "install": "true",
+                                "recreate": "true",
+                                "resetValues": "false",
+                                "force": "true",
+                                "waitForExecution": "true",
+                                "arguments": "",
+                                "enableTls": "false",
+                                "caCert": "",
+                                "certificate": "",
+                                "privatekey": "",
+                                "tillernamespace": ""
+                            }
+                        }
+                    ]
+                }
+            ],
+            "environmentOptions": {
+                "emailNotificationType": "OnlyOnFailure",
+                "emailRecipients": "release.environment.owner;release.creator",
+                "skipArtifactsDownload": false,
+                "timeoutInMinutes": 0,
+                "enableAccessToken": false,
+                "publishDeploymentStatus": true,
+                "badgeEnabled": false,
+                "autoLinkWorkItems": false,
+                "pullRequestDeploymentEnabled": false
+            },
+            "demands": [],
+            "conditions": [],
+            "executionPolicy": {
+                "concurrencyCount": 1,
+                "queueDepthCount": 0
+            },
+            "schedules": [],
+            "currentRelease": {
+                "id": 23,
+                "url": "https://vsrm.dev.azure.com/csedevil/0634c848-f8d0-4293-9c2a-570bab0d8457/_apis/Release/releases/23",
+                "_links": {}
+            },
+            "retentionPolicy": {
+                "daysToKeep": 10,
+                "releasesToKeep": 3,
+                "retainBuild": true
+            },
+            "processParameters": {},
+            "properties": {},
+            "preDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "postDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "environmentTriggers": []
+        }
+    ],
+    "artifacts": [
+        {
+            "sourceId": "0634c848-f8d0-4293-9c2a-570bab0d8457:35",
+            "type": "Build",
+            "alias": "_Agogosml-build-CI",
+            "definitionReference": {
+                "defaultVersionBranch": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionSpecific": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionTags": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionType": {
+                    "id": "selectDuringReleaseCreationType",
+                    "name": "Specify at the time of release creation"
+                },
+                "definition": {
+                    "id": "35",
+                    "name": "Agogosml-build-CI (master)"
+                },
+                "definitions": {
+                    "id": "",
+                    "name": ""
+                },
+                "IsMultiDefinitionType": {
+                    "id": "False",
+                    "name": "False"
+                },
+                "project": {
+                    "id": "0634c848-f8d0-4293-9c2a-570bab0d8457",
+                    "name": "agogosml"
+                },
+                "repository": {
+                    "id": "e6fc6b41-12c1-41f7-91be-c1369e61e5e0",
+                    "name": "agogosml"
+                }
+            },
+            "isRetained": false
+        },
+        {
+            "sourceId": "7030c884-91b4-4708-b5e9-cbda460e10ba:Microsoft/agogosml",
+            "type": "GitHub",
+            "alias": "_Microsoft_agogosml",
+            "definitionReference": {
+                "artifactSourceDefinitionUrl": {
+                    "id": "https://github.com/Microsoft/agogosml",
+                    "name": ""
+                },
+                "branch": {
+                    "id": "master",
+                    "name": "master"
+                },
+                "checkoutNestedSubmodules": {
+                    "id": "True",
+                    "name": "Any nested submodules within"
+                },
+                "checkoutSubmodules": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionSpecific": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionType": {
+                    "id": "latestFromBranchType",
+                    "name": "Latest from the default branch"
+                },
+                "definition": {
+                    "id": "Microsoft/agogosml",
+                    "name": "Microsoft/agogosml"
+                },
+                "fetchDepth": {
+                    "id": "",
+                    "name": ""
+                },
+                "gitLfsSupport": {
+                    "id": "",
+                    "name": ""
+                }
+            },
+            "isPrimary": true,
+            "isRetained": false
+        }
+    ],
+    "triggers": [],
+    "releaseNameFormat": "rev-$(rev:r)",
+    "tags": [],
+    "properties": {
+        "DefinitionCreationSource": {
+            "$type": "System.String",
+            "$value": "Other"
+        }
+    },
+    "id": 1,
+    "name": "Agogosml-CD",
+    "path": "\\",
+    "projectReference": null
+}

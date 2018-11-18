@@ -4,8 +4,9 @@ from .listener_client import ListenerClient
 
 
 class FlaskHttpListenerClient(ListenerClient):
-    def __init__(self, port):
+    def __init__(self, port, host='127.0.0.1'):
         self.port = port
+        self.host = host
 
     def start(self, on_message_received):
         app = Flask(__name__)
@@ -16,7 +17,7 @@ class FlaskHttpListenerClient(ListenerClient):
             on_message_received(self, msg)
             return ""
 
-        app.run(port=self.port)
+        app.run(host=self.host, port=self.port)
 
     def stop(self):
         raise NotImplementedError()

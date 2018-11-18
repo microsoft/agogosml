@@ -4,8 +4,6 @@
 Factory for OutputWriter
 """
 
-import os
-
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
@@ -50,8 +48,10 @@ class OutputWriterFactory:
             Unknown client type
             ''')
 
-        port = os.environ['OUTPUT_WRITER_PORT']
-        listener = FlaskHttpListenerClient(port)
+        port = client_config.get("OUTPUT_WRITER_PORT")
+        host = client_config.get("OUTPUT_WRITER_HOST")
+
+        listener = FlaskHttpListenerClient(port, host)
 
         return OutputWriter(client, listener)
 

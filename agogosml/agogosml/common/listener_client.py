@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 class ListenerClient(ABC):
 
     @abstractmethod
-    def __init__(self, port):
+    def __init__(self, port, host):
         pass
 
     @abstractmethod

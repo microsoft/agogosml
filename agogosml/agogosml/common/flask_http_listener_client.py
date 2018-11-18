@@ -3,8 +3,10 @@ from flask import Flask, request
 from .listener_client import ListenerClient
 
 
+DEFAULT_HOST = '127.0.0.1'
+
 class FlaskHttpListenerClient(ListenerClient):
-    def __init__(self, port, host='127.0.0.1'):
+    def __init__(self, port, host=DEFAULT_HOST):
         self.port = port
         self.host = host
 

@@ -24,6 +24,6 @@ spec:
           imagePullPolicy: {{ default "IfNotPresent" .Values.input_reader.pullPolicy }}
           envFrom:
           - configMapRef:
-              name: input-reader-config
+              name: input-reader-{{ .Values.input_reader.tag }}-config
       {{ if .Values.registry }}imagePullSecrets:
         - name: {{ .Values.imagePullSecret}}{{ end }}

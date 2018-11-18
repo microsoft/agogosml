@@ -1,6 +1,8 @@
+
 """
 Main entry point for input reader
 """
+
 import os  # temp
 from dotenv import load_dotenv  # temp
 
@@ -16,7 +18,7 @@ if __name__ == "__main__":
     if msg_type == 'eventhub':
         # FOR NOW, LOAD THE CONFIG VARS IN FROM .ENV
         CFG = {
-            'broker': {
+            'client': {
                 'type': 'eventhub',
                 'config': {
                     'AZURE_STORAGE_ACCOUNT':
@@ -44,7 +46,7 @@ if __name__ == "__main__":
         }
     elif msg_type == 'kafka':
         CFG = {
-            'broker': {
+            'client': {
                 'type': 'kafka',
                 'config': {
                     'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),

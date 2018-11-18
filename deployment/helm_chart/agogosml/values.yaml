@@ -26,8 +26,6 @@ input_reader:
     # kafka
     KAFKA_TOPIC: ""
     KAFKA_CONSUMER_GROUP: ""
-    APP_HOST: ""
-    APP_PORT: ""
     KAFKA_ADDRESS: ""
 
 

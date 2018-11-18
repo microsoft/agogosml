@@ -36,7 +36,7 @@ The sample app receives data from the input reader and feeds it to the ML model
 for scoring. Once scored the data is sent onto the output writer.
 
 
-Build with Docker Instructions
+Build with Docker
 _________________________
 
 Install `Docker <https://docs.docker.com/install/>`_ .
@@ -68,7 +68,7 @@ And finally the output writer:
 
 
 
-Run with Docker Instructions
+Run with Docker
 _________________________
 
 Set required environment variables
@@ -137,6 +137,16 @@ environment variables. An example of how to run one of these Docker images is:
     -e OUTPUT_WRITER_HOST=$OUTPUT_WRITER_NAME \
     -e OUTPUT_WRITER_PORT=$OUTPUT_WRITER_PORT \
     agogosml/output_writer:latest
+
+Now you can send a message to Event Hub with the following sample payload and check the output Event Hub for the transformed result:
+
+.. code:: bash
+
+    {
+	    "key": "SAMPLE_KEY",
+        "intValue": 40
+    }
+
 
 
 Agogosml Library

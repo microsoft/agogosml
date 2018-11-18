@@ -7,7 +7,7 @@ metadata:
   name: {{ $appName | replace "_" "-"}}-{{ .tag }}-config
 data:
 {{- range $key, $value := .env }}
-  {{ $key }}:{{ $value }}
+  {{ $key }}: {{ $value }}
 {{- end }}
 ---
 {{- end }}

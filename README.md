@@ -23,7 +23,7 @@ agogosml is a data processing pipeline project that addresses the common need fo
 - Install [azure-cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 - [Maven 3.0](https://maven.apache.org/download.cgi) or higher
 - [Python 3.7](https://www.python.org/downloads/release/python-371/) 
-- Check the requirements.txt for list of necessary Python packages. (will be installed by `make requirements`)
+- Run `make requirements` - Install Python requirements Python packages.
 
 ## Projects
 

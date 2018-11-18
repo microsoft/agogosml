@@ -76,7 +76,7 @@ The following bash lines will run unit tests on agogosml_cli project locally:
 ```
 cd agogosml_cli
 # install dependencies in the virtual environment
-pipenv install && pipenv install --dev
+pipenv install --dev
 # installs agogosml locally
 pipenv run python setup.py install
 # run the tests

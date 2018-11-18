@@ -21,12 +21,6 @@ def test_when_ctor_instance_created(MockStreamingClient, MockListenerClient):
     assert ow is not None
 
 
-def test_on_message_received_sent_called(MockStreamingClient, MockListenerClient):
-    ow = OutputWriter(MockStreamingClient, MockListenerClient)
-    ow.on_message_received(MockListenerClient, 'test')
-    assert MockStreamingClient.get_sent()
-
-
 def test_on_listener_event_sent_called(MockStreamingClient, MockListenerClient):
     ow = OutputWriter(MockStreamingClient, MockListenerClient)
     ow.start_incoming_messages()

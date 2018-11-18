@@ -47,7 +47,7 @@ class ListenerClientMock(ListenerClient):
         pass
 
     def mock_new_incoming_message(self):
-        self.callback(self, "{'some':'json'}")
+        self.callback("{'some':'json'}")
 
     def get_started(self):
         return self.startCalled

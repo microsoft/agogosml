@@ -21,8 +21,7 @@ class OutputWriter:
         self.messaging_client = streaming_client
         self.listener = listener
 
-    def on_message_received(self, listener_client: ListenerClient, message: str):
-        # TODO: Should this take a listener_client?
+    def on_message_received(self, message: str):
         """
         Send messages onwards
 
@@ -30,14 +29,11 @@ class OutputWriter:
         """
         self.messaging_client.send(message)
 
-    def start_incoming_messages(self, callback=None):
+    def start_incoming_messages(self):
         """
         Start accepting messages
         """
-        if callback:
-            self.listener.start(callback)
-        else:
-            self.listener.start(self.on_message_received)
+        self.listener.start(self.on_message_received)
 
     def stop_incoming_messages(self):
         """

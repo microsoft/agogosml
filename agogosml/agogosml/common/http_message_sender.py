@@ -2,7 +2,6 @@
 HttpMessageSender
 """
 import logging
-import json
 import requests
 from .message_sender import MessageSender
 
@@ -40,7 +39,7 @@ class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-method
         try:
             server_address = "http://" + self.host_endpoint + ":" + self.port_endpoint
             # TODO: Add retries as some of the messages are failing to send
-            request = requests.post(server_address, data=json.dumps(message))
+            request = requests.post(server_address, data=message)
             if request.status_code != 200:
                 LOGGER.error(
                     "Error with a request {} and message not sent was {}"

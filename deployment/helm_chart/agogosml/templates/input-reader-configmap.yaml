@@ -3,16 +3,16 @@ kind: ConfigMap
 metadata:
   name: input-reader-{{ .Values.input_reader.tag }}-config
 data:
-  MESSAGING_TYPE: {{ .Values.input_reader.env.MESSAGING_TYPE }}
-  AZURE_STORAGE_ACCOUNT: {{ .Values.input_reader.env.AZURE_STORAGE_ACCOUNT }}
-  AZURE_STORAGE_ACCESS_KEY: {{ .Values.input_reader.env.AZURE_STORAGE_ACCESS_KEY }}
-  EVENT_HUB_NAMESPACE: {{ .Values.input_reader.env.EVENT_HUB_NAMESPACE }}
-  EVENT_HUB_NAME: {{ .Values.input_reader.env.EVENT_HUB_NAME }}
-  EVENT_HUB_SAS_POLICY: {{ .Values.input_reader.env.EVENT_HUB_SAS_POLICY }}
-  EVENT_HUB_SAS_KEY: {{ .Values.input_reader.env.EVENT_HUB_SAS_KEY }}
-  LEASE_CONTAINER_NAME: {{ .Values.input_reader.env.LEASE_CONTAINER_NAME }}
-  APP_HOST: {{ .Values.input_reader.env.APP_HOST }}
-  APP_PORT: {{ .Values.input_reader.env.APP_PORT }}
-  KAFKA_TOPIC: {{ .Values.input_reader.env.KAFKA_TOPIC }}
-  KAFKA_CONSUMER_GROUP: {{ .Values.input_reader.env.KAFKA_CONSUMER_GROUP }}
-  KAFKA_ADDRESS: {{ .Values.input_reader.env.KAFKA_ADDRESS }}
+  MESSAGING_TYPE: {{ quote .Values.input_reader.env.MESSAGING_TYPE }}
+  AZURE_STORAGE_ACCOUNT: {{ quote .Values.input_reader.env.AZURE_STORAGE_ACCOUNT }}
+  AZURE_STORAGE_ACCESS_KEY: {{ quote .Values.input_reader.env.AZURE_STORAGE_ACCESS_KEY }}
+  EVENT_HUB_NAMESPACE: {{ quote .Values.input_reader.env.EVENT_HUB_NAMESPACE }}
+  EVENT_HUB_NAME: {{ quote .Values.input_reader.env.EVENT_HUB_NAME }}
+  EVENT_HUB_SAS_POLICY: {{ quote .Values.input_reader.env.EVENT_HUB_SAS_POLICY }}
+  EVENT_HUB_SAS_KEY: {{ quote .Values.input_reader.env.EVENT_HUB_SAS_KEY }}
+  LEASE_CONTAINER_NAME: {{ quote .Values.input_reader.env.LEASE_CONTAINER_NAME }}
+  APP_HOST: {{ quote .Values.input_reader.env.APP_HOST }}
+  APP_PORT: {{ quote .Values.input_reader.env.APP_PORT }}
+  KAFKA_TOPIC: {{ quote .Values.input_reader.env.KAFKA_TOPIC }}
+  KAFKA_CONSUMER_GROUP: {{ quote .Values.input_reader.env.KAFKA_CONSUMER_GROUP }}
+  KAFKA_ADDRESS: {{ quote .Values.input_reader.env.KAFKA_ADDRESS }}

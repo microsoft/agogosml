@@ -33,12 +33,21 @@ This solution consists of two projects;
 
 ## Installing prerequisites
 
+### Windows
+
 ```
-If you’re on MacOS, you can install Pipenv easily with Homebrew:
+sudo apt-get install pipenv
+```
 
+### MacOS
+
+Using Homebrew:
+```
 $ brew install pipenv
-Or, if you’re using Fedora 28:
+```
 
+Or, if using Fedora 28:
+```
 $ sudo dnf install pipenv
 ```
 
@@ -60,10 +69,13 @@ The following bash lines will run unit tests on agogosml project locally:
 
 ```
 cd agogosml
+
 # install dependencies in the virtual environment
 pipenv install && pipenv install --dev
+
 # installs agogosml locally
 pipenv run python setup.py install
+
 # run the tests
 pipenv run make test
 ```

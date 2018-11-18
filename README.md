@@ -34,7 +34,12 @@ This solution consists of two projects;
 ## Installing prerequisites
 
 ```
-sudo apt-get install pipenv
+If you’re on MacOS, you can install Pipenv easily with Homebrew:
+
+$ brew install pipenv
+Or, if you’re using Fedora 28:
+
+$ sudo dnf install pipenv
 ```
 
 ## Setting up Development environment

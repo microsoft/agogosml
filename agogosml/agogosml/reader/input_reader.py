@@ -1,8 +1,7 @@
-"""
-Input Reader
+# -*- coding: utf-8 -*-
 
---> since this and the input_reader_factory class are super small, should we combine?
-or should it follow output_writer structure exactly?
+"""
+InputReader
 """
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
@@ -17,6 +16,7 @@ class InputReader:  # pylint: disable=too-few-public-methods
     def __init__(self, streaming_client: AbstractStreamingClient, message_sender: MessageSender):
         """
         :param streaming_client: A client that can stream data out
+        :param message_sender: A message sender that can send messages onwards
         """
         self.message_sender = message_sender
         self.messaging_client = streaming_client
@@ -24,7 +24,6 @@ class InputReader:  # pylint: disable=too-few-public-methods
     def start_receiving_messages(self):
         """
         Start receiving messages
-        :return:
         """
         self.messaging_client.start_receiving(self.on_message_received)
 
@@ -34,8 +33,10 @@ class InputReader:  # pylint: disable=too-few-public-methods
         """
         self.messaging_client.stop()
 
-    def on_message_received(self, msg):
+    def on_message_received(self, message):
         """
         Send messages onwards
+
+        :param message: a message to process
         """
-        self.message_sender.send(msg)
+        self.message_sender.send(message)

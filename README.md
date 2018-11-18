@@ -29,7 +29,7 @@ agogosml is a data processing pipeline project that addresses the common need fo
 
 This solution consists of two projects;
 - [agogosml](./agogosml): The agogosml library sdk which consists of the data pipeline, input reader, output writer, streaming clients, etc. 
-- [agogosml_cli](./agogosml_cli): A project mean to help set up a new project via cli
+- [agogosml_cli](./agogosml_cli): A cli meant to help you set up a new project via cli
 
 ## Installing prerequisites
 

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: output-writer-config
+  name: output-writer-{{ .Values.output_writer.tag }}-config
 data:
   MESSAGING_TYPE: {{ quote .Values.output_writer.env.MESSAGING_TYPE }}
   EVENT_HUB_NAMESPACE: {{ quote .Values.output_writer.env.EVENT_HUB_NAMESPACE }}

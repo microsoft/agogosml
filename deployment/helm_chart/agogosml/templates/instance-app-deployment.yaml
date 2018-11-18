@@ -34,7 +34,7 @@ spec:
           imagePullPolicy: {{ default "IfNotPresent" $root.Values.output_writer.pullPolicy }}
           envFrom:
           - configMapRef:
-              name: output-writer-config
+              name: output-writer-{{ .Values.output_writer.tag }}-config
       {{ if $root.Values.registry }}imagePullSecrets:
         - name: {{ $root.Values.imagePullSecret}}{{ end }}
 ---

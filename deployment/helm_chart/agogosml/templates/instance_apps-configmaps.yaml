@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $appName | replace "_" "-"}}-{{ .tag }}-config
+  name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-"}}-config
 data:
 {{- range $key, $value := .env }}
   {{ $key }}: {{ quote $value }}

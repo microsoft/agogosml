@@ -24,9 +24,7 @@ EXPECTED_OUTPUT_PROJ_FILES = [
     '.env',
     'Pipfile',
     'logging.yaml',
-    'ci-sample-app-pipeline.json',
-    'ci-input-app-pipeline.json',
-    'ci-output-app-pipeline.json'
+    'ci-sample-app-pipeline.json'
 ]
 
 

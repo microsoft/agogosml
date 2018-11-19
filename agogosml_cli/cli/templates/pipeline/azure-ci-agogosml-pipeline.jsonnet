@@ -149,6 +149,12 @@ local repository = import 'pipeline-repository.libsonnet';
                 "jobCancelTimeoutInMinutes": 1
             },
             {
+                "dependencies": [
+                    {
+                        "scope": "Phase_1",
+                        "event": "Completed"
+                    }
+                ],
                 "steps": [
                     {
                         "environment": {},
@@ -259,6 +265,12 @@ local repository = import 'pipeline-repository.libsonnet';
                 "jobCancelTimeoutInMinutes": 1
             },
             {
+                "dependencies": [
+                    {
+                        "scope": "Phase_1",
+                        "event": "Completed"
+                    }
+                ],
                 "steps": [
                     {
                         "environment": {},

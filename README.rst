@@ -69,8 +69,6 @@ Related projects and useful resources
 -  https://github.com/Azure/AI-predictivemaintenance and `this
    page <https://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FAzure%2FAI-PredictiveMaintenance%2Ftree%2Fmaster%2Fdocs&data=02%7C01%7C%7C0bc38fbfbe0e45b9364e08d60ecfc936%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C636712682921627767&sdata=CXvxvfzl%2FnoLlIZV7p7LBQTyzJdrL8rvwYlDxB5CsQE%3D&reserved=0>`__
    shows the modeling pipeline and the operationalized pipeline.
--  `Happy Paths – A reference
-   architecture <https://microsoft.sharepoint.com/teams/CECRMSP/Shared%20with%20Microsoft/Forms/AllItems.aspx?slrid=0c878a9e%2Da0d2%2D0000%2Db062%2Dfea03d1c2137&RootFolder=%2Fteams%2FCECRMSP%2FShared%20with%20Microsoft%2FAI%20CAT%20Materials%2FCustom%20AI%20Reference%20Architectures&FolderCTID=0x012000CC11EAFABCEF3D40B8E0D96CF1BA4810>`__
 -  `Case Study on fraud
    detection <https://azure.microsoft.com/en-us/blog/two-seconds-to-take-a-bite-out-of-mobile-bank-fraud-with-artificial-intelligence/>`__
 

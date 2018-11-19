@@ -1,9 +1,9 @@
 """EventProcessor host class for Event Hub"""
 
 from azure.eventprocessorhost import AbstractEventProcessor
-from ..utils import logger
+from ..utils.logger import Logger
 
-logger = logger.Logger()
+logger = Logger()
 
 
 class EventProcessor(AbstractEventProcessor):

@@ -5,10 +5,10 @@ Factory for InputReader
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 from agogosml.common.http_message_sender import HttpMessageSender
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
-from agogosml.utils import logger
+from agogosml.utils.logger import Logger
 from .input_reader import InputReader
 
-logger = logger.Logger()
+logger = Logger()
 
 
 class InputReaderFactory:

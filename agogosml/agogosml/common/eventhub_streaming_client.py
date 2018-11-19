@@ -6,9 +6,9 @@ from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, \
     EventHubConfig, EventProcessorHost, EPHOptions
 from .eventhub_processor_events import EventProcessor
 from .abstract_streaming_client import AbstractStreamingClient
-from ..utils import logger
+from ..utils.logger import Logger
 
-logger = logger.Logger()
+logger = Logger()
 
 
 class EventHubStreamingClient(AbstractStreamingClient):

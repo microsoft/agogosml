@@ -3,9 +3,9 @@ HttpMessageSender
 """
 import requests
 from .message_sender import MessageSender
-from ..utils import logger
+from ..utils.logger import Logger
 
-logger = logger.Logger()
+logger = Logger()
 
 
 class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-methods

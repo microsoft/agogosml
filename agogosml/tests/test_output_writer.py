@@ -94,7 +94,7 @@ def test_output_writer_factory_kafka():
     ow.messaging_client.stop()
 
 
-@pytest.mark.integration
+@pytest.mark.integration1
 def test_output_writer_flask():
 
     config = {

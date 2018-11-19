@@ -4,9 +4,9 @@ from confluent_kafka import Producer, Consumer, admin
 from confluent_kafka import KafkaException, KafkaError
 import datetime
 from .abstract_streaming_client import AbstractStreamingClient
-from ..utils import logger
+from ..utils.logger import Logger
 
-logger = logger.Logger()
+logger = Logger()
 
 
 class KafkaStreamingClient(AbstractStreamingClient):

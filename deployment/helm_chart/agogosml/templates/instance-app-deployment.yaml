@@ -1,11 +1,12 @@
 {{ $fullname := include "data-pipeline-app.instance-app.fullname" . }}
+{{ $configName := include "data-pipeline-app.output-writer.config-name" . }}
 # For each instance app, we create a pair of instance_app+output_writer containers (in a single pod)
 {{- $root := . -}}
 {{- range $appName, $value := .Values.instance_apps }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ia-{{ $appName | replace "_" "-" }}-{{ .tag }}
+  name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}
   labels:
     chart: "{{ $root.Chart.Name }}-{{ $root.Chart.Version }}"
     release: {{ quote $root.Release.Name }}
@@ -14,11 +15,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ia-{{ $appName | replace "_" "-" }}-{{ .tag }}
+      app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}
   template:
     metadata:
       labels:
-        app: ia-{{ $appName | replace "_" "-" }}-{{ .tag }}
+        app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}
     spec:
       containers:
         - name: {{ $fullname }}-{{ $appName | replace "_" "-" }}-app
@@ -26,7 +27,7 @@ spec:
           imagePullPolicy: {{ default "IfNotPresent" .pullPolicy }}
           envFrom:
           - configMapRef:
-              name: {{ $appName | replace "_" "-" }}-{{ .tag }}-config
+              name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-"}}-config
           ports:
           - containerPort: {{ .service.internalPort }}
         - name: {{ $fullname }}-{{ $appName | replace "_" "-" }}-output-writer
@@ -34,7 +35,7 @@ spec:
           imagePullPolicy: {{ default "IfNotPresent" $root.Values.output_writer.pullPolicy }}
           envFrom:
           - configMapRef:
-              name: output-writer-{{ .Values.output_writer.tag }}-config
+              name: {{ $configName }}
       {{ if $root.Values.registry }}imagePullSecrets:
         - name: {{ $root.Values.imagePullSecret}}{{ end }}
 ---

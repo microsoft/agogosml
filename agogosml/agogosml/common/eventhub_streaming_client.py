@@ -7,9 +7,7 @@ from azure.eventhub import EventHubClient, EventData
 from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, \
     EventHubConfig, EventProcessorHost, EPHOptions
 
-
-logger = logging.getLogger("STREAM")
-logger.setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class EventHubStreamingClient(AbstractStreamingClient):
@@ -29,7 +27,10 @@ class EventHubStreamingClient(AbstractStreamingClient):
         self.lease_container_name = self.config.get("LEASE_CONTAINER_NAME")
         self.namespace = self.config.get("EVENT_HUB_NAMESPACE")
         self.eventhub = self.config.get("EVENT_HUB_NAME")
-        # self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP") # TODO: get consumer groups working
+        self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP")
+        if self.consumer_group is None:
+            self.consumer_group = '$default'
+
         self.user = self.config.get("EVENT_HUB_SAS_POLICY")
         self.key = self.config.get("EVENT_HUB_SAS_KEY")
         if self.config.get("TIMEOUT"):
@@ -43,12 +44,14 @@ class EventHubStreamingClient(AbstractStreamingClient):
         # Create EPH Client
         if self.storage_account_name is not None and self.storage_key is not None:
             self.eph_client = EventHubConfig(
-                self.namespace,
-                self.eventhub,
-                self.user,
-                self.key)  # consumer_group=self.consumer_group)
+                sb_name=self.namespace,
+                eh_name=self.eventhub,
+                policy=self.user,
+                sas_key=self.key,
+                consumer_group=self.consumer_group)
             self.eh_options = EPHOptions()
             self.eh_options.release_pump_on_timeout = True
+            self.eh_options.auto_reconnect_on_error = False
             self.eh_options.debug_trace = False
             self.storage_manager = AzureStorageCheckpointLeaseManager(
                 self.storage_account_name, self.storage_key,

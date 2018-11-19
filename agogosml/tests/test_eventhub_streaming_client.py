@@ -8,14 +8,15 @@ from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 
 load_dotenv()
 
+
 test_messages = [
     '{"key": "dfkdsflk", "intValue": 23}',
     '{"key": "kjjioud", "intValue": 73}',
     '{"key": "ewrfsdere", "intValue": 5}',
     '{"key": "dfsadfs", "intValue": 30}',
-    '{"key": "dfkdsflk", "intValue": 23}',
-    '{"key": "kjjioud", "intValue": 73}',
-    '{"key": "ewrfsdere", "intValue": 10}',
+    '{"key": "qweqad", "intValue": 23}',
+    '{"key": "iewquweqnx", "intValue": 73}',
+    '{"key": "ewrfsdere", "intValue": 5}',
     '{"key": "dfsadfs", "intValue": 10}'
 ]
 
@@ -44,7 +45,9 @@ def test_send_receive():
         "EVENT_HUB_SAS_POLICY": os.getenv("EVENT_HUB_SAS_POLICY"),
         "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY"),
         "EVENT_HUB_CONSUMER_GROUP": os.getenv("EVENT_HUB_CONSUMER_GROUP"),
-        "TIMEOUT": 60
+        "TIMEOUT": 60,
+        "APP_HOST": "0.0.0.0",
+        "APP_PORT": 5000
     }
     receive_client = EventHubStreamingClient(receive_config)
 

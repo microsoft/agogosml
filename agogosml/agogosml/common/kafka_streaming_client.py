@@ -1,12 +1,12 @@
 """Kafka streaming client"""
 
-from .abstract_streaming_client import AbstractStreamingClient
 from confluent_kafka import Producer, Consumer, admin
 from confluent_kafka import KafkaException, KafkaError
-import logging
 import datetime
+from .abstract_streaming_client import AbstractStreamingClient
+from ..utils import logger
 
-logger = logging.getLogger(__name__)
+logger = logger.Logger()
 
 
 class KafkaStreamingClient(AbstractStreamingClient):

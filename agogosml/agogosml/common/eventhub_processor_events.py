@@ -3,8 +3,7 @@
 from azure.eventprocessorhost import AbstractEventProcessor
 import logging
 
-logger = logging.getLogger("STREAM")
-logger.setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class EventProcessor(AbstractEventProcessor):

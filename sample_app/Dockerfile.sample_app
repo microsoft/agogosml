@@ -1,8 +1,6 @@
-ARG CONTAINER_REG
-ARG AGOGOSML_TAG="latest"
+ARG PYTHON_VERSION=3.7.0-alpine3.8
 
-# Base image
-FROM ${CONTAINER_REG}agogosml/agogosml:${AGOGOSML_TAG} as builder
+FROM python:${PYTHON_VERSION} as builder
 
 WORKDIR /usr/src/sample_app
 COPY ./sample_app /usr/src/sample_app
@@ -14,7 +12,10 @@ RUN pytest testapp.py
 RUN pylint *.py
 
 # Release 
-FROM ${CONTAINER_REG}agogosml/agogosml:${AGOGOSML_TAG}
+ARG PYTHON_VERSION=3.7.0-alpine3.8
+
+FROM python:${PYTHON_VERSION}
+
 WORKDIR /sample_app
 COPY --from=builder /usr/src/sample_app /sample_app
 RUN pip install -r requirements.txt

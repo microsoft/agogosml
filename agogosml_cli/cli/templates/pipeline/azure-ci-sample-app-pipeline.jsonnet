@@ -4,26 +4,30 @@ local repository = import 'pipeline-repository.libsonnet';
     "options": [],
     "triggers": [
         {
-            "definition": {
-                "id": 35,
-                "url": "",
-                "path": "\\",
-                "queueStatus": 0,
-                "project": {
-                    "id": "0634c848-f8d0-4293-9c2a-570bab0d8457",
-                    "name": std.extVar('PROJECT_NAME'),
-                    "description": "Azure Pipelines for agogosml repo",
-                    "url": "",
-                    "state": 1,
-                    "revision": 47,
-                    "visibility": 2
-                }
-            },
-            "requiresSuccessfulBuild": true,
+            "branchFilters": [
+                "+refs/heads/master"
+            ],
+            "pathFilters": [
+                "+/sample_app"
+            ],
+            "batchChanges": false,
+            "maxConcurrentBuildsPerBranch": 1,
+            "pollingInterval": 0,
+            "triggerType": 2
+        },
+        {
             "branchFilters": [
                 "+master"
             ],
-            "triggerType": 128
+            "forks": {
+                "enabled": false,
+                "allowSecrets": false
+            },
+            "pathFilters": [
+                "+/sample_app"
+            ],
+            "isCommentRequiredForPullRequest": false,
+            "triggerType": 64
         }
     ],
     "properties": {},

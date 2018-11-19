@@ -2,7 +2,7 @@ local repository = import 'pipeline-repository.libsonnet';
 
 {
     "options": [],
-     "triggers": [
+    "triggers": [
         {
             "branchFilters": [
                 "+refs/heads/master"
@@ -10,8 +10,7 @@ local repository = import 'pipeline-repository.libsonnet';
             "pathFilters": [
                 "+/agogosml",
                 "+/input_reader",
-                "+/output_writer",
-                "+/sample_app"
+                "+/output_writer"
             ],
             "batchChanges": false,
             "maxConcurrentBuildsPerBranch": 1,
@@ -29,8 +28,7 @@ local repository = import 'pipeline-repository.libsonnet';
             "pathFilters": [
                 "+/agogosml",
                 "+/input_reader",
-                "+/output_writer",
-                "+/sample_app"
+                "+/output_writer"
             ],
             "isCommentRequiredForPullRequest": false,
             "triggerType": 64
@@ -139,6 +137,226 @@ local repository = import 'pipeline-repository.libsonnet';
                 ],
                 "name": "Agogosml-Build-CI",
                 "refName": "Phase_1",
+                "condition": "succeeded()",
+                "target": {
+                    "executionOptions": {
+                        "type": 0
+                    },
+                    "allowScriptsAuthAccessOption": false,
+                    "type": 1
+                },
+                "jobAuthorizationScope": 1,
+                "jobCancelTimeoutInMinutes": 1
+            },
+            {
+                "steps": [
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Build an image",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                            "versionSpec": "1.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerregistrytype": "Azure Container Registry",
+                            "dockerRegistryEndpoint": "",
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
+                            "command": "Build an image",
+                            "dockerFile": "**/input_reader/Dockerfile.input_reader",
+                            "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
+                            "useDefaultContext": "false",
+                            "buildContext": "",
+                            "pushMultipleImages": "false",
+                            "tagMultipleImages": "false",
+                            "imageName": "input_reader:$(Build.BuildId)",
+                            "imageNamesPath": "",
+                            "qualifyImageName": "true",
+                            "includeSourceTags": "false",
+                            "includeLatestTag": "false",
+                            "addDefaultLabels": "true",
+                            "imageDigestFile": "",
+                            "containerName": "",
+                            "ports": "",
+                            "volumes": "",
+                            "envVars": "",
+                            "workingDirectory": "",
+                            "entrypointOverride": "",
+                            "containerCommand": "",
+                            "runInBackground": "true",
+                            "restartPolicy": "no",
+                            "maxRestartRetries": "",
+                            "dockerHostEndpoint": "",
+                            "enforceDockerNamingConvention": "true",
+                            "memoryLimit": ""
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Push input reader app image",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                            "versionSpec": "1.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerregistrytype": "Azure Container Registry",
+                            "dockerRegistryEndpoint": "",
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
+                            "command": "Push an image",
+                            "dockerFile": "**/Dockerfile",
+                            "arguments": "",
+                            "useDefaultContext": "true",
+                            "buildContext": "",
+                            "pushMultipleImages": "false",
+                            "tagMultipleImages": "false",
+                            "imageName": "input_reader:$(Build.BuildId)",
+                            "imageNamesPath": "",
+                            "qualifyImageName": "true",
+                            "includeSourceTags": "false",
+                            "includeLatestTag": "false",
+                            "addDefaultLabels": "true",
+                            "imageDigestFile": "",
+                            "containerName": "",
+                            "ports": "",
+                            "volumes": "",
+                            "envVars": "",
+                            "workingDirectory": "",
+                            "entrypointOverride": "",
+                            "containerCommand": "",
+                            "runInBackground": "true",
+                            "restartPolicy": "no",
+                            "maxRestartRetries": "",
+                            "dockerHostEndpoint": "",
+                            "enforceDockerNamingConvention": "true",
+                            "memoryLimit": ""
+                        }
+                    }
+                ],
+                "name": "InputReader-Build-CI",
+                "refName": "Phase_2",
+                "condition": "succeeded()",
+                "target": {
+                    "executionOptions": {
+                        "type": 0
+                    },
+                    "allowScriptsAuthAccessOption": false,
+                    "type": 1
+                },
+                "jobAuthorizationScope": 1,
+                "jobCancelTimeoutInMinutes": 1
+            },
+            {
+                "steps": [
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Build an image",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                            "versionSpec": "1.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerregistrytype": "Azure Container Registry",
+                            "dockerRegistryEndpoint": "",
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
+                            "command": "Build an image",
+                            "dockerFile": "**/output_writer/Dockerfile.output_writer",
+                            "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
+                            "useDefaultContext": "false",
+                            "buildContext": "",
+                            "pushMultipleImages": "false",
+                            "tagMultipleImages": "false",
+                            "imageName": "output_writer:$(Build.BuildId)",
+                            "imageNamesPath": "",
+                            "qualifyImageName": "true",
+                            "includeSourceTags": "false",
+                            "includeLatestTag": "false",
+                            "addDefaultLabels": "true",
+                            "imageDigestFile": "",
+                            "containerName": "",
+                            "ports": "",
+                            "volumes": "",
+                            "envVars": "",
+                            "workingDirectory": "",
+                            "entrypointOverride": "",
+                            "containerCommand": "",
+                            "runInBackground": "true",
+                            "restartPolicy": "no",
+                            "maxRestartRetries": "",
+                            "dockerHostEndpoint": "",
+                            "enforceDockerNamingConvention": "true",
+                            "memoryLimit": ""
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Push output writer app image",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                            "versionSpec": "1.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerregistrytype": "Azure Container Registry",
+                            "dockerRegistryEndpoint": "",
+                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
+                            "command": "Push an image",
+                            "dockerFile": "**/Dockerfile",
+                            "arguments": "",
+                            "useDefaultContext": "true",
+                            "buildContext": "",
+                            "pushMultipleImages": "false",
+                            "tagMultipleImages": "false",
+                            "imageName": "output_writer:$(Build.BuildId)",
+                            "imageNamesPath": "",
+                            "qualifyImageName": "true",
+                            "includeSourceTags": "false",
+                            "includeLatestTag": "false",
+                            "addDefaultLabels": "true",
+                            "imageDigestFile": "",
+                            "containerName": "",
+                            "ports": "",
+                            "volumes": "",
+                            "envVars": "",
+                            "workingDirectory": "",
+                            "entrypointOverride": "",
+                            "containerCommand": "",
+                            "runInBackground": "true",
+                            "restartPolicy": "no",
+                            "maxRestartRetries": "",
+                            "dockerHostEndpoint": "",
+                            "enforceDockerNamingConvention": "true",
+                            "memoryLimit": ""
+                        }
+                    }
+                ],
+                "name": "OutputWriter-Build-CI",
+                "refName": "Phase_3",
                 "condition": "succeeded()",
                 "target": {
                     "executionOptions": {

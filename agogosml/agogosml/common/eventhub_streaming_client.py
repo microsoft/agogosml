@@ -44,10 +44,10 @@ class EventHubStreamingClient(AbstractStreamingClient):
         # Create EPH Client
         if self.storage_account_name is not None and self.storage_key is not None:
             self.eph_client = EventHubConfig(
-                self.namespace,
-                self.eventhub,
-                self.user,
-                self.key,
+                sb_name=self.namespace,
+                eh_name=self.eventhub,
+                policy=self.user,
+                sas_key=self.key,
                 consumer_group=self.consumer_group)
             self.eh_options = EPHOptions()
             self.eh_options.release_pump_on_timeout = True

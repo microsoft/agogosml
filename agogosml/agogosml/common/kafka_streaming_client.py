@@ -81,6 +81,21 @@ class KafkaStreamingClient(AbstractStreamingClient):
     def stop(self, *args, **kwargs):
         pass
 
+    def check_timeout(self, start):
+        if self.timeout is not None:
+            elapsed = datetime.datetime.now() - start
+            if elapsed.seconds >= self.timeout:
+                raise KeyboardInterrupt
+
+    def handle_kafka_error(self, msg):
+        if msg.error().code() == KafkaError._PARTITION_EOF:
+            # End of partition event
+            logger.error('%% %s [%d] reached end at offset %d\n' %
+                         (msg.topic(), msg.partition(), msg.offset()))
+        else:
+            # Error
+            raise KafkaException(msg.error())
+
     def start_receiving(self, on_message_received_callback):
         """
         Receive messages from a kafka topic.
@@ -95,24 +110,16 @@ class KafkaStreamingClient(AbstractStreamingClient):
             start = datetime.datetime.now()
 
             while True:
-                if self.timeout is not None:
-                    elapsed = datetime.datetime.now() - start
-                    if elapsed.seconds >= self.timeout:
-                        raise KeyboardInterrupt
+                # Stop loop after timeout if exists
+                self.check_timeout(start)
 
+                # Poll messages from topic
                 msg = self.consumer.poll(timeout=1.0)
                 if msg is None:
                     continue
                 if msg.error():
                     # Error or event
-                    if msg.error().code() == KafkaError._PARTITION_EOF:
-                        # End of partition event
-                        logger.error(
-                            '%% %s [%d] reached end at offset %d\n' %
-                            (msg.topic(), msg.partition(), msg.offset()))
-                    else:
-                        # Error
-                        raise KafkaException(msg.error())
+                    self.handle_kafka_error(msg)
                 else:
                     # Proper message
                     on_message_received_callback(msg.value())

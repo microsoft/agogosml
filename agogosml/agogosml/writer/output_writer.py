@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 OutputWriter
 """
@@ -13,7 +12,8 @@ class OutputWriter:
     Accepts incoming messages and routes them to a configured output
     """
 
-    def __init__(self, streaming_client: AbstractStreamingClient, listener: ListenerClient):
+    def __init__(self, streaming_client: AbstractStreamingClient,
+                 listener: ListenerClient):
         """
         :param streaming_client: A client that can stream data in
         :param listener: A client that accepts incoming messages
@@ -21,8 +21,7 @@ class OutputWriter:
         self.messaging_client = streaming_client
         self.listener = listener
 
-    def on_message_received(self, listener_client: ListenerClient, message: str):
-        # TODO: Should this take a listener_client?
+    def on_message_received(self, message):
         """
         Send messages onwards
 

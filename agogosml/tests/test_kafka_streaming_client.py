@@ -8,7 +8,7 @@ from agogosml.common.kafka_streaming_client import KafkaStreamingClient
 
 load_dotenv()
 
-messages = [
+test_messages = [
     '{"key": "dfkdsflk", "intValue": 23}',
     '{"key": "kjjioud", "intValue": 73}',
     '{"key": "ewrfsdere", "intValue": 5}',
@@ -28,7 +28,7 @@ def test_send_receive():
     }
     send_client = KafkaStreamingClient(send_config)
 
-    for message in messages:
+    for message in test_messages:
         send_client.send(message)
 
     send_client.stop()
@@ -48,6 +48,6 @@ def test_send_receive():
             received_messages.append(value.decode("utf-8"))
 
     receive_client.start_receiving(receive_callback)
-    assert len(messages) == len(received_messages)
+    assert len(test_messages) == len(received_messages)
     for msg in received_messages:
-        assert msg in messages
+        assert msg in test_messages

@@ -12,15 +12,19 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "data-pipeline-app.fullname" -}}
 {{- $name := .Chart.Name -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "data-pipeline-app.input_reader.fullname" -}}
-{{ include "data-pipeline-app.fullname" . | printf "%s-in-rdr" }}
+{{ printf "input-reader" }}
 {{- end -}}
 
 {{- define "data-pipeline-app.instance-app.fullname" -}}
-{{ include "data-pipeline-app.fullname" . | printf "%s-ia" }}
+{{ include "data-pipeline-app.fullname" . | printf "%s-instance" }}
+{{- end -}}
+
+{{- define "data-pipeline-app.output-writer.config-name" -}}
+{{- printf "%s-output-writer-config" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "rbac.version" }}rbac.authorization.k8s.io/v1beta1{{ end -}}

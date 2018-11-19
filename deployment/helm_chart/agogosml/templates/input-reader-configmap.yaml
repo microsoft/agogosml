@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: input-reader-{{ .Values.input_reader.tag }}-config
+  name: {{ .Release.Name }}-input-reader-config
 data:
   MESSAGING_TYPE: {{ quote .Values.input_reader.env.MESSAGING_TYPE }}
   AZURE_STORAGE_ACCOUNT: {{ quote .Values.input_reader.env.AZURE_STORAGE_ACCOUNT }}

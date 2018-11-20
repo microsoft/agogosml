@@ -6,7 +6,7 @@ from agogosml.common.message_sender import MessageSender
 class ClientMessagingMock(AbstractStreamingClient):
     def __init__(self):
         self.sent = False
-        self.receving = False
+        self.receiving = False
         pass
 
     def send(self, *args, **kwargs):
@@ -17,7 +17,7 @@ class ClientMessagingMock(AbstractStreamingClient):
         pass
 
     def start_receiving(self, callback):
-        self.receving = True
+        self.receiving = True
         self.callback = callback
         pass
 
@@ -25,7 +25,7 @@ class ClientMessagingMock(AbstractStreamingClient):
         return self.sent
 
     def get_receiving(self):
-        return self.receving
+        return self.receiving
 
     def mock_incoming_message_event(self, msg):
         self.callback(msg)
@@ -47,7 +47,7 @@ class ListenerClientMock(ListenerClient):
         pass
 
     def mock_new_incoming_message(self):
-        self.callback(self, "{'some':'json'}")
+        self.callback("{'some':'json'}")
 
     def get_started(self):
         return self.startCalled

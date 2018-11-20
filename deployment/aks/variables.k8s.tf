@@ -1,5 +1,5 @@
 variable agent_count {
-    default = 3
+  default = 3
 }
 
 variable agent_size {
@@ -8,4 +8,8 @@ variable agent_size {
 
 variable agent_disk_size_gb {
   default = 30
+}
+
+variable kubernetes_version {
+  default = "1.11.4"
 }

@@ -1,12 +1,11 @@
 """
 Main entry point for output writer
 """
-import os  # temp
-from dotenv import load_dotenv  # temp
-
+import os
+from dotenv import load_dotenv
 from agogosml.writer.output_writer_factory import OutputWriterFactory
 
-load_dotenv()  # temp
+load_dotenv()
 
 if __name__ == "__main__":
 
@@ -24,6 +23,7 @@ if __name__ == "__main__":
                     'EVENT_HUB_SAS_POLICY': os.getenv("EVENT_HUB_SAS_POLICY"),
                     'EVENT_HUB_SAS_KEY': os.getenv("EVENT_HUB_SAS_KEY"),
                     'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
+                    'OUTPUT_WRITER_HOST': os.getenv("OUTPUT_WRITER_HOST"),
                 }
             }
         }
@@ -35,6 +35,7 @@ if __name__ == "__main__":
                     'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),
                     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
                     'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
+                    'OUTPUT_WRITER_HOST': os.getenv("OUTPUT_WRITER_HOST"),
                 }
             }
         }

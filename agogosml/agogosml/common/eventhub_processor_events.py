@@ -1,10 +1,9 @@
 """EventProcessor host class for Event Hub"""
 
 from azure.eventprocessorhost import AbstractEventProcessor
-import logging
+from ..utils.logger import Logger
 
-logger = logging.getLogger("STREAM")
-logger.setLevel(logging.INFO)
+logger = Logger()
 
 
 class EventProcessor(AbstractEventProcessor):
@@ -50,7 +49,7 @@ class EventProcessor(AbstractEventProcessor):
         :type messages: list[~azure.eventhub.common.EventData]
         """
         for message in messages:
-            message_json = message.body_as_json(encoding='UTF-8')
+            message_json = message.body_as_str(encoding='UTF-8')
             if self.on_message_received_callback is not None:
                 self.on_message_received_callback(message_json)
                 logger.debug("Received message: {}".format(message_json))

@@ -6,7 +6,7 @@ import yaml
 
 class Logger(object):
     """
-    A logger implementation
+    A logger implementation.
     """
 
     __instance = None
@@ -17,7 +17,7 @@ class Logger(object):
                       level=logging.INFO,
                       env_key='LOG_CFG'):
         """
-        Setup logging configuration
+        Setup logging configuration.
         """
         path = log_path
         value = os.getenv(env_key, None)
@@ -56,10 +56,9 @@ class Logger(object):
 
     def debug(self, message):
         """
-        Log debug message
+        Log debug message.
 
-        :param message:
-        :return:
+        :param message: Debug message string.
         """
         self.logger.debug(message)
 
@@ -67,16 +66,14 @@ class Logger(object):
         """
         Log info message
 
-        :param message:
-        :return:
+        :param message: Info message string.
         """
         self.logger.info(message)
 
     def error(self, message):
         """
         Log error message
-        
-        :param message:
-        :return:
+
+        :param message: Error message string.
         """
         self.logger.error(message)

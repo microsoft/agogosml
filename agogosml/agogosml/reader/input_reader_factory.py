@@ -17,9 +17,9 @@ class InputReaderFactory:
     @staticmethod
     def create(config: dict):
         """
-        Create a new instance of Input Reader
+        Create a new instance of InputReader
 
-        :param config: A configuration for input reader
+        :param config: A configuration for InputReader
         :return InputReader: An instance of an InputReader with streaming_client and message_sender
         """
         if InputReaderFactory.is_empty(config):

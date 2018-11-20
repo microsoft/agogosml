@@ -15,10 +15,11 @@ class OutputWriterFactory:
     @staticmethod
     def create(config: dict):
         """
-        Creates a new instance of OutputWriter
-        :param config: A configuration for output writer
+        Creates a new instance of OutputWriter.
+
+        :param config: A configuration for OutputWriter.
         :return OutputWriter: An instance of an OutputWriter with a
-            streaming_client and listener
+        streaming_client and listener.
         """
 
         client = None
@@ -59,7 +60,7 @@ class OutputWriterFactory:
         Empty dictionaries resolve to false when
         converted to booleans in Python.
 
-        :param dictionary: a dictionary to test
-        :return: true if empty, false otherwise
+        :param dictionary: A dictionary to test.
+        :return: True if empty, false otherwise.
         """
         return not bool(dictionary)

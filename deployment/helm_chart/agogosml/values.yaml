@@ -53,7 +53,8 @@ output_writer:
 instance_apps:
   sample_app_0:
     name: sample_app
-    tag: latest
+    blue_tag: latest
+    green_tag: latest
     imagePullPolicy: IfNotPresent
     service:
       type: ClusterIP

@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: {{ $fullname }}-{{ $appName | replace "_" "-" }}-app
-          image: {{ $root.Values.registry }}/{{ .name }}:{{ default "latest" .tag }}
+          image: {{ $root.Values.registry }}/{{ .name }}:{{ default "latest" .blue_tag }}
           imagePullPolicy: {{ default "IfNotPresent" .pullPolicy }}
           envFrom:
           - configMapRef:

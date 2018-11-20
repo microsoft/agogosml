@@ -1,12 +1,11 @@
 """
 Main entry point for output writer
 """
-import os  # temp
-from dotenv import load_dotenv  # temp
-
+import os
+from dotenv import load_dotenv
 from agogosml.writer.output_writer_factory import OutputWriterFactory
 
-load_dotenv()  # temp
+load_dotenv()
 
 if __name__ == "__main__":
 

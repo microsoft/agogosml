@@ -1,14 +1,12 @@
-
 """
 Main entry point for input reader
 """
 
-import os  # temp
-from dotenv import load_dotenv  # temp
-
+import os
+from dotenv import load_dotenv
 from agogosml.reader.input_reader_factory import InputReaderFactory
 
-load_dotenv()  # temp
+load_dotenv()
 
 if __name__ == "__main__":
 

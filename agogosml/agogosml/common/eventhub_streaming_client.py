@@ -1,13 +1,14 @@
-import logging
+"""Event Hub streaming client"""
+
 import asyncio
-"""EventHub streaming client"""
-from .eventhub_processor_events import EventProcessor
-from .abstract_streaming_client import AbstractStreamingClient
 from azure.eventhub import EventHubClient, EventData
 from azure.eventprocessorhost import AzureStorageCheckpointLeaseManager, \
     EventHubConfig, EventProcessorHost, EPHOptions
+from .eventhub_processor_events import EventProcessor
+from .abstract_streaming_client import AbstractStreamingClient
+from ..utils.logger import Logger
 
-logger = logging.getLogger(__name__)
+logger = Logger()
 
 
 class EventHubStreamingClient(AbstractStreamingClient):

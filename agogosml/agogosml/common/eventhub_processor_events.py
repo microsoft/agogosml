@@ -29,6 +29,7 @@ class EventProcessor(AbstractEventProcessor):
         """
         Called by processor host to indicate that the event processor
         is being stopped.
+
         :param context: Information about the partition
         :type context: ~azure.eventprocessorhost.PartitionContext
         :param reason: Reason for closing the async loop
@@ -43,6 +44,7 @@ class EventProcessor(AbstractEventProcessor):
         """
         Called by the processor host when a batch of events has arrived.
         This is where the real work of the event processor is done.
+
         :param context: Information about the partition
         :type context: ~azure.eventprocessorhost.PartitionContext
         :param messages: The events to be processed.
@@ -60,7 +62,8 @@ class EventProcessor(AbstractEventProcessor):
         """
         Called when the underlying client experiences an error while receiving.
         EventProcessorHost will take care of recovering from the error and
-        continuing to pump messages,so no action is required from
+        continuing to pump messages, so no external action is required.
+
         :param context: Information about the partition
         :type context: ~azure.eventprocessorhost.PartitionContext
         :param error: The error that occured.

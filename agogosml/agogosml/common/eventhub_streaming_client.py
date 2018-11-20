@@ -16,9 +16,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
         """
         Class to create an eventhub streaming client instance.
 
-        Args:
-            config: dictionary file with all the relevant parameters
-
+        :param config: Dictionary file with all the relevant parameters.
         """
         super().__init__()
         self.message_callback = None
@@ -75,6 +73,11 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 raise
 
     def start_receiving(self, on_message_received_callback):
+        """
+        Receive messages from an event hub streaming client.
+
+        :param on_message_received_callback: Callback function.
+        """
         loop = asyncio.get_event_loop()
         try:
             host = EventProcessorHost(
@@ -93,6 +96,11 @@ class EventHubStreamingClient(AbstractStreamingClient):
             loop.stop()
 
     def send(self, message):
+        """
+        Send a message to an event hub streaming client.
+
+        :param message: A string input to upload to event hub.
+        """
         try:
             self.sender.send(EventData(body=message))
             logger.info('Sent message: {}'.format(message))
@@ -108,7 +116,10 @@ class EventHubStreamingClient(AbstractStreamingClient):
     @staticmethod
     async def wait_and_close(host, timeout):
         """
-        Run EventProcessorHost indefinitely
+        Run EventProcessorHost indefinitely.
+
+        :param host: An EventProcessorHost instance.
+        :param timeout: Length of time to run the EventProcessorHost for.
         """
         if timeout is None:
             while True:

@@ -5,9 +5,7 @@ import yaml
 
 
 class Logger(object):
-    """
-    A logger implementation.
-    """
+    """A logger implementation."""
 
     __instance = None
     logger = None
@@ -16,9 +14,8 @@ class Logger(object):
     def setup_logging(log_path='logging.yaml',
                       level=logging.INFO,
                       env_key='LOG_CFG'):
-        """
-        Setup logging configuration.
-        """
+        """Setup logging configuration."""
+
         path = log_path
         value = os.getenv(env_key, None)
         if value:

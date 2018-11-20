@@ -10,14 +10,11 @@ logger = Logger()
 
 
 class InputReaderFactory:
-    """
-    Factory and instance resolving for input reader
-    """
+    """Factory and instance resolving for input reader"""
 
     @staticmethod
     def create(config: dict):
-        """
-        Create a new instance of InputReader
+        """Create a new instance of InputReader
 
         :param config: A configuration for InputReader
         :return InputReader: An instance of an InputReader with streaming_client and message_sender

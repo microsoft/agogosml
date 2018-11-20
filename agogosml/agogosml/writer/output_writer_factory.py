@@ -8,14 +8,11 @@ from .output_writer import OutputWriter
 
 
 class OutputWriterFactory:
-    """
-    Factory for OutputWriter
-    """
+    """Factory for OutputWriter"""
 
     @staticmethod
     def create(config: dict):
-        """
-        Creates a new instance of OutputWriter.
+        """Creates a new instance of OutputWriter.
 
         :param config: A configuration for OutputWriter.
         :return OutputWriter: An instance of an OutputWriter with a

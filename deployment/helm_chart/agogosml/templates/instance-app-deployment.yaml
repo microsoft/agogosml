@@ -11,8 +11,6 @@ metadata:
     chart: "{{ $root.Chart.Name }}-{{ $root.Chart.Version }}"
     release: {{ quote $root.Release.Name }}
     heritage: {{ quote $root.Release.Service }}
-  annotations:
-    "helm.sh/resource-policy": keep
 spec:
   replicas: 1
   selector:

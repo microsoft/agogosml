@@ -4,39 +4,22 @@ from abc import ABC, abstractmethod
 
 
 class AbstractStreamingClient(ABC):
-    """
-    Abstract Streaming Client
-    """
+    """Abstract Streaming Client"""
     @abstractmethod
     def __init__(self):
         pass
 
     @abstractmethod
     def send(self, *args, **kwargs):
-        """
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
+        """Send method."""
         pass
 
     @abstractmethod
     def stop(self, *args, **kwargs):
-        """
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
+        """Stop method."""
         pass
 
     @abstractmethod
     def start_receiving(self, *args, **kwargs):
-        """
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
+        """Start receiving messages from streaming client."""
         pass

@@ -7,13 +7,13 @@ logger = Logger()
 
 
 class EventProcessor(AbstractEventProcessor):
-    """
-    Example Implementation of AbstractEventProcessor
-    """
+    """Example Implementation of AbstractEventProcessor."""
 
     def __init__(self, params):
         """
-        Init Event processor
+        Init Event processor.
+
+        :param params: List of params.
         """
         super().__init__()
         self.on_message_received_callback = params[0]
@@ -30,9 +30,9 @@ class EventProcessor(AbstractEventProcessor):
         Called by processor host to indicate that the event processor
         is being stopped.
 
-        :param context: Information about the partition
+        :param context: Information about the partition.
         :type context: ~azure.eventprocessorhost.PartitionContext
-        :param reason: Reason for closing the async loop
+        :param reason: Reason for closing the async loop.
         :type reason: string
         """
         logger.info(
@@ -45,7 +45,7 @@ class EventProcessor(AbstractEventProcessor):
         Called by the processor host when a batch of events has arrived.
         This is where the real work of the event processor is done.
 
-        :param context: Information about the partition
+        :param context: Information about the partition.
         :type context: ~azure.eventprocessorhost.PartitionContext
         :param messages: The events to be processed.
         :type messages: list[~azure.eventhub.common.EventData]
@@ -64,7 +64,7 @@ class EventProcessor(AbstractEventProcessor):
         EventProcessorHost will take care of recovering from the error and
         continuing to pump messages, so no external action is required.
 
-        :param context: Information about the partition
+        :param context: Information about the partition.
         :type context: ~azure.eventprocessorhost.PartitionContext
         :param error: The error that occured.
         """

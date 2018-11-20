@@ -12,10 +12,10 @@ logger = Logger()
 class KafkaStreamingClient(AbstractStreamingClient):
     def __init__(self, config):
         """
-        Class to create a kafka streaming client instance.
+        Class to create a KafkaStreamingClient instance.
 
-        :param config: dictionary file with all the relevant parameters
-        :param topic: a string kafka topic
+        :param config: Dictionary file with all the relevant parameters.
+        :param topic: A string kafka topic.
         """
 
         self.topic = config.get("KAFKA_TOPIC")
@@ -86,6 +86,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
     def check_timeout(self, start):
         """
         Checks how much time has elapsed since the kafka client started running.
+
+        :param start: Start time.
         """
         if self.timeout is not None:
             elapsed = datetime.datetime.now() - start

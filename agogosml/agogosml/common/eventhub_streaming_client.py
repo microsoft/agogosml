@@ -14,7 +14,7 @@ logger = Logger()
 class EventHubStreamingClient(AbstractStreamingClient):
     def __init__(self, config):
         """
-        Class to create an eventhub streaming client instance.
+        Class to create an EventHubStreamingClient instance.
 
         :param config: Dictionary file with all the relevant parameters.
         """
@@ -74,7 +74,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
     def start_receiving(self, on_message_received_callback):
         """
-        Receive messages from an event hub streaming client.
+        Receive messages from an EventHubStreamingClient.
 
         :param on_message_received_callback: Callback function.
         """
@@ -97,7 +97,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
     def send(self, message):
         """
-        Send a message to an event hub streaming client.
+        Send a message to an EventHubStreamingClient.
 
         :param message: A string input to upload to event hub.
         """

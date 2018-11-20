@@ -4,6 +4,7 @@
 
 registry: ""
 imagePullSecret: ""
+deployment: ""
 
 green:
   enabled: false

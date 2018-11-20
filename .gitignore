@@ -26,6 +26,8 @@ wheels/
 *.egg
 .idea
 *.tar.gz
+.terraform
+*.plan
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

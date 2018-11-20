@@ -37,9 +37,7 @@ def test_send_receive():
         "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC"),
         "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
         "KAFKA_CONSUMER_GROUP": os.getenv("KAFKA_CONSUMER_GROUP"),
-        "TIMEOUT": 20,
-        "APP_HOST": "0.0.0.0",
-        "APP_PORT": 5000
+        "TIMEOUT": 20
     }
     receive_client = KafkaStreamingClient(receive_config)
 

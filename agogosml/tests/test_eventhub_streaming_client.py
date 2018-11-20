@@ -23,6 +23,7 @@ test_messages = [
 
 @pytest.mark.integration
 def test_send_receive():
+
     send_config = {
         "EVENT_HUB_NAMESPACE": os.getenv("EVENT_HUB_NAMESPACE"),
         "EVENT_HUB_NAME": os.getenv("EVENT_HUB_NAME"),
@@ -45,17 +46,15 @@ def test_send_receive():
         "EVENT_HUB_SAS_POLICY": os.getenv("EVENT_HUB_SAS_POLICY"),
         "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY"),
         "EVENT_HUB_CONSUMER_GROUP": os.getenv("EVENT_HUB_CONSUMER_GROUP"),
-        "TIMEOUT": 60,
-        "APP_HOST": "0.0.0.0",
-        "APP_PORT": 5000
+        "TIMEOUT": 60
     }
     receive_client = EventHubStreamingClient(receive_config)
 
+    global received_messages
     received_messages = []
 
-    def receive_callback(*args, **kwargs):
-        for value in args:
-            received_messages.append(value)
+    def receive_callback(message):
+        received_messages.append(message)
 
     receive_client.start_receiving(receive_callback)
 

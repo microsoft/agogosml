@@ -58,7 +58,9 @@ def test_eventhub_created_from_factory():
                        "EVENT_HUB_SAS_POLICY": os.getenv("EVENT_HUB_SAS_POLICY"),
                        "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY"),
                        "EVENT_HUB_CONSUMER_GROUP": os.getenv("EVENT_HUB_CONSUMER_GROUP"),
-                       "TIMEOUT": 60
+                       "TIMEOUT": 60,
+                       "APP_HOST": os.getenv("APP_HOST"),
+                       "APP_PORT": os.getenv("APP_PORT")
                        }
         }
     }
@@ -78,10 +80,12 @@ def test_kafka_created_from_factory():
                         "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC"),
                         "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
                         "KAFKA_CONSUMER_GROUP": os.getenv("KAFKA_CONSUMER_GROUP"),
-                        "TIMEOUT": 20
-                                }
-                            }
+                        "TIMEOUT": 20,
+                        "APP_HOST": os.getenv("APP_HOST"),
+                        "APP_PORT": os.getenv("APP_PORT")
+                        }
                     }
+            }
     ir = InputReaderFactory.create(config)
     assert ir is not None
     assert isinstance(ir, InputReader)

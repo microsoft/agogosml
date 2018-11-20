@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-OutputWriter
-"""
+""" OutputWriter class"""
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 from agogosml.common.listener_client import ListenerClient
@@ -23,9 +21,9 @@ class OutputWriter:
 
     def on_message_received(self, message):
         """
-        Send messages onwards
+        Send messages onwards to a streaming client
 
-        :param message: a message to process
+        :param message: a message to transport
         """
         self.messaging_client.send(message)
 

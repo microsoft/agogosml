@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-
-"""
-InputReader
-"""
+""" InputReader """
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 from agogosml.common.message_sender import MessageSender
@@ -23,13 +20,13 @@ class InputReader:  # pylint: disable=too-few-public-methods
 
     def start_receiving_messages(self):
         """
-        Start receiving messages
+        Start receiving messages from streaming endpoint
         """
         self.messaging_client.start_receiving(self.on_message_received)
 
     def stop_incoming_messages(self):
         """
-        Stop incoming messages from server
+        Stop incoming messages from streaming endpoint
         """
         self.messaging_client.stop()
 

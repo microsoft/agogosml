@@ -1,9 +1,13 @@
+""" Logger """
 import os
 import logging.config
 import yaml
 
 
 class Logger(object):
+    """
+    A logger implementation
+    """
 
     __instance = None
     logger = None
@@ -51,10 +55,28 @@ class Logger(object):
         self.logger = logging.getLogger(self.name)
 
     def debug(self, message):
+        """
+        Log debug message
+
+        :param message:
+        :return:
+        """
         self.logger.debug(message)
 
     def info(self, message):
+        """
+        Log info message
+
+        :param message:
+        :return:
+        """
         self.logger.info(message)
 
     def error(self, message):
+        """
+        Log error message
+        
+        :param message:
+        :return:
+        """
         self.logger.error(message)

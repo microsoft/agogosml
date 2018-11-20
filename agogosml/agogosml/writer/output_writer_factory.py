@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-
-"""
-Factory for OutputWriter
-"""
+""" Factory for OutputWriter """
 
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
@@ -18,7 +15,7 @@ class OutputWriterFactory:
     @staticmethod
     def create(config: dict):
         """
-        Create a new instance
+        Creates a new instance of OutputWriter
         :param config: A configuration for output writer
         :return OutputWriter: An instance of an OutputWriter with a
             streaming_client and listener
@@ -61,5 +58,8 @@ class OutputWriterFactory:
         Checks if a dictionary is empty.
         Empty dictionaries resolve to false when
         converted to booleans in Python.
+
+        :param dictionary: a dictionary to test
+        :return: true if empty, false otherwise
         """
         return not bool(dictionary)

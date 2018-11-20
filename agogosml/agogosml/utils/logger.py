@@ -1,9 +1,11 @@
+""" Logger """
 import os
 import logging.config
 import yaml
 
 
 class Logger(object):
+    """A logger implementation."""
 
     __instance = None
     logger = None
@@ -12,9 +14,8 @@ class Logger(object):
     def setup_logging(log_path='logging.yaml',
                       level=logging.INFO,
                       env_key='LOG_CFG'):
-        """
-        Setup logging configuration
-        """
+        """Setup logging configuration."""
+
         path = log_path
         value = os.getenv(env_key, None)
         if value:
@@ -51,10 +52,25 @@ class Logger(object):
         self.logger = logging.getLogger(self.name)
 
     def debug(self, message):
+        """
+        Log debug message.
+
+        :param message: Debug message string.
+        """
         self.logger.debug(message)
 
     def info(self, message):
+        """
+        Log info message
+
+        :param message: Info message string.
+        """
         self.logger.info(message)
 
     def error(self, message):
+        """
+        Log error message
+
+        :param message: Error message string.
+        """
         self.logger.error(message)

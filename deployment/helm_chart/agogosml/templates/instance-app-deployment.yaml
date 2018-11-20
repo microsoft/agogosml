@@ -6,7 +6,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}
+  name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}{{ .tag }}
   labels:
     chart: "{{ $root.Chart.Name }}-{{ $root.Chart.Version }}"
     release: {{ quote $root.Release.Name }}
@@ -15,11 +15,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}
+      app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}{{ .tag }}
   template:
     metadata:
       labels:
-        app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}
+        app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}{{ .tag }}
     spec:
       containers:
         - name: {{ $fullname }}-{{ $appName | replace "_" "-" }}-app

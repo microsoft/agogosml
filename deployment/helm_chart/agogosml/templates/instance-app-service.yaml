@@ -19,6 +19,6 @@ spec:
     - port: {{ .service.externalPort }}
       targetPort: {{ .service.internalPort }}
   selector:
-    app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}
+    app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}{{ .tag }}
 ---
 {{- end }}

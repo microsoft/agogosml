@@ -12,7 +12,6 @@ metadata:
     chart: "{{ $root.Chart.Name }}-{{ $root.Chart.Version | replace "+" "_" }}"
     release: {{ $root.Release.Name }}
     heritage: {{ $root.Release.Service }}
-    deployment: {{ $root.Values.deployment }}
 spec:
   type: {{ .service.type }}
   ports:

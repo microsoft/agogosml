@@ -4,7 +4,12 @@
 
 registry: ""
 imagePullSecret: ""
-deployment: green
+
+green:
+  enabled: false
+
+blue:
+  enabled: false
 
 input_reader:
   name: input_reader

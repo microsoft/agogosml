@@ -1,13 +1,15 @@
+{{ if .Values.blue.enabled }}
 # For each instance app, we create its own service
 {{- $root := . -}}
 {{- range $appName, $value := .Values.instance_apps }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-"}}-config
+  name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-"}}-config-blue
 data:
 {{- range $key, $value := .env }}
   {{ $key }}: {{ quote $value }}
 {{- end }}
 ---
 {{- end }}
+{{ end }}

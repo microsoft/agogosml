@@ -6,13 +6,12 @@ import yaml
 class Logger(object):
 
     __instance = None
+    logger = None
 
     @staticmethod
-    def setup_logging(
-        log_path='logging.yaml',
-        level=logging.INFO,
-        env_key='LOG_CFG'
-    ):
+    def setup_logging(log_path='logging.yaml',
+                      level=logging.INFO,
+                      env_key='LOG_CFG'):
         """
         Setup logging configuration
         """
@@ -25,14 +24,20 @@ class Logger(object):
                 config = yaml.safe_load(f.read())
             logging.config.dictConfig(config)
         else:
-            logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=level)
+            logging.basicConfig(
+                format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                level=level)
 
     def __new__(cls, *args, **kwargs):
         if not cls.__instance:
             cls.__instance = object.__new__(cls, *args, **kwargs)
         return cls.__instance
 
-    def __init__(self, name=__name__, path='logging.yaml', env_key='LOG_CFG', level=logging.INFO):
+    def __init__(self,
+                 name=__name__,
+                 path='logging.yaml',
+                 env_key='LOG_CFG',
+                 level=logging.INFO):
 
         self.level = level
         self.name = name
@@ -40,14 +45,16 @@ class Logger(object):
         self.env_key = env_key
         self.logger = None
 
-        Logger.setup_logging(log_path=self.path, level=self.level, env_key=self.env_key)
+        Logger.setup_logging(
+            log_path=self.path, level=self.level, env_key=self.env_key)
 
         self.logger = logging.getLogger(self.name)
 
-    @classmethod
+    def debug(self, message):
+        self.logger.debug(message)
+
     def info(self, message):
         self.logger.info(message)
 
-    @classmethod
     def error(self, message):
         self.logger.error(message)

@@ -1,11 +1,10 @@
 import pytest
-
+import os
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
 from agogosml.reader.input_reader import InputReader
 from agogosml.reader.input_reader_factory import InputReaderFactory
 from .client_mocks import ClientMessagingMock, MessageSenderMock
-import os
 
 
 @pytest.fixture
@@ -23,7 +22,8 @@ def test_when_instance_created(MockStreamingClient, MockMessageSender):
     assert ir is not None
 
 
-def test_when_start_receiving_then_messaging_client_starts(MockStreamingClient, MockMessageSender):
+def test_when_start_receiving_then_messaging_client_starts(
+        MockStreamingClient, MockMessageSender):
     # arrange
     ir = InputReader(MockStreamingClient, MockMessageSender)
 
@@ -32,7 +32,8 @@ def test_when_start_receiving_then_messaging_client_starts(MockStreamingClient, 
     assert MockStreamingClient.get_receiving()
 
 
-def test_when_msg_received_callback_called(MockStreamingClient, MockMessageSender):
+def test_when_msg_received_callback_called(MockStreamingClient,
+                                           MockMessageSender):
     # arrange
     ir = InputReader(MockStreamingClient, MockMessageSender)
 

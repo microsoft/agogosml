@@ -1,11 +1,11 @@
 """
 HttpMessageSender
 """
-import logging
 import requests
 from .message_sender import MessageSender
+from ..utils.logger import Logger
 
-logger = logging.getLogger(__name__)
+logger = Logger()
 
 
 class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-methods

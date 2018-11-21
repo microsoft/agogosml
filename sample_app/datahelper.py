@@ -1,4 +1,4 @@
-""" Helper functions for the sample customer application """
+""" Helper functions for the customer application """
 import json
 from jsonschema import validate
 

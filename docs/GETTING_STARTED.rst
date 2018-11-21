@@ -6,7 +6,7 @@ This solution consists of three projects:
 -  `Framework`_ - The agogosml library SDK which consists of the data
    pipeline, input reader, output writer, streaming clients, etc.
 -  `CLI`_: A CLI tool to help you set up a new project.
--  `Sample App`_: A sample app that represent the customer app/model
+-  ` App`_: An app that represent the customer app/model
 
 Before starting, please review agogosml `design`_
 
@@ -28,7 +28,7 @@ Setup up Development environment
 
 3. Generate the code for the project. ``$ agogosml generate``. The
    generated folder structure is described `here`_ and consist with the
-   input, sample and output app as well as the Azure DevOps pipelines
+   input, customer app and output app as well as the Azure DevOps pipelines
    for CI/CD.
 
 .. _app/model-integration-with-agogosml:
@@ -57,7 +57,7 @@ Provision Azure Resources
 
 .. _Framework: https://github.com/Microsoft/agogosml/tree/master/agogosml
 .. _CLI: https://github.com/Microsoft/agogosml/tree/master/agogosml_cli
-.. _Sample App: https://github.com/Microsoft/agogosml/tree/master/sample_app
+.. _App: https://github.com/Microsoft/agogosml/tree/master/sample_app
 .. _design: https://github.com/Microsoft/agogosml/tree/master/docs/DESIGN.md
 .. _WSL: https://docs.microsoft.com/en-us/windows/wsl/install-win10
 .. _azure-cli: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest

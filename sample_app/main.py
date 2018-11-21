@@ -1,4 +1,4 @@
-""" Entrypoint for customer sample application. Listens for HTTP requests from
+""" Entrypoint for customer application. Listens for HTTP requests from
 the input reader, and sends the transformed message to the output writer. """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.request

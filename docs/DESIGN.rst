@@ -101,11 +101,11 @@ approved, the old model will be deleted and the new model will be marked
 The deployment is done via `Helm <https://helm.sh>`__ chart and Azure
 DevOps release pipeline with manual approval process of the version.
 
-|Architecure Diagram - production architecture|
+|Architecure Diagram - production architecture-bg|
 
 .. |Architecure Diagram - Basic Pipeline Building Block| image:: ./assets/design/agogosml.draw-io-input-output-app-simple.png
 .. |Architecure Diagram - ci/cd| image:: ./assets/design/agogosml.draw-io-CI-CD.png
 .. |Architecure Diagram - production architecture| image:: ./assets/design/agogosml.draw-io-Production.png
 .. |Architecure Diagram - test architecture| image:: ./assets/design/agogosml.draw-io-Test.png
 .. |Architecure Diagram - Pipeline Building Block Description| image:: ./assets/design/agogosml.draw-io-input-app-output-desc.png
-.. |Architecure Diagram - production architecture| image:: ./assets/design/agogosml.draw-io-BG-Production.png
+.. |Architecure Diagram - production architecture-bg| image:: ./assets/design/agogosml.draw-io-BG-Production.png

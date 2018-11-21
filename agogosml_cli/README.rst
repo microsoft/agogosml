@@ -38,7 +38,7 @@ scaffold will include the following files:
 -  ``data-pipeline.yml`` - This yaml file will contain the Azure DevOps
    data pipeline for an agogosml project.
 -  ``Pipfile`` - This file is the pipenv file used to configure the
-   included sample app. It may also contain runs scripts to simplify
+   included app. It may also contain runs scripts to simplify
    deployment (coming soon).
 -  ``sample_app/`` - This a simple data transformation app that shows
    you how to read from the InputReader and write to the OutputWriter

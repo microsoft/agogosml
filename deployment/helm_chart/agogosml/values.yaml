@@ -46,8 +46,8 @@ output_writer:
     OUTPUT_WRITER_PORT: ""
 
 instance_apps:
-  sample_app_0:
-    name: sample_app
+  app_0:
+    name: app
     tag: latest
     imagePullPolicy: IfNotPresent
     service:

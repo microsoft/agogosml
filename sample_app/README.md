@@ -10,8 +10,8 @@ with body:
  }`
 
 With Docker:
-docker build -t sample .
-docker run --rm -p 5000:5000 sample:latest
+docker build -t app .
+docker run --rm -p 5000:5000 app:latest
 
 Send a POST request to "0.0.0.0:5000" 
 with post body: 

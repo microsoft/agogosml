@@ -55,7 +55,7 @@ local repository = import 'pipeline-repository.libsonnet';
                             "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
-                            "dockerFile": "**/sample_app/Dockerfile.sample_app",
+                            "dockerFile": "**/sample_app/Dockerfile.app",
                             "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
                             "useDefaultContext": "false",
                             "buildContext": "",
@@ -131,7 +131,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         }
                     }
                 ],
-                "name": "Sample-App-Build-CI",
+                "name": "App-Build-CI",
                 "refName": "Phase_1",
                 "condition": "succeeded()",
                 "target": {
@@ -151,7 +151,7 @@ local repository = import 'pipeline-repository.libsonnet';
     "processParameters": {},
     "quality": 1,
     "drafts": [],
-    "name": "Sample-App-Build-CI",
+    "name": "App-Build-CI",
     "path": "\\",
     "type": 2
 }

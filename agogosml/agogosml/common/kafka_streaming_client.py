@@ -114,7 +114,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
                 self.check_timeout(start)
 
                 # Poll messages from topic
-                msg = self.consumer.poll(timeout=1.0)
+                msg = self.consumer.poll(0.00000001)
                 if msg is None:
                     continue
                 if msg.error():

@@ -8,20 +8,22 @@ from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 
 load_dotenv()
 
+
 test_messages = [
     '{"key": "dfkdsflk", "intValue": 23}',
     '{"key": "kjjioud", "intValue": 73}',
     '{"key": "ewrfsdere", "intValue": 5}',
     '{"key": "dfsadfs", "intValue": 30}',
-    '{"key": "dfkdsflk", "intValue": 23}',
-    '{"key": "kjjioud", "intValue": 73}',
-    '{"key": "ewrfsdere", "intValue": 10}',
+    '{"key": "qweqad", "intValue": 23}',
+    '{"key": "iewquweqnx", "intValue": 73}',
+    '{"key": "ewrfsdere", "intValue": 5}',
     '{"key": "dfsadfs", "intValue": 10}'
 ]
 
 
 @pytest.mark.integration
 def test_send_receive():
+
     send_config = {
         "EVENT_HUB_NAMESPACE": os.getenv("EVENT_HUB_NAMESPACE"),
         "EVENT_HUB_NAME": os.getenv("EVENT_HUB_NAME"),
@@ -48,11 +50,11 @@ def test_send_receive():
     }
     receive_client = EventHubStreamingClient(receive_config)
 
+    global received_messages
     received_messages = []
 
-    def receive_callback(*args, **kwargs):
-        for value in args:
-            received_messages.append(value)
+    def receive_callback(message):
+        received_messages.append(message)
 
     receive_client.start_receiving(receive_callback)
 

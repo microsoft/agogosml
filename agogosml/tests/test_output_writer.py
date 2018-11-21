@@ -1,14 +1,13 @@
 import pytest
 import os
-import asyncio
-import requests
+import time
 from agogosml.writer.output_writer import OutputWriter
 from agogosml.writer.output_writer_factory import OutputWriterFactory
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 from .client_mocks import ClientMessagingMock, ListenerClientMock
-import time
+
 
 @pytest.fixture
 def MockStreamingClient():
@@ -111,7 +110,6 @@ def test_output_writer_flask():
         }
     }
 
-    print("whatever")
     ow = OutputWriterFactory.create(config)
     assert ow is not None
     assert isinstance(ow.listener, FlaskHttpListenerClient)
@@ -125,5 +123,3 @@ def test_output_writer_flask():
     time.sleep(10)
     print("stopping server")
     ow.listener.stop()
-    
-    

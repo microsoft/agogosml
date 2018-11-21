@@ -60,9 +60,7 @@ test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source agogosml -m pytest
-	coverage report -m
-	coverage html
+	py.test --cov=agogosml --cov-report term-missing --cov-report html -m "not integration"
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs

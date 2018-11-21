@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Factory for InputReader
-"""
+""" Factory for InputReader """
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 from agogosml.common.http_message_sender import HttpMessageSender
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
@@ -12,15 +10,13 @@ logger = Logger()
 
 
 class InputReaderFactory:
-    """
-    Factory and instance resolving for input reader
-    """
+    """Factory and instance resolving for input reader"""
 
     @staticmethod
     def create(config: dict):
-        """
-        Create a new instance
-        :param config: A configuration for input reader
+        """Create a new instance of InputReader
+
+        :param config: A configuration for InputReader
         :return InputReader: An instance of an InputReader with streaming_client and message_sender
         """
         if InputReaderFactory.is_empty(config):
@@ -61,5 +57,8 @@ class InputReaderFactory:
         Checks if a dictionary is empty.
         Empty dictionaries resolve to false when
         converted to booleans in Python.
+
+        :param dictionary: a dictionary to test
+        :return: true if empty, false otherwise
         """
         return not bool(dictionary)

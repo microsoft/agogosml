@@ -58,7 +58,7 @@ The app:
 
 .. code:: bash
 
-    $ docker build -t agogosml/sample_app -f sample_app/Dockerfile.app .
+    $ docker build -t agogosml/app -f sample_app/Dockerfile.app .
 
 And finally the output writer:
 
@@ -125,7 +125,7 @@ environment variables. An example of how to run one of these Docker images is:
       -e PORT=$APP_PORT \
       -e OUTPUT_URL=http://$OUTPUT_WRITER_NAME:$OUTPUT_WRITER_PORT \
       -e SCHEMA_FILEPATH=schema_example.json \
-      agogosml/sample_app
+      agogosml/app
 
     # Run Output writer
     $ docker run --rm --name $OUTPUT_WRITER_NAME -d --network $NETWORK_NAME \

@@ -3,7 +3,7 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.md
-include cli/templates/*
+recursive-include cli/templates * 
 include cli/manifest.schema.json
 
 recursive-include tests *

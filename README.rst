@@ -1,8 +1,11 @@
+.. image:: https://dev.azure.com/csedevil/agogosml/_apis/build/status/agogosml-CI
+    :target: https://dev.azure.com/csedevil/agogosml/_build/latest?definitionId=37
+
 Agogosml
 ========
 
 +------------+-----------------+
-|            | Status          | 
+|            | Status          |
 +============+=================+
 | Framework  | |Build status1| |
 +------------+-----------------+
@@ -18,7 +21,7 @@ Agogosml
 agogosml is a data processing pipeline project that addresses the common
 need for operationalizing ML models. This covers the complete workflow
 of training, deploying, scoring and monitoring the models in production
-at scale. 
+at scale.
 
 
 Features

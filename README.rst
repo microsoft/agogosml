@@ -42,12 +42,12 @@ Roadmap
 Quick Links
 ===========
 
--  `Getting Started <./docs/GETTING_STARTED.md>`__
+-  `Getting Started <./docs/GETTING_STARTED.rst>`__
 -  `Contributing / Developer guide <./CONTRIBUTING.rst>`__
 -  `License <./LICENSE>`__
 -  `Microsoft Open Source Code of Conduct <https://opensource.microsoft.com/codeofconduct/>`__
 -  `Backlog <https://dev.azure.com/csedevil/agogosml/_workitems/recentlyupdated>`__
--  `Design and Architecture <./docs/DESIGN.md>`__
+-  `Design and Architecture <./docs/DESIGN.rst>`__
 
 
 Contributing

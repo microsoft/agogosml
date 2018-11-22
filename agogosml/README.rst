@@ -14,7 +14,7 @@ Overview
 --------
 The agogosml package was developed to provide a Data Engineer with a simple
 configurable data pipeline consisting of three components: an input reader,
-sample app (that holds a trained ML model) and an output writer. The three
+app (that holds a trained ML model) and an output writer. The three
 components are instrumented using one Docker container per component.
 
 
@@ -26,13 +26,13 @@ input for the ML model. The package supports both Kafka and EventHub.
 
 Output Writer
 _____________
-The output writer receives the scored data from the sample app and sends it onto
+The output writer receives the scored data from the app and sends it onto
 a streaming client (a Kafka or Eventhub instance).
 
 
-Sample App
+App
 _____________
-The sample app receives data from the input reader and feeds it to the ML model
+The app receives data from the input reader and feeds it to the ML model
 for scoring. Once scored the data is sent onto the output writer.
 
 
@@ -54,11 +54,11 @@ Then the input reader image:
     $ docker build -t agogosml/input_reader -f input_reader/Dockerfile.input_reader .
 
 
-The sample app:
+The app:
 
 .. code:: bash
 
-    $ docker build -t agogosml/sample_app -f sample_app/Dockerfile.sample_app .
+    $ docker build -t agogosml/app -f sample_app/Dockerfile.app .
 
 And finally the output writer:
 
@@ -76,7 +76,7 @@ Set required environment variables
 .. code:: bash
 
     $ export INPUT_READER_NAME=input-reader
-    $ export SAMPLE_APP_NAME=sample-app
+    $ export APP_NAME=app
     $ export OUTPUT_WRITER_NAME=output-writer
     $ export NETWORK_NAME=testnetwork       # Docker network name
     $ export MESSAGING_TYPE=eventhub        # eventhub/kafka
@@ -90,7 +90,7 @@ Set required environment variables
     $ export OUTPUT_EVENT_HUB_NAME=         # output EH
     $ export OUTPUT_EVENT_HUB_SAS_POLICY=   # output EH policy name
     $ export OUTPUT_EVENT_HUB_SAS_KEY=      # output EH policy key
-    $ export APP_PORT=5000                  # sample app port
+    $ export APP_PORT=5000                  # app port
     $ export OUTPUT_WRITER_PORT=8080        # output writer app port
 
 
@@ -115,17 +115,17 @@ environment variables. An example of how to run one of these Docker images is:
       -e EVENT_HUB_NAME=$INPUT_EVENT_HUB_NAME \
       -e EVENT_HUB_SAS_POLICY=$INPUT_EVENT_HUB_SAS_POLICY \
       -e EVENT_HUB_SAS_KEY=$INPUT_EVENT_HUB_SAS_KEY \
-      -e APP_HOST=$SAMPLE_APP_NAME \
+      -e APP_HOST=$APP_NAME \
       -e APP_PORT=$APP_PORT \
       agogosml/input_reader:latest
 
-    # Run Sample app
-    $ docker run --rm --name $SAMPLE_APP_NAME -d --network $NETWORK_NAME \
-      -e HOST=$SAMPLE_APP_NAME \
+    # Run app
+    $ docker run --rm --name $APP_NAME -d --network $NETWORK_NAME \
+      -e HOST=$APP_NAME \
       -e PORT=$APP_PORT \
       -e OUTPUT_URL=http://$OUTPUT_WRITER_NAME:$OUTPUT_WRITER_PORT \
       -e SCHEMA_FILEPATH=schema_example.json \
-      agogosml/sample_app
+      agogosml/app
 
     # Run Output writer
     $ docker run --rm --name $OUTPUT_WRITER_NAME -d --network $NETWORK_NAME \

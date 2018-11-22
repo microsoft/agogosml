@@ -1,4 +1,4 @@
-""" Unit tests for the sample customer instance app """
+""" Unit tests for the customer app """
 import os
 import json
 from dotenv import load_dotenv
@@ -14,20 +14,22 @@ SCHEMA_FILEPATH = os.getenv('SCHEMA_FILEPATH')
 # TO DO: Make Unit Tests More Robust
 
 
-@given(data=fixed_dictionaries({
-    'key': text(characters()),
-    'intValue': integers()
-}))
+@given(
+    data=fixed_dictionaries({
+        'key': text(characters()),
+        'intValue': integers()
+    }))
 def test_validation(data):
     """ Test that the schema validator is working as expected """
     encoded_json = json.dumps(data)
     assert datahelper.validate_schema(encoded_json, SCHEMA_FILEPATH) is None
 
 
-@given(data=fixed_dictionaries({
-    'key': text(characters()),
-    'intValue': integers()
-}))
+@given(
+    data=fixed_dictionaries({
+        'key': text(characters()),
+        'intValue': integers()
+    }))
 def test_transform(data):
     """ Test the simple transformation on the input data """
     encoded_original_json = json.dumps(data)

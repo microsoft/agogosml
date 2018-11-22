@@ -1,23 +1,33 @@
 local repository = import 'pipeline-repository.libsonnet';
 
 {
-    "options": [],
+    "options": [
+        {
+            "enabled": false,
+            "definition": {
+                "id": "5d58cc01-7c75-450c-be18-a388ddb129ec"
+            },
+            "inputs": {
+                "branchFilters": "[\"+refs/heads/*\"]",
+                "additionalFields": "{}"
+            }
+        },
+        {
+            "enabled": false,
+            "definition": {
+                "id": "a9db38f9-9fdc-478c-b0f9-464221e58316"
+            },
+            "inputs": {
+                "workItemType": "3060103",
+                "assignToRequestor": "true",
+                "additionalFields": "{}"
+            }
+        }
+    ],
     "triggers": [
         {
             "branchFilters": [
-                "+refs/heads/master"
-            ],
-            "pathFilters": [
-                "+/sample_app"
-            ],
-            "batchChanges": false,
-            "maxConcurrentBuildsPerBranch": 1,
-            "pollingInterval": 0,
-            "triggerType": 2
-        },
-        {
-            "branchFilters": [
-                "+master"
+                "+refs/heads/*"
             ],
             "forks": {
                 "enabled": false,
@@ -61,7 +71,7 @@ local repository = import 'pipeline-repository.libsonnet';
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "sample_app:$(Build.TriggeredBy.BuildId)",
+                            "imageName": "sample_app:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -88,7 +98,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         "enabled": true,
                         "continueOnError": false,
                         "alwaysRun": false,
-                        "displayName": "Push instance app image",
+                        "displayName": "Push app image",
                         "timeoutInMinutes": 0,
                         "condition": "succeeded()",
                         "task": {
@@ -108,7 +118,7 @@ local repository = import 'pipeline-repository.libsonnet';
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "sample_app:$(Build.TriggeredBy.BuildId)",
+                            "imageName": "sample_app:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -131,7 +141,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         }
                     }
                 ],
-                "name": "Sample-App-Build-CI",
+                "name": "agogosml-app-ci",
                 "refName": "Phase_1",
                 "condition": "succeeded()",
                 "target": {
@@ -151,7 +161,7 @@ local repository = import 'pipeline-repository.libsonnet';
     "processParameters": {},
     "quality": 1,
     "drafts": [],
-    "name": "Sample-App-Build-CI",
+    "name": "agogosml-app-ci",
     "path": "\\",
     "type": 2
 }

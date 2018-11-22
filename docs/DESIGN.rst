@@ -16,9 +16,9 @@ Data Pipeline Building Block
 
 The following is a basic, data pipeline, building block consisting of an
 <input, app, output> sequence. The input/output containers implement
-connector to various messaging services and act as a message proxy
+connectors to various messaging services and act as a message proxy
 between the messaging services and the app container. This sequence
-removes the need to implement connector to various messaging services,
+removes the need to implement connectors to various messaging services,
 and focus on building the business logic inside the app container while
 implementing a loosely coupled services approach.
 

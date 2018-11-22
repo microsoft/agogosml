@@ -9,8 +9,8 @@ deployment: ""
 green:
   enabled: false
 
-  blue:
-    enabled: false
+blue:
+  enabled: false
 
 input_reader:
   name: input_reader
@@ -66,4 +66,3 @@ instance_apps:
       PORT: ""
       OUTPUT_URL: ""
       SCHEMA_FILEPATH: ""
-      

@@ -4,9 +4,7 @@ from abc import ABC, abstractmethod
 
 
 class MessageSender(ABC):  # pylint: disable=too-few-public-methods
-    """
-    Message Sender
-    """
+    """Message Sender class."""
 
     @abstractmethod
     def __init__(self):
@@ -15,9 +13,6 @@ class MessageSender(ABC):  # pylint: disable=too-few-public-methods
     @abstractmethod
     def send(self, *args, **kwargs):
         """
-        Sends message
-        :param args:
-        :param kwargs:
-        :return:
+        Sends message.
         """
         pass

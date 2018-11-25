@@ -1,6 +1,5 @@
-"""
-HttpMessageSender
-"""
+"""HttpMessageSender."""
+
 import requests
 from .message_sender import MessageSender
 from ..utils.logger import Logger
@@ -9,11 +8,14 @@ logger = Logger()
 
 
 class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-methods
-    """
-    HttpMessageSender
-    """
+    """HttpMessageSender."""
 
     def __init__(self, host_endpoint, port_endpoint):
+        """
+
+        :param host_endpoint: Host endpoint.
+        :param port_endpoint: Port number.
+        """
         logger.info("host_endpoint: {}".format(host_endpoint))
         logger.info("port_endpoint: {}".format(port_endpoint))
 
@@ -28,13 +30,12 @@ class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-method
 
         self.host_endpoint = host_endpoint
         self.port_endpoint = port_endpoint
-        pass
 
     def send(self, message):
         """
-        Sends messages to specified address via HTTP
+        Sends messages to specified address via HTTP.
 
-        :param message:  json formatted message
+        :param message: JSON formatted message.
         """
         try:
             server_address = "http://" + self.host_endpoint + ":" + self.port_endpoint

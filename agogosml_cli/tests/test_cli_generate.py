@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Tests for `agogosml_cli` package."""
 
 import os
@@ -7,7 +6,6 @@ import json
 from click.testing import CliRunner
 import cli.generate as generate
 import tests.test_utils as test_utils
-
 """
 * agogosml generate
     * should fail if no manifest.json is in working directory
@@ -21,10 +19,7 @@ import tests.test_utils as test_utils
 """
 
 EXPECTED_OUTPUT_PROJ_FILES = [
-    '.env',
-    'Pipfile',
-    'logging.yaml',
-    'ci-sample-app-pipeline.json'
+    '.env', 'Pipfile', 'logging.yaml', 'ci-app-pipeline.json'
 ]
 
 
@@ -40,7 +35,6 @@ def test_generate():
         result = runner.invoke(generate.generate)
         assert result.exit_code == 0
         _assert_template_files_exist()
-
     """
     RUN: agogosml generate -f
     RESULT: Overwrite existing files
@@ -53,7 +47,6 @@ def test_generate():
         assert result.exit_code == 0
         assert set(prevmd5) != set(_get_md5_template_files())
         _assert_template_files_exist()
-
     """
     RUN: agogosml generate
     RESULT: Fail since files already exist and should NOT overwite
@@ -80,7 +73,6 @@ def test_generate_folder():
         result = runner.invoke(generate.generate, ['folder'])
         assert result.exit_code == 0
         _assert_template_files_exist('folder')
-
     """
     RUN: agogosml generate -f <folder>
     RESULT: Overwrite existing files in the specified directory
@@ -93,7 +85,6 @@ def test_generate_folder():
         assert result.exit_code == 0
         assert set(prevmd5) != set(_get_md5_template_files(folder='folder'))
         _assert_template_files_exist('folder')
-
     """
     RUN: agogosml generate <folder>
     RESULT: Fail since files already exist and should NOT overwite
@@ -114,7 +105,7 @@ def test_generate_invalid_schema():
     RESULT: Produces the ff in the current working directory:
         - .env
         - Pipfile
-        - ci-sample-app-pipeline.json
+        - ci-app-pipeline.json
         - ci-input-app-pipeline.json
         - ci-output-app-pipeline.json
     """

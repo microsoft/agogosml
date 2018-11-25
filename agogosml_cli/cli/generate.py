@@ -14,8 +14,8 @@ PROJ_FILES = {
     '.env': '.env',
     'Pipfile': 'Pipfile',
     'logging.yaml': 'logging.yaml',
-    'pipeline/agogosml-app-ci-azure-devops.jsonnet':
-        'agogosml-app-ci-azure-devops.json'
+    'pipeline/agogosml-app-ci-azure-devops-pipeline.jsonnet':
+        'agogosml-app-ci-azure-devops-pipeline.json'
 }
 
 

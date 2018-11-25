@@ -1,5 +1,7 @@
 ### Issue Template
 
+- [ ] Does your issue follow our [Code of Conduct](https://github.com/Microsoft/agogosml/blob/master/CODE_OF_CONDUCT.md)?
+
 - [ ] Ensure you are up-to-date with master.
 
 - [ ] Search existing issues.
@@ -10,3 +12,4 @@
     - [ ] Include versions of tooling where appropriate (Terraform, Kubernetes, Docker, etc.)
 
 - [ ] Steps of reproduce issue. Provide a link to a Github Gist or paste here if short.
+

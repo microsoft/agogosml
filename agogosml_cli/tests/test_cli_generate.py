@@ -21,7 +21,7 @@ import tests.test_utils as test_utils
 """
 
 EXPECTED_OUTPUT_PROJ_FILES = [
-    'ci-sample-app-pipeline.json',
+    'ci-app-pipeline.json',
     'ci-agogosml-pipeline.json',
     'testproject/dockerbuild.sh',
     'testproject/.dockerignore',

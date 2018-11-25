@@ -65,7 +65,7 @@ local repository = import 'pipeline-repository.libsonnet';
                             "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
-                            "dockerFile": "**/sample_app/Dockerfile.sample_app",
+                            "dockerFile": "**/sample_app/Dockerfile.app",
                             "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
                             "useDefaultContext": "false",
                             "buildContext": "",

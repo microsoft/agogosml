@@ -49,7 +49,7 @@ output_writer:
     KAFKA_ADDRESS: ""
     OUTPUT_WRITER_PORT: ""
 
-main_app: sample_app_0
+main_app: app_0
 
 instance_apps:
   app_0:

@@ -53,7 +53,7 @@ main_app: app_0
 
 instance_apps:
   app_0:
-    name: app
+    name: sample_app
     blue_tag: latest
     green_tag: latest
     imagePullPolicy: IfNotPresent

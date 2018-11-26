@@ -6,10 +6,10 @@ registry: ""
 imagePullSecret: ""
 deployment: ""
 
-green:
+slot2:
   enabled: false
 
-blue:
+slot1:
   enabled: false
 
 input_reader:
@@ -54,8 +54,8 @@ main_app: app_0
 instance_apps:
   app_0:
     name: sample_app
-    blue_tag: latest
-    green_tag: latest
+    slot1_tag: latest
+    slot2_tag: latest
     imagePullPolicy: IfNotPresent
     service:
       type: ClusterIP

@@ -18,10 +18,10 @@ spec:
     - port: {{ .service.externalPort }}
       targetPort: {{ .service.internalPort }}
   selector:
-  {{- if eq $root.Values.deployment "blue" }}
-    app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-blue
+  {{- if eq $root.Values.deployment "slot1" }}
+    app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-slot1
   {{- else }}
-    app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-green
+    app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-slot2
   {{- end }}
 ---
 {{- end }}

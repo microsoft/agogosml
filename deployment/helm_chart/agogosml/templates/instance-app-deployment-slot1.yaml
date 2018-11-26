@@ -1,4 +1,4 @@
-{{ if .Values.green.enabled }}
+{{ if .Values.slot1.enabled }}
 {{ $fullname := include "data-pipeline-app.instance-app.fullname" . }}
 {{ $configName := include "data-pipeline-app.output-writer.config-name" . }}
 # For each instance app, we create a pair of instance_app+output_writer containers (in a single pod)
@@ -7,7 +7,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-green
+  name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-slot1
   labels:
     chart: "{{ $root.Chart.Name }}-{{ $root.Chart.Version }}"
     release: {{ quote $root.Release.Name }}
@@ -16,19 +16,19 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-green
+      app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-slot1
   template:
     metadata:
       labels:
-        app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-green
+        app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-slot1
     spec:
       containers:
         - name: {{ $fullname }}-{{ $appName | replace "_" "-" }}-app
-          image: {{ $root.Values.registry }}/{{ .name }}:{{ default "latest" .green_tag }}
+          image: {{ $root.Values.registry }}/{{ .name }}:{{ default "latest" .slot1_tag }}
           imagePullPolicy: {{ default "IfNotPresent" .pullPolicy }}
           envFrom:
           - configMapRef:
-              name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-"}}-config-green
+              name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-"}}-config-slot1
           ports:
           - containerPort: {{ .service.internalPort }}
         - name: {{ $fullname }}-{{ $appName | replace "_" "-" }}-output-writer

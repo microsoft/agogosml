@@ -1,6 +1,6 @@
 ### Issue Template
 
-- [ ] Does your issue follow our [Code of Conduct](https://github.com/Microsoft/agogosml/blob/master/CODE_OF_CONDUCT.md)?
+- [ ] Does your issue follow our [Code of Conduct](https://opensource.microsoft.com/codeofconduct/)?
 
 - [ ] Ensure you are up-to-date with master.
 

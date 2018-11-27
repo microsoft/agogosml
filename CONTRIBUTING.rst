@@ -23,6 +23,6 @@ accepted:
 
 -  Write tests.
 -  Follow our `engineering
-   playbook <https://github.com/cloudbeatsch/code-with-engineering-playbook>`__
+   playbook <https://github.com/Microsoft/code-with-engineering-playbook>`__
 -  Write a `good commit
    message <http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html>`__.

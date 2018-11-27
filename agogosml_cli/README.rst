@@ -1,3 +1,7 @@
+.. image:: https://dev.azure.com/csedevil/agogosml/_apis/build/status/CLI-CI%20(master))
+    :target: https://dev.azure.com/csedevil/agogosml/_build/latest?definitionId=32
+
+
 CLI and Scaffolding Tools Documentation
 =======================================
 

@@ -14,7 +14,7 @@
     "variableGroups": [],
     "environments": [
         {
-            "id": 1,
+            "id": 6,
             "name": "Deploy chart",
             "rank": 1,
             "variables": {
@@ -91,16 +91,14 @@
                     "allowOverride": true
                 }
             },
-            "variableGroups": [
-                3
-            ],
+            "variableGroups": [],
             "preDeployApprovals": {
                 "approvals": [
                     {
                         "rank": 1,
                         "isAutomated": true,
                         "isNotificationOn": false,
-                        "id": 1
+                        "id": 17
                     }
                 ],
                 "approvalOptions": {
@@ -113,7 +111,7 @@
                 }
             },
             "deployStep": {
-                "id": 2
+                "id": 22
             },
             "postDeployApprovals": {
                 "approvals": [
@@ -121,7 +119,7 @@
                         "rank": 1,
                         "isAutomated": true,
                         "isNotificationOn": false,
-                        "id": 3
+                        "id": 23
                     }
                 ],
                 "approvalOptions": {
@@ -141,7 +139,19 @@
                         },
                         "skipArtifactsDownload": false,
                         "artifactsDownloadInput": {
-                            "downloadInputs": []
+                            "downloadInputs": [
+                                {
+                                    "alias": "_Agogosml__Git_Repo",
+                                    "artifactType": "GitHub",
+                                    "artifactDownloadMode": "All"
+                                },
+                                {
+                                    "artifactItems": [],
+                                    "alias": "_agogosml_instance_build",
+                                    "artifactType": "Build",
+                                    "artifactDownloadMode": "All"
+                                }
+                            ]
                         },
                         "queueId": 30,
                         "demands": [],
@@ -392,20 +402,18 @@
             "environmentTriggers": []
         },
         {
-            "id": 4,
+            "id": 7,
             "name": "Approve",
             "rank": 2,
             "variables": {},
-            "variableGroups": [
-                3
-            ],
+            "variableGroups": [],
             "preDeployApprovals": {
                 "approvals": [
                     {
                         "rank": 1,
                         "isAutomated": true,
                         "isNotificationOn": false,
-                        "id": 11
+                        "id": 18
                     }
                 ],
                 "approvalOptions": {
@@ -418,7 +426,7 @@
                 }
             },
             "deployStep": {
-                "id": 12
+                "id": 21
             },
             "postDeployApprovals": {
                 "approvals": [
@@ -426,7 +434,7 @@
                         "rank": 1,
                         "isAutomated": true,
                         "isNotificationOn": false,
-                        "id": 13
+                        "id": 24
                     }
                 ],
                 "approvalOptions": {
@@ -446,7 +454,19 @@
                         },
                         "skipArtifactsDownload": false,
                         "artifactsDownloadInput": {
-                            "downloadInputs": []
+                            "downloadInputs": [
+                                {
+                                    "alias": "_Agogosml__Git_Repo",
+                                    "artifactType": "GitHub",
+                                    "artifactDownloadMode": "All"
+                                },
+                                {
+                                    "artifactItems": [],
+                                    "alias": "_agogosml_instance_build",
+                                    "artifactType": "Build",
+                                    "artifactDownloadMode": "All"
+                                }
+                            ]
                         },
                         "queueId": 30,
                         "demands": [],
@@ -629,13 +649,7 @@
                 "pullRequestDeploymentEnabled": false
             },
             "demands": [],
-            "conditions": [
-                {
-                    "name": "Deploy chart",
-                    "conditionType": 2,
-                    "value": "4"
-                }
-            ],
+            "conditions": [],
             "executionPolicy": {
                 "concurrencyCount": 1,
                 "queueDepthCount": 0
@@ -661,20 +675,18 @@
             "environmentTriggers": []
         },
         {
-            "id": 5,
+            "id": 8,
             "name": "Reject",
             "rank": 3,
             "variables": {},
-            "variableGroups": [
-                3
-            ],
+            "variableGroups": [],
             "preDeployApprovals": {
                 "approvals": [
                     {
                         "rank": 1,
                         "isAutomated": true,
                         "isNotificationOn": false,
-                        "id": 14
+                        "id": 19
                     }
                 ],
                 "approvalOptions": {
@@ -687,7 +699,7 @@
                 }
             },
             "deployStep": {
-                "id": 15
+                "id": 20
             },
             "postDeployApprovals": {
                 "approvals": [
@@ -695,7 +707,7 @@
                         "rank": 1,
                         "isAutomated": true,
                         "isNotificationOn": false,
-                        "id": 16
+                        "id": 25
                     }
                 ],
                 "approvalOptions": {
@@ -715,7 +727,19 @@
                         },
                         "skipArtifactsDownload": false,
                         "artifactsDownloadInput": {
-                            "downloadInputs": []
+                            "downloadInputs": [
+                                {
+                                    "alias": "_Agogosml__Git_Repo",
+                                    "artifactType": "GitHub",
+                                    "artifactDownloadMode": "All"
+                                },
+                                {
+                                    "artifactItems": [],
+                                    "alias": "_agogosml_instance_build",
+                                    "artifactType": "Build",
+                                    "artifactDownloadMode": "All"
+                                }
+                            ]
                         },
                         "queueId": 30,
                         "demands": [],
@@ -898,13 +922,7 @@
                 "pullRequestDeploymentEnabled": false
             },
             "demands": [],
-            "conditions": [
-                {
-                    "name": "Deploy chart",
-                    "conditionType": 2,
-                    "value": "4"
-                }
-            ],
+            "conditions": [],
             "executionPolicy": {
                 "concurrencyCount": 1,
                 "queueDepthCount": 0
@@ -1034,7 +1052,7 @@
             "$value": "Other"
         }
     },
-    "id": 1,
+    "id": 2,
     "name": "agogosml-cd",
     "path": "\\",
     "projectReference": null

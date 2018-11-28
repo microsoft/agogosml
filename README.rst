@@ -88,7 +88,7 @@ App
 The app receives data from the input reader and feeds it to the ML model
 for scoring. Once scored the data is sent onto the output writer.
 
-FOR MORE DETAILED ON ARCHITECTURE = GO TO DOCS/DESIGN.RST
+For more information about the design, see the `Design Documentation <./docs/DESIGN.rst>`__
 
 
 Links

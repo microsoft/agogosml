@@ -89,7 +89,7 @@ Agogosml CLI Usage
 
    agogosml command [OPTIONS]
 
-.. figure:: ./_static/cli-user-usage-flow.png
+.. figure:: ../agogosml_cli/docs/_static/cli-user-usage-flow.png
    :alt: CLI User Usage Flow
 
    CLI User Usage Flow

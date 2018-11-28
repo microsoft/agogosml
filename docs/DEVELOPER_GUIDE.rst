@@ -123,7 +123,7 @@ Now you can send a message to Event Hub with the following sample payload and ch
 .. code:: json
 
     {
-	    "key": "SAMPLE_KEY",
+        "key": "SAMPLE_KEY",
         "intValue": 40
     }
 

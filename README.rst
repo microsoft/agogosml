@@ -94,7 +94,7 @@ For more information about the design, see the `Design Documentation <./docs/DES
 Links
 -----
 
--  `User Guide - Getting Started <./docs/GETTING_STARTED.rst>`__
+-  `User Guide - Getting Started <./docs/USER_GUIDE.rst>`__
 -  `Developer Guide <./docs/DEVELOPER_GUIDE.rst>`__
 -  `License <./LICENSE>`__
 -  `Microsoft Open Source Code of Conduct <https://opensource.microsoft.com/codeofconduct/>`__

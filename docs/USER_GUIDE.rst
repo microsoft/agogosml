@@ -15,23 +15,23 @@ Prerequisites
 Create a New Project
 --------------------------------
 
-```sh
-# 1. Installing the CLI
-pip install agogosml_cli
+.. code-block:: bash
+    # 1. Installing the CLI
+    pip install agogosml_cli
 
-# 2. Create a directory for your project
-mkdir hello-agogomsl
-cd hello-agogomsl
+    # 2. Create a directory for your project
+    mkdir hello-agogomsl
+    cd hello-agogomsl
 
-# 3. Init the project
-agogosml init
+    # 3. Init the project
+    agogosml init
 
-# 4. Fill in the manifest.json (Docker Container Registry, Azure Subscription, etc).
-vi manifest.json
+    # 4. Fill in the manifest.json (Docker Container Registry, Azure Subscription, etc).
+    vi manifest.json
 
-# 5. Generate the code for the projects
-agogosml generate
-```
+    # 5. Generate the code for the projects
+    agogosml generate
+
 
 The generated folder structure consists of the input reader, customer app and output writer as well as the Azure DevOps pipelines for CI/CD.
 
@@ -54,26 +54,26 @@ Build the base image using:
 
 .. code:: bash
 
-    $ docker build -t agogosml/agogosml -f agogosml/Dockerfile.agogosml agogosml
+    docker build -t agogosml/agogosml -f agogosml/Dockerfile.agogosml agogosml
 
 Then the input reader image:
 
 .. code:: bash
 
-    $ docker build -t agogosml/input_reader -f input_reader/Dockerfile.input_reader .
+    docker build -t agogosml/input_reader -f input_reader/Dockerfile.input_reader .
 
 
 The app:
 
 .. code:: bash
 
-    $ docker build -t agogosml/app -f sample_app/Dockerfile.app .
+    docker build -t agogosml/app -f sample_app/Dockerfile.app .
 
 And finally the output writer:
 
 .. code:: bash
 
-    $ docker build -t agogosml/output_writer -f output_writer/Dockerfile.output_writer .
+    docker build -t agogosml/output_writer -f output_writer/Dockerfile.output_writer .
 
 Run with Docker Locally
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,30 +82,30 @@ Set required environment variables
 
 .. code:: bash
 
-    $ export INPUT_READER_NAME=input-reader
-    $ export APP_NAME=app
-    $ export OUTPUT_WRITER_NAME=output-writer
-    $ export NETWORK_NAME=testnetwork       # Docker network name
-    $ export MESSAGING_TYPE=eventhub        # eventhub/kafka
-    $ export AZURE_STORAGE_ACCOUNT=         # storage account name for EH processor
-    $ export AZURE_STORAGE_ACCESS_KEY=      # storage account key for EH processor
-    $ export LEASE_CONTAINER_NAME=          # storage account container for EH processor
-    $ export EVENT_HUB_NAMESPACE=           # EH namespace
-    $ export INPUT_EVENT_HUB_NAME=          # input EH
-    $ export INPUT_EVENT_HUB_SAS_POLICY=    # input EH policy name
-    $ export INPUT_EVENT_HUB_SAS_KEY=       # input EH policy key
-    $ export OUTPUT_EVENT_HUB_NAME=         # output EH
-    $ export OUTPUT_EVENT_HUB_SAS_POLICY=   # output EH policy name
-    $ export OUTPUT_EVENT_HUB_SAS_KEY=      # output EH policy key
-    $ export APP_PORT=5000                  # app port
-    $ export OUTPUT_WRITER_PORT=8080        # output writer app port
+    export INPUT_READER_NAME=input-reader
+    export APP_NAME=app
+    export OUTPUT_WRITER_NAME=output-writer
+    export NETWORK_NAME=testnetwork       # Docker network name
+    export MESSAGING_TYPE=eventhub        # eventhub/kafka
+    export AZURE_STORAGE_ACCOUNT=         # storage account name for EH processor
+    export AZURE_STORAGE_ACCESS_KEY=      # storage account key for EH processor
+    export LEASE_CONTAINER_NAME=          # storage account container for EH processor
+    export EVENT_HUB_NAMESPACE=           # EH namespace
+    export INPUT_EVENT_HUB_NAME=          # input EH
+    export INPUT_EVENT_HUB_SAS_POLICY=    # input EH policy name
+    export INPUT_EVENT_HUB_SAS_KEY=       # input EH policy key
+    export OUTPUT_EVENT_HUB_NAME=         # output EH
+    export OUTPUT_EVENT_HUB_SAS_POLICY=   # output EH policy name
+    export OUTPUT_EVENT_HUB_SAS_KEY=      # output EH policy key
+    export APP_PORT=5000                  # app port
+    export OUTPUT_WRITER_PORT=8080        # output writer app port
 
 
 A Docker network must then be created with:
 
 .. code:: bash
 
-    $ docker network create $NETWORK_NAME
+    docker network create $NETWORK_NAME
 
 The four Docker images must then be run, prepending the parameter ``-e`` to any
 environment variables. An example of how to run one of these Docker images is:
@@ -113,41 +113,41 @@ environment variables. An example of how to run one of these Docker images is:
 .. code:: bash
 
     # Run Input reader
-    $ docker run --rm --network $NETWORK_NAME --name $INPUT_READER_NAME -d \
-      -e MESSAGING_TYPE=$MESSAGING_TYPE \
-      -e AZURE_STORAGE_ACCOUNT=$AZURE_STORAGE_ACCOUNT \
-      -e AZURE_STORAGE_ACCESS_KEY=$AZURE_STORAGE_ACCESS_KEY \
-      -e LEASE_CONTAINER_NAME=$LEASE_CONTAINER_NAME \
-      -e EVENT_HUB_NAMESPACE=$EVENT_HUB_NAMESPACE \
-      -e EVENT_HUB_NAME=$INPUT_EVENT_HUB_NAME \
-      -e EVENT_HUB_SAS_POLICY=$INPUT_EVENT_HUB_SAS_POLICY \
-      -e EVENT_HUB_SAS_KEY=$INPUT_EVENT_HUB_SAS_KEY \
-      -e APP_HOST=$APP_NAME \
-      -e APP_PORT=$APP_PORT \
-      agogosml/input_reader:latest
+    docker run --rm --network $NETWORK_NAME --name $INPUT_READER_NAME -d \
+        -e MESSAGING_TYPE=$MESSAGING_TYPE \
+        -e AZURE_STORAGE_ACCOUNT=$AZURE_STORAGE_ACCOUNT \
+        -e AZURE_STORAGE_ACCESS_KEY=$AZURE_STORAGE_ACCESS_KEY \
+        -e LEASE_CONTAINER_NAME=$LEASE_CONTAINER_NAME \
+        -e EVENT_HUB_NAMESPACE=$EVENT_HUB_NAMESPACE \
+        -e EVENT_HUB_NAME=$INPUT_EVENT_HUB_NAME \
+        -e EVENT_HUB_SAS_POLICY=$INPUT_EVENT_HUB_SAS_POLICY \
+        -e EVENT_HUB_SAS_KEY=$INPUT_EVENT_HUB_SAS_KEY \
+        -e APP_HOST=$APP_NAME \
+        -e APP_PORT=$APP_PORT \
+        agogosml/input_reader:latest
 
     # Run app
-    $ docker run --rm --name $APP_NAME -d --network $NETWORK_NAME \
-      -e HOST=$APP_NAME \
-      -e PORT=$APP_PORT \
-      -e OUTPUT_URL=http://$OUTPUT_WRITER_NAME:$OUTPUT_WRITER_PORT \
-      -e SCHEMA_FILEPATH=schema_example.json \
-      agogosml/app
+    docker run --rm --name $APP_NAME -d --network $NETWORK_NAME \
+        -e HOST=$APP_NAME \
+        -e PORT=$APP_PORT \
+        -e OUTPUT_URL=http://$OUTPUT_WRITER_NAME:$OUTPUT_WRITER_PORT \
+        -e SCHEMA_FILEPATH=schema_example.json \
+        agogosml/app
 
     # Run Output writer
-    $ docker run --rm --name $OUTPUT_WRITER_NAME -d --network $NETWORK_NAME \
-    -e MESSAGING_TYPE=$MESSAGING_TYPE \
-    -e EVENT_HUB_NAMESPACE=$EVENT_HUB_NAMESPACE \
-    -e EVENT_HUB_NAME=$OUTPUT_EVENT_HUB_NAME \
-    -e EVENT_HUB_SAS_POLICY=$OUTPUT_EVENT_HUB_SAS_POLICY \
-    -e EVENT_HUB_SAS_KEY=$OUTPUT_EVENT_HUB_SAS_KEY \
-    -e OUTPUT_WRITER_HOST=$OUTPUT_WRITER_NAME \
-    -e OUTPUT_WRITER_PORT=$OUTPUT_WRITER_PORT \
-    agogosml/output_writer:latest
+    docker run --rm --name $OUTPUT_WRITER_NAME -d --network $NETWORK_NAME \
+        -e MESSAGING_TYPE=$MESSAGING_TYPE \
+        -e EVENT_HUB_NAMESPACE=$EVENT_HUB_NAMESPACE \
+        -e EVENT_HUB_NAME=$OUTPUT_EVENT_HUB_NAME \
+        -e EVENT_HUB_SAS_POLICY=$OUTPUT_EVENT_HUB_SAS_POLICY \
+        -e EVENT_HUB_SAS_KEY=$OUTPUT_EVENT_HUB_SAS_KEY \
+        -e OUTPUT_WRITER_HOST=$OUTPUT_WRITER_NAME \
+        -e OUTPUT_WRITER_PORT=$OUTPUT_WRITER_PORT \
+        agogosml/output_writer:latest
 
 Now you can send a message to Event Hub with the following sample payload and check the output Event Hub for the transformed result:
 
-.. code:: bash
+.. code:: json
 
     {
 	    "key": "SAMPLE_KEY",
@@ -195,7 +195,7 @@ Agogosml CLI Usage
 
 .. code:: bash
 
-   $ agogosml command [OPTIONS]
+   agogosml command [OPTIONS]
 
 .. figure:: ./_static/cli-user-usage-flow.png
    :alt: CLI User Usage Flow
@@ -240,7 +240,7 @@ init - Creates a manifest.json file
 
 .. code:: bash
 
-   $ agogosml init [--force|-f] <folder>
+   agogosml init [--force|-f] <folder>
 
 ``agogosml init <folder>`` will generate a manifest file that contains
 all the configuration variables for an agogosml project. ``<folder>`` is
@@ -251,10 +251,10 @@ generate - Generates an agogosml project
 
 .. code:: bash
 
-   $ agogosml generate
-   $ agogosml generate <folder>
-   $ agogosml generate [--config|-c]
-   $ agogosml generate [--config|-c] <folder>
+   agogosml generate
+   agogosml generate <folder>
+   agogosml generate [--config|-c]
+   agogosml generate [--config|-c] <folder>
 
    alias: agogosml g
 
@@ -267,8 +267,8 @@ update - Updates an agogosml project
 
 .. code:: bash
 
-   $ agogosml update
-   $ agogosml update <folder>
+   agogosml update
+   agogosml update <folder>
 
 ``agogosml update`` will update a scaffolded agogosml project. It will
 update the agogosml dependencies to the latest version.

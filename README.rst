@@ -41,23 +41,23 @@ Quick Install & Run
 
 The following quick install instructions assumes you have the azure-cli, Python 3.7, Docker and Terraform installed.
 
-```sh
-# 1. Installing the CLI
-pip install agogosml_cli
+.. code-block:: bash
 
-# 2. Create a directory for your project
-mkdir hello-agogomsl
-cd hello-agogomsl
+   # 1. Installing the CLI
+    pip install agogosml_cli
 
-# 3. Init the project
-agogosml init
+    # 2. Create a directory for your project
+    mkdir hello-agogomsl
+    cd hello-agogomsl
 
-# 4. Fill in the manifest.json (Docker Container Registry, Azure Subscription, etc).
-vi manifest.json
+    # 3. Init the project
+    agogosml init
 
-# 5. Generate the code for the projects
-agogosml generate
-```
+    # 4. Fill in the manifest.json (Docker Container Registry, Azure Subscription, etc).
+    vi manifest.json
+
+    # 5. Generate the code for the projects
+    agogosml generate
 
 The generated folder structure consists of the input reader, customer app and output writer as well as the Azure DevOps pipelines for CI/CD.
 

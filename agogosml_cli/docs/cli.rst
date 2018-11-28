@@ -36,6 +36,14 @@ cli.update module
     :undoc-members:
     :show-inheritance:
 
+cli.utils module
+----------------
+
+.. automodule:: cli.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

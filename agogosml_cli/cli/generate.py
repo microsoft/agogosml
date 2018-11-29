@@ -9,7 +9,7 @@ import validators
 import giturlparse
 import cli.utils as utils
 from cookiecutter.main import cookiecutter
-from cookiecutter.exceptions import *
+from cookiecutter.exceptions import OutputDirExistsException
 
 # Project files to output with src and dst names.
 PROJ_FILES = {

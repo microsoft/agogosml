@@ -20,8 +20,8 @@ Create a New Project
     pip install agogosml_cli
 
     # 2. Create a directory for your project
-    mkdir hello-agogomsl
-    cd hello-agogomsl
+    mkdir hello-agogosml
+    cd hello-agogosml
 
     # 3. Init the project
     agogosml init

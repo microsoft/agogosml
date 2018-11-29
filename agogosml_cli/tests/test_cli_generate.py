@@ -19,7 +19,7 @@ import tests.test_utils as test_utils
 """
 
 EXPECTED_OUTPUT_PROJ_FILES = [
-    '.env', 'Pipfile', 'logging.yaml', 'ci-app-pipeline.json'
+    '.env', 'Pipfile', 'logging.yaml', 'azure-ci-app-pipeline.json'
 ]
 
 
@@ -105,7 +105,7 @@ def test_generate_invalid_schema():
     RESULT: Produces the ff in the current working directory:
         - .env
         - Pipfile
-        - ci-app-pipeline.json
+        - azure-ci-app-pipeline.json
         - ci-input-app-pipeline.json
         - ci-output-app-pipeline.json
     """

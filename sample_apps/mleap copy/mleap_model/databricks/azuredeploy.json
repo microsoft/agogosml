@@ -1,0 +1,113 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deployNs": {
+            "defaultValue": "agogos",
+            "type": "string"
+        },
+        "dbricksWorkspaceName": {
+            "defaultValue": "[concat(parameters('deployNs'), 'dbricks', uniqueString(resourceGroup().id))]",
+            "type": "string"
+        },
+        "dbricksLocation": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "string",
+            "metadata": {
+                "description": "Location of Databricks workspace"
+            }
+        },
+        "dbricksTier": {
+            "defaultValue": "premium",
+            "type": "string",
+            "allowedValues": [
+                "premium",
+                "standard"
+            ]
+        },
+        "storAccountName": {
+            "defaultValue": "[concat(parameters('deployNs'), 'stor', uniqueString(resourceGroup().id))]",
+            "type": "string",
+            "metadata": {
+                "description": "Storage account name"
+            }
+        },
+        "storLocation": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "string",
+            "metadata": {
+                "description": "Storage account location"
+            }
+        }
+    },
+    "variables": {
+        "managedResourceGroupId": "[concat(subscription().id, '/resourceGroups/', variables('managedResourceGroupName'))]",
+        "managedResourceGroupName": "[concat('databricks-rg-', parameters('dbricksWorkspaceName'), '-', uniqueString(parameters('dbricksWorkspaceName'), resourceGroup().id))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-04-01",
+            "location": "[parameters('dbricksLocation')]",
+            "name": "[parameters('dbricksWorkspaceName')]",
+            "tags": {
+                "displayName": "Databricks Workspace"
+            },
+            "sku": {
+                "name": "[parameters('dbricksTier')]"
+            },
+            "properties": {
+                "ManagedResourceGroupId": "[variables('managedResourceGroupId')]"
+            },
+            "type": "Microsoft.Databricks/workspaces"
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "name": "[parameters('storAccountName')]",
+            "apiVersion": "2017-10-01",
+            "location": "[parameters('storLocation')]",
+            "tags": {
+                "displayname": "Databricks storage"
+            },
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        }
+    ],
+    "outputs": {
+        "dbricksWorkspaceName": {
+            "value": "[parameters('dbricksWorkspaceName')]",
+            "type": "string"
+        },
+        "dbricksLocation": {
+            "value": "[parameters('dbricksLocation')]",
+            "type": "string"
+        },
+        "storAccountName": {
+            "value": "[parameters('storAccountName')]",
+            "type": "string"
+        }
+    }
+}

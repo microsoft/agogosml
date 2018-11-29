@@ -1,0 +1,7 @@
+{
+  "type": "object",
+  "properties": {
+      "key": {"type": "string"},
+      "intValue": {"type": "integer"}
+  }
+}

@@ -1,0 +1,4 @@
+.env.example
+.hypothesis
+.pytest_cache
+__pycache__

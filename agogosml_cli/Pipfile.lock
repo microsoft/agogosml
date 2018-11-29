@@ -15,6 +15,13 @@
         ]
     },
     "default": {
+        "agogosml": {
+            "hashes": [
+                "sha256:48a2ffef9a79958c52c3d86367758f9ad9de7302480eba3e03af0ba0abc96498",
+                "sha256:b9804db2be6e3bdcd3835c232fc3f5daa0bdfe720eeee5e09abb07c368324b57"
+            ],
+            "version": "==0.1.0"
+        },
         "arrow": {
             "hashes": [
                 "sha256:a558d3b7b6ce7ffc74206a86c147052de23d3d4ef0e17c210dd478c53575c4cd"
@@ -30,10 +37,10 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:339dc09518b07e2fa7eda5450740925974815557727d6bd35d319c1524a04a4c",
-                "sha256:6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a"
+                "sha256:47f9c83ef4c0c621eaef743f133f09fa8a74a9b75f037e8624f83bd1b6626cb7",
+                "sha256:993f830721089fef441cdfeb4b2c8c9df86f0c63239f06bd025a76a7daddb033"
             ],
-            "version": "==2018.10.15"
+            "version": "==2018.11.29"
         },
         "chardet": {
             "hashes": [

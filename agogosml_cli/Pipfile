@@ -24,6 +24,7 @@ click = "~=7.0"
 jsonnet = "~=0.11"
 validators = "~=0.12"
 git-url-parse = "~=1.1"
+cookiecutter = "*"
 
 [requires]
 python_version = "3.7"

@@ -12,13 +12,16 @@ metadata:
     chart: "{{ $root.Chart.Name }}-{{ $root.Chart.Version | replace "+" "_" }}"
     release: {{ $root.Release.Name }}
     heritage: {{ $root.Release.Service }}
-    deployment: {{ $root.Values.deployment }}
 spec:
   type: {{ .service.type }}
   ports:
     - port: {{ .service.externalPort }}
       targetPort: {{ .service.internalPort }}
   selector:
-    app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}{{ .tag }}
+  {{- if eq $root.Values.deployment "slot1" }}
+    app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-slot1
+  {{- else }}
+    app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-slot2
+  {{- end }}
 ---
 {{- end }}

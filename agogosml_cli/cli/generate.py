@@ -14,7 +14,8 @@ PROJ_FILES = {
     '.env': '.env',
     'Pipfile': 'Pipfile',
     'logging.yaml': 'logging.yaml',
-    'pipeline/azure-ci-app-pipeline.jsonnet': 'ci-app-pipeline.json'
+    'pipeline/azure-ci-app-pipeline.jsonnet':
+        'azure-ci-app-pipeline.json'
 }
 
 

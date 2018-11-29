@@ -1,1 +1,1 @@
-.. include:: ../../CONTRIBUTING.rst
+.. include:: ../../docs/DEVELOPER_GUIDE.rst

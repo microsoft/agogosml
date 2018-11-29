@@ -4,13 +4,19 @@
 
 registry: ""
 imagePullSecret: ""
-deployment: green
+deployment: ""
+
+slot2:
+  enabled: false
+
+slot1:
+  enabled: false
 
 input_reader:
   name: input_reader
   # tag: 
   imagePullPolicy: IfNotPresent
-  replicaCount: 1
+  replicaCount: 2
   env:
     MESSAGING_TYPE: "" # kafka or eventhub
     # eventhub
@@ -21,8 +27,6 @@ input_reader:
     EVENT_HUB_SAS_POLICY: ""
     EVENT_HUB_SAS_KEY: ""
     LEASE_CONTAINER_NAME: ""
-    APP_HOST: ""
-    APP_PORT: ""
     # kafka
     KAFKA_TOPIC: ""
     KAFKA_CONSUMER_GROUP: ""
@@ -45,10 +49,13 @@ output_writer:
     KAFKA_ADDRESS: ""
     OUTPUT_WRITER_PORT: ""
 
+main_app: app_0
+
 instance_apps:
   app_0:
-    name: app
-    tag: latest
+    name: sample_app
+    slot1_tag: latest
+    slot2_tag: latest
     imagePullPolicy: IfNotPresent
     service:
       type: ClusterIP
@@ -59,4 +66,3 @@ instance_apps:
       PORT: ""
       OUTPUT_URL: ""
       SCHEMA_FILEPATH: ""
-      

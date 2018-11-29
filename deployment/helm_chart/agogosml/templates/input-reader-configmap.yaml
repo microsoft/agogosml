@@ -11,8 +11,8 @@ data:
   EVENT_HUB_SAS_POLICY: {{ quote .Values.input_reader.env.EVENT_HUB_SAS_POLICY }}
   EVENT_HUB_SAS_KEY: {{ quote .Values.input_reader.env.EVENT_HUB_SAS_KEY }}
   LEASE_CONTAINER_NAME: {{ quote .Values.input_reader.env.LEASE_CONTAINER_NAME }}
-  APP_HOST: {{ quote .Values.input_reader.env.APP_HOST }}
-  APP_PORT: {{ quote .Values.input_reader.env.APP_PORT }}
+  APP_HOST: {{ quote .Values.main_app }}
+  APP_PORT: {{ quote (index .Values.instance_apps .Values.main_app).service.externalPort }}
   KAFKA_TOPIC: {{ quote .Values.input_reader.env.KAFKA_TOPIC }}
   KAFKA_CONSUMER_GROUP: {{ quote .Values.input_reader.env.KAFKA_CONSUMER_GROUP }}
   KAFKA_ADDRESS: {{ quote .Values.input_reader.env.KAFKA_ADDRESS }}

@@ -15,7 +15,9 @@ PROJ_FILES = {
     'pipeline/azure-ci-agogosml-pipeline.jsonnet':
         'ci-agogosml-pipeline.json',
     'pipeline/azure-ci-app-pipeline.jsonnet':
-        'ci-app-pipeline.json'
+        'ci-app-pipeline.json',
+    'pipeline/azure-cd-pipeline.jsonnet':
+        'cd-pipeline.json'
 }
 
 

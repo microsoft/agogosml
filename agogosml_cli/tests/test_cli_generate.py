@@ -23,6 +23,7 @@ import tests.test_utils as test_utils
 EXPECTED_OUTPUT_PROJ_FILES = [
     'ci-app-pipeline.json',
     'ci-agogosml-pipeline.json',
+    'cd-pipeline.json',
     'testproject/dockerbuild.sh',
     'testproject/.dockerignore',
     'testproject/logging.yaml',

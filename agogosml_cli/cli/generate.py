@@ -9,6 +9,7 @@ import validators
 import giturlparse
 import cli.utils as utils
 from cookiecutter.main import cookiecutter
+from cookiecutter.exceptions import *
 
 # Project files to output with src and dst names.
 PROJ_FILES = {
@@ -58,9 +59,14 @@ def generate(force, config, folder) -> int:
     if not os.path.isdir(folder):
         os.makedirs(folder)
 
-    # Write cookiecutter template
-    write_cookiecutter(utils.get_template_full_filepath(''),
-                       folder, template_vars, force)
+    try:
+        # Write cookiecutter template
+        write_cookiecutter(utils.get_template_full_filepath(''),
+                           folder, template_vars, force)
+    except OutputDirExistsException:
+        # Handle situation where template folder exists and force is not set to true
+        click.echo('Files already exists in directory. Use --force to overwrite')
+        raise click.Abort()
 
     del template_vars['_copy_without_render']
 
@@ -69,7 +75,7 @@ def generate(force, config, folder) -> int:
         # Check if files exists in dst
         if (os.path.exists(os.path.join(folder, template_dst))):
             if not force:
-                click.echo('Files already exists. Use --force to overwrite')
+                click.echo('Files already exists in directory. Use --force to overwrite')
                 raise click.Abort()
 
         # Must end w/ -pipeline.json

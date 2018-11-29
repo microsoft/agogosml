@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-input-reader-config
+data:
+  MESSAGING_TYPE: {{ quote .Values.input_reader.env.MESSAGING_TYPE }}
+  AZURE_STORAGE_ACCOUNT: {{ quote .Values.input_reader.env.AZURE_STORAGE_ACCOUNT }}
+  AZURE_STORAGE_ACCESS_KEY: {{ quote .Values.input_reader.env.AZURE_STORAGE_ACCESS_KEY }}
+  EVENT_HUB_NAMESPACE: {{ quote .Values.input_reader.env.EVENT_HUB_NAMESPACE }}
+  EVENT_HUB_NAME: {{ quote .Values.input_reader.env.EVENT_HUB_NAME }}
+  EVENT_HUB_SAS_POLICY: {{ quote .Values.input_reader.env.EVENT_HUB_SAS_POLICY }}
+  EVENT_HUB_SAS_KEY: {{ quote .Values.input_reader.env.EVENT_HUB_SAS_KEY }}
+  LEASE_CONTAINER_NAME: {{ quote .Values.input_reader.env.LEASE_CONTAINER_NAME }}
+  APP_HOST: {{ quote .Values.input_reader.env.APP_HOST }}
+  APP_PORT: {{ quote .Values.input_reader.env.APP_PORT }}
+  KAFKA_TOPIC: {{ quote .Values.input_reader.env.KAFKA_TOPIC }}
+  KAFKA_CONSUMER_GROUP: {{ quote .Values.input_reader.env.KAFKA_CONSUMER_GROUP }}
+  KAFKA_ADDRESS: {{ quote .Values.input_reader.env.KAFKA_ADDRESS }}

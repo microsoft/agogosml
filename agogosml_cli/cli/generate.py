@@ -60,6 +60,8 @@ def generate(force, config, folder) -> int:
     write_cookiecutter(utils.get_template_full_filepath(''),
                        folder, template_vars, force)
 
+    del template_vars['_copy_without_render']
+
     for template_src, template_dst in PROJ_FILES.items():
         template_src_filename = os.path.basename(template_src)
         # Check if files exists in dst

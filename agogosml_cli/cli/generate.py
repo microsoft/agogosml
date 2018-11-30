@@ -110,8 +110,7 @@ def extractTemplateVarsFromManifest(manifest):
 def extractAzureTemplateVars(manifest):
     template_vars = {}
     azure_props = manifest['cloud']['otherProperties']
-    if 'azureContainerRegistry' not in azure_props or \
-       not validators.url(azure_props['azureContainerRegistry']):
+    if 'azureContainerRegistry' not in azure_props:
         click.echo('Azure Container Registry is missing or invalid URL.')
         raise click.Abort()
     else:
@@ -120,7 +119,7 @@ def extractAzureTemplateVars(manifest):
         if not acr.endswith('/'):
             acr += '/'
         template_vars['AZURE_DOCKER_BUILDARGS'] = \
-            '--build-arg CONTAINER_REG=%s --build-arg AGOGOSML_TAG=$(Build.TriggeredBy.BuildId)' % acr
+            '--build-arg CONTAINER_REG=%s --build-arg AGOGOSML_TAG=$(Build.BuildId)' % acr
     return template_vars
 
 

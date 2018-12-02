@@ -23,7 +23,7 @@ and focus on building the business logic inside the app container while
 implementing a loosely coupled services approach.
 
 - Input container - Receive events from Azure Event Hub / Kafka.
-- Init Container - Runs on load on the same pod as the customer application. Init container loads the ML module to a temporary storage (stored on Azure Blob Storage) which is then accessible by the Customer Application. This enables the Customer App to be oblivious to the location/implementation/management of the ML model.
+- Init Container - Runs on load on the same pod as the customer application. Init container loads the ML module to a temporary storage (stored on Azure Blob Storage) which is then accessible by the Customer Application. This enables the Customer App to have access to the ML module while being oblivious to the location/implementation/management of it.
 - Customer App - Models implemented in PySpark, Tensorflow, scikit-learn and R.
 - Output container - send the results of the models to Azure Event Hub / Kafka or other data source.
 

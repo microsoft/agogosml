@@ -25,8 +25,8 @@ object Main extends App {
   }
 
   val receiveMessage: Endpoint[Response] =
-    post("message" :: jsonBody[model.InputMessage]) { message: model.InputMessage =>
-      // feed msg into mleap model
+    post(jsonBody[model.InputMessage]) { message: model.InputMessage =>
+      // feed msg into mleap model after validation
       val transformedMessage = model.transformMessage(message)
 
       // send the transformed data to the output writer

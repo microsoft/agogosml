@@ -53,15 +53,19 @@ clean-test: ## remove test and coverage artifacts
 lint: ## check style with flake8
 	flake8 agogosml tests
 
-test: ## run unit tests and not integration tests
-	py.test -m "not integration"
+test:
+	## Fail fast in CI maxfail=1
+	py.test --maxfail=1 -m "not integration" --cov=agogosml --cov-report term-missing \
+		--cov-report xml:tests_cov_output/coverage.xml \
+		--junitxml=tests_cov_output/TEST-agogosml.xml
+
+test-dev:
+	py.test -m "not integration" --cov=agogosml --cov-report term-missing \
+		--cov-report html:tests_cov_output/htmlcov
+	$(BROWSER) ./tests_cov_output/htmlcov/index.html
 
 test-all: ## run tests on every Python version with tox
 	tox
-
-coverage: ## check code coverage quickly with the default Python
-	py.test --cov=agogosml --cov-report term-missing --cov-report html -m "not integration"
-	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/agogosml.rst

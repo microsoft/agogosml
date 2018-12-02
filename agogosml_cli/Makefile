@@ -54,13 +54,13 @@ lint: ## check style with flake8
 	flake8 cli tests
 
 test: ## run tests quickly with the default Python
-	py.test
+	py.test --junitxml=tests/TEST-cli.xml
 
 test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	py.test --cov=cli --cov-report term-missing --cov-report html
+	py.test --cov=cli --cov-report term-missing --cov-report html --cov-report xml
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs

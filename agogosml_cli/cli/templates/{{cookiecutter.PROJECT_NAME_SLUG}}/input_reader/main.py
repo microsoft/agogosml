@@ -11,31 +11,20 @@ if __name__ == "__main__":
     CFG = None
 
     if msg_type == 'eventhub':
-        # FOR NOW, LOAD THE CONFIG VARS IN FROM .ENV
         CFG = {
             'client': {
                 'type': 'eventhub',
                 'config': {
-                    'AZURE_STORAGE_ACCOUNT':
-                    os.getenv("AZURE_STORAGE_ACCOUNT"),
-                    'AZURE_STORAGE_ACCESS_KEY':
-                    os.getenv("AZURE_STORAGE_ACCESS_KEY"),
-                    'EVENT_HUB_NAMESPACE':
-                    os.getenv("EVENT_HUB_NAMESPACE"),
-                    'EVENT_HUB_NAME':
-                    os.getenv("EVENT_HUB_NAME"),
-                    'EVENT_HUB_SAS_POLICY':
-                    os.getenv("EVENT_HUB_SAS_POLICY"),
-                    'EVENT_HUB_SAS_KEY':
-                    os.getenv("EVENT_HUB_SAS_KEY"),
-                    'LEASE_CONTAINER_NAME':
-                    os.getenv("LEASE_CONTAINER_NAME"),
-                    'APP_HOST':
-                    os.getenv('APP_HOST'),
-                    'APP_PORT':
-                    os.getenv('APP_PORT'),
-                    'TIMEOUT':
-                    os.getenv('TIMEOUT')
+                    'AZURE_STORAGE_ACCOUNT': os.getenv("AZURE_STORAGE_ACCOUNT"),
+                    'AZURE_STORAGE_ACCESS_KEY': os.getenv("AZURE_STORAGE_ACCESS_KEY"),
+                    'EVENT_HUB_NAMESPACE': os.getenv("EVENT_HUB_NAMESPACE"),
+                    'EVENT_HUB_NAME': os.getenv("EVENT_HUB_NAME"),
+                    'EVENT_HUB_SAS_POLICY': os.getenv("EVENT_HUB_SAS_POLICY"),
+                    'EVENT_HUB_SAS_KEY': os.getenv("EVENT_HUB_SAS_KEY"),
+                    'LEASE_CONTAINER_NAME': os.getenv("LEASE_CONTAINER_NAME"),
+                    'APP_HOST': os.getenv('APP_HOST'),
+                    'APP_PORT': os.getenv('APP_PORT'),
+                    'TIMEOUT': os.getenv('TIMEOUT')
                 }
             }
         }

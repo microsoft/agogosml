@@ -5,7 +5,6 @@ import os
 import click
 import json
 import _jsonnet
-import validators
 import giturlparse
 import cli.utils as utils
 from cookiecutter.main import cookiecutter

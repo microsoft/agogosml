@@ -11,7 +11,6 @@ if __name__ == "__main__":
     CFG = None
 
     if msg_type == 'eventhub':
-        # FOR NOW, LOAD THE CONFIG VARS IN FROM .ENV
         CFG = {
             'client': {
                 'type': 'eventhub',

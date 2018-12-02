@@ -22,11 +22,10 @@ removes the need to implement connectors to various messaging services,
 and focus on building the business logic inside the app container while
 implementing a loosely coupled services approach.
 
--  Input container - Receive events from Azure Event Hub / Kafka
--  Customer App - Models implemented in PySpark, Tensorflow,
-   scikit-learn and R.
--  Output container - send the results of the models to Azure Event Hub
-   / Kafka or other data source.
+- Input container - Receive events from Azure Event Hub / Kafka.
+- Init Container - Runs on load on the same pod as the customer application. Init container loads the ML module to a temporary storage (stored on Azure Blob Storage) which is then accessible by the Customer Application. This enables the Customer App to be oblivious to the location/implementation/management of the ML model.
+- Customer App - Models implemented in PySpark, Tensorflow, scikit-learn and R.
+- Output container - send the results of the models to Azure Event Hub / Kafka or other data source.
 
 |Architecure Diagram - Basic Pipeline Building Block|
 

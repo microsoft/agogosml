@@ -53,15 +53,17 @@ clean-test: ## remove test and coverage artifacts
 lint: ## check style with flake8
 	flake8 cli tests
 
-test: ## run tests quickly with the default Python
-	py.test --junitxml=tests/TEST-cli.xml
-
 test-all: ## run tests on every Python version with tox
 	tox
 
-coverage: ## check code coverage quickly with the default Python
-	py.test --cov=cli --cov-report term-missing --cov-report html --cov-report xml
-	$(BROWSER) htmlcov/index.html
+test-and-coverage: ## check code coverage quickly with the default Python
+	# A unfortunate consequence of coverage.py’s history is that .coveragerc is a magic name:
+	# it’s the default file but it also means “try to also lookup coverage configuration in tox.ini or setup.cfg”.
+	py.test --cov=cli --cov-report term-missing \
+		--cov-report html:tests_cov_output/htmlcov \
+		--cov-report xml:tests_cov_output/coverage.xml \
+		--junitxml=tests_cov_output/TEST-cli.xml
+	$(BROWSER) ./tests_cov_output/htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/cli.rst

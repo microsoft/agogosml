@@ -13,3 +13,5 @@ pylint==2.2.2
 pytest==4.0.1
 six==1.11.0
 wrapt==1.10.11
+python-dotenv==0.9.1
+jsonschema==2.6.0

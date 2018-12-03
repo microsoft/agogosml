@@ -16,6 +16,7 @@ requirements = [
     'Click>=7.0',
     'jsonnet==0.11.2',
     'validators==0.12.3',
+    'cookiecutter==1.6.0',
     'git-url-parse==1.1.0'
 ]
 

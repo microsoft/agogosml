@@ -13,7 +13,8 @@ PORT = os.getenv("PORT")
 # OUTPUT_URL is the url which receives all the output messages after they are processed by the app
 OUTPUT_URL = os.getenv("OUTPUT_URL")
 
-# Filepath for the JSON schema which represents the schema for the expected input messages to the app
+# Filepath for the JSON schema which represents
+# the schema for the expected input messages to the app
 SCHEMA_FILEPATH = os.getenv("SCHEMA_FILEPATH")
 
 

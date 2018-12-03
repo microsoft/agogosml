@@ -3,7 +3,7 @@ ARG PYTHON_VERSION=3.7.0-alpine3.8
 FROM python:${PYTHON_VERSION} as builder
 
 WORKDIR /usr/src/{{cookiecutter.PROJECT_NAME_SLUG}}
-COPY ./{{cookiecutter.PROJECT_NAME_SLUG}} /usr/src/{{cookiecutter.PROJECT_NAME_SLUG}}
+COPY . /usr/src/{{cookiecutter.PROJECT_NAME_SLUG}}
 
 RUN pip install -r requirements-dev.txt
 

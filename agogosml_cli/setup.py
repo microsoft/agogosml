@@ -11,7 +11,13 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', 'jsonschema', ]
+requirements = [
+    'jsonschema==2.6.0',
+    'Click>=7.0',
+    'jsonnet==0.11.2',
+    'validators==0.12.3',
+    'git-url-parse==1.1.0'
+]
 
 setup_requirements = ['pytest-runner', ]
 

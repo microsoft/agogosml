@@ -22,8 +22,13 @@ RUN pipenv run make clean && \
 FROM python:${PYTHON_VERSION}
 ENV PYTHONUNBUFFERED=1
 
-COPY --from=builder /usr/src/agogosml_cli/dist /
+COPY --from=builder /usr/src/agogosml_cli/dist /dist
 
-RUN pip install /agogosml_cli-*.tar.gz
+RUN apk add --no-cache --update --virtual .build-deps \
+    make cmake g++
+
+RUN pip install /dist/agogosml_cli-*.tar.gz
+
+RUN apk del .build-deps
 
 ENTRYPOINT ["agogosml"]

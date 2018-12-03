@@ -44,9 +44,17 @@ def generate(force, config, folder) -> int:
     ) as default_template_file:
         template_vars = json.load(default_template_file)
 
+    # Create folder if not exists
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+
     # Read Manifest file
-    if os.path.isfile(config):
-        with open(config) as f:
+    config_path = config if os.path.isfile(config) else False
+    if not config_path and os.path.isfile(os.path.join(folder, config)):
+        config_path = os.path.join(folder, config)
+
+    if config_path:
+        with open(config_path) as f:
             manifest = json.load(f)
             utils.validate_manifest(manifest)
             # Retrieve values
@@ -54,9 +62,6 @@ def generate(force, config, folder) -> int:
     else:
         click.echo('manifest.json not found. Please run agogosml init first.')
         raise click.Abort()
-    # Create folder if not exists
-    if not os.path.isdir(folder):
-        os.makedirs(folder)
 
     try:
         # Write cookiecutter template

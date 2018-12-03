@@ -8,6 +8,7 @@
     "SUBSCRIPTION_ID": "",
     "_copy_without_render": [
         "*.yaml",
-        "*.tpl"
+        "*.tpl",
+        "*.txt"
     ]
 }

@@ -26,9 +26,22 @@ EXPECTED_OUTPUT_PROJ_FILES = [
     'cd-pipeline.json',
     'testproject/dockerbuild.sh',
     'testproject/.dockerignore',
-    'testproject/logging.yaml',
-    'testproject/Pipfile',
-    'testproject/README.md'
+    'testproject/README.md',
+    'testproject/agogosml/Dockerfile.agogosml',
+    'testproject/input_reader/Dockerfile.input_reader',
+    'testproject/input_reader/logging.yaml',
+    'testproject/input_reader/main.py',
+    'testproject/output_writer/Dockerfile.output_writer',
+    'testproject/output_writer/logging.yaml',
+    'testproject/output_writer/main.py',
+    'testproject/testproject/Dockerfile.testproject',
+    'testproject/testproject/logging.yaml',
+    'testproject/testproject/main.py',
+    'testproject/testproject/requirements-dev.txt',
+    'testproject/testproject/requirements.txt',
+    'testproject/testproject/datahelper.py',
+    'testproject/testproject/schema_example.json',
+    'testproject/testproject/testapp.py'
 ]
 
 
@@ -83,6 +96,16 @@ def test_generate_folder():
         assert result.exit_code == 0
         _assert_template_files_exist('folder')
     """
+    RUN: agogosml generate <folder>
+    RESULT: Produces the correct files in the specified directory
+    where the manifest file is in the target directory.
+    """
+    with runner.isolated_filesystem():
+        _create_test_manifest_azure('folder')
+        result = runner.invoke(generate.generate, ['folder'])
+        assert result.exit_code == 0
+        _assert_template_files_exist('folder/')
+    """
     RUN: agogosml generate -f <folder>
     RESULT: Overwrite existing files in the specified directory
     """
@@ -135,7 +158,9 @@ def test_generate_invalid_schema():
 
 def _assert_template_files_exist(folder='.'):
     for proj_file in EXPECTED_OUTPUT_PROJ_FILES:
-        assert os.path.exists(os.path.join(folder, proj_file))
+        assert_file = os.path.join(folder, proj_file)
+        print(assert_file)
+        assert os.path.exists(assert_file)
 
 
 def _create_test_manifest_azure(folder='.'):
@@ -152,14 +177,7 @@ def _create_test_manifest_azure(folder='.'):
         "repository": {
             "type": "GitHub",
             "url": "https://github.com/Microsoft/agogosml.git"
-        },
-        "tests": [{
-            "name": "Sanity Check",
-            "type": "language-specific",
-            "input": "in.json",
-            "output": "out.json",
-            "outputFormatter": "ConsoleOutputFormatterClass"
-        }]
+        }
     }
     """
     manifest = json.loads(manifest_str)
@@ -174,7 +192,10 @@ def _create_dummy_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
     if not os.path.isdir(folder):
         os.makedirs(folder)
 
-    os.makedirs(os.path.join(folder, 'testproject'))
+    os.makedirs(os.path.join(folder, 'testproject', 'agogosml'))
+    os.makedirs(os.path.join(folder, 'testproject', 'input_reader'))
+    os.makedirs(os.path.join(folder, 'testproject', 'output_writer'))
+    os.makedirs(os.path.join(folder, 'testproject', 'testproject'))
 
     for proj_file in files:
         outfile = os.path.join(folder, proj_file)

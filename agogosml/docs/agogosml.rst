@@ -7,7 +7,9 @@ Subpackages
 .. toctree::
 
     agogosml.common
+    agogosml.reader
     agogosml.utils
+    agogosml.writer
 
 Module contents
 ---------------

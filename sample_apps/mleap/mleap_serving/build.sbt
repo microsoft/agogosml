@@ -6,7 +6,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % "0.9.0",
   "com.google.code.gson" % "gson" % "2.8.0",
   "org.scalaj" %% "scalaj-http" % "2.4.1",
-  "ml.combust.mleap" %% "mleap-runtime" % "0.12.0"
+  "ml.combust.mleap" %% "mleap-runtime" % "0.12.0",
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 )
 
 assemblyJarName in assembly := s"app-assembly.jar"

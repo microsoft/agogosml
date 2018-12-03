@@ -21,6 +21,7 @@ ARG SCALA_VERSION=2.11
 WORKDIR /app
 COPY --from=jar_builder /temp/run_jar.sh /app
 COPY --from=jar_builder /temp/target/scala-${SCALA_VERSION}/app-assembly.jar /app
+COPY --from=jar_builder /temp/assets/sample_app.zip /app
 
 RUN ["chmod", "+x", "./run_jar.sh"]
 

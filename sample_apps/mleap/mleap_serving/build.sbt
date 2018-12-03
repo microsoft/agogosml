@@ -8,3 +8,10 @@ libraryDependencies ++= Seq(
   "org.scalaj" %% "scalaj-http" % "2.4.1",
   "ml.combust.mleap" %% "mleap-runtime" % "0.12.0"
 )
+
+assemblyJarName in assembly := s"app-assembly.jar"
+
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.first
+}

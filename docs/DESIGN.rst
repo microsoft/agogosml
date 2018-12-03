@@ -22,10 +22,10 @@ removes the need to implement connectors to various messaging services,
 and focus on building the business logic inside the app container while
 implementing a loosely coupled services approach.
 
-- Input container - Receive events from Azure Event Hub / Kafka.
+- Input Container - Receive events from Azure Event Hub / Kafka.
 - Init Container - Loads artifacts before initializing the customer application. The Init container (Artifact Loader)  loads the ML module to a temporary storage which is then accessible to the Customer Application.
 - Customer App - Models implemented in PySpark, Tensorflow, scikit-learn and R.
-- Output container - send the results of the models to Azure Event Hub / Kafka or other data source.
+- Output Container - send the results of the models to Azure Event Hub / Kafka or other data source.
 
 |Architecure Diagram - Basic Pipeline Building Block|
 

@@ -3,7 +3,7 @@
 ## assumes: TWINE_USERNAME, TWINE_PASSWORD, GITHUB_ACCESS_TOKEN are set as environment variables.
 ## requires pipenv, jq and curl to be installed
 
-echo Do you want to bump major, minor or patch version?
+echo "Do you want to bump major, minor or patch version?"
 read versionbump
 
 #AGOGOSML_VERSION="$(ls dist/agogosml_cli-*.tar.gz | egrep -o '[0-9].*[0-9]')"

@@ -24,6 +24,6 @@ ENV PYTHONUNBUFFERED=1
 
 COPY --from=builder /usr/src/agogosml_cli/dist /
 
-RUN pip install /agogosml_cli-0.1.0.tar.gz
+RUN pip install /agogosml_cli-*.tar.gz
 
 ENTRYPOINT ["agogosml"]

@@ -32,23 +32,6 @@ input_reader:
     KAFKA_CONSUMER_GROUP: ""
     KAFKA_ADDRESS: ""
 
-
-output_writer:
-  name: output_writer
-  # tag:
-  imagePullPolicy: IfNotPresent
-  env:
-    MESSAGING_TYPE: "" # kafka or eventhub
-    # eventhub
-    EVENT_HUB_NAMESPACE: ""
-    EVENT_HUB_NAME: ""
-    EVENT_HUB_SAS_POLICY: ""
-    EVENT_HUB_SAS_KEY: ""
-    # Kafka
-    KAFKA_TOPIC: ""
-    KAFKA_ADDRESS: ""
-    OUTPUT_WRITER_PORT: ""
-
 main_app: app_0
 
 instance_apps:
@@ -66,3 +49,18 @@ instance_apps:
       PORT: ""
       OUTPUT_URL: ""
       SCHEMA_FILEPATH: ""
+    output_writer:
+      name: output_writer
+      # tag:
+      imagePullPolicy: IfNotPresent
+      env:
+        MESSAGING_TYPE: "" # kafka or eventhub
+        # eventhub
+        EVENT_HUB_NAMESPACE: ""
+        EVENT_HUB_NAME: ""
+        EVENT_HUB_SAS_POLICY: ""
+        EVENT_HUB_SAS_KEY: ""
+        # Kafka
+        KAFKA_TOPIC: ""
+        KAFKA_ADDRESS: ""
+        OUTPUT_WRITER_PORT: ""

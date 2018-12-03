@@ -32,11 +32,11 @@ spec:
           ports:
           - containerPort: {{ .service.internalPort }}
         - name: {{ $fullname }}-{{ $appName | replace "_" "-" }}-output-writer
-          image: {{ $root.Values.registry }}/{{ $root.Values.output_writer.name }}:{{ default "latest" $root.Values.output_writer.tag }}
-          imagePullPolicy: {{ default "IfNotPresent" $root.Values.output_writer.pullPolicy }}
+          image: {{ $root.Values.registry }}/{{ $value.output_writer.name }}:{{ default "latest" $value.output_writer.tag }}
+          imagePullPolicy: {{ default "IfNotPresent" $value.output_writer.pullPolicy }}
           envFrom:
           - configMapRef:
-              name: {{ $configName }}
+              name: {{ $configName }}-{{ $appName | replace "_" "-" }}
       {{ if $root.Values.registry }}imagePullSecrets:
         - name: {{ $root.Values.imagePullSecret}}{{ end }}
 ---

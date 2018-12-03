@@ -20,18 +20,6 @@ def get_template_full_filepath(file: str) -> str:
     return os.path.join(TEMPLATES_FOLDER, file)
 
 
-def copy_module_templates(src: str, dst: str) -> str:
-    """Copies a file from the module templates, returns dst string.
-    Throws SameFileError if both file and destination are the same.
-    Args:
-        src (string):  Name of the source template file
-        dst (string):  Destination folder to copy to
-    """
-    module_path = os.path.dirname(__file__)
-    full_file = os.path.join(module_path, TEMPLATES_FOLDER, src)
-    return copy(full_file, dst)
-
-
 def validate_manifest(manifest_json: object) -> None:
     """Validates a manifest file against
     the scheme Throws an error if invalid.

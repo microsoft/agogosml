@@ -50,6 +50,13 @@ def test_generate():
     runner = CliRunner()
     """
     RUN: agogosml generate
+    RESULT: Fail because no manifest.json exists
+    """
+    with runner.isolated_filesystem():
+        result = runner.invoke(generate.generate)
+        assert result.exit_code == 1
+    """
+    RUN: agogosml generate
     RESULT: Produces the correct files in the current working directory
     """
     with runner.isolated_filesystem():
@@ -57,6 +64,28 @@ def test_generate():
         result = runner.invoke(generate.generate)
         assert result.exit_code == 0
         _assert_template_files_exist()
+    """
+    RUN: agogosml generate
+    RESULT: Fail because files exist and force is not specified.
+    """
+    with runner.isolated_filesystem():
+        _create_test_manifest_azure()
+        _create_dummy_template_files()
+        prevmd5 = _get_md5_template_files()
+        result = runner.invoke(generate.generate)
+        assert result.exit_code == 1
+        assert set(prevmd5) == set(_get_md5_template_files())
+    """
+    RUN: agogosml generate
+    RESULT: Fail because manifest is invalid.
+    """
+    with runner.isolated_filesystem():
+        _create_invalid_manifest_azure()
+        _create_dummy_template_files()
+        prevmd5 = _get_md5_template_files()
+        result = runner.invoke(generate.generate)
+        assert result.exit_code == 1
+        assert set(prevmd5) == set(_get_md5_template_files())
     """
     RUN: agogosml generate -f
     RESULT: Overwrite existing files
@@ -158,9 +187,7 @@ def test_generate_invalid_schema():
 
 def _assert_template_files_exist(folder='.'):
     for proj_file in EXPECTED_OUTPUT_PROJ_FILES:
-        assert_file = os.path.join(folder, proj_file)
-        print(assert_file)
-        assert os.path.exists(assert_file)
+        assert os.path.exists(os.path.join(folder, proj_file))
 
 
 def _create_test_manifest_azure(folder='.'):
@@ -174,6 +201,31 @@ def _create_test_manifest_azure(folder='.'):
                 "azureContainerRegistry": "https://acr.acr.io",
                 "azureResourceGroup": "agogosml-rg",
                 "kubernetesCluster": "agogosml-k"
+            }
+        },
+        "repository": {
+            "type": "GitHub",
+            "url": "https://github.com/Microsoft/agogosml.git"
+        }
+    }
+    """
+    manifest = json.loads(manifest_str)
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+    outfile = os.path.join(folder, 'manifest.json')
+    with open(outfile, 'w') as f:
+        json.dump(manifest, f, indent=4)
+
+
+def _create_invalid_manifest_azure(folder='.'):
+    manifest_str = """
+    {
+        "name": "testproject",
+        "cloud": {
+            "vendor": "azure",
+            "subscriptionId": "123-123-123-123",
+            "otherProperties": {
+                "azureContainerRegistry": "https://acr.acr.io"
             }
         },
         "repository": {

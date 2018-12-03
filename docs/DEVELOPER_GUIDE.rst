@@ -149,10 +149,19 @@ Installing Dependencies (and Dev Dependencies):
     $ cd agogosml_cli/
     $ pipenv install --dev
 
-Running Tests:
+Linking against development agogosml
 
 .. code:: bash
 
+    $ pipenv shell
+    # Note: pipenv on Windows does not keep you in the current directory, you might have to change directories.
+    $ cd ../agogosml/
+    $ pipenv run make installedit
+
+Running Tests:
+
+.. code:: bash
+    $ cd ../agogosml_cli/
     $ pipenv run make test
 
 Running Linter:
@@ -160,6 +169,26 @@ Running Linter:
 .. code:: bash
 
     $ pipenv run make lint
+
+
+Test the CLI and see generated output
+
+.. code:: bash
+
+    $ pipenv run make installedit
+
+    # Create a directory for your project
+    $ mkdir hello-agogosml && cd hello-agogosml
+
+    # Init the project
+    agogosml init
+
+    # Fill in the manifest.json (Docker Container Registry, Azure Subscription, etc).
+    vi manifest.json
+
+    # Generate the code for the projects
+    agogosml generate
+
 
 
 Deployment and Provisionning to Azure

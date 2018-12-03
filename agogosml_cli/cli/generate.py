@@ -124,6 +124,8 @@ def extractAzureTemplateVars(manifest):
             acr += '/'
         template_vars['AZURE_DOCKER_BUILDARGS'] = \
             '--build-arg CONTAINER_REG=%s --build-arg AGOGOSML_TAG=$(Build.BuildId)' % acr
+        template_vars['AZURE_RESOURCE_GROUP'] = manifest['cloud']['otherProperties']['azureResourceGroup']
+        template_vars['KUBERNETES_CLUSTER'] = manifest['cloud']['otherProperties']['kubernetesCluster']
     return template_vars
 
 

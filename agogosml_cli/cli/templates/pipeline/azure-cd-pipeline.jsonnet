@@ -331,8 +331,8 @@
                             "inputs": {
                                 "connectionType": "Azure Resource Manager",
                                 "azureSubscriptionEndpoint": "",
-                                "azureResourceGroup": "agogosml-rg",
-                                "kubernetesCluster": "agogosml-aks",
+                                "azureResourceGroup": std.extVar('AZURE_RESOURCE_GROUP'),
+                                "kubernetesCluster": std.extVar('KUBERNETES_CLUSTER'),
                                 "kubernetesServiceEndpoint": "",
                                 "namespace": "",
                                 "command": "upgrade",
@@ -604,8 +604,8 @@
                             "inputs": {
                                 "connectionType": "Azure Resource Manager",
                                 "azureSubscriptionEndpoint": "",
-                                "azureResourceGroup": "agogosml-rg",
-                                "kubernetesCluster": "agogosml-aks",
+                                "azureResourceGroup": std.extVar('AZURE_RESOURCE_GROUP'),
+                                "kubernetesCluster": std.extVar('KUBERNETES_CLUSTER'),
                                 "kubernetesServiceEndpoint": "",
                                 "namespace": "",
                                 "command": "upgrade",
@@ -877,8 +877,8 @@
                             "inputs": {
                                 "connectionType": "Azure Resource Manager",
                                 "azureSubscriptionEndpoint": "",
-                                "azureResourceGroup": "agogosml-rg",
-                                "kubernetesCluster": "agogosml-aks",
+                                "azureResourceGroup": std.extVar('AZURE_RESOURCE_GROUP'),
+                                "kubernetesCluster": std.extVar('KUBERNETES_CLUSTER'),
                                 "kubernetesServiceEndpoint": "",
                                 "namespace": "",
                                 "command": "upgrade",

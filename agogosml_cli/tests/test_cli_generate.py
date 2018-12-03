@@ -171,7 +171,9 @@ def _create_test_manifest_azure(folder='.'):
             "vendor": "azure",
             "subscriptionId": "123-123-123-123",
             "otherProperties": {
-                "azureContainerRegistry": "https://acr.acr.io"
+                "azureContainerRegistry": "https://acr.acr.io",
+                "azureResourceGroup": "agogosml-rg",
+                "kubernetesCluster": "agogosml-k"
             }
         },
         "repository": {

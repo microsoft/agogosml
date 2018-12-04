@@ -5,7 +5,6 @@
 import os
 import json
 from jsonschema import validate
-from shutil import copy
 
 
 SCHEMA_FILE = os.path.join(os.path.dirname(__file__), 'manifest.schema.json')

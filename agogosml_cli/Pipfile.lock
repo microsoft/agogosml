@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "42527ecf20cc382f66acbac7a837c212b882a3dac775f8382ca442321466a203"
+            "sha256": "9bb6def85e03fb6b8d1a1735eb01f1bcb259297a17bde3cb06fc3675f1e6a699"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -15,13 +15,6 @@
         ]
     },
     "default": {
-        "agogosml": {
-            "hashes": [
-                "sha256:48a2ffef9a79958c52c3d86367758f9ad9de7302480eba3e03af0ba0abc96498",
-                "sha256:b9804db2be6e3bdcd3835c232fc3f5daa0bdfe720eeee5e09abb07c368324b57"
-            ],
-            "version": "==0.1.0"
-        },
         "arrow": {
             "hashes": [
                 "sha256:a558d3b7b6ce7ffc74206a86c147052de23d3d4ef0e17c210dd478c53575c4cd"
@@ -62,6 +55,13 @@
                 "sha256:ed8f54a8fc79b6864020d773ce11539b5f08e4617f353de1f22d23226f6a0d36"
             ],
             "version": "==1.6.0"
+        },
+        "decorator": {
+            "hashes": [
+                "sha256:2c51dff8ef3c447388fe5e4453d24a2bf128d3a4c32af3fabef1f01c6851ab82",
+                "sha256:c39efa13fbdeb4506c476c9b3babf6a718da943dab7811c206005a4a956c080c"
+            ],
+            "version": "==4.3.0"
         },
         "future": {
             "hashes": [
@@ -185,6 +185,12 @@
                 "sha256:de9529817c93f27c8ccbfead6985011db27bd0ddfcdb2d86f3f663385c6a9c22"
             ],
             "version": "==1.24.1"
+        },
+        "validators": {
+            "hashes": [
+                "sha256:cb9c61250ee23a68e8b5f75319c3cd3668af83112fed4f72dfe352f65fe5387c"
+            ],
+            "version": "==0.12.3"
         },
         "whichcraft": {
             "hashes": [

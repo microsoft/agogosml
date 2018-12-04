@@ -65,6 +65,7 @@ def output_message(data: object):
 
     request = requests.post(OUTPUT_URL, data=str(data))
     if request.status_code != 200:
+
         logging.error("Error with a request %s and message not sent was %s",
                       request.status_code, data)
     else:

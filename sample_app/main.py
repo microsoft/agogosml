@@ -1,11 +1,10 @@
 """ Entrypoint for customer application. Listens for HTTP requests from
 the input reader, and sends the transformed message to the output writer. """
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import urllib.request
-import urllib.parse
 import os
 import logging
 from dotenv import load_dotenv
+import requests
 import datahelper
 
 load_dotenv()
@@ -64,12 +63,14 @@ def output_message(data: object):
       data: transformed json object to send to output writer
     """
 
-    encoded_data = urllib.parse.urlencode(data).encode('utf-8')
-    req = urllib.request.Request(OUTPUT_URL, encoded_data)
-    response = urllib.request.urlopen(req)
-    logging.info('Response received from output writer')
-    # TO DO: Design retry policy based on BL. For now, print result
-    print(response.read().decode('utf-8'))
+    request = requests.post(OUTPUT_URL, data=str(data))
+    if request.status_code != 200:
+
+        logging.error("Error with a request %s and message not sent was %s",
+                      request.status_code, data)
+    else:
+        logging.info("%s Response received from output writer",
+                     request.status_code)
 
 
 def run(server_class=HTTPServer, handler_class=Socket):

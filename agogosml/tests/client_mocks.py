@@ -10,6 +10,7 @@ class ClientMessagingMock(AbstractStreamingClient):
         pass
 
     def send(self, *args, **kwargs):
+        print(args)
         self.sent = True
         pass
 

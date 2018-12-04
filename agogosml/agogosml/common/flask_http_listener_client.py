@@ -13,31 +13,32 @@ class FlaskHttpListenerClient(ListenerClient):
         self.host = host
 
     def thread_flask(self):
-
         app = Flask(__name__)
 
         @app.route("/", methods=["POST"])
         def on_input():
             msg = str(request.data, 'utf-8', 'ignore')
             self.on_message_received(msg)
-            return ""
+            return 'msg:' + msg
 
         app.run(
-            host=self.host, port=self.port, debug=False, use_reloader=False)
+            host=self.host, port=self.port, debug=False, use_reloader=False, threaded=True)
 
     def start(self, on_message_received):
-
         self.on_message_received = on_message_received
-        t_flask = threading.Thread(name='agogosml', target=self.thread_flask)
-        t_flask.setDaemon(True)
-        t_flask.start()
-
-        try:
-            while True:
-                time.sleep(1)
-
-        except KeyboardInterrupt:
-            exit(1)
+        self.t_flask = threading.Thread(name='agogosml', target=self.thread_flask)
+        self.t_flask.setDaemon(True)
+        self.t_flask.start()
 
     def stop(self):
-        raise KeyboardInterrupt
+        self.shutdown_server()
+        # self.t_flask.join()
+
+    def shutdown_server(self):
+        try:
+            func = request.environ.get('werkzeug.server.shutdown')
+            if func is None:
+                raise RuntimeError('Not running with the Werkzeug Server')
+            func()
+        except:
+            print('error while shutting down flask server')

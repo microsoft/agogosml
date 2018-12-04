@@ -1,10 +1,10 @@
 """ Entrypoint for customer application. Listens for HTTP requests from
 the input reader, and sends the transformed message to the output writer. """
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import requests
 import os
 import logging
 from dotenv import load_dotenv
+import requests
 import datahelper
 
 load_dotenv()
@@ -65,12 +65,12 @@ def output_message(data: object):
 
     request = requests.post(OUTPUT_URL, data=str(data))
     if request.status_code != 200:
-        logging.error(
-            "Error with a request {} and message not sent was {}".format(
-                request.status_code, data))
+
+        logging.error("Error with a request %s and message not sent was %s",
+                      request.status_code, data)
     else:
-        logging.info("{} Response received from output writer".format(
-            request.status_code))
+        logging.info("%s Response received from output writer",
+                     request.status_code)
 
 
 def run(server_class=HTTPServer, handler_class=Socket):

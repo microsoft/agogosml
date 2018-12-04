@@ -3,3 +3,4 @@ python-dotenv
 jsonschema
 pytest
 pylint
+requests

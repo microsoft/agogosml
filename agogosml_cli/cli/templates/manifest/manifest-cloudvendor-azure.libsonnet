@@ -1,5 +1,5 @@
 {
-    "azureContainerRegistry": "FILL IN",
-    "azureResourceGroup": "FILL IN",
-    "kubernetesCluster": "FILL IN"
+    "azureContainerRegistry": "MISSING",
+    "azureResourceGroup": "MISSING",
+    "kubernetesCluster": "MISSING"
 }

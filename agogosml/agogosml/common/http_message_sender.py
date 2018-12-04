@@ -45,8 +45,6 @@ class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-method
                 logger.error(
                     "Error with a request {} and message not sent was {}".
                     format(request.status_code, message))
-                print("Error with a request {} and message not sent was {}".
-                      format(request.status_code, message))
                 return False
             return True
 

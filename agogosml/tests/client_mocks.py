@@ -7,11 +7,13 @@ class ClientMessagingMock(AbstractStreamingClient):
     def __init__(self):
         self.sent = False
         self.receiving = False
+        self.last_message = None
         pass
 
-    def send(self, *args, **kwargs):
-        print(args)
+    def send(self, msg):
+        print(msg)
         self.sent = True
+        self.last_message = msg
         pass
 
     def stop(self, *args, **kwargs):
@@ -24,6 +26,9 @@ class ClientMessagingMock(AbstractStreamingClient):
 
     def get_sent(self):
         return self.sent
+
+    def get_last_msg(self):
+        return self.last_message
 
     def get_receiving(self):
         return self.receiving

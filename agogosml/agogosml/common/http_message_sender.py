@@ -37,6 +37,7 @@ class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-method
 
         :param message: JSON formatted message.
         """
+        return_value = False
         try:
             server_address = "http://" + self.host_endpoint + ":" + self.port_endpoint
             # TODO: Add retries as some of the messages are failing to send
@@ -47,11 +48,10 @@ class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-method
                     format(request.status_code, message))
                 print("Error with a request {} and message not sent was {}".
                       format(request.status_code, message))
-                return False
-            return True
+            else:
+                return_value = True
 
         except Exception as e_e:
             logger.error('Failed to send request: ' + str(e_e))
 
-        finally:
-            return False
+        return return_value

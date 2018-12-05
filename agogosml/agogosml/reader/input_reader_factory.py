@@ -13,9 +13,10 @@ class InputReaderFactory:
     """Factory and instance resolving for input reader"""
 
     @staticmethod
-    def create(config: dict):
+    def create(config: dict, streaming_client=None):
         """Create a new instance of InputReader
 
+        :param streaming_client:
         :param config: A configuration for InputReader
         :return InputReader: An instance of an InputReader with streaming_client and message_sender
         """
@@ -25,27 +26,29 @@ class InputReaderFactory:
             ''')
 
         client = None
+        if streaming_client is None:
+            if config.get("client") is None:
+                raise Exception('''
+                client cannot be empty
+                ''')
 
-        if config.get("client") is None:
-            raise Exception('''
-            client cannot be empty
-            ''')
+            client_config = config.get("client")["config"]
+            if config.get("client")["type"] == "kafka":
+                client = KafkaStreamingClient(client_config)
 
-        client_config = config.get("client")["config"]
-        if config.get("client")["type"] == "kafka":
-            client = KafkaStreamingClient(client_config)
+            if config.get("client")["type"] == "eventhub":
+                client = EventHubStreamingClient(client_config)
 
-        if config.get("client")["type"] == "eventhub":
-            client = EventHubStreamingClient(client_config)
-
-        if client is None:
-            raise Exception('''
-            Unknown client type
-            ''')
+            if client is None:
+                raise Exception('''
+                Unknown client type
+                ''')
+        else:
+            client = streaming_client
 
         # host and port from the client
-        app_host = config.get("client")["config"]["APP_HOST"]
-        app_port = config.get("client")["config"]["APP_PORT"]
+        app_host = config.get("APP_HOST")
+        app_port = config.get("APP_PORT")
 
         msg_sender = HttpMessageSender(app_host, app_port)
 

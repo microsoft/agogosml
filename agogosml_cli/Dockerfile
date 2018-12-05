@@ -9,7 +9,8 @@ RUN apk add --update make \
     cmake \
     g++ && \ 
     pip install pipenv && \
-    pipenv install --dev
+    pipenv install --deploy --dev 
+    # --deploy causes pipenv to fail if the lock file is out of date
 
 RUN pipenv run make clean && \
     pipenv run make lint && \

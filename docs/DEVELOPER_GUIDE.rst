@@ -148,20 +148,12 @@ Installing Dependencies (and Dev Dependencies):
 
     $ cd agogosml_cli/
     $ pipenv install --dev
-
-Linking against development agogosml
-
-.. code:: bash
-
-    $ pipenv shell
-    # Note: pipenv on Windows does not keep you in the current directory, you might have to change directories.
-    $ cd ../agogosml/
     $ pipenv run make installedit
 
 Running Tests:
 
 .. code:: bash
-    $ cd ../agogosml_cli/
+
     $ pipenv run make test
 
 Running Linter:

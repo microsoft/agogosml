@@ -11,7 +11,6 @@ import cli.generate as generate
 @click.group()
 def main() -> None:
     """CLI and scaffold generation tool for agogosml"""
-    pass
 
 
 main.add_command(init.init)

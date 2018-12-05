@@ -1,4 +1,4 @@
-package mleap_model
+package com.Microsoft.agogosml.mleap_serving
 
 import ml.combust.bundle.BundleFile
 import ml.combust.mleap.runtime.MleapSupport._

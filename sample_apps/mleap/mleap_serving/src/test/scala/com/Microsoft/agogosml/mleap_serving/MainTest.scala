@@ -1,4 +1,5 @@
-package com.Microsoft.mleap_serving
+package com.Microsoft.agogosml.mleap_serving
+
 import io.finch._
 import org.scalatest.FunSuite
 import com.twitter.io.Buf

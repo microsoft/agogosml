@@ -1,4 +1,4 @@
-package com.Microsoft.mleap_serving
+package com.Microsoft.agogosml.mleap_serving
 
 import com.twitter.util.Await
 import io.finch._
@@ -6,7 +6,6 @@ import io.finch.circe._
 import io.finch.syntax._
 import io.circe.generic.auto._
 import com.google.gson.Gson
-import mleap_model._
 
 object Main extends App {
 

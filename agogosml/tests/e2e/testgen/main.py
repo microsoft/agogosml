@@ -68,4 +68,4 @@ def get_messages_from_event_hub():
 
 
 if __name__ == "__main__":
-    app.run(port=os.getenv("TEST_GEN_PORT"), host=os.getenv("TEST_GEN_HOST"), debug=False, use_reloader=False)
+    app.run(port=5000, host='0.0.0.0', debug=True, use_reloader=False)

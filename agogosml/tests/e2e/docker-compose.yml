@@ -4,14 +4,40 @@ services:
   input-reader:
     image: agogosacr.azurecr.io/input_reader:$TAG
     env_file: .env
+    networks:
+      mynet:
+        aliases:
+          - input
 
   output-writer:
     image: agogosacr.azurecr.io/output_writer:$TAG
     env_file: .env
+    ports:
+     - "127.0.0.1:6000:6000"
+    networks:
+      mynet:
+        aliases:
+          - output
 
   sample-app:
     image: agogosacr.azurecr.io/sample_app:$APP_TAG
     env_file: .env.app
+    ports:
+     - "127.0.0.1:3000:3000"
+    networks:
+      mynet:
+        aliases:
+          - sample
 
-  # tester-app:
-  #   image: ...
+  tester-gen:
+    build: testgen/.
+    env_file: .env
+    ports:
+     - "127.0.0.1:2000:5000"
+    networks:
+      mynet:
+        aliases:
+          - tester
+
+networks:
+  mynet:

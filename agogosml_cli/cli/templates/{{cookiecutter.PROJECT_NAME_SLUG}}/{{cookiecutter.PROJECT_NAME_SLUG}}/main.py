@@ -42,7 +42,6 @@ class Socket(BaseHTTPRequestHandler):
         data = data.decode("utf-8")
 
         try:
-            logging.info(data)
             datahelper.validate_schema(data, SCHEMA_FILEPATH)
         except BaseException:
             self.send_error(

@@ -20,6 +20,8 @@ services:
       OUTPUT_WRITER_HOST: output
       TEST_GEN_PORT: 2000
       TEST_GEN_HOST: 127.0.0.1
+      AZURE_STORAGE_ACCESS_KEY:
+      EVENT_HUB_SAS_KEY:
 
   output-writer:
     image: agogosacr.azurecr.io/output_writer:${TAG}

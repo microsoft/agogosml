@@ -3,31 +3,57 @@ version: "3.7"
 services:
   input-reader:
     image: agogosacr.azurecr.io/input_reader:${TAG}
-    env_file: .env
     networks:
       mynet:
         aliases:
           - input
+    environment:
+      - MESSAGING_TYPE=eventhub
+      - AZURE_STORAGE_ACCOUNT=eistorage
+      - EVENT_HUB_NAMESPACE=ei-test
+      - EVENT_HUB_NAME=eh-input
+      - EVENT_HUB_SAS_POLICY=test
+      - LEASE_CONTAINER_NAME=leases
+      - APP_HOST=sample
+      - APP_PORT=3000
+      - OUTPUT_WRITER_PORT=6000
+      - OUTPUT_WRITER_HOST=output
+      - TEST_GEN_PORT=2000
+      - TEST_GEN_HOST=127.0.0.1
 
   output-writer:
     image: agogosacr.azurecr.io/output_writer:${TAG}
-    env_file: output.env
     ports:
      - "127.0.0.1:6000:6000"
     networks:
       mynet:
         aliases:
           - output
+    environment:
+      - MESSAGING_TYPE=eventhub
+      - EVENT_HUB_NAMESPACE=ei-test
+      - EVENT_HUB_NAME=eh-output
+      - EVENT_HUB_SAS_POLICY=test
+      - APP_HOST=sample
+      - APP_PORT=3000
+      - OUTPUT_WRITER_PORT=6000
+      - OUTPUT_WRITER_HOST=output
+      - TEST_GEN_PORT=2000
+      - TEST_GEN_HOST=127.0.0.1
 
   sample-app:
     image: agogosacr.azurecr.io/sample_app:${APP_TAG}
-    env_file: app.env
     ports:
      - "127.0.0.1:3000:3000"
     networks:
       mynet:
         aliases:
           - sample
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+      - OUTPUT_URL=http://output:6000
+      - SCHEMA_FILEPATH=schema_example.json
 
 networks:
   mynet:

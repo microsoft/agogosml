@@ -14,19 +14,19 @@ app = Flask(__name__)
 
 @app.route("/send", methods=["GET"])
 def send_messages():
-    with open('test_messages.json') as f:
+    with open('test_messages.json', encoding='utf-8') as f:
         test_messages = json.load(f)
 
     send_config = {
         "EVENT_HUB_NAMESPACE": os.getenv("EVENT_HUB_NAMESPACE"),
-        "EVENT_HUB_NAME": os.getenv("EVENT_HUB_NAME"),
+        "EVENT_HUB_NAME": os.getenv("EVENT_HUB_NAME_INPUT"),
         "EVENT_HUB_SAS_POLICY": os.getenv("EVENT_HUB_SAS_POLICY"),
-        "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY")
+        "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY_INPUT"),
     }
     send_client = EventHubStreamingClient(send_config)
 
     for message in test_messages:
-        send_client.send(message)
+        send_client.send(json.dumps(message))
 
     send_client.stop()
     return json.dumps(test_messages)
@@ -46,11 +46,11 @@ def get_messages_from_event_hub():
     receive_config = {
         "AZURE_STORAGE_ACCOUNT": os.getenv("AZURE_STORAGE_ACCOUNT"),
         "AZURE_STORAGE_ACCESS_KEY": os.getenv("AZURE_STORAGE_ACCESS_KEY"),
-        "LEASE_CONTAINER_NAME": os.getenv("LEASE_CONTAINER_NAME"),
+        "LEASE_CONTAINER_NAME": os.getenv("LEASE_CONTAINER_NAME_OUTPUT"),
         "EVENT_HUB_NAMESPACE": os.getenv("EVENT_HUB_NAMESPACE"),
-        "EVENT_HUB_NAME": os.getenv("EVENT_HUB_NAME"),
+        "EVENT_HUB_NAME": os.getenv("EVENT_HUB_NAME_OUTPUT"),
         "EVENT_HUB_SAS_POLICY": os.getenv("EVENT_HUB_SAS_POLICY"),
-        "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY"),
+        "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY_OUTPUT"),
         "EVENT_HUB_CONSUMER_GROUP": os.getenv("EVENT_HUB_CONSUMER_GROUP"),
         "TIMEOUT": 10
     }

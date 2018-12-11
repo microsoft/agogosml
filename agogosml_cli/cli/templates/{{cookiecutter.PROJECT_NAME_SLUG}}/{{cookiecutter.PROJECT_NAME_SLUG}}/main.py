@@ -3,6 +3,7 @@ the input reader, and sends the transformed message to the output writer. """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import os
 import logging
+import json
 import requests
 import datahelper
 
@@ -41,6 +42,7 @@ class Socket(BaseHTTPRequestHandler):
         data = data.decode("utf-8")
 
         try:
+            logging.info(data)
             datahelper.validate_schema(data, SCHEMA_FILEPATH)
         except BaseException:
             self.send_error(
@@ -65,8 +67,7 @@ def output_message(data: object):
     Args:
       data: transformed json object to send to output writer
     """
-
-    request = requests.post(OUTPUT_URL, data=str(data))
+    request = requests.post(OUTPUT_URL, data=json.dumps(data))
     if request.status_code != 200:
 
         logging.error("Error with a request %s and message not sent was %s",

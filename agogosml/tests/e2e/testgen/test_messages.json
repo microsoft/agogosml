@@ -1,5 +1,14 @@
 [
-    "{\"key\": \"a\", \"intValue\": 1}",
-    "{\"key\": \"b\", \"intValue\": 2}",
-    "{\"key\": \"c\", \"intValue\": 3}"
+    {
+        "key": "first test message",
+        "intValue": 1
+    },
+    {
+        "key": "another test message",
+        "intValue": 2
+    },
+    {
+        "key": "third test",
+        "intValue": 3
+    }
 ]

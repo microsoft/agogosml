@@ -1,4 +1,5 @@
 import asyncio
+import time
 from multiprocessing.pool import ThreadPool
 
 from dotenv import load_dotenv
@@ -68,4 +69,11 @@ def get_messages_from_event_hub():
 
 
 if __name__ == "__main__":
-    app.run(port=5000, host='0.0.0.0', debug=True, use_reloader=False)
+    # app.run(port=5000, host='0.0.0.0', debug=True, use_reloader=False)
+    send = send_messages()
+    print(send)
+    print "Going to sleep : %s" % time.ctime()
+    time.sleep(20)
+    print "Finished sleeping : %s" % time.ctime()
+    receive = receive_messages()
+    print(receive)

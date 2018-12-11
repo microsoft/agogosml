@@ -75,3 +75,7 @@ if __name__ == "__main__":
     time.sleep(20)
     receive = receive_messages()
     print(receive)
+    if receive == "":
+        exit(1)
+    else:
+        exit(0)

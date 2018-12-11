@@ -1,5 +1,5 @@
 ARG CONTAINER_REG="agogosacr.azurecr.io/"
-ARG AGOGOSML_TAG="939"
+ARG AGOGOSML_TAG=""
 
 FROM ${CONTAINER_REG}agogosml:${AGOGOSML_TAG} as builder
 

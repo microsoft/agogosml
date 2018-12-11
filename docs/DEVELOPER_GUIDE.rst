@@ -48,8 +48,16 @@ And finally the output writer:
 
     docker build -t agogosml/output_writer -f output_writer/Dockerfile.output_writer .
 
+
+
 Run with Docker Locally
 ~~~~~~~~~~~~~~~~~~~~~~~
+
+If you are building this locally add the following to each of the above commands:
+
+.. code:: bash
+
+  --build-arg CONTAINER_REG=agogosml/
 
 Set required environment variables (You can see an example `env.example.sh <../env.example.sh>`__)
 

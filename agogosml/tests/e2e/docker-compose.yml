@@ -3,7 +3,6 @@ version: "3.7"
 services:
   tester-gen:
     build: testgen/.
-    env_file: tester.env
     ports:
      - "127.0.0.1:2000:5000"
     networks:

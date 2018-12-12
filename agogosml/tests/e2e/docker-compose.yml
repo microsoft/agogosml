@@ -26,6 +26,8 @@ services:
       EVENT_HUB_SAS_KEY_INPUT:
       EVENT_HUB_SAS_KEY_OUTPUT:
       AZURE_STORAGE_ACCESS_KEY:
+      CONTAINER_REG:
+      TAG:
 
 networks:
   mynet:

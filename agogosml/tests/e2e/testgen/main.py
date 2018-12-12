@@ -5,15 +5,12 @@ from multiprocessing.pool import ThreadPool
 from dotenv import load_dotenv
 import os
 import json
-from flask import Flask
 
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 
 load_dotenv()
-app = Flask(__name__)
 
 
-@app.route("/send", methods=["GET"])
 def send_messages():
     with open('test_messages.json', encoding='utf-8') as f:
         test_messages = json.load(f)
@@ -33,7 +30,6 @@ def send_messages():
     return json.dumps(test_messages)
 
 
-@app.route("/receive", methods=["GET"])
 def receive_messages():
     pool = ThreadPool(processes=1)
 
@@ -69,7 +65,6 @@ def get_messages_from_event_hub():
 
 
 if __name__ == "__main__":
-    # app.run(port=5000, host='0.0.0.0', debug=True, use_reloader=False)
     send = send_messages()
     print(send)
     time.sleep(20)

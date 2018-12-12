@@ -9,11 +9,11 @@ services:
           - input
     environment:
       MESSAGING_TYPE: eventhub
-      AZURE_STORAGE_ACCOUNT: eistorage
-      EVENT_HUB_NAMESPACE: ei-test
-      EVENT_HUB_NAME: eh-input
+      AZURE_STORAGE_ACCOUNT: ${AZURE_STORAGE_ACCOUNT}
+      EVENT_HUB_NAMESPACE: agogos-eh
+      EVENT_HUB_NAME: ${EVENT_HUB_NAME_INPUT}
       EVENT_HUB_SAS_POLICY: test
-      LEASE_CONTAINER_NAME: leases
+      LEASE_CONTAINER_NAME: ${LEASE_CONTAINER_NAME_INPUT}
       APP_HOST: sample
       APP_PORT: 3000
       OUTPUT_WRITER_PORT: 6000
@@ -33,8 +33,8 @@ services:
           - output
     environment:
       MESSAGING_TYPE: eventhub
-      EVENT_HUB_NAMESPACE: ei-test
-      EVENT_HUB_NAME: eh-output
+      EVENT_HUB_NAMESPACE: agogos-eh
+      EVENT_HUB_NAME: ${EVENT_HUB_NAME_OUTPUT}
       EVENT_HUB_SAS_POLICY: test
       APP_HOST: sample
       APP_PORT: 3000

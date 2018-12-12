@@ -82,8 +82,6 @@ lazy val mleapCustomTransformer = (project in file("mleapCustomTransformer"))
       sparkMllib % "provided",
       scalaTest % "test",
       scalaCheck % "test",
-      //"org.apache.spark" %% "spark-core" % "2.3.1" % "provided",
-      //"org.apache.spark" %% "spark-mllib" % "2.3.1" % "provided",
       "ml.combust.mleap" %% "mleap-runtime" % "0.12.0",
       "ml.combust.mleap" %% "mleap-core" % "0.12.0",
       "ml.combust.mleap" %% "mleap-spark" % "0.12.0"

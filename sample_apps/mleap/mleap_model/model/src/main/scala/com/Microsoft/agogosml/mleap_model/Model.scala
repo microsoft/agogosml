@@ -75,7 +75,6 @@ object Model {
     accuracy
   }
 
-
   def save(model: PipelineModel, outPath: String, inputDf: Dataset[Row]) : Unit = {
 
     implicit val context = SparkBundleContext().withDataset(inputDf)

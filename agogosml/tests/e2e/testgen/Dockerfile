@@ -1,4 +1,5 @@
 ARG CONTAINER_REG
+ARG TAG
 
 FROM ${CONTAINER_REG}agogosml:${TAG} as builder
 

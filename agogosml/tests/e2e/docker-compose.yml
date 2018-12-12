@@ -2,7 +2,12 @@ version: "3.7"
 
 services:
   tester-gen:
-    build: testgen/.
+    build: 
+      context: testgen/.
+      dockerfile: Dockerfile
+      args:
+        CONTAINER_REG:
+        TAG:
     ports:
      - "127.0.0.1:2000:5000"
     networks:
@@ -26,9 +31,6 @@ services:
       EVENT_HUB_SAS_KEY_INPUT:
       EVENT_HUB_SAS_KEY_OUTPUT:
       AZURE_STORAGE_ACCESS_KEY:
-    args:
-      CONTAINER_REG:
-      TAG:
 
 networks:
   mynet:

@@ -1,4 +1,4 @@
-.PHONY: clean data lint requirements deploy_resources deploy deploy_w_docker download_notebooks
+.PHONY: requirements build_model deploy_resources deploy deploy_w_docker
 .DEFAULT_GOAL := help
 
 define PRINT_HELP_PYSCRIPT
@@ -21,6 +21,7 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROFILE = default
 PROJECT_NAME = microsoft-agogosml
 PYTHON_INTERPRETER = python3
+MODEL_TRAINER_JAR=trainer/target/scala-2.11/mleap_model_trainer.jar
 DOCKER_DEPLOY_CONTAINER = devlace/agogos-mleapmodel
 DATABRICKS_NOTEBOOKS_FOLDER = agogos
 
@@ -35,16 +36,16 @@ requirements: ## Install Python Dependencies
 	pip install -U pip setuptools wheel
 	pip install -r requirements.txt
 
-build_model: ## Builds scala jar with model
+$(MODEL_TRAINER_JAR): ## Builds scala jar with model
 	(cd model/ && sbt clean assembly)
 
-deploy_resources: build_model ## Deploy Azure infrastructure 
+deploy_resources: $(MODEL_TRAINER_JAR) ## Deploy Azure infrastructure 
 	databricks/deploy_resources.sh
 
 deploy: deploy_resources ## Deploys entire solution 
 	databricks/create_secrets.sh
 	databricks/configure_databricks.sh
 
-# deploy_w_docker: ## Deploys entire solutions using Docker
-# 	docker build -t $(DOCKER_DEPLOY_CONTAINER) -f Dockerfile .
-# 	docker run -it $(DOCKER_DEPLOY_CONTAINER)
+deploy_w_docker: ## Deploys entire solutions using Docker
+	docker build -t $(DOCKER_DEPLOY_CONTAINER) -f Dockerfile .
+	docker run -it $(DOCKER_DEPLOY_CONTAINER)

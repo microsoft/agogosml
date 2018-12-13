@@ -1,4 +1,4 @@
-package com.Microsoft.agogosml.mleap_model
+package com.Microsoft.agogosml.mleap_model_trainer
 
 import org.apache.spark.sql._
 import org.apache.spark.ml.feature.{StringIndexer, Tokenizer, CountVectorizer, IDF}
@@ -19,7 +19,7 @@ import org.apache.spark.ml.mleap.feature.LengthCounter
  * Train, evaluate, model
  */
 
-object Model {
+object ModelTrainer {
 
   def train(df: Dataset[Row]) : PipelineModel = {
     val indexer = new StringIndexer()

@@ -1,4 +1,4 @@
-package com.Microsoft.agogosml.mleap_model
+package com.Microsoft.agogosml.mleap_model_trainer
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.{SparkConf, SparkContext}
@@ -43,9 +43,9 @@ object Runner {
       .withColumnRenamed("_c0", "hamOrSpam")
       .withColumnRenamed("_c1", "text")
 
-    val trainedModel = Model.train(spamDfRenamed)
+    val trainedModel = ModelTrainer.train(spamDfRenamed)
 
-    Model.save(trainedModel, outputModelPath, spamDfRenamed)
+    ModelTrainer.save(trainedModel, outputModelPath, spamDfRenamed)
 
     println("Done!")
   }

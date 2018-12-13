@@ -4,6 +4,7 @@ val sparkSql = "org.apache.spark" %% "spark-sql" % "2.3.1"
 val sparkMllib = "org.apache.spark" %% "spark-mllib" % "2.3.1"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1"
 val scalaCheck = "org.scalacheck" %% "scalacheck" % "1.13.4"
+val sparkTest = "com.holdenkarau" %% "spark-testing-base" % "2.3.1_0.10.0"
 
 lazy val assemblySettings = Seq(
   assemblyJarName in assembly := name.value + ".jar",
@@ -31,8 +32,8 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = (project in file("."))
-  .aggregate(mleapCustomTransformer)
-  .dependsOn(mleapCustomTransformer)
+  .aggregate(customTransformer)
+  .dependsOn(customTransformer)
   .settings(
     commonSettings,
     assemblySettings,
@@ -40,7 +41,7 @@ lazy val root = (project in file("."))
       organization := "com.Microsoft.agogosml",
       scalaVersion := "2.11.8"
     )),
-    name := "mleap_model",
+    name := "mleap_model_trainer",
     version := "0.0.1",
 
     javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
@@ -55,7 +56,7 @@ lazy val root = (project in file("."))
       sparkMllib % "provided",
       scalaTest % "test",
       scalaCheck % "test",
-      "com.holdenkarau" %% "spark-testing-base" % "2.3.1_0.10.0" % "test" 
+      sparkTest % "test"
     ),
 
     // uses compile classpath for the run task, including "provided" jar (cf http://stackoverflow.com/a/21803413/3827)
@@ -71,7 +72,7 @@ lazy val root = (project in file("."))
     }
   )
 
-lazy val mleapCustomTransformer = (project in file("mleapCustomTransformer"))
+lazy val customTransformer = (project in file("custom_transformer"))
   .settings(
     commonSettings,
     assemblySettings,
@@ -82,6 +83,7 @@ lazy val mleapCustomTransformer = (project in file("mleapCustomTransformer"))
       sparkMllib % "provided",
       scalaTest % "test",
       scalaCheck % "test",
+      sparkTest % "test",
       "ml.combust.mleap" %% "mleap-runtime" % "0.12.0",
       "ml.combust.mleap" %% "mleap-core" % "0.12.0",
       "ml.combust.mleap" %% "mleap-spark" % "0.12.0"

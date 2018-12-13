@@ -1,14 +1,14 @@
-package com.Microsoft.agogosml.mleap_model
+package com.Microsoft.agogosml.mleap_model_trainer
 
 /**
- * Tests for Model
+ * Tests for Model Trainer
  */
 
 import com.holdenkarau.spark.testing.{DataFrameSuiteBase, SharedSparkContext, SparkSessionProvider}
 import org.apache.spark.sql.SparkSession
 import org.scalatest.FunSuite
 
-class ModelTest extends FunSuite with DataFrameSuiteBase with SharedSparkContext {
+class ModelTrainerTest extends FunSuite with DataFrameSuiteBase with SharedSparkContext {
 
   override implicit def reuseContextIfPossible: Boolean = true
 
@@ -38,8 +38,8 @@ class ModelTest extends FunSuite with DataFrameSuiteBase with SharedSparkContext
 
     val Array(trainingData, testData) = spamDfRenamed.randomSplit(Array(0.7, 0.3))
 
-    val trainedModel = Model.train(trainingData)
-    val accuracy = Model.evaluate(trainedModel, testData)
+    val trainedModel = ModelTrainer.train(trainingData)
+    val accuracy = ModelTrainer.evaluate(trainedModel, testData)
 
     assert(accuracy > 0.7)
 

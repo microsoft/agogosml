@@ -12,71 +12,71 @@ This examples includes:
 Requirements to Run Locally
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  azure-cli
--  java 8
--  scala 2.11
--  sbt 1.2.1
--  spark > 2.3
--  mleap
-
-Databricks Setup
-------------------
-
-<Lace to add more here>
+-  `azure-cli 2.0 <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest>`__
+-  `Java 8 <https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html>`__
+-  `scala 2.11 <https://www.scala-lang.org/>`__
+-  `sbt 1.2.1 <https://www.scala-sbt.org/>`__
+-  `Apache Spark > 2.3 <https://spark.apache.org/>`__
+-  `mleap > 0.12.0 <https://github.com/combust/mleap>`__
+-  `jq <https://stedolan.github.io/jq/download/>`__
 
 
+Train and serialize ML Model with Spark and Mleap
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-MLeap Model
-----------------
+MLeap provides functionality to serialize trained pipelines and algorithms to a ``BundleFile`` which can then easily be loaded back into a lightweight Mleap runtime for scoring without Spark dependencies. Our example implements a pipeline with a trained model and a simple custom transformer.
 
-MLeap provides functionality to serialize trained pipelines and algorithm to a
-``BundleFile`` which can then easily be deployed.
-Our example implements a pipeline with a trained model and a custom
-transformer.
+`ModelTrainer <mleap_model/model/src/main/scala/com/Microsoft/agogosml/mleap_model/Model.scala>`__ contains our model training code for training on a Spark cluster. This imports the custom transformer ``LengthCounter``. The Spark model is a simple classification model on the `Spam or Ham` dataset which is then serialized as an Mleap ``BundleFile`` and saved as a ``jar``.
 
-`Model <mleap_model/model/src/main/scala/com/Microsoft/agogosml/mleap_model/Model.scala>`__
-contains our Spark model which imports the custom transformer ``LengthCounter``. The Spark
-model is a simple classification model on the `Spam or Ham` dataset. The MLeap ``BundleFile``
-is saved/outputted as a ``jar`` which can then be saved as an artifact.
+`ModelTrainerApp <mleap_model/model/src/main/scala/com/Microsoft/agogosml/mleap_model/ModelApp.scala>`__ executes the training of the Spark model in a Spark session (locally or on a cluster).
 
-`ModelApp <mleap_model/model/src/main/scala/com/Microsoft/agogosml/mleap_model/ModelApp.scala>`__
-executes the training of the Spark model in a Spark session (locally or on a cluster).
+Train model on Azure Databricks
+--------------------------------------
 
+While the model can be trained with a local installation of Spark due to the limited size of the datasets, an appropriate cluster would be required if training with much larger production datasets. This solution comes with automated deployment scripts to easily train the model on `Azure Databricks <https://azure.microsoft.com/en-au/services/databricks/>`__, a managed Apache Spark platform which can easily scale to handle very large Spark workloads. 
+
+Running the deployment scripts will:
+
+1. Deploy an Azure Databricks workspace and Azure Blob storage with a container called ``databricks``, mounted on DBFS within Azure Databricks.
+2. Upload SMSSpamCollection.tsv dataset to blob storage.
+3. Rebuild the ModelTrainer JAR file locally with ``sbt clean assembly`` and upload this JAR to blob storage.
+4. Create a two node Spark cluster on Azure Databricks with the necessary packages installed, along with ModelTrainer JAR.
+5. Upload necessary Databricks notebooks to train the model on Azure Databricks.
+
+
+To deploy ModelTrainer on Azure databricks:
+
+1. Ensure you have the necessary pre-requisites.
+2. cd into the `mleap_model <mleap_model/>`__ folder.
+3. Run: ``make deploy`` to deploy the soltuion. Alternatively, run ``make deploy_w_docker`` to avoid installing pre-requisites. This will build and run a docker container locally with the necessary pre-requisites. The deployment will prompt for the following:
+    - Azure Resource Group
+    - Data center location
+    - Azure Subscription
+    - `Databricks workspace url and access token <https://docs.azuredatabricks.net/api/latest/authentication.html#token-management>`__
+4. After the deployment has completed, in the Azure Portal, navigate to the newly deployed Azure Databricks workspace. 
+5. Open the agogos > 02_train_model notebook. Run the notebook to train and serialize the model blob storage (mounted via DBFS).
 
 MLeap Custom Transformer
 -----------------------------
 
 MLeap supports a range of `transformers
-<http://mleap-docs.combust.ml/core-concepts/transformers/support.html>`__,
-however as these are limited, so it may be necessary for you to write your
-own custom implementation.
-We have written a simple example of a custom transformer called ``LengthCounter``
-which returns the count of words as an ``Int`` given a ``String`` input.
+<http://mleap-docs.combust.ml/core-concepts/transformers/support.html>`__, however as these are limited, so it may be necessary for you to write your own custom implementation. We have written a simple example of a custom transformer called ``LengthCounter`` which returns the count of words as an ``Int`` given a ``String`` input.
 
-There are a number of `standard steps
-<https://github.com/combust/mleap-docs/blob/master/mleap-runtime/
-custom-transformer.md>`__  for creating a custom transformer in the MLeap
-docs. The steps to creating a custom transformer are:
+There are a number of `standard steps <https://github.com/combust/mleap-docs/blob/master/mleap-runtime/ custom-transformer.md>`__  for creating a custom transformer in the MLeap docs. The steps to creating a custom transformer are:
 
 1. Core Model
 _______________
-`LengthCounterModel <mleap_model/model/mleapCustomTransformer/src/main/scala/ml/combust/mleap/
-core/ feature/LengthCounterModel.scala>`__ defines the inputs and outputs of the transformer.
+`LengthCounterModel <mleap_model/trainer/mleapCustomTransformer/src/main/scala/ml/combust/mleap/core/feature/LengthCounterModel.scala>`__ defines the inputs and outputs of the transformer.
 
 
 2. MLeap Transformer
 _____________________
-`LengthCounter <mleap_model/model/mleapCustomTransformer/src/main/scala/ml/combust/mleap/runtime/
-transformer/feature/LengthCounter.scala>`__ inherits from the transformer base class but
-allows us to pass in our transformer by redefining the ``UserDefinedFunction``. The
-``LengthCounterModel`` is passed as an input to the ``LengthCounter``.
+`LengthCounter <mleap_model/trainer/mleapCustomTransformer/src/main/scala/ml/combust/mleap/runtime/transformer/feature/LengthCounter.scala>`__ inherits from the transformer base class but allows us to pass in our transformer by redefining the ``UserDefinedFunction``. The ``LengthCounterModel`` is passed as an input to the ``LengthCounter``.
 
 
 3. Spark Transformer
 _____________________
-`LengthCounter <mleap_model/model/mleapCustomTransformer/src/main/scala/org/apache/spark/ml/mleap/
-feature/LengthCounter.scala>`__ is a spark transformer that knows how to execute against a
-Spark DataFrame (just as you would write a custom Spark transformer)
+`LengthCounter <mleap_model/trainer/mleapCustomTransformer/src/main/scala/org/apache/spark/ml/mleap/feature/LengthCounter.scala>`__ is a spark transformer that knows how to execute against a Spark DataFrame (just as you would write a custom Spark transformer)
 
 There is an important method within this class:
 
@@ -85,10 +85,7 @@ There is an important method within this class:
 
 4. MLeap Serialization
 _________________________
-`LengthCounterOp <mleap_model/model/
-mleapCustomTransformer/src/main/scala/ml/combust/mleap/bundle/ops/feature/
-LengthCounterOp.scala>`__ defines how we serialize and deserialize our model and transformer
-to/from an MLeap ``BundleFile``.
+`LengthCounterOp <mleap_model/trainer/mleapCustomTransformer/src/main/scala/ml/combust/mleap/bundle/ops/feature/LengthCounterOp.scala>`__ defines how we serialize and deserialize our model and transformer to/from an MLeap ``BundleFile``.
 
 There are two important methods within this class:
 
@@ -97,10 +94,12 @@ There are two important methods within this class:
 
 5. Spark Serialization
 _______________________
-`LengthCounterOp <mleap_model/model/mleapCustomTransformer/src/main/scala/org/apache/spark/ml/
-bundle/extension/ops/feature/LengthCounterOp.scala>`__  defines how we serialize and
-deserialize the custom Spark transformer to/from MLeap.
+`LengthCounterOp <mleap_model/trainer/mleapCustomTransformer/src/main/scala/org/apache/spark/ml/bundle/extension/ops/feature/LengthCounterOp.scala>`__  defines how we serialize and deserialize the custom Spark transformer to/from MLeap.
 
+
+6. MLeap Registry & Spark Registry
+____________________________________
+The custom transformer needs to be added to the MLeap registry and the Spark registry with a `reference.conf <mleap_model/model/mleapCustomTransformer/src/main/resources/reference.conf>`__ file in our project.
 
 6. MLeap Registry & Spark Registry
 ____________________________________
@@ -110,19 +109,13 @@ our project.
 
 
 Serving the Model
-------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The model is put into production by wrapping an HTTP server around the MLeap model bundle.
-The HTTP server receives incoming data with a `POST` request and feeds it as input to the
-model. Finally, it receives the transformed data/scores and pushes it through the pipeline to the
-output.
+The model is put into production by wrapping an HTTP server around the MLeap model bundle. The HTTP server receives incoming data with a `POST` request and feeds it as input to the model. Finally, it receives the transformed data/scores and pushes it through the pipeline to the output.
 
-The `Main <mleap_serving/src/main/scala/com/Microsoft/agogosml/mleap_serving/Main.scala>`__
-function provides the functionality.
+The `Main <mleap_serving/src/main/scala/com/Microsoft/agogosml/mleap_serving/Main.scala>`__ function provides the functionality.
 
-The `MLModel <mleap_serving/src/main/scala/com/Microsoft/agogosml/mleap_serving/
-MLModel.scala>`__ class takes care of loading the model bundle from the ``jar`` file and scoring
-the incoming data that is received from the HTTP server.
+The `MLModel <mleap_serving/src/main/scala/com/Microsoft/agogosml/mleap_serving/ MLModel.scala>`__ class takes care of loading the model bundle from the ``jar`` file and scoring the incoming data that is received from the HTTP server.
 
 The ``jar`` file has to be located in the ``mleap_serving/lib/`` directory.
 
@@ -140,11 +133,9 @@ Process of Running Model
 
 <HOW TO RUN USING DOCKERFILES & FINISH DOCKERFILES>
 
-Jar file is created by the model and CI/CD pipeline picks up the jar file and dumps
-into artifacts in Azure DevOps.
+Jar file is created by the model and CI/CD pipeline picks up the jar file and dumps into artifacts in Azure DevOps.
 
 Jar then downloaded from artifacts by other CI <Artifact downloader does this>
-
 
 .. code-block:: bash
     # Add code here to explain

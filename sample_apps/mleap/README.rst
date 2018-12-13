@@ -2,12 +2,13 @@ MLeap Model Example
 ============================
 
 This documentation walks the user through an MLeap model app example.
+
 This examples includes:
 
-- Databricks setup
-- Creation of Spark Model
-- Creation of custom transformer in Scala
-- Serving of the Model
+- Training and serializing ML Model with Spark and MLeap
+- Training model on Azure Databricks
+- Creation of Custom Transformer for MLeap in Scala
+- Serving the Model
 
 Requirements to Run Locally
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,19 +22,19 @@ Requirements to Run Locally
 -  `jq <https://stedolan.github.io/jq/download/>`__
 
 
-Train and serialize ML Model with Spark and Mleap
+Train and serialize ML Model with Spark and MLeap
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-MLeap provides functionality to serialize trained pipelines and algorithms to a ``BundleFile`` which can then easily be loaded back into a lightweight Mleap runtime for scoring without Spark dependencies. Our example implements a pipeline with a trained model and a simple custom transformer.
+MLeap provides functionality to serialize trained pipelines and algorithms to a ``BundleFile`` which can then easily be loaded back into a lightweight MLeap runtime for scoring without Spark dependencies. Our example implements a pipeline with a trained model and a simple custom transformer.
 
-`ModelTrainer <mleap_model/model/src/main/scala/com/Microsoft/agogosml/mleap_model/Model.scala>`__ contains our model training code for training on a Spark cluster. This imports the custom transformer ``LengthCounter``. The Spark model is a simple classification model on the `Spam or Ham` dataset which is then serialized as an Mleap ``BundleFile`` and saved as a ``jar``.
+`ModelTrainer <mleap_model/trainer/src/main/scala/com/Microsoft/agogosml/mleap_model_trainer/ModelTrainer.scala>`__ contains our model training code for training on a Spark cluster. This imports the custom transformer ``LengthCounter``. The Spark model is a simple classification model on the `Spam or Ham` dataset which is then serialized as an MLeap ``BundleFile`` and saved as a ``jar``.
 
-`ModelTrainerApp <mleap_model/model/src/main/scala/com/Microsoft/agogosml/mleap_model/ModelApp.scala>`__ executes the training of the Spark model in a Spark session (locally or on a cluster).
+`ModelTrainerApp <mleap_model/trainer/src/main/scala/com/Microsoft/agogosml/mleap_model_trainer/ModelTrainerApp.scala>`__ executes the training of the Spark model in a Spark session (locally or on a cluster).
 
 Train model on Azure Databricks
 --------------------------------------
 
-While the model can be trained with a local installation of Spark due to the limited size of the datasets, an appropriate cluster would be required if training with much larger production datasets. This solution comes with automated deployment scripts to easily train the model on `Azure Databricks <https://azure.microsoft.com/en-au/services/databricks/>`__, a managed Apache Spark platform which can easily scale to handle very large Spark workloads. 
+While this model can be trained with a local installation of Spark due to the limited size of the dataset, an appropriate cluster would be required if training with much larger production datasets. This solution comes with automated deployment scripts to easily train the model on `Azure Databricks <https://azure.microsoft.com/en-au/services/databricks/>`__, a managed Apache Spark platform which can easily scale to handle very large Spark workloads.
 
 Running the deployment scripts will:
 
@@ -44,17 +45,18 @@ Running the deployment scripts will:
 5. Upload necessary Databricks notebooks to train the model on Azure Databricks.
 
 
-To deploy ModelTrainer on Azure databricks:
+To deploy ModelTrainer on Azure Databricks:
 
 1. Ensure you have the necessary pre-requisites.
 2. cd into the `mleap_model <mleap_model/>`__ folder.
-3. Run: ``make deploy`` to deploy the soltuion. Alternatively, run ``make deploy_w_docker`` to avoid installing pre-requisites. This will build and run a docker container locally with the necessary pre-requisites. The deployment will prompt for the following:
+3. Run: ``make deploy`` to deploy the solution. Alternatively, run ``make deploy_w_docker`` to avoid installing pre-requisites. This will build and run a docker container locally with the necessary pre-requisites. The deployment will prompt for the following:
     - Azure Resource Group
     - Data center location
     - Azure Subscription
     - `Databricks workspace url and access token <https://docs.azuredatabricks.net/api/latest/authentication.html#token-management>`__
 4. After the deployment has completed, in the Azure Portal, navigate to the newly deployed Azure Databricks workspace. 
-5. Open the agogos > 02_train_model notebook. Run the notebook to train and serialize the model blob storage (mounted via DBFS).
+5. Open the **agogos > 02_train_model notebook**. Run the notebook to train and serialize the model blob storage (mounted via DBFS).
+
 
 MLeap Custom Transformer
 -----------------------------
@@ -64,19 +66,20 @@ MLeap supports a range of `transformers
 
 There are a number of `standard steps <https://github.com/combust/mleap-docs/blob/master/mleap-runtime/ custom-transformer.md>`__  for creating a custom transformer in the MLeap docs. The steps to creating a custom transformer are:
 
+
 1. Core Model
 _______________
-`LengthCounterModel <mleap_model/trainer/mleapCustomTransformer/src/main/scala/ml/combust/mleap/core/feature/LengthCounterModel.scala>`__ defines the inputs and outputs of the transformer.
+`LengthCounterModel <mleap_model/trainer/custom_transformer/src/main/scala/ml/combust/mleap/core/feature/LengthCounterModel.scala>`__ defines the inputs and outputs of the transformer.
 
 
 2. MLeap Transformer
 _____________________
-`LengthCounter <mleap_model/trainer/mleapCustomTransformer/src/main/scala/ml/combust/mleap/runtime/transformer/feature/LengthCounter.scala>`__ inherits from the transformer base class but allows us to pass in our transformer by redefining the ``UserDefinedFunction``. The ``LengthCounterModel`` is passed as an input to the ``LengthCounter``.
+`LengthCounter <mleap_model/trainer/custom_transformer/src/main/scala/ml/combust/mleap/runtime/transformer/feature/LengthCounter.scala>`__ inherits from the transformer base class but allows us to pass in our transformer by redefining the ``UserDefinedFunction``. The ``LengthCounterModel`` is passed as an input to the ``LengthCounter``.
 
 
 3. Spark Transformer
 _____________________
-`LengthCounter <mleap_model/trainer/mleapCustomTransformer/src/main/scala/org/apache/spark/ml/mleap/feature/LengthCounter.scala>`__ is a spark transformer that knows how to execute against a Spark DataFrame (just as you would write a custom Spark transformer)
+`LengthCounter <mleap_model/trainer/custom_transformer/src/main/scala/org/apache/spark/ml/mleap/feature/LengthCounter.scala>`__ is a spark transformer that knows how to execute against a Spark DataFrame (just as you would write a custom Spark transformer)
 
 There is an important method within this class:
 
@@ -85,7 +88,7 @@ There is an important method within this class:
 
 4. MLeap Serialization
 _________________________
-`LengthCounterOp <mleap_model/trainer/mleapCustomTransformer/src/main/scala/ml/combust/mleap/bundle/ops/feature/LengthCounterOp.scala>`__ defines how we serialize and deserialize our model and transformer to/from an MLeap ``BundleFile``.
+`LengthCounterOp <mleap_model/trainer/custom_transformer/src/main/scala/ml/combust/mleap/bundle/ops/feature/LengthCounterOp.scala>`__ defines how we serialize and deserialize our model and transformer to/from an MLeap ``BundleFile``.
 
 There are two important methods within this class:
 
@@ -94,18 +97,13 @@ There are two important methods within this class:
 
 5. Spark Serialization
 _______________________
-`LengthCounterOp <mleap_model/trainer/mleapCustomTransformer/src/main/scala/org/apache/spark/ml/bundle/extension/ops/feature/LengthCounterOp.scala>`__  defines how we serialize and deserialize the custom Spark transformer to/from MLeap.
+`LengthCounterOp <mleap_model/trainer/custom_transformer/src/main/scala/org/apache/spark/ml/bundle/extension/ops/feature/LengthCounterOp.scala>`__  defines how we serialize and deserialize the custom Spark transformer to/from MLeap.
 
 
 6. MLeap Registry & Spark Registry
 ____________________________________
-The custom transformer needs to be added to the MLeap registry and the Spark registry with a `reference.conf <mleap_model/model/mleapCustomTransformer/src/main/resources/reference.conf>`__ file in our project.
+The custom transformer needs to be added to the MLeap registry and the Spark registry with a `reference.conf <mleap_model/trainer/custom_transformer/src/main/resources/reference.conf>`__ file in our project.
 
-6. MLeap Registry & Spark Registry
-____________________________________
-The custom transformer needs to be added to the MLeap registry and the Spark registry with a
-`reference.conf <mleap_model/model/mleapCustomTransformer/src/main/resources/reference.conf>`__ file in
-our project.
 
 
 Serving the Model
@@ -113,7 +111,7 @@ Serving the Model
 
 An HTTP server is used to access the MLeap model in production. The server receives incoming data with a `POST` request and feeds it as input to the model. Finally, it receives the model prediction and pushes it, along with any other desired data, through the pipeline to the output. Please refer to our `design documents <https://github.com/Microsoft/agogosml/blob/master/docs/DESIGN.rst>`_ for more details.
 
-Running this sample application locally with Docker is documented in our `developer guide <https://github.com/Microsoft/agogosml/blob/master/docs/DEVELOPER_GUIDE.rst>`_, with a couple additional steps. First ensure that the mleap model is manually placed in the ``mleap_serving/assets`` directory. If your model requires a custom transformer, ensure that the ``jar`` file for the custom transformer is located in the ``mleap_serving/lib/`` directory.  
+Running this sample application locally with Docker is documented in our `developer guide <https://github.com/Microsoft/agogosml/blob/master/docs/DEVELOPER_GUIDE.rst>`_, with a couple of additional steps. First ensure that the mleap model is manually placed in the ``mleap_serving/assets`` directory. If your model requires a custom transformer, ensure that the ``jar`` file for the custom transformer is located in the ``mleap_serving/lib/`` directory.
 
 ``docker run -e PORT=5000
              -e OUTPUT_URL=
@@ -124,16 +122,3 @@ While these steps are necessary for running locally, in production, the model an
 
 With the app running on the specified port, send a POST request containing JSON data that follows the schema your model expects.
 
-Process of Running Model
--------------------------
-
-<LACE/MARGARET TO ADD MORE HERE>
-
-<HOW TO RUN MANUALLY?!>
-
-Jar file is created by the model and CI/CD pipeline picks up the jar file and dumps into artifacts in Azure DevOps.
-
-Jar then downloaded from artifacts by other CI <Artifact downloader does this>
-
-.. code-block:: bash
-    # Add code here to explain

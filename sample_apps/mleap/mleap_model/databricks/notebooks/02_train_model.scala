@@ -4,7 +4,7 @@
 
 // COMMAND ----------
 
-import com.Microsoft.agogosml.mleap_model._
+import com.Microsoft.agogosml.mleap_model_trainer._
 
 // Read in data
 val spamDf = spark.read.format("csv")
@@ -16,10 +16,10 @@ val spamDfRenamed = spamDf
 val Array(trainingData, testData) = spamDfRenamed.randomSplit(Array(0.7, 0.3))
 
 // Train model
-val trainedModel = Model.train(trainingData)
+val trainedModel = ModelTrainer.train(trainingData)
 
 // Evaluate model
-Model.evaluate(trainedModel, testData)
+ModelTrainer.evaluate(trainedModel, testData)
 
 // Save model
-Model.save(trainedModel, "/dbfs/mnt/blob_storage/outmodel", trainingData)
+ModelTrainer.save(trainedModel, "/dbfs/mnt/blob_storage/outmodel", trainingData)

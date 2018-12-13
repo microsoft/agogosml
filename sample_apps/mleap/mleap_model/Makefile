@@ -37,7 +37,7 @@ requirements: ## Install Python Dependencies
 	pip install -r requirements.txt
 
 $(MODEL_TRAINER_JAR): ## Builds scala jar with model
-	(cd model/ && sbt clean assembly)
+	(cd trainer/ && sbt clean assembly)
 
 deploy_resources: $(MODEL_TRAINER_JAR) ## Deploy Azure infrastructure 
 	databricks/deploy_resources.sh

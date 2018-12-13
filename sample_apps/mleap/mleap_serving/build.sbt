@@ -16,3 +16,9 @@ assemblyMergeStrategy in assembly := {
   case PathList("META-INF", xs @ _*) => MergeStrategy.discard
   case x => MergeStrategy.first
 }
+
+fork in Test := true
+
+envVars in Test := Map("MODEL_PATH" -> sys.env.get("MODEL_PATH"))
+envVars in Test := Map("PORT" -> sys.env.get("PORT"))
+envVars in Test := Map("OUTPUT_URL" -> sys.env.get("OUTPUT_URL"))

@@ -65,8 +65,8 @@ sub_id="${3-}"
 
 storage_container=databricks #fixed
 data_file=SMSSpamCollection.tsv
-model_package_name=mleap_model.jar
-model_package_path=../model/target/scala-2.11/$model_package_name
+model_package_name=mleap_model_trainer.jar
+model_package_path=../trainer/target/scala-2.11/$model_package_name
 
 
 while [[ -z $rg_name ]]; do

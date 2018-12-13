@@ -114,7 +114,7 @@ _main() {
     databricks libraries install --maven-coordinates ml.combust.mleap:mleap-spark:0.12.0 --cluster-id $cluster_id
 
     # Install jar on cluster - this jar was uploaded as part of deploy_resources.sh
-    databricks libraries install --jar dbfs:/mnt/blob_storage/modeljars/mleap_model.jar --cluster-id $cluster_id
+    databricks libraries install --jar dbfs:/mnt/blob_storage/modeljars/mleap_model_trainer.jar --cluster-id $cluster_id
 }
 
 _main

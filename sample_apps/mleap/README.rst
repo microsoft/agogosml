@@ -111,18 +111,18 @@ our project.
 Serving the Model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The model is put into production by wrapping an HTTP server around the MLeap model bundle. The HTTP server receives incoming data with a `POST` request and feeds it as input to the model. Finally, it receives the transformed data/scores and pushes it through the pipeline to the output.
+An HTTP server is used to access the MLeap model in production. The server receives incoming data with a `POST` request and feeds it as input to the model. Finally, it receives the model prediction and pushes it, along with any other desired data, through the pipeline to the output. Please refer to our `design documents <https://github.com/Microsoft/agogosml/blob/master/docs/DESIGN.rst>`_ for more details.
 
-The `Main <mleap_serving/src/main/scala/com/Microsoft/agogosml/mleap_serving/Main.scala>`__ function provides the functionality.
+Running this sample application locally with Docker is documented in our `developer guide <https://github.com/Microsoft/agogosml/blob/master/docs/DEVELOPER_GUIDE.rst>`_, with a couple additional steps. First ensure that the mleap model is manually placed in the ``mleap_serving/assets`` directory. If your model requires a custom transformer, ensure that the ``jar`` file for the custom transformer is located in the ``mleap_serving/lib/`` directory.  
 
-The `MLModel <mleap_serving/src/main/scala/com/Microsoft/agogosml/mleap_serving/ MLModel.scala>`__ class takes care of loading the model bundle from the ``jar`` file and scoring the incoming data that is received from the HTTP server.
+``docker run -e PORT=5000
+             -e OUTPUT_URL=
+             -e MODEL_PATH=/app/sample_model.zip 
+             -p 5000:5000 ``
 
-The ``jar`` file has to be located in the ``mleap_serving/lib/`` directory.
+While these steps are necessary for running locally, in production, the model and jar files are picked up via a build pipeline and placed into the correct folders before the sample app runs.
 
-
-More to be added here <Margaret?>
-
-
+With the app running on the specified port, send a POST request containing JSON data that follows the schema your model expects.
 
 Process of Running Model
 -------------------------
@@ -130,8 +130,6 @@ Process of Running Model
 <LACE/MARGARET TO ADD MORE HERE>
 
 <HOW TO RUN MANUALLY?!>
-
-<HOW TO RUN USING DOCKERFILES & FINISH DOCKERFILES>
 
 Jar file is created by the model and CI/CD pipeline picks up the jar file and dumps into artifacts in Azure DevOps.
 

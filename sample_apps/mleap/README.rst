@@ -113,10 +113,12 @@ An HTTP server is used to access the MLeap model in production. The server recei
 
 Running this sample application locally with Docker is documented in our `developer guide <https://github.com/Microsoft/agogosml/blob/master/docs/DEVELOPER_GUIDE.rst>`_, with a couple of additional steps. First ensure that the mleap model is manually placed in the ``mleap_serving/assets`` directory. If your model requires a custom transformer, ensure that the ``jar`` file for the custom transformer is located in the ``mleap_serving/lib/`` directory.
 
-``docker run -e PORT=5000
+.. code:: bash
+
+    docker run -e PORT=5000
              -e OUTPUT_URL=
              -e MODEL_PATH=/app/sample_model.zip 
-             -p 5000:5000 ``
+             -p 5000:5000
 
 While these steps are necessary for running locally, in production, the model and jar files are picked up via a build pipeline and placed into the correct folders before the sample app runs.
 

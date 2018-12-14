@@ -22,7 +22,7 @@ class LengthCounterTest extends FunSuite {
         .withStandardOutput("string_length"),
       model = LengthCounterModel())
 
-    // Transform our leap frame using the StringIndexer transformer
+    // Transform our leap frame using the LengthCounter transformer
     val lengths = (for(lf <- lc.transform(leapFrame);
                        lf2 <- lf.select("string_length")) yield {
       lf2.dataset.map(_.getInt(0))

@@ -19,6 +19,6 @@ assemblyMergeStrategy in assembly := {
 
 fork in Test := true
 
-envVars in Test := Map("MODEL_PATH" -> sys.env.get("MODEL_PATH"))
-envVars in Test := Map("PORT" -> sys.env.get("PORT"))
-envVars in Test := Map("OUTPUT_URL" -> sys.env.get("OUTPUT_URL"))
+envVars in Test := Map("MODEL_PATH" -> sys.env.get("MODEL_PATH").get)
+envVars in Test := Map("PORT" -> sys.env.get("PORT").get)
+envVars in Test := Map("OUTPUT_URL" -> sys.env.get("OUTPUT_URL").get)

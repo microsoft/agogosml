@@ -109,9 +109,6 @@ _main() {
     # Install Library
     echo "Installing libraries..."
     cluster_id=$(databricks clusters list | awk '/'$cluster_name'/ {print $1}')
-    databricks libraries install --maven-coordinates ml.combust.mleap:mleap-runtime:0.12.0 --cluster-id $cluster_id
-    databricks libraries install --maven-coordinates ml.combust.mleap:mleap-core:0.12.0 --cluster-id $cluster_id
-    databricks libraries install --maven-coordinates ml.combust.mleap:mleap-spark:0.12.0 --cluster-id $cluster_id
 
     # Install jar on cluster - this jar was uploaded as part of deploy_resources.sh
     databricks libraries install --jar dbfs:/mnt/blob_storage/modeljars/mleap_model_trainer.jar --cluster-id $cluster_id

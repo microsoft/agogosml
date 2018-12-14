@@ -10,10 +10,12 @@ import com.Microsoft.agogosml.mleap_model_trainer._
 val spamDf = spark.read.format("csv")
   .option("delimiter", "\t")
   .load("/mnt/blob_storage/data/SMSSpamCollection.tsv")
-val spamDfRenamed = spamDf
-  .withColumnRenamed("_c0", "hamOrSpam")
-  .withColumnRenamed("_c1", "text")
-val Array(trainingData, testData) = spamDfRenamed.randomSplit(Array(0.7, 0.3))
+
+// Prepare data (Column rename, StringIndexer, etc)
+val prepData = ModelTrainer.prepareData(spamDf)
+
+// Split data
+val Array(trainingData, testData) = prepData.randomSplit(Array(0.7, 0.3))
 
 // Train model
 val trainedModel = ModelTrainer.train(trainingData)
@@ -22,4 +24,4 @@ val trainedModel = ModelTrainer.train(trainingData)
 ModelTrainer.evaluate(trainedModel, testData)
 
 // Save model
-ModelTrainer.save(trainedModel, "/dbfs/mnt/blob_storage/outmodel", trainingData)
+ModelTrainer.save(trainedModel, "/dbfs/mnt/blob_storage/outmodel.zip", trainingData)

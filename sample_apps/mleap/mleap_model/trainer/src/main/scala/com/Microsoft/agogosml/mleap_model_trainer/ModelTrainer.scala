@@ -1,16 +1,18 @@
 package com.Microsoft.agogosml.mleap_model_trainer
 
 import org.apache.spark.sql._
-import org.apache.spark.ml.feature.{StringIndexer, Tokenizer, CountVectorizer, IDF}
+import org.apache.spark.ml.feature.{CountVectorizer, IDF, StringIndexer, Tokenizer}
 import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.tuning.{CrossValidator, ParamGridBuilder}
 import org.apache.spark.ml.{Pipeline, PipelineModel}
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator
 import ml.combust.bundle.BundleFile
+import ml.combust.bundle.serializer.SerializationFormat
 import ml.combust.mleap.spark.SparkSupport._
+import ml.combust.mleap.runtime.MleapSupport._
+import ml.combust.mleap.runtime.frame.Transformer
 import org.apache.spark.ml.bundle.SparkBundleContext
 import resource._
-
 
 // Custom transformer
 import org.apache.spark.ml.mleap.feature.LengthCounter
@@ -21,11 +23,21 @@ import org.apache.spark.ml.mleap.feature.LengthCounter
 
 object ModelTrainer {
 
-  def train(df: Dataset[Row]) : PipelineModel = {
+  def prepareData(df: Dataset[Row]) : Dataset[Row] = {
+    val sparkDFrame = df
+      .withColumnRenamed("_c0", "hamOrSpam")
+      .withColumnRenamed("_c1", "text")
+    // Index data outside of pipeline
     val indexer = new StringIndexer()
       .setInputCol("hamOrSpam")
       .setOutputCol("label")
+    val indexedDf = indexer
+      .fit(sparkDFrame)
+      .transform(sparkDFrame)
+    indexedDf
+  }
 
+  def train(df: Dataset[Row]) : PipelineModel = {
     val tokenizer = new Tokenizer()
       .setInputCol("text")
       .setOutputCol("words")
@@ -49,7 +61,7 @@ object ModelTrainer {
       .setOutputCol("length_counter_out")
 
     val pipeline = new Pipeline()
-      .setStages(Array(indexer, tokenizer, cvModel, idf, lr, lc))
+      .setStages(Array(tokenizer, cvModel, idf, lr, lc))
 
     // Cross Validation
     val paramGrid = new ParamGridBuilder()
@@ -76,12 +88,19 @@ object ModelTrainer {
   }
 
   def save(model: PipelineModel, outPath: String, inputDf: Dataset[Row]) : Unit = {
-
-    implicit val context = SparkBundleContext().withDataset(inputDf)
-
+    // Create transformedDf
+    val transformedDf = model.transform(inputDf)
+    implicit val context = SparkBundleContext().withDataset(transformedDf)
     // save the pipeline
     (for(modelFile <- managed(BundleFile(s"jar:file:${outPath}"))) yield {
-      model.writeBundle.save(modelFile)(context)
+      model.writeBundle.format(SerializationFormat.Json).save(modelFile)(context)
     }).tried.get
+  }
+
+  def load(inPath: String) : Transformer = {
+    val bundle = (for(bundleFile <- managed(BundleFile(s"jar:file:${inPath}"))) yield {
+      bundleFile.loadMleapBundle().get
+    }).opt.get
+    bundle.root
   }
 }

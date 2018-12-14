@@ -7,6 +7,11 @@ package com.Microsoft.agogosml.mleap_model_trainer
 import com.holdenkarau.spark.testing.{DataFrameSuiteBase, SharedSparkContext, SparkSessionProvider}
 import org.apache.spark.sql.SparkSession
 import org.scalatest.FunSuite
+import java.io.File
+
+import ml.combust.mleap.core.types.{ScalarType, StructType}
+import ml.combust.mleap.runtime.frame.{DefaultLeapFrame, Row}
+import ml.combust.mleap.core.types._
 
 class ModelTrainerTest extends FunSuite with DataFrameSuiteBase with SharedSparkContext {
 
@@ -24,24 +29,47 @@ class ModelTrainerTest extends FunSuite with DataFrameSuiteBase with SharedSpark
       .getOrCreate()
   }
 
-  test("trained model with baseline accuracy given sample data is created"){
-
+  def fixture = {
+    // Create SparkDf
     val inputFile = getClass.getResource("/SMSSpamCollection.tsv").toString
-
     val spamDf = spark.read.format("csv")
       .option("delimiter", "\t")
       .load(inputFile)
 
-    val spamDfRenamed = spamDf
-      .withColumnRenamed("_c0", "hamOrSpam")
-      .withColumnRenamed("_c1", "text")
+    // Create leapFrame
+    val schema: StructType = StructType(StructField("text", ScalarType.String)).get
+    val dataset = Seq(
+      Row("Don't stop me now"),
+      Row("cause I'm having a good time"))
+    val mleapFrame = DefaultLeapFrame(schema, dataset)
 
-    val Array(trainingData, testData) = spamDfRenamed.randomSplit(Array(0.7, 0.3))
+    new {
+      val sparkDf = spamDf
+      val mleapDf = mleapFrame
+    }
+  }
 
+  test("trained model with baseline accuracy given sample data is created"){
+    val f = fixture
+    val prepDf = ModelTrainer.prepareData(f.sparkDf)
+    val Array(trainingData, testData) = prepDf.randomSplit(Array(0.7, 0.3))
     val trainedModel = ModelTrainer.train(trainingData)
     val accuracy = ModelTrainer.evaluate(trainedModel, testData)
+    assert(accuracy > 0.5)
+  }
 
-    assert(accuracy > 0.7)
+  test("Can save and reload model") {
+    val f = fixture
+    val prepDf = ModelTrainer.prepareData(f.sparkDf)
+    val trainedModel = ModelTrainer.train(prepDf)
+    val modelPath = "/tmp/outmodel.zip"
+    try {
+      // Try to save and reload model
+      ModelTrainer.save(trainedModel, modelPath, prepDf)
+      val mleapModel = ModelTrainer.load(modelPath)
+      mleapModel.transform(f.mleapDf).get
+    }
+    finally new File(modelPath).delete()
 
   }
 }

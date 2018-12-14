@@ -6,14 +6,16 @@ import resource._
 import ml.combust.mleap.runtime.frame.{DefaultLeapFrame, Row}
 import ml.combust.mleap.core.types._
 
-// Schema of the expected input and output, respectively of the model
+// Schema of the expected input and output, respectively, of the model
 case class InputMessage(text: String)
 case class OutputMessage(input: InputMessage, prediction: Double)
 
 class Model {
 
   // Loads the model from the given path
-  val pipelinePath = "jar:file:" + sys.env("MODEL_PATH")
+  val modelPath = sys.env("MODEL_PATH")
+
+  val pipelinePath = "jar:file:" + modelPath
   val bundle = (for(bundleFile <- managed(BundleFile(pipelinePath))) yield {
     bundleFile.loadMleapBundle().get
   }).opt.get
@@ -39,7 +41,7 @@ class Model {
     *  @return a new OutputMessage instance with the model's prediction and
     *          the original message
     */
-  def transformMessage(message: InputMessage): OutputMessage = {
+  def processData(message: InputMessage): OutputMessage = {
     val frame = createDataFrame(message)
 
     val mleapPipeline = bundle.root
@@ -47,10 +49,12 @@ class Model {
 
     // get the prediction out of the transformed dataframe
     val predictionFrame = frameTransformed.select("prediction").get
+
     // create our output message
     // What one wants to send along to the output will vary by use case
-    val transformedMessage = OutputMessage(message, predictionFrame.dataset(0).getDouble(0))
-    return transformedMessage
+    val processedData = OutputMessage(message, predictionFrame.dataset(0).getDouble(0))
+
+    return processedData
   }
 }
 

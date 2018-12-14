@@ -7,7 +7,8 @@ libraryDependencies ++= Seq(
   "com.google.code.gson" % "gson" % "2.8.0",
   "org.scalaj" %% "scalaj-http" % "2.4.1",
   "ml.combust.mleap" %% "mleap-runtime" % "0.12.0",
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test",
+  "org.slf4j" % "slf4j-jdk14" % "1.7.25"
 )
 
 assemblyJarName in assembly := s"app-assembly.jar"
@@ -19,6 +20,8 @@ assemblyMergeStrategy in assembly := {
 
 fork in Test := true
 
-envVars in Test := Map("MODEL_PATH" -> sys.env.get("MODEL_PATH").get)
-envVars in Test := Map("PORT" -> sys.env.get("PORT").get)
-envVars in Test := Map("OUTPUT_URL" -> sys.env.get("OUTPUT_URL").get)
+envVars in Test := Map(
+  "MODEL_PATH" -> sys.env.get("MODEL_PATH").get,
+  "PORT" -> sys.env.get("PORT").get,
+  "OUTPUT_URL" -> sys.env.get("OUTPUT_URL").get
+)

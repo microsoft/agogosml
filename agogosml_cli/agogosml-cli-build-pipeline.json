@@ -1,18 +1,28 @@
 {
-    "options": [],
-    "triggers": [
+    "options": [
         {
-            "branchFilters": [
-                "+master"
-            ],
-            "pathFilters": [
-                "+/agogosml_cli"
-            ],
-            "batchChanges": false,
-            "maxConcurrentBuildsPerBranch": 1,
-            "pollingInterval": 0,
-            "triggerType": 2
+            "enabled": false,
+            "definition": {
+                "id": "5d58cc01-7c75-450c-be18-a388ddb129ec"
+            },
+            "inputs": {
+                "branchFilters": "[\"+refs/heads/*\"]",
+                "additionalFields": "{}"
+            }
         },
+        {
+            "enabled": false,
+            "definition": {
+                "id": "a9db38f9-9fdc-478c-b0f9-464221e58316"
+            },
+            "inputs": {
+                "workItemType": "3060103",
+                "assignToRequestor": "true",
+                "additionalFields": "{}"
+            }
+        }
+    ],
+    "triggers": [
         {
             "branchFilters": [
                 "+master"
@@ -153,7 +163,7 @@
     "processParameters": {},
     "quality": 1,
     "drafts": [],
-    "name": "Agogosml_cli-build-CI (master)",
+    "name": "agogosml-cli-ci",
     "path": "\\",
     "type": 2
 }

@@ -9,7 +9,8 @@ RUN apk add --update make \
     cmake \
     g++ && \ 
     pip install pipenv && \
-    pipenv install --dev
+    pipenv install --deploy --dev 
+    # --deploy causes pipenv to fail if the lock file is out of date
 
 RUN pipenv run make clean && \
     pipenv run make lint && \
@@ -22,8 +23,13 @@ RUN pipenv run make clean && \
 FROM python:${PYTHON_VERSION}
 ENV PYTHONUNBUFFERED=1
 
-COPY --from=builder /usr/src/agogosml_cli/dist /
+COPY --from=builder /usr/src/agogosml_cli/dist /dist
 
-RUN pip install /agogosml_cli-0.1.0.tar.gz
+RUN apk add --no-cache --update --virtual .build-deps \
+    make cmake g++
+
+RUN pip install /dist/agogosml_cli-*.tar.gz
+
+RUN apk del .build-deps
 
 ENTRYPOINT ["agogosml"]

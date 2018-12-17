@@ -11,7 +11,15 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [ ]
+requirements = [
+    "confluent-kafka==0.11.6",
+    "azure-eventhub==1.2.0",
+    "requests==2.20.1",
+    "python-dotenv==0.9.1",
+    "flask==1.0.2",
+    "pyyaml==3.13",
+    "jsonschema==2.6.0"
+]
 
 setup_requirements = ['pytest-runner', ]
 
@@ -39,6 +47,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/Microsoft/agogosml',
-    version='0.1.0',
+    version='0.1.1',
     zip_safe=False,
 )

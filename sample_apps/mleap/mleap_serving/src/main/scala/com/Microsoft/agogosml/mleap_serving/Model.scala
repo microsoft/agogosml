@@ -21,7 +21,15 @@ class Model {
   }).opt.get
 
   // TO DO: Dynamically create the schema rather than hardcode
-  val schema = StructType(StructField("text", ScalarType.String)).get
+  def createSchema(): StructType = {
+    // load in our schema
+
+    val schema = StructType(StructField("text", ScalarType.String)).get
+    return schema
+  }
+
+  // make schema available when Model is initiated
+  val schema = createSchema()
 
   /** Creates a dataframe from the new data received, according to the defined
     * schema

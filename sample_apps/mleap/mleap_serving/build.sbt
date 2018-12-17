@@ -14,16 +14,13 @@ libraryDependencies ++= Seq(
     "com.typesafe.play" % "play-json_2.11" % "2.4.6"
 )
 
-envVars in test := Map(
+envVars in test / assembly := Map(
   "MODEL_PATH" -> sys.env.get("MODEL_PATH").get,
   "PORT" -> sys.env.get("PORT").get,
   "OUTPUT_URL" -> sys.env.get("OUTPUT_URL").get
 )
 
 fork in test := true
-
-// currently assembly won't run with tests enabled
-test in assembly := {}
 
 assemblyJarName in assembly := "app-assembly.jar"
 

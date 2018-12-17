@@ -8,7 +8,7 @@ from agogosml.common.kafka_streaming_client import KafkaStreamingClient
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 
 
-
+@pytest.mark.integration
 def test_when_new_message_then_send_to_event_hub():
     """
     Writer should be able to send message to EventHub

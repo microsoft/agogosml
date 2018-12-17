@@ -30,6 +30,7 @@ def mock_listener_client():
     return ListenerClientMock(0)
 
 
+@pytest.mark.integration
 def test_when_messages_received_in_input_then_all_messages_are_sent_via_output():
     """
     This function tests the integration of input and output.
@@ -65,7 +66,9 @@ def test_when_messages_received_in_input_then_all_messages_are_sent_via_output()
     ow.start_incoming_messages()
 
     print('sending test message to reader')
-    test_msg = 'test'
+    test_msg = str(time.clock())
+    # send a message from input reader, and expect it to flow in the pipeline,
+    # and eventually be picked up by the output writer
     ir_streaming_client.mock_incoming_message_event(test_msg)
     last_msg = ow_streaming_client.get_last_msg()
 

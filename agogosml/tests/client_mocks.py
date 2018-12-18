@@ -33,7 +33,7 @@ class ClientMessagingMock(AbstractStreamingClient):
     def get_receiving(self):
         return self.receiving
 
-    def mock_incoming_message_event(self, msg):
+    def fake_incoming_message_from_streaming(self, msg):
         self.callback(msg)
 
 

@@ -39,7 +39,7 @@ def test_when_msg_received_callback_called(MockStreamingClient,
 
     # act
     ir.start_receiving_messages()
-    MockStreamingClient.mock_incoming_message_event('a')
+    MockStreamingClient.fake_incoming_message_from_streaming('a')
     assert MockMessageSender.get_last_msg() == 'a'
 
 # TODO: Try splitting out the unit tests and integration tests into two different directories within tests

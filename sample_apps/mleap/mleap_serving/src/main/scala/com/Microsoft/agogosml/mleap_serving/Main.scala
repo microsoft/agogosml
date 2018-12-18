@@ -15,10 +15,9 @@ object Main extends App {
     val outputUrl = sys.env("OUTPUT_URL")
 
     val stringBody = new Gson().toJson(body)
-    val response = scalaj.http.Http(outputUrl).postData(stringBody)
+    scalaj.http.Http(outputUrl).postData(stringBody)
       .header("Content-Type", "application/json")
       .header("Charset", "UTF-8").asString
-    return response
   }
 
   val s = new ModelServer

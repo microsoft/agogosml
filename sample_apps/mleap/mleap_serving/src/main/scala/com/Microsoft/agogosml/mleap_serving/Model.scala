@@ -23,9 +23,7 @@ class Model {
   // TO DO: Dynamically create the schema rather than hardcode
   def createSchema(): StructType = {
     // load in our schema
-
-    val schema = StructType(StructField("text", ScalarType.String)).get
-    return schema
+    StructType(StructField("text", ScalarType.String)).get
   }
 
   // make schema available when Model is initiated
@@ -39,8 +37,7 @@ class Model {
     */
   def createDataFrame(message: InputMessage) : DefaultLeapFrame = {
     val data = Seq(Row(message.text))
-    val frame = DefaultLeapFrame(schema, data)
-    return frame
+    DefaultLeapFrame(schema, data)
   }
 
   /** Processes a single message through the model
@@ -61,8 +58,7 @@ class Model {
     // create our output message
     // What one wants to send along to the output will vary by use case
     val processedData = OutputMessage(message, predictionFrame.dataset(0).getDouble(0))
-
-    return processedData
+    processedData
   }
 }
 

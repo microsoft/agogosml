@@ -1,6 +1,6 @@
 package com.Microsoft.agogosml.mleap_serving
 
-import com.twitter.finagle.Http
+import com.twitter.finagle.{Http, ListeningServer}
 import com.twitter.util.Await
 import io.finch._
 import io.finch.circe._
@@ -21,7 +21,7 @@ class ModelServer {
   /** Processes incoming through the model, send it along the pipeline
     * @param message received from the server
     */
-  def handleIncomingMessage(message: InputMessage) = {
+  def handleIncomingMessage(message: InputMessage) : String = {
     // feed message into mleap model
     val processedData = model.processData(message)
     // send the transformed data to the output
@@ -30,7 +30,7 @@ class ModelServer {
 
   /** HTTP server that receives incoming data, processes it,
     * and pushes it through the pipeline to the output */
-  def receiveMessage =
+  def receiveMessage : Endpoint[String] =
     post(jsonBody[InputMessage]) { message: InputMessage =>
 
       handleIncomingMessage(message)
@@ -45,7 +45,7 @@ class ModelServer {
     }
 
   /** Initiates an HTTP server */
-  def main() = {
+  def main() : ListeningServer = {
     logger.info(s"Serving the application on port ${port}", port)
 
     val server = Http.server.serve(":" + port, receiveMessage.toService)

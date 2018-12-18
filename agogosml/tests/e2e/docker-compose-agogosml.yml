@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   input-reader:
-    image: ${CONTAINER_REG_BASE}/input_reader:${TAG}
+    image: ${CONTAINER_REG}/input_reader:${TAG}
     networks:
       mynet:
         aliases:
@@ -20,7 +20,7 @@ services:
       EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_INPUT}
 
   output-writer:
-    image: ${CONTAINER_REG_BASE}/output_writer:${TAG}
+    image: ${CONTAINER_REG}/output_writer:${TAG}
     ports:
      - "127.0.0.1:6000:6000"
     networks:
@@ -41,7 +41,7 @@ services:
 
 
   sample-app:
-    image: ${CONTAINER_REG_BASE}/sample_app:${APP_TAG}
+    image: ${CONTAINER_REG}/sample_app:${APP_TAG}
     ports:
      - "127.0.0.1:3000:3000"
     networks:

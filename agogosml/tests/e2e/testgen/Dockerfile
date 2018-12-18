@@ -1,14 +1,14 @@
-ARG CONTAINER_REG_BASE
+ARG CONTAINER_REG_AGOGOSML
 ARG TAG
 
-FROM ${CONTAINER_REG_BASE}/agogosml:${TAG} as builder
+FROM ${CONTAINER_REG_AGOGOSML}:${TAG} as builder
 
 # Copy the app
 WORKDIR /usr/src/agogosml
 COPY . ./testgen
 
 # Release
-FROM ${CONTAINER_REG_BASE}/agogosml:${TAG} AS testgen
+FROM ${CONTAINER_REG_AGOGOSML}:${TAG} AS testgen
 
 WORKDIR /testgen
 COPY --from=builder /usr/src/agogosml/testgen /testgen

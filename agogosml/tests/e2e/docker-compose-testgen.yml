@@ -6,7 +6,7 @@ services:
       context: testgen/.
       dockerfile: Dockerfile
       args:
-        CONTAINER_REG_AGOGOSML: ${CONTAINER_REG}/agogosml
+        CONTAINER_REG_AGOGOSML: ${CONTAINER_REG}/agogosml/agogosml
         TAG:
     ports:
      - "127.0.0.1:2000:5000"

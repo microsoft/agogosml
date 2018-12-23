@@ -1,7 +1,8 @@
-import os
-
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.http_message_sender import HttpMessageSender
+from agogosml.utils.logger import Logger
+
+logger = Logger()
 
 
 class TestApp:
@@ -14,5 +15,7 @@ class TestApp:
         self.listener.start(self.on_message_received)
 
     def on_message_received(self, message):
-        print('Test App message received: ' + message)
-        self.sender.send(message)
+        logger.info('Test App message received: ' + message)
+        sender_result = self.sender.send(message)
+        logger.info('Sender result: ' + str(sender_result))
+        return sender_result

@@ -74,11 +74,15 @@ class KafkaStreamingClient(AbstractStreamingClient):
         """
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
-        mutated_message = message.encode('utf-8')
-        self.producer.poll(0)
-        self.producer.produce(
-            self.topic, mutated_message, callback=self.delivery_report)
-        self.producer.flush()
+        try:
+            mutated_message = message.encode('utf-8')
+            self.producer.poll(0)
+            self.producer.produce(
+                self.topic, mutated_message, callback=self.delivery_report)
+            self.producer.flush()
+            return True
+        except Exception as e:
+            return False
 
     def stop(self, *args, **kwargs):
         pass

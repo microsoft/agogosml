@@ -18,8 +18,11 @@ class FlaskHttpListenerClient(ListenerClient):
         @app.route("/", methods=["POST"])
         def on_input():
             msg = str(request.data, 'utf-8', 'ignore')
-            self.on_message_received(msg)
-            return 'msg:' + msg
+            if self.on_message_received(msg):
+                return 'msg:' + msg
+            else:
+                print('Error: The callback failed to process the message, returning 500')
+                return 'Error: The callback failed to process the message', 500
 
         app.run(
             host=self.host, port=self.port, debug=False, use_reloader=False, threaded=True)

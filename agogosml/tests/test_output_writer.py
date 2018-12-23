@@ -5,17 +5,17 @@ from agogosml.writer.output_writer_factory import OutputWriterFactory
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
-from .client_mocks import ClientMessagingMock, ListenerClientMock
+from .client_mocks import StreamingClientMock, HttpClientMock
 
 
 @pytest.fixture
 def MockStreamingClient():
-    return ClientMessagingMock()
+    return StreamingClientMock()
 
 
 @pytest.fixture
 def MockListenerClient():
-    return ListenerClientMock(0)
+    return HttpClientMock(0)
 
 
 def test_when_ctor_instance_created(MockStreamingClient, MockListenerClient):

@@ -15,19 +15,20 @@ from agogosml.writer.output_writer_factory import OutputWriterFactory
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
-from tests.client_mocks import ClientMessagingMock, ListenerClientMock
+from tests.client_mocks import StreamingClientMock, HttpClientMock
+from tests.integration_tests.test_app import TestApp
 
 load_dotenv()
 
 
 @pytest.fixture
 def mock_streaming_client():
-    return ClientMessagingMock()
+    return StreamingClientMock()
 
 
 @pytest.fixture
 def mock_listener_client():
-    return ListenerClientMock(0)
+    return HttpClientMock(0)
 
 
 @pytest.mark.integration
@@ -41,18 +42,22 @@ def test_when_messages_received_in_input_then_all_messages_are_sent_via_output()
     """
 
     # setup input
-    input_client_mock = ClientMessagingMock()
+    input_client_mock = StreamingClientMock()
     ir_config = {
-        'APP_PORT': os.getenv("OUTPUT_WRITER_PORT"),
-        'APP_HOST': os.getenv("OUTPUT_WRITER_HOST"),
+        'APP_PORT': os.getenv("APP_PORT"),
+        'APP_HOST': os.getenv("APP_HOST"),
     }
     print('Creating reader')
     ir = InputReaderFactory.create(ir_config, input_client_mock)
     print('start_receiving_messages')
     ir.start_receiving_messages()
 
-    # setup app is skipped. We are wiring input and output directly,
-    # skipping the app, because we don't want to test the app, but the connectivity features of both input and output.
+    # setup app
+    app = TestApp(os.getenv("APP_PORT"),
+                  os.getenv("APP_HOST"),
+                  os.getenv("OUTPUT_WRITER_PORT"),
+                  os.getenv("OUTPUT_WRITER_HOST"))
+    app.start()
 
     # setup output
     ow_config = {
@@ -61,7 +66,7 @@ def test_when_messages_received_in_input_then_all_messages_are_sent_via_output()
     }
 
     print('Creating writer')
-    output_client_mock = ClientMessagingMock()
+    output_client_mock = StreamingClientMock()
     ow = OutputWriterFactory.create(ow_config, output_client_mock, None)
     print('start_incoming_messages')
     ow.start_incoming_messages()

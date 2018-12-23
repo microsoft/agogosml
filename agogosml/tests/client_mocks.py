@@ -3,7 +3,10 @@ from agogosml.common.listener_client import ListenerClient
 from agogosml.common.message_sender import MessageSender
 
 
-class ClientMessagingMock(AbstractStreamingClient):
+class StreamingClientMock(AbstractStreamingClient):
+    """
+    A class to mock functionality at the streaming client level.
+    """
     def __init__(self):
         self.sent = False
         self.receiving = False
@@ -37,7 +40,10 @@ class ClientMessagingMock(AbstractStreamingClient):
         self.callback(msg)
 
 
-class ListenerClientMock(ListenerClient):
+class HttpClientMock(ListenerClient):
+    """
+    A class to mock functionality at the http client level
+    """
     def __init__(self, port):
         self.callback = None
         self.startCalled = False

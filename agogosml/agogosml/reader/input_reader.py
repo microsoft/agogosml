@@ -3,6 +3,9 @@
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 from agogosml.common.message_sender import MessageSender
+from agogosml.utils.logger import Logger
+
+logger = Logger()
 
 
 class InputReader:  # pylint: disable=too-few-public-methods
@@ -29,4 +32,14 @@ class InputReader:  # pylint: disable=too-few-public-methods
 
         :param message: a message to process
         """
-        self.message_sender.send(message)
+        result = self.message_sender.send(message)
+        if result:
+            return True
+            pass
+        else:
+            self.handle_send_failure(message)
+            return False
+
+    def handle_send_failure(self, message):
+        logger.error('Error while sending message to App')
+        # Notify...

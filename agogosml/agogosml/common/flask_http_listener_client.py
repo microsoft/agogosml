@@ -1,6 +1,5 @@
 """ Flask client to receive messages from customer app"""
 import threading
-import time
 from flask import Flask, request
 from .listener_client import ListenerClient
 

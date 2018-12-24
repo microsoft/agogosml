@@ -1,20 +1,9 @@
-import asyncio
-import threading
-from multiprocessing.pool import ThreadPool
 import pytest
 import os
-import requests
-import json
 import time
 from dotenv import load_dotenv
-
-from agogosml.reader.input_reader import InputReader
 from agogosml.reader.input_reader_factory import InputReaderFactory
-from agogosml.writer.output_writer import OutputWriter
 from agogosml.writer.output_writer_factory import OutputWriterFactory
-from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
-from agogosml.common.kafka_streaming_client import KafkaStreamingClient
-from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 from tests.client_mocks import StreamingClientMock, HttpClientMock
 from tests.integration_tests.test_app import TestApp
 

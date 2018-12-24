@@ -22,7 +22,7 @@ class OutputWriter:
 
         :param message: A message as a string to send onwards.
         """
-        self.messaging_client.send(message)
+        return self.messaging_client.send(message)
 
     def start_incoming_messages(self, callback=None):
         """Start accepting messages."""

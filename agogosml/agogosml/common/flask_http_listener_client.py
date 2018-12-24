@@ -42,5 +42,5 @@ class FlaskHttpListenerClient(ListenerClient):
             if func is None:
                 raise RuntimeError('Not running with the Werkzeug Server')
             func()
-        except:
-            print('error while shutting down flask server')
+        except Exception as e:
+            print('error while shutting down flask server: ' + str(e))

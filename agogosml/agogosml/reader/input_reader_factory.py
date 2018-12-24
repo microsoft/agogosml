@@ -16,8 +16,8 @@ class InputReaderFactory:
     def create(config: dict, streaming_client=None):
         """Create a new instance of InputReader
 
-        :param streaming_client:
         :param config: A configuration for InputReader
+        :param streaming_client: Optional, an existing streaming client implementation to use.
         :return InputReader: An instance of an InputReader with streaming_client and message_sender
         """
         if InputReaderFactory.is_empty(config):

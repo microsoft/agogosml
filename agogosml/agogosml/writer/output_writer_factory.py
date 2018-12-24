@@ -14,9 +14,9 @@ class OutputWriterFactory:
     def create(config: dict, streaming_client=None, listener_client=None):
         """Creates a new instance of OutputWriter.
 
-        :param listener_client: optional
-        :param streaming_client: optional
         :param config: A configuration for OutputWriter.
+        :param streaming_client: Optional, an existing streaming client implementation to use.
+        :param listener_client: Optional, an existing listener client implementation to use.
         :return OutputWriter: An instance of an OutputWriter with a
         streaming_client and listener.
         """

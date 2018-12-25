@@ -1,0 +1,58 @@
+version: "3.7"
+
+services:
+  input-reader:
+    image: ${CONTAINER_REG}/input_reader:${TAG}
+    networks:
+      mynet:
+        aliases:
+          - input
+    environment:
+      MESSAGING_TYPE: ${MESSAGING_TYPE}
+      AZURE_STORAGE_ACCOUNT: ${AZURE_STORAGE_ACCOUNT}
+      EVENT_HUB_NAMESPACE: ${EVENT_HUB_NAMESPACE}
+      EVENT_HUB_NAME: ${EVENT_HUB_NAME_INPUT}
+      EVENT_HUB_SAS_POLICY: ${EVENT_HUB_SAS_POLICY}
+      LEASE_CONTAINER_NAME: ${LEASE_CONTAINER_NAME_INPUT}
+      APP_HOST: sample
+      APP_PORT: 3000
+      AZURE_STORAGE_ACCESS_KEY:
+      EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_INPUT}
+
+  output-writer:
+    image: ${CONTAINER_REG}/output_writer:${TAG}
+    ports:
+     - "127.0.0.1:6000:6000"
+    networks:
+      mynet:
+        aliases:
+          - output
+    environment:
+      MESSAGING_TYPE: ${MESSAGING_TYPE}
+      AZURE_STORAGE_ACCOUNT: ${AZURE_STORAGE_ACCOUNT}
+      AZURE_STORAGE_ACCESS_KEY: ${AZURE_STORAGE_ACCESS_KEY}
+      LEASE_CONTAINER_NAME: ${LEASE_CONTAINER_NAME_OUTPUT}
+      EVENT_HUB_NAMESPACE: ${EVENT_HUB_NAMESPACE}
+      EVENT_HUB_NAME: ${EVENT_HUB_NAME_OUTPUT}
+      EVENT_HUB_SAS_POLICY: ${EVENT_HUB_SAS_POLICY}
+      OUTPUT_WRITER_PORT: 6000
+      OUTPUT_WRITER_HOST: output
+      EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_OUTPUT}
+
+
+  sample-app:
+    image: ${CONTAINER_REG}/sample_app:${APP_TAG}
+    ports:
+     - "127.0.0.1:3000:3000"
+    networks:
+      mynet:
+        aliases:
+          - sample
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      OUTPUT_URL: http://output:6000
+      SCHEMA_FILEPATH: schema_example.json
+
+networks:
+  mynet:

@@ -25,6 +25,7 @@ jsonnet = "~=0.11"
 validators = "~=0.12"
 git-url-parse = "~=1.1"
 cookiecutter = "~=1.6"
+json = "~=2.0.9"
 
 [requires]
 python_version = "3.7"

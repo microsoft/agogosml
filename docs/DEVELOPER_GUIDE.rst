@@ -27,7 +27,7 @@ Build the base image using:
 
 .. code:: bash
 
-    docker build -t agogosml/agogosml -f agogosml/Dockerfile.agogosml agogosml
+    docker build -t agogosml -f agogosml/Dockerfile.agogosml agogosml
 
 Then the input reader image:
 

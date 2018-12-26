@@ -30,16 +30,34 @@ local repository = import 'pipeline-repository.libsonnet';
                 "+refs/heads/*"
             ],
             "forks": {
-                "enabled": false,
+                "enabled": true,
                 "allowSecrets": false
             },
             "pathFilters": [
-                "+/sample_app"
+                "+/agogosml_cli/cli/templates/{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}"
             ],
             "isCommentRequiredForPullRequest": false,
             "triggerType": 64
+        },
+        {
+            "branchFilters": [
+                "+master"
+            ],
+            "pathFilters": [
+                "+/agogosml_cli/cli/templates/{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}"
+            ],
+            "batchChanges": false,
+            "maxConcurrentBuildsPerBranch": 1,
+            "pollingInterval": 0,
+            "triggerType": 2
         }
     ],
+    "variables": {
+        "container_registry": {
+            "value": std.extVar('AZURE_CONTAINER_REGISTRY'),
+            "allowOverride": true
+        }
+    },
     "properties": {},
     "buildNumberFormat": "$(date:yyyyMMdd)$(rev:.r)",
     "process": {
@@ -65,10 +83,10 @@ local repository = import 'pipeline-repository.libsonnet';
                             "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
-                            "dockerFile": "**/sample_app/Dockerfile.app",
+                            "dockerFile": "**/{{cookiecutter.PROJECT_NAME_SLUG}}/Dockerfile.{{cookiecutter.PROJECT_NAME_SLUG}}",
                             "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
                             "useDefaultContext": "false",
-                            "buildContext": "",
+                            "buildContext": "agogosml_cli/cli/templates/{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
                             "imageName": "sample_app:$(Build.BuildId)",
@@ -98,6 +116,28 @@ local repository = import 'pipeline-repository.libsonnet';
                         "enabled": true,
                         "continueOnError": false,
                         "alwaysRun": false,
+                        "displayName": "Tag 'Latest'",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                            "versionSpec": "3.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "targetType": "inline",
+                            "filePath": "",
+                            "arguments": "",
+                            "script": "if [ $(Build.SourceBranchName) = \"master\" ]; then\n  echo \"Since this is a merge build, we are creating a new 'latest' tag\"\n  docker tag $(container_registry)/sample_app:$(Build.BuildId) $(container_registry)/sample_app:latest\n  echo \"Done\"\nelse\n  echo \"Not a merge build, hence skipping 'latest' tag\"\nfi\n",
+                            "workingDirectory": "",
+                            "failOnStderr": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
                         "displayName": "Push app image",
                         "timeoutInMinutes": 0,
                         "condition": "succeeded()",
@@ -118,7 +158,7 @@ local repository = import 'pipeline-repository.libsonnet';
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "sample_app:$(Build.BuildId)",
+                            "imageName": "sample_app",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",

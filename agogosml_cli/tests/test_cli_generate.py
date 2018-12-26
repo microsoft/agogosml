@@ -24,6 +24,7 @@ EXPECTED_OUTPUT_PROJ_FILES = [
     'ci-app-pipeline.json',
     'ci-agogosml-pipeline.json',
     'cd-pipeline.json',
+    'e2e-pipeline.json',
     'testproject/dockerbuild.sh',
     'testproject/.dockerignore',
     'testproject/README.md',
@@ -169,6 +170,7 @@ def test_generate_invalid_schema():
         - azure-ci-app-pipeline.json
         - ci-input-app-pipeline.json
         - ci-output-app-pipeline.json
+        - azure-ci-e2e-tests-pipeline.json
     """
     runner = CliRunner()
     with runner.isolated_filesystem():

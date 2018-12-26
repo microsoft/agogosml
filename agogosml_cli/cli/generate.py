@@ -17,7 +17,9 @@ PROJ_FILES = {
     'pipeline/azure-ci-app-pipeline.jsonnet':
         'ci-app-pipeline.json',
     'pipeline/azure-cd-pipeline.jsonnet':
-        'cd-pipeline.json'
+        'cd-pipeline.json',
+    'pipeline/azure-ci-e2e-tests-pipeline.jsonnet':
+        'e2e-pipeline.json'
 }
 
 APP_TEMPLATES = {

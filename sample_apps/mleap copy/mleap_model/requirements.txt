@@ -1,4 +1,0 @@
-python-dotenv>=0.5.1
-databricks-cli==0.8.2
-msrestazure~=0.4.32
-azure-cli==2.0.43

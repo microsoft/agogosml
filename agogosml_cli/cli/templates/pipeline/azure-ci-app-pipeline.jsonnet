@@ -34,7 +34,7 @@ local repository = import 'pipeline-repository.libsonnet';
                 "allowSecrets": false
             },
             "pathFilters": [
-                "+/agogosml_cli/cli/templates/{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}"
+                std.format("+/agogosml_cli/cli/templates/%s/%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
             ],
             "isCommentRequiredForPullRequest": false,
             "triggerType": 64
@@ -44,7 +44,7 @@ local repository = import 'pipeline-repository.libsonnet';
                 "+master"
             ],
             "pathFilters": [
-                "+/agogosml_cli/cli/templates/{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}"
+                std.format("+/agogosml_cli/cli/templates/%s/%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
             ],
             "batchChanges": false,
             "maxConcurrentBuildsPerBranch": 1,
@@ -83,10 +83,10 @@ local repository = import 'pipeline-repository.libsonnet';
                             "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
-                            "dockerFile": "**/{{cookiecutter.PROJECT_NAME_SLUG}}/Dockerfile.{{cookiecutter.PROJECT_NAME_SLUG}}",
+                            "dockerFile": std.format("**/%s/Dockerfile.%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
                             "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
                             "useDefaultContext": "false",
-                            "buildContext": "agogosml_cli/cli/templates/{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}",
+                            "buildContext": std.format("agogosml_cli/cli/templates/%s/%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
                             "imageName": "sample_app:$(Build.BuildId)",

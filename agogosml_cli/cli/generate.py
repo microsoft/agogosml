@@ -20,6 +20,11 @@ PROJ_FILES = {
         'cd-pipeline.json'
 }
 
+APP_TEMPLATES = {
+    'simple': 'apps/simple',
+    'mleap':  'apps/mleap'
+}
+
 
 @click.command()
 @click.option(
@@ -35,8 +40,9 @@ PROJ_FILES = {
     required=False,
     default='./manifest.json',
     help='Path to manifest.json file')
+@click.option('--app-base', type=click.Choice(APP_TEMPLATES.keys()), default='simple')
 @click.argument('folder', type=click.Path(), default='.', required=False)
-def generate(force, config, folder) -> int:
+def generate(force, config, app_base, folder) -> int:
     """Generates an agogosml project"""
     template_vars = {}
     with open(
@@ -67,6 +73,16 @@ def generate(force, config, folder) -> int:
         # Write cookiecutter template
         write_cookiecutter(utils.get_template_full_filepath(''),
                            folder, template_vars, force)
+    except OutputDirExistsException:
+        # Handle situation where template folder exists and force is not set to true
+        click.echo('Files already exists in directory. Use --force to overwrite')
+        raise click.Abort()
+
+    try:
+        # Write App Template
+        write_cookiecutter(utils.get_template_full_filepath(APP_TEMPLATES[app_base]),
+                           os.path.join(folder, template_vars['PROJECT_NAME_SLUG']),
+                           template_vars, True)
     except OutputDirExistsException:
         # Handle situation where template folder exists and force is not set to true
         click.echo('Files already exists in directory. Use --force to overwrite')

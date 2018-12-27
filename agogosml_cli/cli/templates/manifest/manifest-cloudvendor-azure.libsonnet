@@ -1,5 +1,3 @@
 {
-    "azureContainerRegistry": "MISSING",
-    "azureResourceGroup": "MISSING",
-    "kubernetesCluster": "MISSING"
+    "azureContainerRegistry": "MISSING"
 }

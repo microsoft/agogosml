@@ -34,7 +34,7 @@ local repository = import 'pipeline-repository.libsonnet';
                 "allowSecrets": false
             },
             "pathFilters": [
-                std.format("+/agogosml_cli/cli/templates/%s/%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
+                "+/agogosml_cli/cli/templates/apps",
             ],
             "isCommentRequiredForPullRequest": false,
             "triggerType": 64
@@ -44,7 +44,7 @@ local repository = import 'pipeline-repository.libsonnet';
                 "+master"
             ],
             "pathFilters": [
-                std.format("+/agogosml_cli/cli/templates/%s/%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
+                "+/agogosml_cli/cli/templates/apps",
             ],
             "batchChanges": false,
             "maxConcurrentBuildsPerBranch": 1,
@@ -83,10 +83,10 @@ local repository = import 'pipeline-repository.libsonnet';
                             "azureSubscriptionEndpoint": "FILL IN HERE",
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
-                            "dockerFile": std.format("**/%s/Dockerfile.%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
+                            "dockerFile": std.format("**/Dockerfile.%s", [std.extVar('PROJECT_NAME_SLUG')]),
                             "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
                             "useDefaultContext": "false",
-                            "buildContext": std.format("agogosml_cli/cli/templates/%s/%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
+                            "buildContext": std.format("agogosml_cli/cli/templates/apps/simple/%s", [std.extVar('PROJECT_NAME_SLUG')]),
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
                             "imageName": "sample_app:$(Build.BuildId)",

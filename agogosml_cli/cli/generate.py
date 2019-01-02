@@ -17,7 +17,14 @@ PROJ_FILES = {
     'pipeline/azure-ci-app-pipeline.jsonnet':
         'ci-app-pipeline.json',
     'pipeline/azure-cd-pipeline.jsonnet':
-        'cd-pipeline.json'
+        'cd-pipeline.json',
+    'pipeline/azure-ci-e2e-tests-pipeline.jsonnet':
+        'e2e-pipeline.json'
+}
+
+APP_TEMPLATES = {
+    'simple': 'apps/simple',
+    'mleap':  'apps/mleap'
 }
 
 
@@ -35,8 +42,9 @@ PROJ_FILES = {
     required=False,
     default='./manifest.json',
     help='Path to manifest.json file')
+@click.option('--app-base', type=click.Choice(APP_TEMPLATES.keys()), default='simple')
 @click.argument('folder', type=click.Path(), default='.', required=False)
-def generate(force, config, folder) -> int:
+def generate(force, config, app_base, folder) -> int:
     """Generates an agogosml project"""
     template_vars = {}
     with open(
@@ -67,6 +75,16 @@ def generate(force, config, folder) -> int:
         # Write cookiecutter template
         write_cookiecutter(utils.get_template_full_filepath(''),
                            folder, template_vars, force)
+    except OutputDirExistsException:
+        # Handle situation where template folder exists and force is not set to true
+        click.echo('Files already exists in directory. Use --force to overwrite')
+        raise click.Abort()
+
+    try:
+        # Write App Template
+        write_cookiecutter(utils.get_template_full_filepath(APP_TEMPLATES[app_base]),
+                           os.path.join(folder, template_vars['PROJECT_NAME_SLUG']),
+                           template_vars, True)
     except OutputDirExistsException:
         # Handle situation where template folder exists and force is not set to true
         click.echo('Files already exists in directory. Use --force to overwrite')
@@ -114,8 +132,7 @@ def extractTemplateVarsFromManifest(manifest):
 def extractAzureTemplateVars(manifest):
     template_vars = {}
     azure_props = manifest['cloud']['otherProperties']
-    if 'azureContainerRegistry' not in azure_props or 'azureResourceGroup' not in azure_props \
-       or 'kubernetesCluster' not in azure_props:
+    if 'azureContainerRegistry' not in azure_props:
         click.echo('Azure property is missing or invalid.')
         raise click.Abort()
     else:
@@ -125,8 +142,6 @@ def extractAzureTemplateVars(manifest):
             acr += '/'
         template_vars['AZURE_DOCKER_BUILDARGS'] = \
             '--build-arg CONTAINER_REG=%s --build-arg AGOGOSML_TAG=$(Build.BuildId)' % acr
-        template_vars['AZURE_RESOURCE_GROUP'] = azure_props['azureResourceGroup']
-        template_vars['KUBERNETES_CLUSTER'] = azure_props['kubernetesCluster']
     return template_vars
 
 

@@ -27,7 +27,7 @@ Build the base image using:
 
 .. code:: bash
 
-    docker build -t agogosml/agogosml -f agogosml/Dockerfile.agogosml agogosml
+    docker build -t agogosml -f agogosml/Dockerfile.agogosml agogosml
 
 Then the input reader image:
 
@@ -175,7 +175,7 @@ Test the CLI and see generated output
 
 .. code:: bash
 
-    $ pipenv run make installedit
+    $ pipenv shell
 
     # Create a directory for your project
     $ mkdir hello-agogosml && cd hello-agogosml

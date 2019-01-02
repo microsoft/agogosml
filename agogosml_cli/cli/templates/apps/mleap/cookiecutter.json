@@ -1,0 +1,8 @@
+{
+    "PROJECT_NAME": "sample_agogosml_project",
+    "PROJECT_NAME_SLUG": "sample_agogosml_project",
+    "_copy_without_render": [
+        "*.yaml",
+        "*.txt"
+    ]
+}

@@ -74,11 +74,16 @@ class KafkaStreamingClient(AbstractStreamingClient):
         """
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
-        mutated_message = message.encode('utf-8')
-        self.producer.poll(0)
-        self.producer.produce(
-            self.topic, mutated_message, callback=self.delivery_report)
-        self.producer.flush()
+        try:
+            mutated_message = message.encode('utf-8')
+            self.producer.poll(0)
+            self.producer.produce(
+                self.topic, mutated_message, callback=self.delivery_report)
+            self.producer.flush()
+            return True
+        except Exception as e:
+            logger.error('Error sending message to kafka:' + str(e))
+            return False
 
     def stop(self, *args, **kwargs):
         pass
@@ -120,7 +125,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
         to ensure proper syntax is clear
         '''
         try:
-            self.consumer.subscribe([self.topic])
+            self.subscribe_to_topic()
             start = datetime.datetime.now()
 
             while True:
@@ -128,16 +133,9 @@ class KafkaStreamingClient(AbstractStreamingClient):
                 self.check_timeout(start)
 
                 # Poll messages from topic
-                msg = self.consumer.poll(0.00000001)
-                if msg is None:
-                    continue
-                if msg.error():
-                    # Error or event
-                    self.handle_kafka_error(msg)
-                else:
-                    # Proper message
-                    on_message_received_callback(msg.value())
-                    self.consumer.commit(msg)
+                msg = self.read_single_message()
+                if msg is not None:
+                    on_message_received_callback(msg)
 
         except KeyboardInterrupt:
             logger.info('Aborting listener...')
@@ -145,3 +143,21 @@ class KafkaStreamingClient(AbstractStreamingClient):
         finally:
             # Close down consumer to commit final offsets.
             self.consumer.close()
+
+    def subscribe_to_topic(self):
+        self.consumer.subscribe([self.topic])
+
+    def read_single_message(self):
+        # Poll messages from topic
+        msg = self.consumer.poll(0.000001)
+        if msg is None:
+            return None
+        if msg.error():
+            # Error or event
+            self.handle_kafka_error(msg)
+            return None
+        else:
+            # Proper message
+            # logger.info('kafka read message: {}, from topic: {}'.format(msg.value(), msg.topic()))
+            self.consumer.commit(msg)
+            return msg.value()

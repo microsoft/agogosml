@@ -1,4 +1,5 @@
 import datetime
+import threading
 
 import pytest
 import os
@@ -137,6 +138,7 @@ def test_when_messages_sent_to_kafka_then_all_messages_are_sent_via_output():
     It assumes connectivity to streaming client is correct, therefore the steaming client is mocked.
     We look to find that once a message is received, it is send out by the output writer.
     This is the maximal integration test we can have in an isolated environment.
+    Please allow KAFKA_TIMEOUT of 30 seconds or more
     :return:
     """
 
@@ -185,17 +187,20 @@ def test_when_messages_sent_to_kafka_then_all_messages_are_sent_via_output():
     ow.start_incoming_messages()
 
     print('start_receiving_messages')
-    ir.start_receiving_messages()
+    # ir.start_receiving_messages()
+    t_ir = threading.Thread(name='testir', target=ir.start_receiving_messages)
+    t_ir.setDaemon(True)
+    t_ir.start()
 
     print('sending test message to reader')
+
     test_msg = str(time.clock())
+    print("sending {} to input topic".format(test_msg))
     # send a message from INPUT reader, and expect it to flow in the pipeline,
     # and eventually be picked up by the output writer
-    # input_client_mock.fake_incoming_message_from_streaming(test_msg)
-
     send_message_to_kafka(test_msg)
     last_msg = read_message_from_kafka()
-
+    print("received {} from output topic".format(last_msg))
     assert last_msg == test_msg
 
     ir.stop_incoming_messages()
@@ -209,7 +214,8 @@ def send_message_to_kafka(msg):
         "TIMEOUT": os.getenv("KAFKA_TIMEOUT")
     }
     kafka = KafkaStreamingClient(config)
-    return kafka.send(msg)
+    val = kafka.send(msg)
+    return val
 
 
 def read_message_from_kafka():
@@ -220,10 +226,10 @@ def read_message_from_kafka():
         "TIMEOUT": os.getenv("KAFKA_TIMEOUT")
     }
     kafka = KafkaStreamingClient(config)
-    kafka.subscribe_to_topic()
+    kafka.start_receiving(on_msg)
 
     start = datetime.datetime.now()
-    timeout = 10 # seconds
+    timeout = int(os.getenv("KAFKA_TIMEOUT"))
     stop = False
     msg = None
     while not stop:
@@ -233,8 +239,17 @@ def read_message_from_kafka():
             stop = True
 
         # Poll messages from topic
-        msg = kafka.read_single_message()
-        print('attempt to read topic. result: {}'.format(msg))
-        if msg is not None:
+        if my_msg is not None:
             stop = True
+            msg = my_msg
+
     return msg
+
+
+my_msg = None
+
+
+def on_msg(msg):
+    global my_msg
+    my_msg = msg.decode('utf-8')
+

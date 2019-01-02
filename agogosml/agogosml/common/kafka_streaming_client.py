@@ -149,7 +149,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
 
     def read_single_message(self):
         # Poll messages from topic
-        msg = self.consumer.poll(1)
+        msg = self.consumer.poll(0.000001)
         if msg is None:
             return None
         if msg.error():

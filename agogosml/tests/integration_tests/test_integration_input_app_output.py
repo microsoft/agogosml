@@ -252,4 +252,3 @@ my_msg = None
 def on_msg(msg):
     global my_msg
     my_msg = msg.decode('utf-8')
-

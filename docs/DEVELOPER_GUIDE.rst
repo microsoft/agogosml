@@ -175,7 +175,7 @@ Test the CLI and see generated output
 
 .. code:: bash
 
-    $ pipenv run make installedit
+    $ pipenv shell
 
     # Create a directory for your project
     $ mkdir hello-agogosml && cd hello-agogosml

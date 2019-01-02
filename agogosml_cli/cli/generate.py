@@ -132,8 +132,7 @@ def extractTemplateVarsFromManifest(manifest):
 def extractAzureTemplateVars(manifest):
     template_vars = {}
     azure_props = manifest['cloud']['otherProperties']
-    if 'azureContainerRegistry' not in azure_props or 'azureResourceGroup' not in azure_props \
-       or 'kubernetesCluster' not in azure_props:
+    if 'azureContainerRegistry' not in azure_props:
         click.echo('Azure property is missing or invalid.')
         raise click.Abort()
     else:
@@ -143,8 +142,6 @@ def extractAzureTemplateVars(manifest):
             acr += '/'
         template_vars['AZURE_DOCKER_BUILDARGS'] = \
             '--build-arg CONTAINER_REG=%s --build-arg AGOGOSML_TAG=$(Build.BuildId)' % acr
-        template_vars['AZURE_RESOURCE_GROUP'] = azure_props['azureResourceGroup']
-        template_vars['KUBERNETES_CLUSTER'] = azure_props['kubernetesCluster']
     return template_vars
 
 

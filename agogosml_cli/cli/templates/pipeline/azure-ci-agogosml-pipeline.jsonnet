@@ -85,7 +85,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": "FILL IN HERE",
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
                             "dockerFile": "agogosml/Dockerfile.agogosml",
@@ -154,7 +154,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": "FILL IN HERE",
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Push an image",
                             "dockerFile": "**/agogosml/Dockerfile.agogosml",
@@ -223,7 +223,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": "FILL IN HERE",
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
                             "dockerFile": "**/input_reader/Dockerfile.input_reader",

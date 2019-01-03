@@ -2,13 +2,10 @@ import asyncio
 import time
 from multiprocessing.pool import ThreadPool
 
-from dotenv import load_dotenv
 import os
 import json
 
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
-
-load_dotenv()
 
 
 def send_messages():

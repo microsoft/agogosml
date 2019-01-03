@@ -34,7 +34,7 @@ local repository = import 'pipeline-repository.libsonnet';
                 "allowSecrets": false
             },
             "pathFilters": [
-                "+/agogosml_cli/cli/templates/apps",
+                 std.format("+/%s/%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
             ],
             "isCommentRequiredForPullRequest": false,
             "triggerType": 64
@@ -44,8 +44,8 @@ local repository = import 'pipeline-repository.libsonnet';
                 "+master"
             ],
             "pathFilters": [
-                "+/agogosml_cli/cli/templates/apps",
-            ],
+                 std.format("+/%s/%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
+             ],
             "batchChanges": false,
             "maxConcurrentBuildsPerBranch": 1,
             "pollingInterval": 0,
@@ -86,7 +86,7 @@ local repository = import 'pipeline-repository.libsonnet';
                             "dockerFile": std.format("**/Dockerfile.%s", [std.extVar('PROJECT_NAME_SLUG')]),
                             "arguments": std.extVar('AZURE_DOCKER_BUILDARGS'),
                             "useDefaultContext": "false",
-                            "buildContext": std.format("agogosml_cli/cli/templates/apps/simple/%s", [std.extVar('PROJECT_NAME_SLUG')]),
+                            "buildContext": std.format("%s/%s", [std.extVar('PROJECT_NAME_SLUG'), std.extVar('PROJECT_NAME_SLUG')]),
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
                             "imageName": "sample_app:$(Build.BuildId)",

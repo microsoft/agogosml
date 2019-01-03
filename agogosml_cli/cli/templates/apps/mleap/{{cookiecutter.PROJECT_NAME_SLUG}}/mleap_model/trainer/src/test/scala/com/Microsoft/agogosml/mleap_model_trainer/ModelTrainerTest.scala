@@ -50,7 +50,7 @@ class ModelTrainerTest extends FunSuite with DataFrameSuiteBase with SharedSpark
     }
   }
 
-  test("trained model with baseline accuracy given sample data is created"){
+  /*test("trained model with baseline accuracy given sample data is created"){
     val f = fixture
     val prepDf = ModelTrainer.prepareData(f.sparkDf)
     val Array(trainingData, testData) = prepDf.randomSplit(Array(0.7, 0.3))
@@ -72,5 +72,5 @@ class ModelTrainerTest extends FunSuite with DataFrameSuiteBase with SharedSpark
     }
     finally new File(modelPath).delete()
 
-  }
+  }*/
 }

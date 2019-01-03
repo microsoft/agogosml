@@ -17,11 +17,6 @@ class MainTest extends FlatSpec with Matchers {
     assert(transformedMessage.input == testInputMessage)
   }
 
-  it should "send correctly formatted message to output and receive OK response" in {
-    val resp = Main.sendPostRequest(testOutputMessage)
-    assert(resp.code == 200)
-  }
-
   it should "get status OK on correct schema" in {
     var input = Input.post("/").withBody[Application.Json](Buf.Utf8("{\"text\":\"correct schema\"}"))
     val res = server.receiveMessage(input)

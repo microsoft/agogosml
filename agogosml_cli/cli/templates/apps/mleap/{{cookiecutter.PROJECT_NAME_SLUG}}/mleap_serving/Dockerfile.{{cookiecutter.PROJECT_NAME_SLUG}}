@@ -12,13 +12,12 @@ RUN apk update && apk add ca-certificates wget tar bash && \
     wget -qO - --no-check-certificate "https://piccolo.link/sbt-${SBT_VERSION}.tgz" > sbt-${SBT_VERSION}.tgz && \
     tar --extract --file "sbt-${SBT_VERSION}.tgz" --directory "/usr/local/sbt" --strip-components 1
 
+# Needed to build for tests
 ARG model_path
 ARG port
-ARG output_url
 
 ENV MODEL_PATH=$model_path
 ENV PORT=$port
-ENV OUTPUT_URL=$output_url
 
 RUN ["/usr/local/sbt/bin/sbt", "assembly"]
 

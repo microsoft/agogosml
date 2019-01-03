@@ -31,7 +31,8 @@ class ModelTrainerTest extends FunSuite with DataFrameSuiteBase with SharedSpark
 
   def fixture = {
     // Create SparkDf
-    val inputFile = getClass.getResource("/SMSSpamCollection.tsv").toString
+    val datasetPath = "/SMSSpamCollection.tsv"
+    val inputFile = getClass.getResource(datasetPath).toString
     val spamDf = spark.read.format("csv")
       .option("delimiter", "\t")
       .load(inputFile)

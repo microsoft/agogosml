@@ -22,8 +22,7 @@ def test_when_instance_created(mock_streaming_client, mock_message_sender):
     assert ir is not None
 
 
-def test_when_start_receiving_then_messaging_client_starts(
-    mock_streaming_client, mock_message_sender):
+def test_when_start_receiving_then_messaging_client_starts(mock_streaming_client, mock_message_sender):
     # arrange
     ir = InputReader(mock_streaming_client, mock_message_sender)
 

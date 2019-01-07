@@ -141,7 +141,7 @@ def extractAzureTemplateVars(manifest):
         if not acr.endswith('/'):
             acr += '/'
         template_vars['AZURE_DOCKER_BUILDARGS'] = \
-            '--build-arg CONTAINER_REG=%s --build-arg AGOGOSML_TAG=$(Build.BuildId)' % acr
+            '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
     return template_vars
 
 

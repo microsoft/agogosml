@@ -85,10 +85,10 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": "FILL IN HERE",
+                            "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
-                            "dockerFile": "agogosml/Dockerfile.agogosml",
+                            "dockerFile": "**/agogosml/Dockerfile.agogosml",
                             "arguments": "",
                             "useDefaultContext": "true",
                             "buildContext": "",
@@ -154,7 +154,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": "FILL IN HERE",
+                            "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Push an image",
                             "dockerFile": "**/agogosml/Dockerfile.agogosml",
@@ -223,7 +223,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": "FILL IN HERE",
+                            "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
                             "dockerFile": "**/input_reader/Dockerfile.input_reader",

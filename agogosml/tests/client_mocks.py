@@ -67,7 +67,7 @@ class HttpClientMock(ListenerClient):
         pass
 
     def mock_new_incoming_message(self):
-        self.callback("{'some':'json'}")
+        return self.callback("{'some':'json'}")
 
     def get_started(self):
         return self.startCalled
@@ -78,11 +78,19 @@ class HttpClientMock(ListenerClient):
 
 class MessageSenderMock(MessageSender):
     def __init__(self):
+        self.msg = None
+        self.should_fail_to_send = None
         pass
 
     def send(self, msg):
-        self.msg = msg
-        pass
+        if self.should_fail_to_send:
+            return False
+        else:
+            self.msg = msg
+            return True
 
     def get_last_msg(self):
         return self.msg
+
+    def set_fail_send(self, should_fail):
+        self.should_fail_to_send = should_fail

@@ -1,20 +1,11 @@
-To run the instance app separately from the pipeline in src/sample_app: 
+# Templates import instructions
 
-Locally:
-run `python placeholder.py`
+1. Generate the pipelines definitions (.json)
 
-Send a POST request to "0.0.0.0:5000" 
-with body: 
-`{"key": "SAMPLE_KEY",
-    "intValue": 40
- }`
+2. Use Azure DevOps 'import pipeline' feature to import each of the pipelines (each json file) ![import](docs/import_pipe.png)
 
-With Docker:
-docker build -t app .
-docker run --rm -p 5000:5000 app:latest
+3. Follow the designer as it points the missing values (red exclamation point) and supply with valid values (repository connection string, agent pool, etc) ![import](docs/missing_values.png) ![import](docs/configure_repo.png)
 
-Send a POST request to "0.0.0.0:5000" 
-with post body: 
-`{"key": "SAMPLE_KEY",
-    "intValue": 40
- }`
+4. for each build task, add the container registry and subscription id from the drop down ![import](docs/sub_id_acr.png)
+
+5. Save

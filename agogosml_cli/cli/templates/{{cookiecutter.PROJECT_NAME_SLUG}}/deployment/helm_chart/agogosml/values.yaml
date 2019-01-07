@@ -66,3 +66,4 @@ instance_apps:
       PORT: ""
       OUTPUT_URL: ""
       SCHEMA_FILEPATH: ""
+      MODEL_PATH: ""

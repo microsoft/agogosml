@@ -9,41 +9,52 @@ from .client_mocks import StreamingClientMock, HttpClientMock
 
 
 @pytest.fixture
-def MockStreamingClient():
+def mock_streaming_client():
     return StreamingClientMock()
 
 
 @pytest.fixture
-def MockListenerClient():
+def mock_listener_client():
     return HttpClientMock(0)
 
 
-def test_when_ctor_instance_created(MockStreamingClient, MockListenerClient):
-    ow = OutputWriter(MockStreamingClient, MockListenerClient)
+def test_when_ctor_instance_created(mock_streaming_client, mock_listener_client):
+    ow = OutputWriter(mock_streaming_client, mock_listener_client)
     assert ow is not None
 
 
-def test_on_message_received_sent_called(MockStreamingClient,
-                                         MockListenerClient):
-    ow = OutputWriter(MockStreamingClient, MockListenerClient)
+def test_on_message_received_sent_called(mock_streaming_client,
+                                         mock_listener_client):
+    ow = OutputWriter(mock_streaming_client, mock_listener_client)
     ow.on_message_received('test')
-    assert MockStreamingClient.get_sent()
+    assert mock_streaming_client.get_sent()
 
 
-def test_on_listener_event_sent_called(MockStreamingClient,
-                                       MockListenerClient):
-    ow = OutputWriter(MockStreamingClient, MockListenerClient)
+def test_on_listener_event_sent_called(mock_streaming_client,
+                                       mock_listener_client):
+    ow = OutputWriter(mock_streaming_client, mock_listener_client)
     ow.start_incoming_messages()
-    MockListenerClient.mock_new_incoming_message()
-    assert MockStreamingClient.get_sent()
-    assert MockListenerClient.get_started()
+    mock_listener_client.mock_new_incoming_message()
+    assert mock_streaming_client.get_sent()
+    assert mock_listener_client.get_started()
 
 
-def test_on_stop_event_stop_called(MockStreamingClient, MockListenerClient):
-    ow = OutputWriter(MockStreamingClient, MockListenerClient)
+def test_when_failed_to_send_then_report_error(mock_streaming_client, mock_listener_client):
+    # arrange
+    ow = OutputWriter(mock_streaming_client, mock_listener_client)
+    ow.start_incoming_messages()
+    mock_streaming_client.set_fail_send(True)
+    # act
+    result = mock_listener_client.mock_new_incoming_message()
+    # assert
+    assert result is False
+
+
+def test_on_stop_event_stop_called(mock_streaming_client, mock_listener_client):
+    ow = OutputWriter(mock_streaming_client, mock_listener_client)
     ow.start_incoming_messages()
     ow.stop_incoming_messages()
-    assert MockListenerClient.get_stopped()
+    assert mock_listener_client.get_stopped()
 
 
 def test_when_unknown_client_throw():

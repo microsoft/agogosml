@@ -8,39 +8,52 @@ from .client_mocks import StreamingClientMock, MessageSenderMock
 
 
 @pytest.fixture
-def MockStreamingClient():
+def mock_streaming_client():
     return StreamingClientMock()
 
 
 @pytest.fixture
-def MockMessageSender():
+def mock_message_sender():
     return MessageSenderMock()
 
 
-def test_when_instance_created(MockStreamingClient, MockMessageSender):
-    ir = InputReader(MockStreamingClient, MockMessageSender)
+def test_when_instance_created(mock_streaming_client, mock_message_sender):
+    ir = InputReader(mock_streaming_client, mock_message_sender)
     assert ir is not None
 
 
-def test_when_start_receiving_then_messaging_client_starts(
-        MockStreamingClient, MockMessageSender):
+def test_when_start_receiving_then_messaging_client_starts(mock_streaming_client, mock_message_sender):
     # arrange
-    ir = InputReader(MockStreamingClient, MockMessageSender)
+    ir = InputReader(mock_streaming_client, mock_message_sender)
 
     # act
     ir.start_receiving_messages()
-    assert MockStreamingClient.get_receiving()
+    assert mock_streaming_client.get_receiving()
 
 
-def test_when_msg_received_callback_called(MockStreamingClient,
-                                           MockMessageSender):
+def test_when_msg_received_callback_called(mock_streaming_client,
+                                           mock_message_sender):
     # arrange
-    ir = InputReader(MockStreamingClient, MockMessageSender)
+    ir = InputReader(mock_streaming_client, mock_message_sender)
 
     # act
     ir.start_receiving_messages()
-    MockStreamingClient.fake_incoming_message_from_streaming('a')
-    assert MockMessageSender.get_last_msg() == 'a'
+    mock_streaming_client.fake_incoming_message_from_streaming('a')
+    assert mock_message_sender.get_last_msg() == 'a'
+
+
+def test_when_failed_to_deliver_then_failure_callback(mock_streaming_client, mock_message_sender):
+    # arrange
+    ir = InputReader(mock_streaming_client, mock_message_sender)
+
+    # act
+    ir.start_receiving_messages()
+    mock_message_sender.set_fail_send(True)
+    result = mock_streaming_client.fake_incoming_message_from_streaming('a')
+
+    # assert
+    assert result is False
+
 
 # TODO: Try splitting out the unit tests and integration tests into two different directories within tests
 
@@ -78,12 +91,12 @@ def test_kafka_created_from_factory():
         'client': {
             'type': 'kafka',
             'config': {
-                        "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC"),
-                        "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
-                        "KAFKA_CONSUMER_GROUP": os.getenv("KAFKA_CONSUMER_GROUP"),
-                        "TIMEOUT": 20
-                        }
-                    },
+                "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC"),
+                "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
+                "KAFKA_CONSUMER_GROUP": os.getenv("KAFKA_CONSUMER_GROUP"),
+                "TIMEOUT": 20
+            }
+        },
         "APP_HOST": os.getenv("APP_HOST"),
         "APP_PORT": os.getenv("APP_PORT")
     }

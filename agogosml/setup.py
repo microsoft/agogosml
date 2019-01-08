@@ -17,7 +17,7 @@ requirements = [
     "requests==2.20.1",
     "python-dotenv==0.9.1",
     "flask==1.0.2",
-    "pyyaml==3.13",
+    "pyyaml>=4.2b1",
     "jsonschema==2.6.0"
 ]
 
@@ -47,6 +47,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/Microsoft/agogosml',
-    version='0.1.1',
+    version='0.1.2',
     zip_safe=False,
 )

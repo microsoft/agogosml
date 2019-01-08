@@ -17,9 +17,9 @@
     "default": {
         "arrow": {
             "hashes": [
-                "sha256:a558d3b7b6ce7ffc74206a86c147052de23d3d4ef0e17c210dd478c53575c4cd"
+                "sha256:9cb4a910256ed536751cd5728673bfb53e6f0026e240466f90c2a92c0b79c895"
             ],
-            "version": "==0.12.1"
+            "version": "==0.13.0"
         },
         "binaryornot": {
             "hashes": [
@@ -188,9 +188,9 @@
         },
         "validators": {
             "hashes": [
-                "sha256:cb9c61250ee23a68e8b5f75319c3cd3668af83112fed4f72dfe352f65fe5387c"
+                "sha256:68e4b74889aac1270d83636cb1dbcce3d2271e291ab14023cf95e7dbfbbce09d"
             ],
-            "version": "==0.12.3"
+            "version": "==0.12.4"
         },
         "whichcraft": {
             "hashes": [
@@ -454,11 +454,11 @@
         },
         "more-itertools": {
             "hashes": [
-                "sha256:c187a73da93e7a8acc0001572aebc7e3c69daf7bf6881a2cea10650bd4420092",
-                "sha256:c476b5d3a34e12d40130bc2f935028b5f636df8f372dc2c1c01dc19681b2039e",
-                "sha256:fcbfeaea0be121980e15bc97b3817b5202ca73d0eae185b4550cbfce2a3ebb3d"
+                "sha256:38a936c0a6d98a38bcc2d03fdaaedaba9f412879461dd2ceff8d37564d6522e4",
+                "sha256:c0a5785b1109a6bd7fac76d6837fd1feca158e54e521ccd2ae8bfe393cc9d4fc",
+                "sha256:fe7a7cae1ccb57d33952113ff4fa1bc5f879963600ed74918f1236e212ee50b9"
             ],
-            "version": "==4.3.0"
+            "version": "==5.0.0"
         },
         "packaging": {
             "hashes": [
@@ -481,10 +481,10 @@
         },
         "pkginfo": {
             "hashes": [
-                "sha256:5878d542a4b3f237e359926384f1dde4e099c9f5525d236b1840cf704fa8d474",
-                "sha256:a39076cb3eb34c333a0dd390b568e9e1e881c7bf2cc0aee12120636816f55aee"
+                "sha256:a9621576be8830035a0db1fc50b97bb6153873ec413ea57c1ee73c61208d8419",
+                "sha256:c521b92d4bf9a449b59e6b6319b28a866d2be7bc52b2e5288bb0f9a2520ff7ff"
             ],
-            "version": "==1.4.2"
+            "version": "==1.5.0"
         },
         "pluggy": {
             "hashes": [
@@ -543,17 +543,17 @@
         },
         "pytest": {
             "hashes": [
-                "sha256:f689bf2fc18c4585403348dd56f47d87780bf217c53ed9ae7a3e2d7faa45f8e9",
-                "sha256:f812ea39a0153566be53d88f8de94839db1e8a05352ed8a49525d7d7f37861e9"
+                "sha256:3e65a22eb0d4f1bdbc1eacccf4a3198bf8d4049dea5112d70a0c61b00e748d02",
+                "sha256:5924060b374f62608a078494b909d341720a050b5224ff87e17e12377486a71d"
             ],
-            "version": "==4.0.2"
+            "version": "==4.1.0"
         },
         "pytest-cov": {
             "hashes": [
-                "sha256:513c425e931a0344944f84ea47f3956be0e416d95acbd897a44970c8d926d5d7",
-                "sha256:e360f048b7dae3f2f2a9a4d067b2dd6b6a015d384d1577c994a43f3f7cbad762"
+                "sha256:0ab664b25c6aa9716cbf203b17ddb301932383046082c081b9848a0edf5add33",
+                "sha256:230ef817450ab0699c6cc3c9c8f7a829c34674456f2ed8df1fe1d39780f7c87f"
             ],
-            "version": "==2.6.0"
+            "version": "==2.6.1"
         },
         "pytest-runner": {
             "hashes": [
@@ -564,10 +564,10 @@
         },
         "pytz": {
             "hashes": [
-                "sha256:31cb35c89bd7d333cd32c5f278fca91b523b0834369e757f4c5641ea252236ca",
-                "sha256:8e0f8568c118d3077b46be7d654cc8167fa916092e28320cde048e54bfc9f1e6"
+                "sha256:32b0891edff07e28efe91284ed9c31e123d84bea3fd98e1f72be2508f43ef8d9",
+                "sha256:d5f05e487007e29e03409f9398d074e158d920d36eb82eaf66fb1136b0c5374c"
             ],
-            "version": "==2018.7"
+            "version": "==2018.9"
         },
         "pywin32": {
             "hashes": [
@@ -642,10 +642,10 @@
         },
         "sphinx": {
             "hashes": [
-                "sha256:120732cbddb1b2364471c3d9f8bfd4b0c5b550862f99a65736c77f970b142aea",
-                "sha256:b348790776490894e0424101af9c8413f2a86831524bd55c5f379d3e3e12ca64"
+                "sha256:429e3172466df289f0f742471d7e30ba3ee11f3b5aecd9a840480d03f14bcfe5",
+                "sha256:c4cb17ba44acffae3d3209646b6baec1e215cad3065e852c68cc569d4df1b9f8"
             ],
-            "version": "==1.8.2"
+            "version": "==1.8.3"
         },
         "sphinxcontrib-websupport": {
             "hashes": [
@@ -670,10 +670,10 @@
         },
         "tqdm": {
             "hashes": [
-                "sha256:3c4d4a5a41ef162dd61f1edb86b0e1c7859054ab656b2e7c7b77e7fbf6d9f392",
-                "sha256:5b4d5549984503050883bc126280b386f5f4ca87e6c023c5d015655ad75bdebb"
+                "sha256:79420109a762f82e20e8ecdc3b3bc1bc6c6536884a8de5fa86a50eb99386376a",
+                "sha256:7fa801cf60e318bf7d2ac7498254df0f3d7a3ad23c622ae63666257d5f833967"
             ],
-            "version": "==4.28.1"
+            "version": "==4.29.0"
         },
         "twine": {
             "hashes": [
@@ -691,10 +691,10 @@
         },
         "virtualenv": {
             "hashes": [
-                "sha256:686176c23a538ecc56d27ed9d5217abd34644823d6391cbeb232f42bf722baad",
-                "sha256:f899fafcd92e1150f40c8215328be38ff24b519cd95357fa6e78e006c7638208"
+                "sha256:34b9ae3742abed2f95d3970acf4d80533261d6061b51160b197f84e5b4c98b4c",
+                "sha256:fa736831a7b18bd2bfeef746beb622a92509e9733d645952da136b0639cd40cd"
             ],
-            "version": "==16.1.0"
+            "version": "==16.2.0"
         },
         "watchdog": {
             "hashes": [

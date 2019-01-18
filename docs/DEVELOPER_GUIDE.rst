@@ -33,20 +33,20 @@ Then the input reader image:
 
 .. code:: bash
 
-    docker build -t agogosml/input_reader -f input_reader/Dockerfile.input_reader .
+    docker build -t agogosml/input_reader -f input_reader/Dockerfile.input_reader input_reader/
 
 
-The app:
+The app (replacing 'app' with your custom application name):
 
 .. code:: bash
 
-    docker build -t agogosml/app -f sample_app/Dockerfile.app .
+    docker build -t agogosml/app -f sample_app/Dockerfile.app app/
 
 And finally the output writer:
 
 .. code:: bash
 
-    docker build -t agogosml/output_writer -f output_writer/Dockerfile.output_writer .
+    docker build -t agogosml/output_writer -f output_writer/Dockerfile.output_writer output_writer/
 
 
 
@@ -224,7 +224,7 @@ accepted:
 .. _Framework: https://github.com/Microsoft/agogosml/tree/master/agogosml
 .. _CLI: https://github.com/Microsoft/agogosml/tree/master/agogosml_cli
 .. _App: https://github.com/Microsoft/agogosml/tree/master/sample_app
-.. _design: https://github.com/Microsoft/agogosml/tree/master/docs/DESIGN.md
+.. _design: https://github.com/Microsoft/agogosml/blob/master/docs/DESIGN.rst
 .. _WSL: https://docs.microsoft.com/en-us/windows/wsl/install-win10
 .. _azure-cli: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest
 .. _Python 3.7: https://www.python.org/downloads/release/python-371/

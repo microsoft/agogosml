@@ -10,9 +10,6 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 steps:
-- script: Testing agogosml build YAML pipeline!
-  displayName: 'Greeting message'
-
 - task: Docker@1
   displayName: 'Build an image'
   inputs:

@@ -20,7 +20,7 @@ steps:
 - task: Docker@1
   displayName: Login
   inputs:
-    azureSubscriptionEndpoint: 'Strategic Engagements Developers Research'
+    azureSubscriptionEndpoint: 'eladtesting'
     azureContainerRegistry: agogosacr.azurecr.io
     command: login
 - task: Docker@1

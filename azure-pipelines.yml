@@ -20,7 +20,7 @@ steps:
 - task: Docker@1
   displayName: Login
   inputs:
-    azureSubscriptionEndpoint: '04f7ec88-8e28-41ed-8537-5e17766001f5'
+    azureSubscriptionEndpoint: 'Strategic Engagements Developers Research'
     azureContainerRegistry: agogosacr.azurecr.io
     command: login
 - task: Docker@1

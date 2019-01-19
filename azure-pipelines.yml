@@ -1,0 +1,30 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+- script: Testing agogosml build YAML pipeline!
+  displayName: 'Greeting message'
+
+- task: Docker@1
+  displayName: 'Build an image'
+  inputs:
+    imageName: 'agogosacr.azurecr.io/buildwithyaml:$(Build.BuildId)'
+- task: Docker@1
+  displayName: Login
+  inputs:
+    azureSubscriptionEndpoint: 'Strategic Engagements Developers Research'
+    azureContainerRegistry: agogosacr.azurecr.io
+    command: login
+- task: Docker@1
+  displayName: 'Push an image'
+  inputs:
+    command: 'push'
+    imageName: 'agogosacr.azurecr.io/buildwithyaml:$(Build.BuildId)'

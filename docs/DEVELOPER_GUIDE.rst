@@ -70,14 +70,15 @@ Set required environment variables (You can see an example `env.example.sh <../e
     export MESSAGING_TYPE=eventhub        # eventhub/kafka
     export AZURE_STORAGE_ACCOUNT=         # storage account name for EH processor
     export AZURE_STORAGE_ACCESS_KEY=      # storage account key for EH processor
-    export LEASE_CONTAINER_NAME=          # storage account container for EH processor
+    export LEASE_CONTAINER_NAME_INPUT=    # storage account container for EH processor
+    export LEASE_CONTAINER_NAME_OUTPUT=   # storage account container for EH processor
     export EVENT_HUB_NAMESPACE=           # EH namespace
-    export INPUT_EVENT_HUB_NAME=          # input EH
-    export INPUT_EVENT_HUB_SAS_POLICY=    # input EH policy name
-    export INPUT_EVENT_HUB_SAS_KEY=       # input EH policy key
-    export OUTPUT_EVENT_HUB_NAME=         # output EH
-    export OUTPUT_EVENT_HUB_SAS_POLICY=   # output EH policy name
-    export OUTPUT_EVENT_HUB_SAS_KEY=      # output EH policy key
+    export EVENT_HUB_NAME_INPUT=          # input EH
+    export EVENT_HUB_SAS_POLICY_INPUT=    # input EH policy name
+    export EVENT_HUB_SAS_KEY_INPUT=       # input EH policy key
+    export EVENT_HUB_NAME_OUTPUT=         # output EH
+    export EVENT_HUB_SAS_POLICY_OUTPUT=   # output EH policy name
+    export EVENT_HUB_SAS_KEY_OUTPUT=      # output EH policy key
     export APP_PORT=5000                  # app port
     export OUTPUT_WRITER_PORT=8080        # output writer app port
 
@@ -100,9 +101,9 @@ environment variables. An example of how to run one of these Docker images is:
         -e AZURE_STORAGE_ACCESS_KEY=$AZURE_STORAGE_ACCESS_KEY \
         -e LEASE_CONTAINER_NAME=$LEASE_CONTAINER_NAME \
         -e EVENT_HUB_NAMESPACE=$EVENT_HUB_NAMESPACE \
-        -e EVENT_HUB_NAME=$INPUT_EVENT_HUB_NAME \
-        -e EVENT_HUB_SAS_POLICY=$INPUT_EVENT_HUB_SAS_POLICY \
-        -e EVENT_HUB_SAS_KEY=$INPUT_EVENT_HUB_SAS_KEY \
+        -e EVENT_HUB_NAME=$EVENT_HUB_NAME_INPUT \
+        -e EVENT_HUB_SAS_POLICY=$EVENT_HUB_SAS_POLICY_INPUT \
+        -e EVENT_HUB_SAS_KEY=$EVENT_HUB_SAS_KEY_INPUT \
         -e APP_HOST=$APP_NAME \
         -e APP_PORT=$APP_PORT \
         agogosml/input_reader:latest
@@ -119,9 +120,9 @@ environment variables. An example of how to run one of these Docker images is:
     docker run --rm --name $OUTPUT_WRITER_NAME -d --network $NETWORK_NAME \
         -e MESSAGING_TYPE=$MESSAGING_TYPE \
         -e EVENT_HUB_NAMESPACE=$EVENT_HUB_NAMESPACE \
-        -e EVENT_HUB_NAME=$OUTPUT_EVENT_HUB_NAME \
-        -e EVENT_HUB_SAS_POLICY=$OUTPUT_EVENT_HUB_SAS_POLICY \
-        -e EVENT_HUB_SAS_KEY=$OUTPUT_EVENT_HUB_SAS_KEY \
+        -e EVENT_HUB_NAME=$EVENT_HUB_NAME_OUTPUT \
+        -e EVENT_HUB_SAS_POLICY=$EVENT_HUB_SAS_POLICY_OUTPUT \
+        -e EVENT_HUB_SAS_KEY=$EVENT_HUB_SAS_KEY_OUTPUT \
         -e OUTPUT_WRITER_HOST=$OUTPUT_WRITER_NAME \
         -e OUTPUT_WRITER_PORT=$OUTPUT_WRITER_PORT \
         agogosml/output_writer:latest

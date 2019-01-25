@@ -39,6 +39,7 @@ output_writer:
   imagePullPolicy: IfNotPresent
   env:
     MESSAGING_TYPE: "" # kafka or eventhub
+    OUTPUT_WRITER_PORT: ""
     # eventhub
     EVENT_HUB_NAMESPACE: ""
     EVENT_HUB_NAME: ""
@@ -47,7 +48,6 @@ output_writer:
     # Kafka
     KAFKA_TOPIC: ""
     KAFKA_ADDRESS: ""
-    OUTPUT_WRITER_PORT: ""
 
 main_app: app_0
 

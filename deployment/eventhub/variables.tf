@@ -1,5 +1,5 @@
 variable prefix {
-  default = "azagml"
+  default = "mm-azagml"
 }
 
 variable resource_group_name {
@@ -22,8 +22,12 @@ variable throughput_units {
   default = 1
 }
 
-variable eh_name {
-  default = "agogosml"
+variable eh_name_input {
+  default = "agogosml-eh-output"
+}
+
+variable eh_name_output {
+  default = "agogosml-eh-input"
 }
 
 variable eh_partition__count {

@@ -1,9 +1,9 @@
 variable prefix {
-    default = "azagml"
+    default = "mm"
 }
 
 variable resource_group_name {
-    default = "k8stest-rg"
+    default = "agogosml-k8s-rg"
 }
 
 variable location {
@@ -23,5 +23,5 @@ variable cluster_name {
 }
 
 variable storage_account_name {
-    default = "agogosml"
+    default = "k8-agogosml"
 }

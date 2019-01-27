@@ -9,6 +9,7 @@ resource "azurerm_eventhub_namespace" eh {
   resource_group_name = "${azurerm_resource_group.eh.name}"
   sku                 = "${var.sku}"
   capacity            = "${var.throughput_units}"
+  kafka_enabled       = "${var.kafka_enabled}"
 }
 
 resource "azurerm_eventhub" eh_input {

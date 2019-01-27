@@ -1,9 +1,9 @@
 variable prefix {
-  default = "mm-azagml"
+  default = "mm"
 }
 
 variable resource_group_name {
-  default = "eh-rg"
+  default = "agogos-rg"
 }
 
 variable location {
@@ -36,4 +36,8 @@ variable eh_partition__count {
 
 variable eh_retention {
   default = 1
+}
+
+variable kafka_enabled {
+  default = "false"
 }

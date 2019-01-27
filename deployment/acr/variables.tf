@@ -1,9 +1,9 @@
 variable prefix {
-  default = "mm-azagml"
+  default = "mm"
 }
 
 variable resource_group_name {
-  default = "eh-rg"
+  default = "agogos-rg"
 }
 
 variable location {
@@ -15,9 +15,9 @@ variable acr_name {
 }
 
 variable sku {
-  default = "Basic"
+  default = "Standard"
 }
 
 variable admin_enabled {
-  default = false
+  default = true
 }

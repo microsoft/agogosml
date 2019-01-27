@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if [ ! -f ./tf.config.private.sh ]; then
+if [ ! -f ../tf.config.private.sh ]; then
     echo "tf.config.private.sh file not found!"
     exit 1
 fi
 
 # Load environment variables defined by user
-. tf.config.private.sh
+. ../tf.config.private.sh
 
 # Check for an environment variable name if it exists and exit if not
 check_variable_exists () {

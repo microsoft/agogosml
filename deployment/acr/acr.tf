@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "rg" {
   name     = "${var.prefix}_${var.resource_group_name}"
-  location = "East US"
+  location = "${var.location}"
 }
 
 resource "azurerm_container_registry" "acr" {
@@ -9,5 +9,4 @@ resource "azurerm_container_registry" "acr" {
   location                 = "${azurerm_resource_group.rg.location}"
   sku                      = "${var.sku}"
   admin_enabled            = "${var.admin_enabled}"
-  georeplication_locations = ["East US2", "West Europe"]
 }

@@ -1,5 +1,5 @@
 variable prefix {
-    default = "mm"
+    default = "az"
 }
 
 variable resource_group_name {

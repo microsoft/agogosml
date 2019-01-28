@@ -1,5 +1,5 @@
 variable prefix {
-  default = "mm"
+  default = "az"
 }
 
 variable resource_group_name {
@@ -11,7 +11,7 @@ variable location {
 }
 
 variable namespace {
-  default = "agogosml"
+  default = "agogosmleh"
 }
 
 variable sku {

@@ -5,6 +5,7 @@ from pathlib import Path
 from logging import DEBUG
 from logging import ERROR
 from logging import INFO
+from logging import Logger as BaseLogger
 from logging import getLevelName
 
 import yaml
@@ -26,28 +27,6 @@ class Logger(object):
     """A logger implementation."""
 
     __instance = None
-    logger = None
-
-    @staticmethod
-    def setup_logging(log_path='logging.yaml',
-                      level=logging.INFO,
-                      env_key='LOG_CFG'):
-        """Setup logging configuration."""
-
-        value = os.getenv(env_key, None)
-        if value:
-            path = Path(value)
-        else:
-            path = Path(log_path)
-
-        if path.is_file():
-            with path.open('rt') as f:
-                config = yaml.safe_load(f.read())
-            logging.config.dictConfig(config)
-        else:
-            logging.basicConfig(
-                format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-                level=level)
 
     def __new__(cls, *args, **kwargs):
         if not cls.__instance:
@@ -64,12 +43,25 @@ class Logger(object):
         self.name = name
         self.path = path
         self.env_key = env_key
-        self.logger = None
 
-        Logger.setup_logging(
-            log_path=self.path, level=self.level, env_key=self.env_key)
+    @cached_property
+    def logger(self) -> BaseLogger:
+        value = os.getenv(self.env_key, None)
+        if value:
+            path = Path(value)
+        else:
+            path = Path(self.path)
 
-        self.logger = logging.getLogger(self.name)
+        if path.is_file():
+            with path.open('rt') as f:
+                config = yaml.safe_load(f.read())
+            logging.config.dictConfig(config)
+        else:
+            logging.basicConfig(
+                format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                level=self.level)
+
+        return logging.getLogger(self.name)
 
     @cached_property
     def telemetry_client(self) -> Union[TelemetryClient, NullTelemetryClient]:

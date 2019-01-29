@@ -1,12 +1,17 @@
 """Abstract streaming client class"""
 
 from abc import ABC, abstractmethod
+from typing import Dict
 
 
 class AbstractStreamingClient(ABC):
-    """Abstract Streaming Client"""
     @abstractmethod
-    def __init__(self):
+    def __init__(self, config: Dict[str, str]):
+        """
+        Abstract Streaming Client
+
+        :param config: Dictionary file with all the relevant parameters.
+        """
         pass
 
     @abstractmethod

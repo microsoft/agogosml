@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Following the tutorial found here:
-# https://docs.microsoft.com/en-us/azure/terraform/terraform-create-k8s-cluster-with-tf-and-aks#set-up-azure-storage-to-store-terraform-state
-# 
-# More samples can be found here:
-# https://github.com/terraform-providers/terraform-provider-azurerm/tree/master/examples
-
 if [ ! -f ../tf.config.private.sh ]; then
     echo "tf.config.private.sh file not found!"
     exit 1
@@ -37,11 +31,6 @@ az storage container create -n tfstate --account-name $STORAGE_ACCOUNT_NAME --ac
 
 # Initializing and deploying terraform deployment
 terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME"
-terraform workspace select aks || terraform workspace new aks && \
+terraform workspace select acr || terraform workspace new acr && \
 terraform plan -out out.plan
 terraform apply out.plan
-
-# Configuring k8s credentials and getting nodes
-echo "$(terraform output kube_config)" > ./azurek8s
-export KUBECONFIG=./azurek8s
-kubectl get nodes

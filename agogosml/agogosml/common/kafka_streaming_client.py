@@ -14,8 +14,15 @@ class KafkaStreamingClient(AbstractStreamingClient):
         """
         Class to create a KafkaStreamingClient instance.
 
+        Configuration keys:
+          APP_HOST
+          APP_PORT
+          KAFKA_ADDRESS
+          KAFKA_CONSUMER_GROUP
+          KAFKA_TOPIC
+          TIMEOUT
+
         :param config: Dictionary file with all the relevant parameters.
-        :param topic: A string kafka topic.
         """
 
         self.topic = config.get("KAFKA_TOPIC")

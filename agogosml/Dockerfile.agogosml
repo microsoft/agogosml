@@ -15,21 +15,25 @@ RUN apk add --no-cache --update --virtual .build-deps \
     libffi-dev
 
 # Install librdkafka
+ARG KAFKA_VERSION=v0.11.6
 WORKDIR /root
-RUN git clone -b v0.11.6 --single-branch https://github.com/edenhill/librdkafka.git
+RUN git clone -b ${KAFKA_VERSION} --single-branch https://github.com/edenhill/librdkafka.git
 WORKDIR /root/librdkafka
 RUN /root/librdkafka/configure && make && make install
 
 FROM base-deps as builder
 
 WORKDIR /usr/src/agogosml
-COPY . .
+COPY Pipfile Pipfile.lock ./
 
 ENV PYTHONUNBUFFERED=1
 
 RUN pip install pipenv && \
-    pipenv install --deploy --dev && \
-    pipenv run make clean && \
+    pipenv install --deploy --dev
+
+COPY . .
+
+RUN pipenv run make clean && \
     pipenv run make lint && \
     pipenv run make test && \
     # pipenv run make test-all && \ <- FIXME: Tox is broken.
@@ -41,9 +45,8 @@ RUN pip install pipenv && \
 
 FROM builder as agogosml
 
-RUN pip install -r requirements.txt
-RUN pip install /usr/src/agogosml/dist/agogosml-*.tar.gz
-
-# Clean Up
-RUN rm -rf /usr/src/agogosml
-RUN rm -rf /root/librdkafka && apk del .build-deps
+RUN pip install -r requirements.txt && \
+    pip install /usr/src/agogosml/dist/agogosml-*.tar.gz && \
+    rm -rf /usr/src/agogosml && \
+    rm -rf /root/librdkafka && \
+    apk del .build-deps

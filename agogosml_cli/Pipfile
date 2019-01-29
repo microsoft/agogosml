@@ -10,7 +10,6 @@ flake8 = "*"
 tox = "*"
 pytest = "*"
 pytest-runner = "*"
-PyInstaller = "*"
 Sphinx = "*"
 twine = "*"
 pywin32 = {version = "*", sys_platform = "== 'win32'"}

@@ -19,10 +19,10 @@ if __name__ == "__main__":
                     'EVENT_HUB_NAME': os.getenv("EVENT_HUB_NAME"),
                     'EVENT_HUB_SAS_POLICY': os.getenv("EVENT_HUB_SAS_POLICY"),
                     'EVENT_HUB_SAS_KEY': os.getenv("EVENT_HUB_SAS_KEY"),
-                    'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
-                    'OUTPUT_WRITER_HOST': os.getenv("OUTPUT_WRITER_HOST"),
                 }
-            }
+            },
+            'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
+            'OUTPUT_WRITER_HOST': os.getenv("OUTPUT_WRITER_HOST"),
         }
     elif msg_type == 'kafka':
         CFG = {
@@ -31,10 +31,10 @@ if __name__ == "__main__":
                 'config': {
                     'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),
                     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
-                    'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
-                    'OUTPUT_WRITER_HOST': os.getenv("OUTPUT_WRITER_HOST"),
                 }
-            }
+            },
+            'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
+            'OUTPUT_WRITER_HOST': os.getenv("OUTPUT_WRITER_HOST"),
         }
     OUTPUT = OutputWriterFactory.create(CFG)
     OUTPUT.start_incoming_messages()

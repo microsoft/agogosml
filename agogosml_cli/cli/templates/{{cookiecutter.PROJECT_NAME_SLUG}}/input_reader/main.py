@@ -22,11 +22,11 @@ if __name__ == "__main__":
                     'EVENT_HUB_SAS_POLICY': os.getenv("EVENT_HUB_SAS_POLICY"),
                     'EVENT_HUB_SAS_KEY': os.getenv("EVENT_HUB_SAS_KEY"),
                     'LEASE_CONTAINER_NAME': os.getenv("LEASE_CONTAINER_NAME"),
-                    'APP_HOST': os.getenv('APP_HOST'),
-                    'APP_PORT': os.getenv('APP_PORT'),
                     'TIMEOUT': os.getenv('TIMEOUT')
                 }
-            }
+            },
+            'APP_HOST': os.getenv('APP_HOST'),
+            'APP_PORT': os.getenv('APP_PORT'),
         }
     elif msg_type == 'kafka':
         CFG = {
@@ -35,12 +35,12 @@ if __name__ == "__main__":
                 'config': {
                     'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),
                     'KAFKA_CONSUMER_GROUP': os.getenv("KAFKA_CONSUMER_GROUP"),
-                    'APP_HOST': os.getenv("APP_HOST"),
-                    'APP_PORT': os.getenv("APP_PORT"),
                     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
                     'TIMEOUT': os.getenv('TIMEOUT')
                 }
-            }
+            },
+            'APP_HOST': os.getenv("APP_HOST"),
+            'APP_PORT': os.getenv("APP_PORT"),
         }
 
     INPUT = InputReaderFactory.create(CFG)

@@ -30,10 +30,10 @@ class Logger(object):
         return cls.__instance
 
     def __init__(self,
-                 name=__name__,
-                 path='logging.yaml',
-                 env_key='LOG_CFG',
-                 level=logging.INFO):
+                 name: str = __name__,
+                 path: str = 'logging.yaml',
+                 env_key: str = 'LOG_CFG',
+                 level: int = logging.INFO):
 
         self.level = level
         self.name = name

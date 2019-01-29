@@ -18,7 +18,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
 
         :param config: Dictionary file with all the relevant parameters.
         """
-        super().__init__()
+
         self.message_callback = None
         self.config = config
         self.storage_account_name = self.config.get("AZURE_STORAGE_ACCOUNT")

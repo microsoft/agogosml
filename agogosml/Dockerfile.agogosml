@@ -23,13 +23,16 @@ RUN /root/librdkafka/configure && make && make install
 FROM base-deps as builder
 
 WORKDIR /usr/src/agogosml
-COPY . .
+COPY Pipfile Pipfile.lock ./
 
 ENV PYTHONUNBUFFERED=1
 
 RUN pip install pipenv && \
-    pipenv install --deploy --dev && \
-    pipenv run make clean && \
+    pipenv install --deploy --dev
+
+COPY . .
+
+RUN pipenv run make clean && \
     pipenv run make lint && \
     pipenv run make test && \
     # pipenv run make test-all && \ <- FIXME: Tox is broken.

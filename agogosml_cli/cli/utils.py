@@ -2,21 +2,24 @@
 
 """Utility functions."""
 
-import os
 import json
+from pathlib import Path
+from typing import Union
+
 from jsonschema import validate
 
 
-SCHEMA_FILE = os.path.join(os.path.dirname(__file__), 'manifest.schema.json')
-TEMPLATES_FOLDER = os.path.join(os.path.dirname(__file__), 'templates')
+MODULE_PATH = Path(__file__).parent
+SCHEMA_FILE = MODULE_PATH / 'manifest.schema.json'
+TEMPLATES_FOLDER = MODULE_PATH / 'templates'
 
 
-def get_template_full_filepath(file: str) -> str:
+def get_template_full_filepath(file: Union[str, Path]) -> Path:
     """Get full file path for template file.
     Args:
         file (string): Name of the file in module
     """
-    return os.path.join(TEMPLATES_FOLDER, file)
+    return TEMPLATES_FOLDER / file
 
 
 def validate_manifest(manifest_json: object) -> None:
@@ -25,9 +28,7 @@ def validate_manifest(manifest_json: object) -> None:
     Args:
         manifest_json (object):
     """
-    module_path = os.path.dirname(__file__)
-    schema_file = os.path.join(module_path, SCHEMA_FILE)
-    with open(schema_file) as f:
+    with SCHEMA_FILE.open() as f:
         schema_json = json.load(f)
     validate(manifest_json, schema_json)
     return

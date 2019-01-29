@@ -1,9 +1,9 @@
 variable prefix {
-  default = "azagml"
+  default = "az"
 }
 
 variable resource_group_name {
-  default = "eh-rg"
+  default = "agogos-rg"
 }
 
 variable location {
@@ -11,7 +11,7 @@ variable location {
 }
 
 variable namespace {
-  default = "agogosml"
+  default = "agogosmleh"
 }
 
 variable sku {
@@ -22,8 +22,12 @@ variable throughput_units {
   default = 1
 }
 
-variable eh_name {
-  default = "agogosml"
+variable eh_name_input {
+  default = "agogosml-eh-output"
+}
+
+variable eh_name_output {
+  default = "agogosml-eh-input"
 }
 
 variable eh_partition__count {
@@ -32,4 +36,8 @@ variable eh_partition__count {
 
 variable eh_retention {
   default = 1
+}
+
+variable kafka_enabled {
+  default = "false"
 }

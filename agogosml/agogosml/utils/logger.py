@@ -1,6 +1,8 @@
 """ Logger """
 import os
 import logging.config
+from pathlib import Path
+
 import yaml
 
 
@@ -16,12 +18,14 @@ class Logger(object):
                       env_key='LOG_CFG'):
         """Setup logging configuration."""
 
-        path = log_path
         value = os.getenv(env_key, None)
         if value:
-            path = value
-        if os.path.exists(path):
-            with open(path, 'rt') as f:
+            path = Path(value)
+        else:
+            path = Path(log_path)
+
+        if path.is_file():
+            with path.open('rt') as f:
                 config = yaml.safe_load(f.read())
             logging.config.dictConfig(config)
         else:

@@ -16,9 +16,20 @@ class EventHubStreamingClient(AbstractStreamingClient):
         """
         Class to create an EventHubStreamingClient instance.
 
+        Configuration keys:
+          AZURE_STORAGE_ACCESS_KEY
+          AZURE_STORAGE_ACCOUNT
+          EVENT_HUB_CONSUMER_GROUP
+          EVENT_HUB_NAME
+          EVENT_HUB_NAMESPACE
+          EVENT_HUB_SAS_KEY
+          EVENT_HUB_SAS_POLICY
+          LEASE_CONTAINER_NAME
+          TIMEOUT
+
         :param config: Dictionary file with all the relevant parameters.
         """
-        super().__init__()
+
         self.message_callback = None
         self.config = config
         self.storage_account_name = self.config.get("AZURE_STORAGE_ACCOUNT")

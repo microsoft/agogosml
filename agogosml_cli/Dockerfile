@@ -2,15 +2,19 @@ ARG PYTHON_VERSION=3.7.0-alpine3.8
 
 FROM python:${PYTHON_VERSION} as builder
 
-WORKDIR /usr/src/agogosml_cli
-COPY . .
-
 RUN apk add --update make \ 
     cmake \
-    g++ && \ 
-    pip install pipenv && \
+    g++
+
+WORKDIR /usr/src/agogosml_cli
+
+COPY Pipfile Pipfile.lock ./
+
+RUN pip install pipenv && \
     pipenv install --deploy --dev 
     # --deploy causes pipenv to fail if the lock file is out of date
+
+COPY . .
 
 RUN pipenv run make clean && \
     pipenv run make lint && \

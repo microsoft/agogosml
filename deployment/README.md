@@ -6,8 +6,14 @@
 - Install [azure-cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 - Install and configure [Terraform](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/terraform-install-configure)
 - Make sure to run `az login` to run the deployment script
-- Copy `tf.config.sh` to `tf.config.private.sh` and update the values according to [Configuration Values](#configuration-values)
-- Run `. setup.sh`
+- Copy `tf.config.sh` to `tf.config.private.sh` and update the values
+  according to [Configuration Values](#configuration-values)
+- For AKS deployment, copy `variables.serviceprincipal.tf.example` to `variables.serviceprincipal.private.tf` and update `client_id` and `client_secret` with the service principal values
+
+- Now, you can either deploy all the necessary Azure resources at once, or deploy individually.
+- To run at once, run `. deployAllResources.sh`
+
+- To run individually, `cd` into the resource's directory and run `. setup.sh`
 
 # Configuration Values
 

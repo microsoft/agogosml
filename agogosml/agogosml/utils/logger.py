@@ -69,7 +69,7 @@ class Logger(object):
         channel = TelemetryChannel(context, queue)
         return TelemetryClient(ikey, telemetry_channel=channel)
 
-    def debug(self, message):
+    def debug(self, message: str):
         """
         Log debug message.
 
@@ -77,7 +77,7 @@ class Logger(object):
         """
         self._log(logging.DEBUG, message)
 
-    def info(self, message):
+    def info(self, message: str):
         """
         Log info message
 
@@ -85,7 +85,7 @@ class Logger(object):
         """
         self._log(logging.INFO, message)
 
-    def error(self, message):
+    def error(self, message: str):
         """
         Log error message
 

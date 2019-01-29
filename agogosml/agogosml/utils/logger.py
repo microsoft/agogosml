@@ -43,10 +43,7 @@ class Logger(object):
     @cached_property
     def logger(self) -> logging.Logger:
         value = os.getenv(self.env_key)
-        if value:
-            path = Path(value)
-        else:
-            path = Path(self.path)
+        path = Path(value or self.path)
 
         if path.is_file():
             with path.open('rt') as f:

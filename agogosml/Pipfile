@@ -23,6 +23,8 @@ python-dotenv = "~=0.9"
 flask = "~=1.0.2"
 pyyaml = ">=4.2b1"
 jsonschema = "~=2.6"
+applicationinsights = "~=0.11.7"
+cached-property = "~=1.5.1"
 
 [pipenv]
 allow_prereleases = true

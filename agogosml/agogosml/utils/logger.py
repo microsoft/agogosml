@@ -4,6 +4,18 @@ import logging.config
 from pathlib import Path
 
 import yaml
+from typing import Union
+from applicationinsights import TelemetryClient
+from applicationinsights.channel import AsynchronousQueue
+from applicationinsights.channel import AsynchronousSender
+from applicationinsights.channel import TelemetryChannel
+from applicationinsights.channel import TelemetryContext
+from cached_property import cached_property
+
+
+class NullTelemetryClient:
+    def track_trace(self, name, properties=None, severity=None):
+        pass
 
 
 class Logger(object):
@@ -55,6 +67,19 @@ class Logger(object):
 
         self.logger = logging.getLogger(self.name)
 
+    @cached_property
+    def telemetry_client(self) -> Union[TelemetryClient, NullTelemetryClient]:
+        ikey = os.getenv('APPINSIGHTS_INSTRUMENTATIONKEY')
+        if not ikey:
+            return NullTelemetryClient()
+
+        sender = AsynchronousSender()
+        queue = AsynchronousQueue(sender)
+        context = TelemetryContext()
+        context.instrumentation_key = ikey
+        channel = TelemetryChannel(context, queue)
+        return TelemetryClient(ikey, telemetry_channel=channel)
+
     def debug(self, message):
         """
         Log debug message.
@@ -62,6 +87,7 @@ class Logger(object):
         :param message: Debug message string.
         """
         self.logger.debug(message)
+        self.telemetry_client.track_trace(message, severity='DEBUG')
 
     def info(self, message):
         """
@@ -70,6 +96,7 @@ class Logger(object):
         :param message: Info message string.
         """
         self.logger.info(message)
+        self.telemetry_client.track_trace(message, severity='INFO')
 
     def error(self, message):
         """
@@ -78,3 +105,4 @@ class Logger(object):
         :param message: Error message string.
         """
         self.logger.error(message)
+        self.telemetry_client.track_trace(message, severity='ERROR')

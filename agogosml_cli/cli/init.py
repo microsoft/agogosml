@@ -2,7 +2,8 @@
 
 """Init command module."""
 
-import os
+from pathlib import Path
+
 import click
 import json
 import _jsonnet
@@ -23,18 +24,18 @@ DEFAULT_MANIFEST_FILE = 'manifest/manifest.jsonnet'
 def init(force, project_name, cloud_vendor, folder) -> int:
     """Initializes an agogosml project by creating a manifest file"""
     # Check if exists
-    outfile = os.path.join(folder, 'manifest.json')
-    if os.path.isfile(outfile):
+    folder = Path(folder)
+    outfile = folder / 'manifest.json'
+    if outfile.is_file():
         if force:
             click.echo('Overwriting %s' % outfile)
         else:
             click.echo('Manifest already exists. Use --force to overwrite')
             raise click.Abort()
     # Create folder if not exists
-    if not os.path.exists(os.path.dirname(outfile)):
-        os.makedirs(os.path.dirname(outfile))
+    outfile.parent.mkdir(parents=True, exist_ok=True)
     manifest = build_manifest(project_name, cloud_vendor)
-    with open(outfile, 'w') as f:
+    with outfile.open('w') as f:
         json.dump(manifest, f, indent=4)
     return 0
 
@@ -42,7 +43,7 @@ def init(force, project_name, cloud_vendor, folder) -> int:
 def build_manifest(project_name: str, cloud_vendor: str) -> object:
     """Builds the Manifest python object"""
     manifest_json = json.loads(_jsonnet.evaluate_file(
-        filename=utils.get_template_full_filepath(DEFAULT_MANIFEST_FILE),
+        filename=str(utils.get_template_full_filepath(DEFAULT_MANIFEST_FILE)),
         ext_vars={'PROJECT_NAME': project_name, 'CLOUD_VENDOR': cloud_vendor}))
     utils.validate_manifest(manifest_json)
     return manifest_json

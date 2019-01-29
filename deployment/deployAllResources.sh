@@ -33,7 +33,6 @@ az storage container create -n tfstate --account-name $STORAGE_ACCOUNT_NAME --ac
 
 # Create ACR
 echo "About to create the ACR Terraform Plan"
-# (cd ./acr && sh ./setup.sh)
 (cd ./acr && \ 
 terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" && \ 
 terraform workspace select acr || terraform workspace new acr && \

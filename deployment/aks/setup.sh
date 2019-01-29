@@ -37,6 +37,7 @@ az storage container create -n tfstate --account-name $STORAGE_ACCOUNT_NAME --ac
 
 # Initializing and deploying terraform deployment
 terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME"
+terraform workspace select aks || terraform workspace new aks && \
 terraform plan -out out.plan
 terraform apply out.plan
 

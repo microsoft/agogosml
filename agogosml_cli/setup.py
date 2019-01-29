@@ -11,7 +11,14 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', 'jsonschema', ]
+requirements = [
+    'jsonschema==2.6.0',
+    'Click>=7.0',
+    'jsonnet==0.11.2',
+    'validators==0.12.3',
+    'cookiecutter==1.6.0',
+    'git-url-parse==1.1.0'
+]
 
 setup_requirements = ['pytest-runner', ]
 
@@ -49,6 +56,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/Microsoft/agogosml/agogosml_cli',
-    version='0.1.0',
+    version='0.1.2',
     zip_safe=False,
 )

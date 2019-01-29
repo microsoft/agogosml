@@ -11,6 +11,7 @@ Prerequisites
 -  `Python 3.7`_
 -  `Terraform`_ to provision Azure resources such as AKS and EventHub
 -  `Docker`_
+-  If you are on Linux/MacOS, please install GCC, Make, CMake and other relevant Python C Extension building tools.
 
 Create a New Project
 --------------------------------

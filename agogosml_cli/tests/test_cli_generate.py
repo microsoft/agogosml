@@ -6,6 +6,8 @@ import json
 from click.testing import CliRunner
 import cli.generate as generate
 import tests.test_utils as test_utils
+
+
 """
 * agogosml generate
     * should fail if no manifest.json is in working directory
@@ -19,13 +21,41 @@ import tests.test_utils as test_utils
 """
 
 EXPECTED_OUTPUT_PROJ_FILES = [
-    '.env', 'Pipfile', 'logging.yaml', 'azure-ci-app-pipeline.json'
+    'ci-app-pipeline.json',
+    'ci-agogosml-pipeline.json',
+    'cd-pipeline.json',
+    'e2e-pipeline.json',
+    'testproject/dockerbuild.sh',
+    'testproject/.dockerignore',
+    'testproject/README.md',
+    'testproject/agogosml/Dockerfile.agogosml',
+    'testproject/input_reader/Dockerfile.input_reader',
+    'testproject/input_reader/logging.yaml',
+    'testproject/input_reader/main.py',
+    'testproject/output_writer/Dockerfile.output_writer',
+    'testproject/output_writer/logging.yaml',
+    'testproject/output_writer/main.py',
+    'testproject/testproject/Dockerfile.testproject',
+    'testproject/testproject/logging.yaml',
+    'testproject/testproject/main.py',
+    'testproject/testproject/requirements-dev.txt',
+    'testproject/testproject/requirements.txt',
+    'testproject/testproject/datahelper.py',
+    'testproject/testproject/schema_example.json',
+    'testproject/testproject/testapp.py'
 ]
 
 
 def test_generate():
     """Tests of generate command w/o <folder> specified"""
     runner = CliRunner()
+    """
+    RUN: agogosml generate
+    RESULT: Fail because no manifest.json exists
+    """
+    with runner.isolated_filesystem():
+        result = runner.invoke(generate.generate)
+        assert result.exit_code == 1
     """
     RUN: agogosml generate
     RESULT: Produces the correct files in the current working directory
@@ -35,6 +65,28 @@ def test_generate():
         result = runner.invoke(generate.generate)
         assert result.exit_code == 0
         _assert_template_files_exist()
+    """
+    RUN: agogosml generate
+    RESULT: Fail because files exist and force is not specified.
+    """
+    with runner.isolated_filesystem():
+        _create_test_manifest_azure()
+        _create_dummy_template_files()
+        prevmd5 = _get_md5_template_files()
+        result = runner.invoke(generate.generate)
+        assert result.exit_code == 1
+        assert set(prevmd5) == set(_get_md5_template_files())
+    """
+    RUN: agogosml generate
+    RESULT: Fail because manifest is invalid.
+    """
+    with runner.isolated_filesystem():
+        _create_invalid_manifest_azure()
+        _create_dummy_template_files()
+        prevmd5 = _get_md5_template_files()
+        result = runner.invoke(generate.generate)
+        assert result.exit_code == 1
+        assert set(prevmd5) == set(_get_md5_template_files())
     """
     RUN: agogosml generate -f
     RESULT: Overwrite existing files
@@ -74,6 +126,16 @@ def test_generate_folder():
         assert result.exit_code == 0
         _assert_template_files_exist('folder')
     """
+    RUN: agogosml generate <folder>
+    RESULT: Produces the correct files in the specified directory
+    where the manifest file is in the target directory.
+    """
+    with runner.isolated_filesystem():
+        _create_test_manifest_azure('folder')
+        result = runner.invoke(generate.generate, ['folder'])
+        assert result.exit_code == 0
+        _assert_template_files_exist('folder/')
+    """
     RUN: agogosml generate -f <folder>
     RESULT: Overwrite existing files in the specified directory
     """
@@ -108,6 +170,7 @@ def test_generate_invalid_schema():
         - azure-ci-app-pipeline.json
         - ci-input-app-pipeline.json
         - ci-output-app-pipeline.json
+        - azure-ci-e2e-tests-pipeline.json
     """
     runner = CliRunner()
     with runner.isolated_filesystem():
@@ -132,7 +195,34 @@ def _assert_template_files_exist(folder='.'):
 def _create_test_manifest_azure(folder='.'):
     manifest_str = """
     {
-        "name": "test manifest",
+        "name": "testproject",
+        "cloud": {
+            "vendor": "azure",
+            "subscriptionId": "123-123-123-123",
+            "otherProperties": {
+                "azureContainerRegistry": "https://acr.acr.io",
+                "azureResourceGroup": "agogosml-rg",
+                "kubernetesCluster": "agogosml-k"
+            }
+        },
+        "repository": {
+            "type": "GitHub",
+            "url": "https://github.com/Microsoft/agogosml.git"
+        }
+    }
+    """
+    manifest = json.loads(manifest_str)
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+    outfile = os.path.join(folder, 'manifest.json')
+    with open(outfile, 'w') as f:
+        json.dump(manifest, f, indent=4)
+
+
+def _create_invalid_manifest_azure(folder='.'):
+    manifest_str = """
+    {
+        "name": "testproject",
         "cloud": {
             "vendor": "azure",
             "subscriptionId": "123-123-123-123",
@@ -143,14 +233,7 @@ def _create_test_manifest_azure(folder='.'):
         "repository": {
             "type": "GitHub",
             "url": "https://github.com/Microsoft/agogosml.git"
-        },
-        "tests": [{
-            "name": "Sanity Check",
-            "type": "language-specific",
-            "input": "in.json",
-            "output": "out.json",
-            "outputFormatter": "ConsoleOutputFormatterClass"
-        }]
+        }
     }
     """
     manifest = json.loads(manifest_str)
@@ -164,6 +247,12 @@ def _create_test_manifest_azure(folder='.'):
 def _create_dummy_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
     if not os.path.isdir(folder):
         os.makedirs(folder)
+
+    os.makedirs(os.path.join(folder, 'testproject', 'agogosml'))
+    os.makedirs(os.path.join(folder, 'testproject', 'input_reader'))
+    os.makedirs(os.path.join(folder, 'testproject', 'output_writer'))
+    os.makedirs(os.path.join(folder, 'testproject', 'testproject'))
+
     for proj_file in files:
         outfile = os.path.join(folder, proj_file)
 

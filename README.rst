@@ -39,7 +39,7 @@ Features
 Quick Install & Run
 -------------------
 
-The following quick install instructions assumes you have the azure-cli, Python 3.7, Docker and Terraform installed.
+The following quick install instructions assumes you have the azure-cli, Python 3.7 (with C Compiler tools), Docker and Terraform installed.
 
 .. code-block:: bash
 

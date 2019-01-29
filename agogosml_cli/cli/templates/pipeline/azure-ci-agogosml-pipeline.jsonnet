@@ -40,8 +40,28 @@ local repository = import 'pipeline-repository.libsonnet';
             ],
             "isCommentRequiredForPullRequest": false,
             "triggerType": 64
+        },
+        {
+            "branchFilters": [
+                "+master"
+            ],
+            "pathFilters": [
+                "+/agogosml",
+                "+/input_reader",
+                "+/output_writer"
+            ],
+            "batchChanges": false,
+            "maxConcurrentBuildsPerBranch": 1,
+            "pollingInterval": 0,
+            "triggerType": 2
         }
     ],
+    "variables": {
+        "container_registry": {
+            "value": std.extVar('AZURE_CONTAINER_REGISTRY'),
+            "allowOverride": true
+        }
+    },
     "properties": {},
     "buildNumberFormat": "$(date:yyyyMMdd)$(rev:.r)",
     "description": "Azure Pipelines for agogosml repo",
@@ -65,16 +85,16 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
-                            "dockerFile": "agogosml/Dockerfile.agogosml",
+                            "dockerFile": "**/agogosml/Dockerfile.agogosml",
                             "arguments": "",
                             "useDefaultContext": "true",
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "agogosml/agogosml:$(Build.BuildId)",
+                            "imageName": "agogosml:$(Build.BuildId)",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -101,6 +121,28 @@ local repository = import 'pipeline-repository.libsonnet';
                         "enabled": true,
                         "continueOnError": false,
                         "alwaysRun": false,
+                        "displayName": "Tag 'latest' tag",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                            "versionSpec": "3.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "targetType": "inline",
+                            "filePath": "",
+                            "arguments": "",
+                            "script": "if [ $(Build.SourceBranchName) = \"master\" ]; then\n  echo \"Since this is a merge build, we are creating a new 'latest' tag\"\n  docker tag $(container_registry)/agogosml:$(Build.BuildId) $(container_registry)/agogosml:latest\n  echo \"Done\"\nelse\n  echo \"Not a merge build, hence skipping 'latest' tag\"\nfi\n",
+                            "workingDirectory": "",
+                            "failOnStderr": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
                         "displayName": "Push base image",
                         "timeoutInMinutes": 0,
                         "condition": "succeeded()",
@@ -112,7 +154,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Push an image",
                             "dockerFile": "**/agogosml/Dockerfile.agogosml",
@@ -121,7 +163,7 @@ local repository = import 'pipeline-repository.libsonnet';
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "agogosml/agogosml:$(Build.BuildId)",
+                            "imageName": "agogosml",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -181,7 +223,7 @@ local repository = import 'pipeline-repository.libsonnet';
                         "inputs": {
                             "containerregistrytype": "Azure Container Registry",
                             "dockerRegistryEndpoint": "",
-                            "azureSubscriptionEndpoint": std.extVar('SUBSCRIPTION_ID'),
+                            "azureSubscriptionEndpoint": "",
                             "azureContainerRegistry": std.extVar('AZURE_CONTAINER_REGISTRY'),
                             "command": "Build an image",
                             "dockerFile": "**/input_reader/Dockerfile.input_reader",
@@ -217,6 +259,28 @@ local repository = import 'pipeline-repository.libsonnet';
                         "enabled": true,
                         "continueOnError": false,
                         "alwaysRun": false,
+                        "displayName": "Tag 'latest' tag",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                            "versionSpec": "3.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "targetType": "inline",
+                            "filePath": "",
+                            "arguments": "",
+                            "script": "if [ $(Build.SourceBranchName) = \"master\" ]; then\n  echo \"Since this is a merge build, we are creating a new 'latest' tag\"\n  docker tag $(container_registry)/input_reader:$(Build.BuildId) $(container_registry)/input_reader:latest\n  echo \"Done\"\nelse\n  echo \"Not a merge build, hence skipping 'latest' tag\"\nfi\n",
+                            "workingDirectory": "",
+                            "failOnStderr": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
                         "displayName": "Push input reader app image",
                         "timeoutInMinutes": 0,
                         "condition": "succeeded()",
@@ -237,7 +301,7 @@ local repository = import 'pipeline-repository.libsonnet';
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "input_reader:$(Build.BuildId)",
+                            "imageName": "input_reader",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",
@@ -333,6 +397,28 @@ local repository = import 'pipeline-repository.libsonnet';
                         "enabled": true,
                         "continueOnError": false,
                         "alwaysRun": false,
+                        "displayName": "Tag 'latest' tag",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                            "versionSpec": "3.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "targetType": "inline",
+                            "filePath": "",
+                            "arguments": "",
+                            "script": "if [ $(Build.SourceBranchName) = \"master\" ]; then\n  echo \"Since this is a merge build, we are creating a new 'latest' tag\"\n  docker tag $(container_registry)/output_writer:$(Build.BuildId) $(container_registry)/output_writer:latest\n  echo \"Done\"\nelse\n  echo \"Not a merge build, hence skipping 'latest' tag\"\nfi\n",
+                            "workingDirectory": "",
+                            "failOnStderr": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
                         "displayName": "Push output writer app image",
                         "timeoutInMinutes": 0,
                         "condition": "succeeded()",
@@ -353,7 +439,7 @@ local repository = import 'pipeline-repository.libsonnet';
                             "buildContext": "",
                             "pushMultipleImages": "false",
                             "tagMultipleImages": "false",
-                            "imageName": "output_writer:$(Build.BuildId)",
+                            "imageName": "output_writer",
                             "imageNamesPath": "",
                             "qualifyImageName": "true",
                             "includeSourceTags": "false",

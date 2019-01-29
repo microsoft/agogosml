@@ -27,7 +27,7 @@ Build the base image using:
 
 .. code:: bash
 
-    docker build -t agogosml/agogosml -f agogosml/Dockerfile.agogosml agogosml
+    docker build -t agogosml -f agogosml/Dockerfile.agogosml agogosml
 
 Then the input reader image:
 
@@ -48,8 +48,16 @@ And finally the output writer:
 
     docker build -t agogosml/output_writer -f output_writer/Dockerfile.output_writer .
 
+
+
 Run with Docker Locally
 ~~~~~~~~~~~~~~~~~~~~~~~
+
+If you are building this locally add the following to each of the above commands:
+
+.. code:: bash
+
+  --build-arg CONTAINER_REG=agogosml/
 
 Set required environment variables (You can see an example `env.example.sh <../env.example.sh>`__)
 
@@ -148,6 +156,7 @@ Installing Dependencies (and Dev Dependencies):
 
     $ cd agogosml_cli/
     $ pipenv install --dev
+    $ pipenv run make installedit
 
 Running Tests:
 
@@ -160,6 +169,26 @@ Running Linter:
 .. code:: bash
 
     $ pipenv run make lint
+
+
+Test the CLI and see generated output
+
+.. code:: bash
+
+    $ pipenv shell
+
+    # Create a directory for your project
+    $ mkdir hello-agogosml && cd hello-agogosml
+
+    # Init the project
+    agogosml init
+
+    # Fill in the manifest.json (Docker Container Registry, Azure Subscription, etc).
+    vi manifest.json
+
+    # Generate the code for the projects
+    agogosml generate
+
 
 
 Deployment and Provisionning to Azure

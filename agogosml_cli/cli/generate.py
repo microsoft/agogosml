@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Generate command module."""
 
-import os
+from pathlib import Path
+
 import click
 import json
 import _jsonnet
@@ -47,22 +48,21 @@ APP_TEMPLATES = {
 def generate(force, config, app_base, folder) -> int:
     """Generates an agogosml project"""
     template_vars = {}
-    with open(
-        utils.get_template_full_filepath('cookiecutter.json')
-    ) as default_template_file:
-        template_vars = json.load(default_template_file)
+    template_file = utils.get_template_full_filepath('cookiecutter.json')
+    with template_file.open() as f:
+        template_vars = json.load(f)
 
     # Create folder if not exists
-    if not os.path.isdir(folder):
-        os.makedirs(folder)
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
 
     # Read Manifest file
-    config_path = config if os.path.isfile(config) else False
-    if not config_path and os.path.isfile(os.path.join(folder, config)):
-        config_path = os.path.join(folder, config)
+    config_path = Path(config)
+    if not config_path.is_file() and (folder / config).is_file():
+        config_path = folder / config
 
-    if config_path:
-        with open(config_path) as f:
+    if config_path.is_file():
+        with config_path.open() as f:
             manifest = json.load(f)
             utils.validate_manifest(manifest)
             # Retrieve values
@@ -83,7 +83,7 @@ def generate(force, config, app_base, folder) -> int:
     try:
         # Write App Template
         write_cookiecutter(utils.get_template_full_filepath(APP_TEMPLATES[app_base]),
-                           os.path.join(folder, template_vars['PROJECT_NAME_SLUG']),
+                           folder / template_vars['PROJECT_NAME_SLUG'],
                            template_vars, True)
     except OutputDirExistsException:
         # Handle situation where template folder exists and force is not set to true
@@ -93,9 +93,9 @@ def generate(force, config, app_base, folder) -> int:
     del template_vars['_copy_without_render']
 
     for template_src, template_dst in PROJ_FILES.items():
-        template_src_filename = os.path.basename(template_src)
+        template_src_filename = Path(template_src).name
         # Check if files exists in dst
-        if (os.path.exists(os.path.join(folder, template_dst))):
+        if (folder / template_dst).exists():
             if not force:
                 click.echo('Files already exists in directory. Use --force to overwrite')
                 raise click.Abort()
@@ -104,7 +104,7 @@ def generate(force, config, app_base, folder) -> int:
         if 'CLOUD_VENDOR' in template_vars and template_vars['CLOUD_VENDOR'] == 'azure' \
            and template_src_filename.startswith('azure') and template_src_filename.endswith('-pipeline.jsonnet'):
             # Modify pipeline file from defaults
-            write_jsonnet(template_src, template_dst, folder, template_vars)
+            write_jsonnet(Path(template_src), Path(template_dst), folder, template_vars)
 
 
 def extractTemplateVarsFromManifest(manifest):
@@ -145,28 +145,28 @@ def extractAzureTemplateVars(manifest):
     return template_vars
 
 
-def write_jsonnet(source_path: str, target_path: str, base_path: str, template_vars: object) -> None:
+def write_jsonnet(source_path: Path, target_path: Path, base_path: Path, template_vars: object) -> None:
     """Writes out a pipeline json file
     Args:
-        src (string):  Name of the pipeline file in module
-        target_path (string): Name of the output folder
+        source_path (Path):  Name of the pipeline file in module
+        target_path (Path): Name of the output folder
         template_vars (object): Values to inject into jsonnet as extVars.
     """
     pipeline_json = json.loads(_jsonnet.evaluate_file(
-        filename=utils.get_template_full_filepath(source_path),
+        filename=str(utils.get_template_full_filepath(source_path)),
         ext_vars=template_vars))
-    full_path = os.path.join(base_path, target_path)
-    with open(full_path, 'w') as f:
+    full_path = base_path / target_path
+    with full_path.open('w') as f:
         json.dump(pipeline_json, f, indent=4)
 
 
-def write_cookiecutter(source_path: str, target_path: str, template_vars: object, overwrite=False) -> None:
+def write_cookiecutter(source_path: Path, target_path: Path, template_vars: object, overwrite=False) -> None:
     """Outputs a cookiecutter template
     Args:
-        target_path (string): Name of the output folder
+        target_path (Path): Name of the output folder
     """
-    return cookiecutter(source_path, extra_context=template_vars, no_input=True,
-                        output_dir=target_path, overwrite_if_exists=overwrite)
+    return cookiecutter(str(source_path), extra_context=template_vars, no_input=True,
+                        output_dir=str(target_path), overwrite_if_exists=overwrite)
 
 
 def safe_filename(name: str) -> str:

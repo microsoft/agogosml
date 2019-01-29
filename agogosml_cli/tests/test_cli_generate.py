@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Tests for `agogosml_cli` package."""
 
-import os
 import json
+from pathlib import Path
+
 from click.testing import CliRunner
 import cli.generate as generate
 import tests.test_utils as test_utils
@@ -188,8 +189,9 @@ def test_generate_invalid_schema():
 
 
 def _assert_template_files_exist(folder='.'):
+    folder = Path(folder)
     for proj_file in EXPECTED_OUTPUT_PROJ_FILES:
-        assert os.path.exists(os.path.join(folder, proj_file))
+        assert (folder / proj_file).exists()
 
 
 def _create_test_manifest_azure(folder='.'):
@@ -212,10 +214,10 @@ def _create_test_manifest_azure(folder='.'):
     }
     """
     manifest = json.loads(manifest_str)
-    if not os.path.isdir(folder):
-        os.makedirs(folder)
-    outfile = os.path.join(folder, 'manifest.json')
-    with open(outfile, 'w') as f:
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
+    outfile = folder / 'manifest.json'
+    with outfile.open('w') as f:
         json.dump(manifest, f, indent=4)
 
 
@@ -237,34 +239,35 @@ def _create_invalid_manifest_azure(folder='.'):
     }
     """
     manifest = json.loads(manifest_str)
-    if not os.path.isdir(folder):
-        os.makedirs(folder)
-    outfile = os.path.join(folder, 'manifest.json')
-    with open(outfile, 'w') as f:
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
+    outfile = folder / 'manifest.json'
+    with outfile.open('w') as f:
         json.dump(manifest, f, indent=4)
 
 
 def _create_dummy_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
-    if not os.path.isdir(folder):
-        os.makedirs(folder)
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
 
-    os.makedirs(os.path.join(folder, 'testproject', 'agogosml'))
-    os.makedirs(os.path.join(folder, 'testproject', 'input_reader'))
-    os.makedirs(os.path.join(folder, 'testproject', 'output_writer'))
-    os.makedirs(os.path.join(folder, 'testproject', 'testproject'))
+    (folder / 'testproject' / 'agogosml').mkdir(parents=True, exist_ok=True)
+    (folder / 'testproject' / 'input_reader').mkdir(parents=True, exist_ok=True)
+    (folder / 'testproject' / 'output_writer').mkdir(parents=True, exist_ok=True)
+    (folder / 'testproject' / 'testproject').mkdir(parents=True, exist_ok=True)
 
     for proj_file in files:
-        outfile = os.path.join(folder, proj_file)
+        outfile = folder / proj_file
 
-        with open(outfile, 'w') as f:
+        with outfile.open('w') as f:
             json.dump("test content", f, indent=4)
 
 
 def _get_md5_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
     """Get the md5 hashes of the project files. Used to know if files were
     overwritten"""
+    folder = Path(folder)
     allmd5 = []
     for proj_file in files:
-        outfile = os.path.join(folder, proj_file)
+        outfile = folder / proj_file
         allmd5.append(test_utils.md5(outfile))
     return allmd5

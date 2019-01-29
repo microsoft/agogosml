@@ -1,12 +1,8 @@
 """ Logger """
 import os
+import logging
 import logging.config
 from pathlib import Path
-from logging import DEBUG
-from logging import ERROR
-from logging import INFO
-from logging import Logger as BaseLogger
-from logging import getLevelName
 
 import yaml
 from typing import Union
@@ -37,7 +33,7 @@ class Logger(object):
                  name=__name__,
                  path='logging.yaml',
                  env_key='LOG_CFG',
-                 level=INFO):
+                 level=logging.INFO):
 
         self.level = level
         self.name = name
@@ -45,8 +41,8 @@ class Logger(object):
         self.env_key = env_key
 
     @cached_property
-    def logger(self) -> BaseLogger:
-        value = os.getenv(self.env_key, None)
+    def logger(self) -> logging.Logger:
+        value = os.getenv(self.env_key)
         if value:
             path = Path(value)
         else:
@@ -82,7 +78,7 @@ class Logger(object):
 
         :param message: Debug message string.
         """
-        self._log(DEBUG, message)
+        self._log(logging.DEBUG, message)
 
     def info(self, message):
         """
@@ -90,7 +86,7 @@ class Logger(object):
 
         :param message: Info message string.
         """
-        self._log(INFO, message)
+        self._log(logging.INFO, message)
 
     def error(self, message):
         """
@@ -98,7 +94,7 @@ class Logger(object):
 
         :param message: Error message string.
         """
-        self._log(ERROR, message)
+        self._log(logging.ERROR, message)
 
     def _log(self, level: int, message: str):
         if not self.logger.isEnabledFor(level):
@@ -106,4 +102,4 @@ class Logger(object):
 
         self.logger.log(level, message)
         self.telemetry_client.track_trace(
-            message, severity=getLevelName(level))
+            message, severity=logging.getLevelName(level))

@@ -1,5 +1,6 @@
 """ Helper functions for the customer application """
 import json
+
 from jsonschema import validate
 
 IN_MEMORY_FILES = {}

@@ -8,8 +8,8 @@ from inspect import getsourcefile
 from pathlib import Path
 from pkgutil import walk_packages
 from sys import stdin
-from typing import Dict
 from typing import IO
+from typing import Dict
 from typing import Iterable
 from typing import Tuple
 from typing import Type

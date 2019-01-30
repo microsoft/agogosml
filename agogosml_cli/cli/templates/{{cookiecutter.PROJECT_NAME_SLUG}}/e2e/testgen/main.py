@@ -1,9 +1,8 @@
 import asyncio
+import json
+import os
 import time
 from multiprocessing.pool import ThreadPool
-
-import os
-import json
 
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 

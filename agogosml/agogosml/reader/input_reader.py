@@ -8,7 +8,7 @@ from agogosml.utils.logger import Logger
 logger = Logger()
 
 
-class InputReader:  # pylint: disable=too-few-public-methods
+class InputReader:
     """Accepts incoming messages and routes them to a configured output"""
 
     def __init__(self, streaming_client: AbstractStreamingClient, message_sender: MessageSender):
@@ -21,11 +21,13 @@ class InputReader:  # pylint: disable=too-few-public-methods
 
     def start_receiving_messages(self):
         """Start receiving messages from streaming endpoint"""
+        logger.event('input.lifecycle.start')
         self.messaging_client.start_receiving(self.on_message_received)
 
     def stop_incoming_messages(self):
         """Stop incoming messages from streaming endpoint"""
         self.messaging_client.stop()
+        logger.event('input.lifecycle.stop')
 
     def on_message_received(self, message):
         """Send messages onwards
@@ -34,11 +36,12 @@ class InputReader:  # pylint: disable=too-few-public-methods
         """
         result = self.message_sender.send(message)
         if result:
-            return True
-            pass
+            success = True
         else:
+            success = False
             self.handle_send_failure(message)
-            return False
+        logger.event('input.message.received', {'success': str(success)})
+        return success
 
     def handle_send_failure(self, message):
         logger.error('Error while sending message to App')

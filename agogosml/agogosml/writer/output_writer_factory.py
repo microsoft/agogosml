@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """ Factory for OutputWriter """
 
-from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
+from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
+
 from .output_writer import OutputWriter
 
 

@@ -3,6 +3,9 @@
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 from agogosml.common.listener_client import ListenerClient
+from agogosml.utils.logger import Logger
+
+logger = Logger()
 
 
 class OutputWriter:
@@ -22,15 +25,16 @@ class OutputWriter:
 
         :param message: A message as a string to send onwards.
         """
-        return self.messaging_client.send(message)
+        success = self.messaging_client.send(message)
+        logger.event('output.message.received', {'success': str(success)})
+        return success
 
     def start_incoming_messages(self, callback=None):
         """Start accepting messages."""
-        if callback:
-            self.listener.start(callback)
-        else:
-            self.listener.start(self.on_message_received)
+        logger.event('output.lifecycle.start')
+        self.listener.start(callback or self.on_message_received)
 
     def stop_incoming_messages(self):
         """Stop accepting messages."""
         self.listener.stop()
+        logger.event('output.lifecycle.stop')

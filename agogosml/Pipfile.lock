@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "279021804ddd6ad5867e3355511afe0b9c64e587664c5c4b3d130e435e3132b5"
+            "sha256": "f362bafd1ae21b8f2c86712ec23142b87995e304e1b827b8fdb4f2910818d6df"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -19,6 +19,13 @@
                 "sha256:b6edd095be66561382bdaa59d40b04490e93149fb3b7fa44c1fa5504eed5b8b9"
             ],
             "version": "==1.2.1"
+        },
+        "applicationinsights": {
+            "hashes": [
+                "sha256:42a2eb05fad51ffdd8246fdf5b2d2c0166d2b34f75a06940a2443d7e17a219fe",
+                "sha256:c4712ede8eeca57e611b7fd4b3b6c345745a4a002a08145ab45f92d31d900040"
+            ],
+            "version": "==0.11.7"
         },
         "asn1crypto": {
             "hashes": [
@@ -54,6 +61,13 @@
                 "sha256:7ab607f9b8fd27b817482194b1e7d43484c65dcf2605aae21ad8706c6891934d"
             ],
             "version": "==1.4.0"
+        },
+        "cached-property": {
+            "hashes": [
+                "sha256:3a026f1a54135677e7da5ce819b0c690f156f37976f3e30c5430740725203d7f",
+                "sha256:9217a59f14a5682da7c4b8829deadbfc194ac22e9908ccf7c8820234e80a1504"
+            ],
+            "version": "==1.5.1"
         },
         "certifi": {
             "hashes": [
@@ -314,6 +328,12 @@
                 "sha256:d3ed0c8f2e3bbc6b344fa63d6f933745ab394469da38db16bdddb461c7e25140"
             ],
             "version": "==1.2.0"
+        },
+        "singleton-decorator": {
+            "hashes": [
+                "sha256:1a90ad8a8a738be591c9c167fdd677c5d4a43d1bc6b1c128227be1c5e03bee07"
+            ],
+            "version": "==1.0.0"
         },
         "six": {
             "hashes": [

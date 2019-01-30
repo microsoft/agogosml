@@ -44,7 +44,7 @@ App/Model Integration with Agogosml
 Integrate your model in Agogosml by implementing a small HTTP service
 that accepts POST requests and can send the HTTP POST request to
 agogosml output writer. You can find an example
-`here <https://github.com/Microsoft/agogosml/tree/master/sample_app>`__.
+`here <https://github.com/Microsoft/agogosml/tree/master/agogosml_cli/cli/templates/apps/simple/%7B%7Bcookiecutter.PROJECT_NAME_SLUG%7D%7D>`__.
 
 
 Deployment and Provisionning to Azure
@@ -57,7 +57,7 @@ Deployment and Provisionning to Azure
 .. _Framework: https://github.com/Microsoft/agogosml/tree/master/agogosml
 .. _CLI: https://github.com/Microsoft/agogosml/tree/master/agogosml_cli
 .. _App: https://github.com/Microsoft/agogosml/tree/master/sample_app
-.. _design: https://github.com/Microsoft/agogosml/tree/master/docs/DESIGN.md
+.. _design: https://github.com/Microsoft/agogosml/blob/master/docs/DESIGN.rst
 .. _WSL: https://docs.microsoft.com/en-us/windows/wsl/install-win10
 .. _azure-cli: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest
 .. _Python 3.7: https://www.python.org/downloads/release/python-371/
@@ -112,12 +112,15 @@ scaffold will include the following files:
 -  ``Pipfile`` - This file is the pipenv file used to configure the
    included app. It may also contain runs scripts to simplify
    deployment (coming soon).
--  ``sample_app/`` - This a simple data transformation app that shows
-   you how to read from the InputReader and write to the OutputWriter
-   data pipeline components.
+-  ``YourApplicationName/`` - This folder is where you will develop your
+    custom application. Within it, we provide starter code, which contains a simple data 
+    transformation app that demonstrates how to read from the InputReader and write to the 
+    OutputWriter data pipeline components. We provide either a simple Python starter project,
+    or a Scala project that loads a ML model using mleap. Specify which base you want to use
+    by adding a flag ``agogosml generate --app-base BASE``. 
 -  ``tests/e2e/`` - This a directory containing end to end integration
    tests for your deployed data pipeline.
--  ``tests/validation`` - This a directory containing various useful
+-  ``tests/validation/`` - This a directory containing various useful
    validation tests.
 
 Install

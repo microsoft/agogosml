@@ -2,10 +2,11 @@
 
 """Console script for agogosml_cli."""
 import sys
+
 import click
 
-import cli.init as init
 import cli.generate as generate
+import cli.init as init
 
 
 @click.group()

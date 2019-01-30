@@ -2,5 +2,6 @@ hypothesis
 python-dotenv
 jsonschema
 pytest
-pylint
+flake8
+isort
 requests

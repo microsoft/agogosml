@@ -1,10 +1,13 @@
 """ Entrypoint for customer application. Listens for HTTP requests from
 the input reader, and sends the transformed message to the output writer. """
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import os
-import logging
 import json
+import logging
+import os
+from http.server import BaseHTTPRequestHandler
+from http.server import HTTPServer
+
 import requests
+
 import datahelper
 
 # HOST & PORT are the values used to run the current application
@@ -28,7 +31,7 @@ class Socket(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/html')
         self.end_headers()
 
-    def do_POST(self):  # pylint: disable=C0103
+    def do_POST(self):
         """Handles a POST request to the server.
         Sends 400 error if there is an issue, otherwise sends a success message.
 

@@ -1,6 +1,7 @@
 """Abstract listener client broker class"""
 
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 
 
 class ListenerClient(ABC):

@@ -50,8 +50,9 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-lint: ## check style with flake8
+lint: ## check python style
 	flake8 cli tests
+	isort --skip-glob '**/cli/templates/**' --check-only --recursive cli
 
 test:
 	## Fail fast in CI, maxfail=1

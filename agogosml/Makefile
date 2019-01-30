@@ -50,8 +50,9 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-lint: ## check style with flake8
+lint: ## check python style
 	flake8 agogosml tests
+	isort --check-only --recursive agogosml
 
 test:
 	## Fail fast in CI maxfail=1

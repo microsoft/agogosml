@@ -8,7 +8,6 @@ from typing import Optional
 from typing import Union
 
 import yaml
-
 from applicationinsights import TelemetryClient
 from applicationinsights.channel import AsynchronousQueue
 from applicationinsights.channel import AsynchronousSender

@@ -47,7 +47,8 @@ def send_messages_to_client(msg_type: str):
         test_messages = json.load(f)
 
     send_client = EventHubStreamingClient(
-        {**send_config_base_eh, **{'LEASE_CONTAINER_NAME': os.getenv('LEASE_CONTAINER_NAME_INPUT')}}) if msg_type == 'eventhub' else KafkaStreamingClient(kafka_config)
+        {**send_config_base_eh, **{'LEASE_CONTAINER_NAME': os.getenv('LEASE_CONTAINER_NAME_INPUT')}}) if msg_type == \
+        'eventhub' else KafkaStreamingClient(kafka_config)
 
     for message in test_messages:
         send_client.send(json.dumps(message))

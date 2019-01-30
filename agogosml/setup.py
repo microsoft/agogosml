@@ -12,6 +12,9 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
+    "applicationinsights==0.11.7",
+    "cached-property==1.5.1",
+    "singleton-decorator==1.0.0",
     "confluent-kafka==0.11.6",
     "azure-eventhub==1.2.0",
     "requests==2.20.1",

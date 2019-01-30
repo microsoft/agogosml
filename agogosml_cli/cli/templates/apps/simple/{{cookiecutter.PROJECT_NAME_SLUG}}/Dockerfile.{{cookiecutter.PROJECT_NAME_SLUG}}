@@ -15,8 +15,6 @@ RUN pytest testapp.py \
  && flake8 *.py
 
 # Release
-ARG PYTHON_VERSION=3.7.0-alpine3.8
-
 FROM python:${PYTHON_VERSION}
 
 WORKDIR /{{cookiecutter.PROJECT_NAME_SLUG}}

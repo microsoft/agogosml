@@ -31,14 +31,15 @@ class InputReaderFactory:
             raise Exception('No config were set for the InputReader manager')
 
         if streaming_client is None:
-            if config.get("client") is None:
+            try:
+                client_config = config['client']['config']
+                client_type = config['client']['type']
+            except KeyError:
                 raise Exception('client cannot be empty')
 
-            client_config = config.get('client')['config']
-            client_type = config.get('client')['type']
-
-            client_class = find_streaming_clients().get(client_type)
-            if client_class is None:
+            try:
+                client_class = find_streaming_clients()[client_type]
+            except KeyError:
                 raise Exception('Unknown client type')
 
             client = client_class(client_config)

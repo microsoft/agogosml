@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8f9b7b4c2b4a648f47cada878fb3deeb74c897360c6d107dd16f119389372f76"
+            "sha256": "f145d940744d82d2055bd35db3b0e9a553f4ccadb81343e7b4df70ad883c5229"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -328,6 +328,12 @@
                 "sha256:d3ed0c8f2e3bbc6b344fa63d6f933745ab394469da38db16bdddb461c7e25140"
             ],
             "version": "==1.2.0"
+        },
+        "singleton-decorator": {
+            "hashes": [
+                "sha256:1a90ad8a8a738be591c9c167fdd677c5d4a43d1bc6b1c128227be1c5e03bee07"
+            ],
+            "version": "==1.0.0"
         },
         "six": {
             "hashes": [

@@ -12,6 +12,7 @@ from applicationinsights.channel import AsynchronousSender
 from applicationinsights.channel import TelemetryChannel
 from applicationinsights.channel import TelemetryContext
 from cached_property import cached_property
+from singleton_decorator import singleton
 
 
 class NullTelemetryClient:
@@ -19,15 +20,9 @@ class NullTelemetryClient:
         pass
 
 
+@singleton
 class Logger(object):
     """A logger implementation."""
-
-    __instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if not cls.__instance:
-            cls.__instance = object.__new__(cls, *args, **kwargs)
-        return cls.__instance
 
     def __init__(self,
                  name: str = __name__,

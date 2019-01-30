@@ -28,32 +28,26 @@ class InputReaderFactory:
         :return InputReader: An instance of an InputReader with streaming_client and message_sender
         """
         if InputReaderFactory.is_empty(config):
-            raise Exception('''
-            No config were set for the InputReader manager
-            ''')
+            raise Exception('No config were set for the InputReader manager')
 
         if streaming_client is None:
             if config.get("client") is None:
-                raise Exception('''
-                client cannot be empty
-                ''')
+                raise Exception('client cannot be empty')
 
-            client_config = config.get("client")["config"]
-            client_type = config.get("client")["type"]
+            client_config = config.get('client')['config']
+            client_type = config.get('client')['type']
 
             client_class = find_streaming_clients().get(client_type)
             if client_class is None:
-                raise Exception('''
-                Unknown client type
-                ''')
+                raise Exception('Unknown client type')
 
             client = client_class(client_config)
         else:
             client = streaming_client
 
         # host and port from the client
-        app_host = config.get("APP_HOST")
-        app_port = config.get("APP_PORT")
+        app_host = config.get('APP_HOST')
+        app_port = config.get('APP_PORT')
 
         msg_sender = HttpMessageSender(app_host, app_port)
 

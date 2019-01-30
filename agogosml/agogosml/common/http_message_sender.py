@@ -1,8 +1,9 @@
 """HttpMessageSender."""
 
 import requests
-from .message_sender import MessageSender
+
 from ..utils.logger import Logger
+from .message_sender import MessageSender
 
 logger = Logger()
 

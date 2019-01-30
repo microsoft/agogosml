@@ -1,12 +1,15 @@
 """ Unit tests for the customer app """
-import os
 import json
+import os
 from pathlib import Path
 
+import datahelper
 from dotenv import load_dotenv
 from hypothesis import given
-from hypothesis.strategies import fixed_dictionaries, text, characters, integers
-import datahelper
+from hypothesis.strategies import characters
+from hypothesis.strategies import fixed_dictionaries
+from hypothesis.strategies import integers
+from hypothesis.strategies import text
 
 BASE_DIR = Path(__file__).parent.absolute()
 load_dotenv(dotenv_path=str(BASE_DIR / ".env"))

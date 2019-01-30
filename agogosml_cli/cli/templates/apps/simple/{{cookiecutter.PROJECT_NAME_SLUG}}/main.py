@@ -1,10 +1,13 @@
 """ Entrypoint for customer application. Listens for HTTP requests from
 the input reader, and sends the transformed message to the output writer. """
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import os
-import logging
 import json
+import logging
+import os
+from http.server import BaseHTTPRequestHandler
+from http.server import HTTPServer
+
 import requests
+
 import datahelper
 
 # HOST & PORT are the values used to run the current application

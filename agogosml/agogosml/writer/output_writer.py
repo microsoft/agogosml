@@ -32,10 +32,7 @@ class OutputWriter:
     def start_incoming_messages(self, callback=None):
         """Start accepting messages."""
         logger.event('output.lifecycle.start')
-        if callback:
-            self.listener.start(callback)
-        else:
-            self.listener.start(self.on_message_received)
+        self.listener.start(callback or self.on_message_received)
 
     def stop_incoming_messages(self):
         """Stop accepting messages."""

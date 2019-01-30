@@ -8,7 +8,7 @@ from agogosml.utils.logger import Logger
 logger = Logger()
 
 
-class InputReader:  # pylint: disable=too-few-public-methods
+class InputReader:
     """Accepts incoming messages and routes them to a configured output"""
 
     def __init__(self, streaming_client: AbstractStreamingClient, message_sender: MessageSender):

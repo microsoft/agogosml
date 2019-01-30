@@ -4,7 +4,7 @@ from abc import ABC
 from abc import abstractmethod
 
 
-class MessageSender(ABC):  # pylint: disable=too-few-public-methods
+class MessageSender(ABC):
     """Message Sender class."""
 
     @abstractmethod

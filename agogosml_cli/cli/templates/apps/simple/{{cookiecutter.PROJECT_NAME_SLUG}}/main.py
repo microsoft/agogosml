@@ -31,7 +31,7 @@ class Socket(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/html')
         self.end_headers()
 
-    def do_POST(self):  # pylint: disable=C0103
+    def do_POST(self):
         """Handles a POST request to the server.
         Sends 400 error if there is an issue, otherwise sends a success message.
 

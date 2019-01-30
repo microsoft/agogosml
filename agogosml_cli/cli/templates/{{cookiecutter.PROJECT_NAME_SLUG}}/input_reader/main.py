@@ -36,7 +36,8 @@ if __name__ == "__main__":
                     'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),
                     'KAFKA_CONSUMER_GROUP': os.getenv("KAFKA_CONSUMER_GROUP"),
                     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
-                    'TIMEOUT': os.getenv('TIMEOUT')
+                    'TIMEOUT': os.getenv('TIMEOUT'),
+                    'EVENTHUB_KAFKA_CONNECTION_STRING': os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
                 }
             },
             'APP_HOST': os.getenv("APP_HOST"),

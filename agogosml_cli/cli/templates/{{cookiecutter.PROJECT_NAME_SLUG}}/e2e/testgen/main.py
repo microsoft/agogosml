@@ -5,19 +5,49 @@ import time
 from multiprocessing.pool import ThreadPool
 
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
+from agogosml.common.kafka_streaming_client import KafkaStreamingClient
+
+receive_config_eh = {
+    "AZURE_STORAGE_ACCOUNT": os.getenv("AZURE_STORAGE_ACCOUNT"),
+    "AZURE_STORAGE_ACCESS_KEY": os.getenv("AZURE_STORAGE_ACCESS_KEY"),
+    "LEASE_CONTAINER_NAME": os.getenv("LEASE_CONTAINER_NAME_OUTPUT"),
+    "EVENT_HUB_CONSUMER_GROUP": os.getenv("EVENT_HUB_CONSUMER_GROUP"),
+    "TIMEOUT": 10
+}
+
+send_config_base_eh = {
+    "EVENT_HUB_NAMESPACE": os.getenv("EVENT_HUB_NAMESPACE"),
+    "EVENT_HUB_NAME": os.getenv("EVENT_HUB_NAME_INPUT"),
+    "EVENT_HUB_SAS_POLICY": os.getenv("EVENT_HUB_SAS_POLICY"),
+    "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY_INPUT"),
+}
+
+kafka_config = {
+    'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),
+    'KAFKA_CONSUMER_GROUP': os.getenv("KAFKA_CONSUMER_GROUP"),
+    'APP_HOST': os.getenv("APP_HOST"),
+    'APP_PORT': os.getenv("APP_PORT"),
+    'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
+    'TIMEOUT': os.getenv('TIMEOUT')
+}
 
 
-def send_messages():
+def receive_messages(msg_type: str):
+    pool = ThreadPool(processes=1)
+
+    async_result = pool.apply_async(get_messages_from_client, args=(msg_type,))
+
+    result = async_result.get()
+
+    return json.dumps(result)
+
+
+def send_messages_to_client(msg_type: str):
     with open('test_messages.json', encoding='utf-8') as f:
         test_messages = json.load(f)
 
-    send_config = {
-        "EVENT_HUB_NAMESPACE": os.getenv("EVENT_HUB_NAMESPACE"),
-        "EVENT_HUB_NAME": os.getenv("EVENT_HUB_NAME_INPUT"),
-        "EVENT_HUB_SAS_POLICY": os.getenv("EVENT_HUB_SAS_POLICY"),
-        "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY_INPUT"),
-    }
-    send_client = EventHubStreamingClient(send_config)
+    send_client = EventHubStreamingClient(
+        {**send_config_base_eh, **{'LEASE_CONTAINER_NAME': os.getenv('LEASE_CONTAINER_NAME_INPUT')}}) if msg_type == 'eventhub' else KafkaStreamingClient(kafka_config)
 
     for message in test_messages:
         send_client.send(json.dumps(message))
@@ -26,29 +56,9 @@ def send_messages():
     return json.dumps(test_messages)
 
 
-def receive_messages():
-    pool = ThreadPool(processes=1)
-
-    async_result = pool.apply_async(get_messages_from_event_hub)
-    result = async_result.get()
-
-    return json.dumps(result)
-
-
-def get_messages_from_event_hub():
-    receive_config = {
-        "AZURE_STORAGE_ACCOUNT": os.getenv("AZURE_STORAGE_ACCOUNT"),
-        "AZURE_STORAGE_ACCESS_KEY": os.getenv("AZURE_STORAGE_ACCESS_KEY"),
-        "LEASE_CONTAINER_NAME": os.getenv("LEASE_CONTAINER_NAME_OUTPUT"),
-        "EVENT_HUB_NAMESPACE": os.getenv("EVENT_HUB_NAMESPACE"),
-        "EVENT_HUB_NAME": os.getenv("EVENT_HUB_NAME_OUTPUT"),
-        "EVENT_HUB_SAS_POLICY": os.getenv("EVENT_HUB_SAS_POLICY"),
-        "EVENT_HUB_SAS_KEY": os.getenv("EVENT_HUB_SAS_KEY_OUTPUT"),
-        "EVENT_HUB_CONSUMER_GROUP": os.getenv("EVENT_HUB_CONSUMER_GROUP"),
-        "TIMEOUT": 10
-    }
-    receive_client = EventHubStreamingClient(receive_config)
-
+def get_messages_from_client(msg_type: str):
+    receive_client = EventHubStreamingClient(
+        {**receive_config_eh, **send_config_base_eh}) if msg_type == 'eventhub' else KafkaStreamingClient(kafka_config)
     global received_messages
     received_messages = []
 
@@ -61,10 +71,11 @@ def get_messages_from_event_hub():
 
 
 if __name__ == "__main__":
-    send = send_messages()
+    msg_type = os.getenv("MESSAGING_TYPE")
+    send = send_messages_to_client(msg_type)
     print(send)
     time.sleep(20)
-    receive = receive_messages()
+    receive = receive_messages(msg_type)
     print(receive)
     if receive == "[]":
         exit(1)

@@ -26,6 +26,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
           KAFKA_CONSUMER_GROUP
           KAFKA_TOPIC
           TIMEOUT
+          EVENTHUB_KAFKA_CONNECTION_STRING
         """
 
         self.topic = config.get("KAFKA_TOPIC")
@@ -55,6 +56,14 @@ class KafkaStreamingClient(AbstractStreamingClient):
             "enable.auto.commit": False,
             "auto.offset.reset": "earliest"
         }
+
+        if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'):
+            eventhub_config = {
+                'security.protocol': "SASL_SSL",
+                'sasl.mechanism': "PLAIN",
+                'sasl.jaas.config': "org.apache.kafka.common.security.plain.PlainLoginModule required username=$ConnectionString password=" + user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'),
+            }
+            config = {**config, **eventhub_config}
 
         consumer_group = user_config.get("KAFKA_CONSUMER_GROUP")
         if consumer_group is not None:

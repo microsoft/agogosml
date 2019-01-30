@@ -174,7 +174,8 @@ def test_when_messages_sent_to_kafka_then_all_messages_are_sent_via_output():
             'config': {
                 "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC_OUTPUT"),
                 "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
-                "TIMEOUT": os.getenv("KAFKA_TIMEOUT")
+                "TIMEOUT": os.getenv("KAFKA_TIMEOUT"),
+                'EVENTHUB_KAFKA_CONNECTION_STRING': os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
             }
         },
         'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),

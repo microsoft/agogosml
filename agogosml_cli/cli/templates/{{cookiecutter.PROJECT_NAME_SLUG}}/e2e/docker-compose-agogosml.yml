@@ -18,6 +18,11 @@ services:
             APP_PORT: 3000
             AZURE_STORAGE_ACCESS_KEY:
             EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_INPUT}
+            #kafka 
+            KAFKA_TOPIC: ${KAFKA_TOPIC}
+            KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
+            KAFKA_ADDRESS: ${KAFKA_ADDRESS}
+            EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
 
     output-writer:
         image: ${CONTAINER_REG}/output_writer:${TAG}
@@ -38,6 +43,11 @@ services:
             OUTPUT_WRITER_PORT: 6000
             OUTPUT_WRITER_HOST: output
             EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_OUTPUT}
+            #kafka             
+            KAFKA_TOPIC: ${KAFKA_TOPIC}
+            KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
+            KAFKA_ADDRESS: ${KAFKA_ADDRESS}
+            EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
 
             
     sample-app:

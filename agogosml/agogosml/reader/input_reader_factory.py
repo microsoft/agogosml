@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 """ Factory for InputReader """
-from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
+from functools import lru_cache
+from typing import Dict
+from typing import Type
+
+from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 from agogosml.common.http_message_sender import HttpMessageSender
-from agogosml.common.kafka_streaming_client import KafkaStreamingClient
+from agogosml.utils.imports import find_implementations
 from agogosml.utils.logger import Logger
 
 from .input_reader import InputReader
+
+StreamingClientType = Type[AbstractStreamingClient]
 
 logger = Logger()
 
@@ -26,7 +32,6 @@ class InputReaderFactory:
             No config were set for the InputReader manager
             ''')
 
-        client = None
         if streaming_client is None:
             if config.get("client") is None:
                 raise Exception('''
@@ -34,16 +39,15 @@ class InputReaderFactory:
                 ''')
 
             client_config = config.get("client")["config"]
-            if config.get("client")["type"] == "kafka":
-                client = KafkaStreamingClient(client_config)
+            client_type = config.get("client")["type"]
 
-            if config.get("client")["type"] == "eventhub":
-                client = EventHubStreamingClient(client_config)
-
-            if client is None:
+            client_class = find_streaming_clients().get(client_type)
+            if client_class is None:
                 raise Exception('''
                 Unknown client type
                 ''')
+
+            client = client_class(client_config)
         else:
             client = streaming_client
 
@@ -66,3 +70,16 @@ class InputReaderFactory:
         :return: true if empty, false otherwise
         """
         return not bool(dictionary)
+
+
+@lru_cache(maxsize=1)
+def find_streaming_clients() -> Dict[str, StreamingClientType]:
+    """
+    >>> senders = find_streaming_clients()
+    >>> sorted(senders.keys())
+    ['eventhub', 'kafka', 'mock']
+    """
+    return {
+        client.__name__.replace('StreamingClient', '').lower(): client
+        for client in find_implementations(AbstractStreamingClient)
+    }

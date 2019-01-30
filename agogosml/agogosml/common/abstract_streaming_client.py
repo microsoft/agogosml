@@ -1,6 +1,7 @@
 """Abstract streaming client class"""
 
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 from typing import Dict
 
 

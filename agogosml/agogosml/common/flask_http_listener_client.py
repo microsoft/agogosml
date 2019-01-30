@@ -1,6 +1,9 @@
 """ Flask client to receive messages from customer app"""
 import threading
-from flask import Flask, request
+
+from flask import Flask
+from flask import request
+
 from .listener_client import ListenerClient
 
 DEFAULT_HOST = '127.0.0.1'

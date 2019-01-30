@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 """Generate command module."""
 
+import json
 from pathlib import Path
 
 import click
-import json
-import _jsonnet
 import giturlparse
-import cli.utils as utils
-from cookiecutter.main import cookiecutter
 from cookiecutter.exceptions import OutputDirExistsException
+from cookiecutter.main import cookiecutter
+
+import _jsonnet
+import cli.utils as utils
 
 # Project files to output with src and dst names.
 PROJ_FILES = {

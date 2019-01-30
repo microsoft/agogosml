@@ -3,17 +3,18 @@ ARG PYTHON_VERSION=3.7.0-alpine3.8
 FROM python:${PYTHON_VERSION} as builder
 
 WORKDIR /usr/src/{{cookiecutter.PROJECT_NAME_SLUG}}
-COPY . /usr/src/{{cookiecutter.PROJECT_NAME_SLUG}}
 
-RUN pip install -r requirements-dev.txt
+COPY requirements-dev.txt .
+RUN pip install --no-cache-dir -r requirements-dev.txt
+
+COPY . .
 
 # Run tests, linter
-RUN pytest testapp.py
-RUN pylint *.py
+RUN pytest testapp.py \
+ && isort --check-only *.py \
+ && flake8 *.py
 
-# Release 
-ARG PYTHON_VERSION=3.7.0-alpine3.8
-
+# Release
 FROM python:${PYTHON_VERSION}
 
 WORKDIR /{{cookiecutter.PROJECT_NAME_SLUG}}

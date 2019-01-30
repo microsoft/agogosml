@@ -36,7 +36,7 @@ class Logger(object):
         self.env_key = env_key
 
     @cached_property
-    def logger(self) -> logging.Logger:
+    def _logger(self) -> logging.Logger:
         value = os.getenv(self.env_key)
         path = Path(value or self.path)
 
@@ -52,7 +52,7 @@ class Logger(object):
         return logging.getLogger(self.name)
 
     @cached_property
-    def telemetry_client(self) -> Union[TelemetryClient, NullTelemetryClient]:
+    def _telemetry(self) -> Union[TelemetryClient, NullTelemetryClient]:
         ikey = os.getenv('APPINSIGHTS_INSTRUMENTATIONKEY')
         if not ikey:
             return NullTelemetryClient()
@@ -89,9 +89,9 @@ class Logger(object):
         self._log(logging.ERROR, message)
 
     def _log(self, level: int, message: str):
-        if not self.logger.isEnabledFor(level):
+        if not self._logger.isEnabledFor(level):
             return
 
-        self.logger.log(level, message)
-        self.telemetry_client.track_trace(
+        self._logger.log(level, message)
+        self._telemetry.track_trace(
             message, severity=logging.getLevelName(level))

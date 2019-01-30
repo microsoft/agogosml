@@ -1,13 +1,14 @@
 """HttpMessageSender."""
 
 import requests
-from .message_sender import MessageSender
+
 from ..utils.logger import Logger
+from .message_sender import MessageSender
 
 logger = Logger()
 
 
-class HttpMessageSender(MessageSender):  # pylint: disable=too-few-public-methods
+class HttpMessageSender(MessageSender):
     """HttpMessageSender."""
 
     def __init__(self, host_endpoint, port_endpoint):

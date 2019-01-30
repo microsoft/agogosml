@@ -8,7 +8,6 @@ from typing import Union
 
 from jsonschema import validate
 
-
 MODULE_PATH = Path(__file__).parent
 SCHEMA_FILE = MODULE_PATH / 'manifest.schema.json'
 TEMPLATES_FOLDER = MODULE_PATH / 'templates'

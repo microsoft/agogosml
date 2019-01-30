@@ -1,13 +1,14 @@
 """ Logger """
-import os
 import logging
 import logging.config
+import os
 from pathlib import Path
-
-import yaml
 from typing import Dict
 from typing import Optional
 from typing import Union
+
+import yaml
+
 from applicationinsights import TelemetryClient
 from applicationinsights.channel import AsynchronousQueue
 from applicationinsights.channel import AsynchronousSender

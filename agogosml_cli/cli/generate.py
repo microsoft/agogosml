@@ -4,12 +4,13 @@
 import json
 from pathlib import Path
 
-import _jsonnet
-import cli.utils as utils
 import click
 import giturlparse
 from cookiecutter.exceptions import OutputDirExistsException
 from cookiecutter.main import cookiecutter
+
+import _jsonnet
+import cli.utils as utils
 
 # Project files to output with src and dst names.
 PROJ_FILES = {

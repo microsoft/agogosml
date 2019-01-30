@@ -5,9 +5,10 @@
 import json
 from pathlib import Path
 
+import click
+
 import _jsonnet
 import cli.utils as utils
-import click
 
 DEFAULT_MANIFEST_FILE = 'manifest/manifest.jsonnet'
 

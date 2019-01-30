@@ -1,28 +1,49 @@
 """ Logger """
+import logging
 import logging.config
 import os
 from pathlib import Path
+from typing import Dict
+from typing import Optional
+from typing import Union
 
 import yaml
+from applicationinsights import TelemetryClient
+from applicationinsights.channel import AsynchronousQueue
+from applicationinsights.channel import AsynchronousSender
+from applicationinsights.channel import TelemetryChannel
+from applicationinsights.channel import TelemetryContext
+from cached_property import cached_property
+from singleton_decorator import singleton
 
 
+class NullTelemetryClient:
+    def track_trace(self, name, properties=None, severity=None):
+        pass
+
+    def track_event(self, name, properties=None, measurements=None):
+        pass
+
+
+@singleton
 class Logger(object):
     """A logger implementation."""
 
-    __instance = None
-    logger = None
+    def __init__(self,
+                 name: str = __name__,
+                 path: str = 'logging.yaml',
+                 env_key: str = 'LOG_CFG',
+                 level: int = logging.INFO):
 
-    @staticmethod
-    def setup_logging(log_path='logging.yaml',
-                      level=logging.INFO,
-                      env_key='LOG_CFG'):
-        """Setup logging configuration."""
+        self.level = level
+        self.name = name
+        self.path = path
+        self.env_key = env_key
 
-        value = os.getenv(env_key, None)
-        if value:
-            path = Path(value)
-        else:
-            path = Path(log_path)
+    @cached_property
+    def _logger(self) -> logging.Logger:
+        value = os.getenv(self.env_key)
+        path = Path(value or self.path)
 
         if path.is_file():
             with path.open('rt') as f:
@@ -31,50 +52,56 @@ class Logger(object):
         else:
             logging.basicConfig(
                 format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-                level=level)
+                level=self.level)
 
-    def __new__(cls, *args, **kwargs):
-        if not cls.__instance:
-            cls.__instance = object.__new__(cls, *args, **kwargs)
-        return cls.__instance
+        return logging.getLogger(self.name)
 
-    def __init__(self,
-                 name=__name__,
-                 path='logging.yaml',
-                 env_key='LOG_CFG',
-                 level=logging.INFO):
+    @cached_property
+    def _telemetry(self) -> Union[TelemetryClient, NullTelemetryClient]:
+        ikey = os.getenv('APPINSIGHTS_INSTRUMENTATIONKEY')
+        if not ikey:
+            return NullTelemetryClient()
 
-        self.level = level
-        self.name = name
-        self.path = path
-        self.env_key = env_key
-        self.logger = None
+        sender = AsynchronousSender()
+        queue = AsynchronousQueue(sender)
+        context = TelemetryContext()
+        context.instrumentation_key = ikey
+        channel = TelemetryChannel(context, queue)
+        return TelemetryClient(ikey, telemetry_channel=channel)
 
-        Logger.setup_logging(
-            log_path=self.path, level=self.level, env_key=self.env_key)
-
-        self.logger = logging.getLogger(self.name)
-
-    def debug(self, message):
+    def debug(self, message: str):
         """
         Log debug message.
 
         :param message: Debug message string.
         """
-        self.logger.debug(message)
+        self._log(logging.DEBUG, message)
 
-    def info(self, message):
+    def info(self, message: str):
         """
         Log info message
 
         :param message: Info message string.
         """
-        self.logger.info(message)
+        self._log(logging.INFO, message)
 
-    def error(self, message):
+    def error(self, message: str):
         """
         Log error message
 
         :param message: Error message string.
         """
-        self.logger.error(message)
+        self._log(logging.ERROR, message)
+
+    def event(self, name: str, props: Optional[Dict[str, str]] = None):
+        props = props or {}
+        self._logger.info('Event %s: %r', name, props)
+        self._telemetry.track_event(name, props)
+
+    def _log(self, level: int, message: str):
+        if not self._logger.isEnabledFor(level):
+            return
+
+        self._logger.log(level, message)
+        self._telemetry.track_trace(
+            message, severity=logging.getLevelName(level))

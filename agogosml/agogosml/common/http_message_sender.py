@@ -18,27 +18,27 @@ class HttpMessageSender(MessageSender):
             PORT
             SCHEME
         """
-        host_endpoint = config.get('HOST')
-        port_endpoint = config.get('PORT')
-        scheme_endpoint = config.get('SCHEME', 'http')
+        host = config.get('HOST')
+        port = config.get('PORT')
+        scheme = config.get('SCHEME', 'http')
 
-        logger.info("host_endpoint: %s", host_endpoint)
-        logger.info("port_endpoint: %s", port_endpoint)
-        logger.info("scheme_endpoint: %s", scheme_endpoint)
+        logger.info("host: %s", host)
+        logger.info("port: %s", port)
+        logger.info("scheme: %s", scheme)
 
-        if host_endpoint is None:
+        if host is None:
             raise ValueError('Host endpoint cannot be None.')
 
-        if host_endpoint == "":
+        if host == "":
             raise ValueError('Host endpoint cannot be empty.')
 
-        if int(port_endpoint) <= 0:
+        if int(port) <= 0:
             raise ValueError('Port cannot be 0 or less.')
 
-        if scheme_endpoint not in ('http', 'https'):
+        if scheme not in ('http', 'https'):
             raise ValueError('Scheme must be http or https')
 
-        self.server_address = "%s://%s:%s" % (scheme_endpoint, host_endpoint, port_endpoint)
+        self.server_address = "%s://%s:%s" % (scheme, host, port)
 
     def send(self, message):
         """

@@ -73,10 +73,10 @@ class KafkaStreamingClient(AbstractStreamingClient):
         """
 
         if err is not None:
-            logger.error('Message delivery failed: {}'.format(err))
+            logger.error('Message delivery failed: %s', err)
         else:
-            logger.info('Message delivered to {} [{}]'.format(
-                msg.topic(), msg.partition()))
+            logger.info('Message delivered to %s [%s]',
+                        msg.topic(), msg.partition())
 
     def send(self, message: str, *args, **kwargs):
         """
@@ -94,7 +94,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             self.producer.flush()
             return True
         except Exception as e:
-            logger.error('Error sending message to kafka:' + str(e))
+            logger.error('Error sending message to kafka: %s', e)
             return False
 
     def stop(self, *args, **kwargs):
@@ -119,8 +119,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
         """
         if msg.error().code() == KafkaError._PARTITION_EOF:
             # End of partition event
-            logger.error('%% %s [%d] reached end at offset %d\n' %
-                         (msg.topic(), msg.partition(), msg.offset()))
+            logger.error('%% %s [%d] reached end at offset %d\n',
+                         msg.topic(), msg.partition(), msg.offset())
         else:
             # Error
             raise KafkaException(msg.error())
@@ -170,6 +170,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
             return None
         else:
             # Proper message
-            # logger.info('kafka read message: {}, from topic: {}'.format(msg.value(), msg.topic()))
+            # logger.info('kafka read message: %s, from topic: %s', msg.value(), msg.topic())
             self.consumer.commit(msg)
             return msg.value()

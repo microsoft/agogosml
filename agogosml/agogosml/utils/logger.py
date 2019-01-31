@@ -69,39 +69,39 @@ class Logger(object):
         channel = TelemetryChannel(context, queue)
         return TelemetryClient(ikey, telemetry_channel=channel)
 
-    def debug(self, message: str):
+    def debug(self, message: str, *args):
         """
         Log debug message.
 
         :param message: Debug message string.
         """
-        self._log(logging.DEBUG, message)
+        self._log(logging.DEBUG, message, *args)
 
-    def info(self, message: str):
+    def info(self, message: str, *args):
         """
         Log info message
 
         :param message: Info message string.
         """
-        self._log(logging.INFO, message)
+        self._log(logging.INFO, message, *args)
 
-    def error(self, message: str):
+    def error(self, message: str, *args):
         """
         Log error message
 
         :param message: Error message string.
         """
-        self._log(logging.ERROR, message)
+        self._log(logging.ERROR, message, *args)
 
     def event(self, name: str, props: Optional[Dict[str, str]] = None):
         props = props or {}
         self._logger.info('Event %s: %r', name, props)
         self._telemetry.track_event(name, props)
 
-    def _log(self, level: int, message: str):
+    def _log(self, level: int, message: str, *args):
         if not self._logger.isEnabledFor(level):
             return
 
-        self._logger.log(level, message)
+        self._logger.log(level, message, *args)
         self._telemetry.track_trace(
             message, severity=logging.getLevelName(level))

@@ -21,8 +21,8 @@ class HttpMessageSender(MessageSender):
         host_endpoint = config.get('HOST')
         port_endpoint = config.get('PORT')
 
-        logger.info("host_endpoint: {}".format(host_endpoint))
-        logger.info("port_endpoint: {}".format(port_endpoint))
+        logger.info("host_endpoint: %s", host_endpoint)
+        logger.info("port_endpoint: %s", port_endpoint)
 
         if host_endpoint is None:
             raise ValueError('Host endpoint cannot be None.')
@@ -48,15 +48,14 @@ class HttpMessageSender(MessageSender):
             # TODO: Add retries as some of the messages are failing to send
             request = requests.post(server_address, data=message)
             if request.status_code != 200:
-                logger.error(
-                    "Error with a request {} and message not sent was {}".
-                    format(request.status_code, message))
-                print("Error with a request {} and message not sent was {}".
-                      format(request.status_code, message))
+                logger.error("Error with a request %s and message not sent was %s",
+                             request.status_code, message)
+                print("Error with a request %s and message not sent was %s" %
+                      (request.status_code, message))
             else:
                 return_value = True
 
         except Exception as e_e:
-            logger.error('Failed to send request: ' + str(e_e))
+            logger.error('Failed to send request: %s', e_e)
 
         return return_value

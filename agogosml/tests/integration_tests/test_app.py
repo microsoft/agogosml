@@ -15,7 +15,7 @@ class TestApp:
         self.listener.start(self.on_message_received)
 
     def on_message_received(self, message):
-        logger.info('Test App message received: ' + message)
+        logger.info('Test App message received: %s', message)
         sender_result = self.sender.send(message)
-        logger.info('Sender result: ' + str(sender_result))
+        logger.info('Sender result: %s', sender_result)
         return sender_result

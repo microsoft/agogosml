@@ -25,7 +25,7 @@ def json_arg(value: str):
     try:
         return loads(value)
     except ValueError:
-        raise ArgumentTypeError('{} is not in JSON format'.format(value))
+        raise ArgumentTypeError('%s is not in JSON format' % value)
 
 
 def main(messages: IO[str], sender_class: StreamingClientType, config: Dict[str, str]):

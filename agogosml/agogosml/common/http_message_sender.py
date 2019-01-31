@@ -11,12 +11,16 @@ logger = Logger()
 class HttpMessageSender(MessageSender):
     """HttpMessageSender."""
 
-    def __init__(self, host_endpoint, port_endpoint):
+    def __init__(self, config: dict):
         """
+        Configuration keys:
 
-        :param host_endpoint: Host endpoint.
-        :param port_endpoint: Port number.
+            HOST
+            PORT
         """
+        host_endpoint = config.get('HOST')
+        port_endpoint = config.get('PORT')
+
         logger.info("host_endpoint: {}".format(host_endpoint))
         logger.info("port_endpoint: {}".format(port_endpoint))
 

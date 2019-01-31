@@ -77,7 +77,7 @@ class HttpClientMock(ListenerClient):
 
 
 class MessageSenderMock(MessageSender):
-    def __init__(self):
+    def __init__(self, config: dict):
         self.msg = None
         self.should_fail_to_send = None
         pass

@@ -50,7 +50,7 @@ class InputReaderFactory:
         app_host = config.get('APP_HOST')
         app_port = config.get('APP_PORT')
 
-        msg_sender = HttpMessageSender(app_host, app_port)
+        msg_sender = HttpMessageSender({'HOST': app_host, 'PORT': app_port})
 
         return InputReader(client, msg_sender)
 

@@ -50,8 +50,8 @@ class HttpMessageSender(MessageSender):
             if request.status_code != 200:
                 logger.error("Error with a request %s and message not sent was %s",
                              request.status_code, message)
-                print("Error with a request %s and message not sent was %s",
-                      request.status_code, message)
+                print("Error with a request %s and message not sent was %s" %
+                      (request.status_code, message))
             else:
                 return_value = True
 

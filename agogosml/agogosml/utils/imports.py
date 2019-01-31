@@ -18,7 +18,7 @@ def get_base_module(interface) -> Tuple[str, Path]:
 
 def import_subpackages(module_prefix: str, module_path: Path):
     for _, module, _ in walk_packages([str(module_path)]):
-        sub_module_name = '{}.{}'.format(module_prefix, module)
+        sub_module_name = '%s.%s' % (module_prefix, module)
         import_module(sub_module_name)
 
 

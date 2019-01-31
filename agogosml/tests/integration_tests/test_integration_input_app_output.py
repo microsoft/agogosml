@@ -195,12 +195,12 @@ def test_when_messages_sent_to_kafka_then_all_messages_are_sent_via_output():
     print('sending test message to reader')
 
     test_msg = str(time.clock())
-    print("sending {} to input topic".format(test_msg))
+    print("sending %s to input topic" % test_msg)
     # send a message from INPUT reader, and expect it to flow in the pipeline,
     # and eventually be picked up by the output writer
     send_message_to_kafka(test_msg)
     last_msg = read_message_from_kafka()
-    print("received {} from output topic".format(last_msg))
+    print("received %s from output topic" % last_msg)
     assert last_msg == test_msg
 
     ir.stop_incoming_messages()

@@ -26,10 +26,6 @@ class HttpMessageSender(MessageSender):
         retries = config.get('RETRIES', 3)
         backoff = config.get('BACKOFF', 1)
 
-        logger.info("host: %s", host)
-        logger.info("port: %s", port)
-        logger.info("scheme: %s", scheme)
-
         if not host:
             raise ValueError('Host endpoint must be provided.')
 
@@ -42,6 +38,8 @@ class HttpMessageSender(MessageSender):
         self.server_address = "%s://%s:%s" % (scheme, host, port)
         self.retries = retries
         self.backoff = backoff
+
+        logger.info("server_address: %s", self.server_address)
 
     def send(self, message):
         """

@@ -16,12 +16,15 @@ class HttpMessageSender(MessageSender):
 
             HOST
             PORT
+            SCHEME
         """
         host_endpoint = config.get('HOST')
         port_endpoint = config.get('PORT')
+        scheme_endpoint = config.get('SCHEME', 'http')
 
         logger.info("host_endpoint: %s", host_endpoint)
         logger.info("port_endpoint: %s", port_endpoint)
+        logger.info("scheme_endpoint: %s", scheme_endpoint)
 
         if host_endpoint is None:
             raise ValueError('Host endpoint cannot be None.')
@@ -32,8 +35,12 @@ class HttpMessageSender(MessageSender):
         if int(port_endpoint) <= 0:
             raise ValueError('Port cannot be 0 or less.')
 
+        if scheme_endpoint not in ('http', 'https'):
+            raise ValueError('Scheme must be http or https')
+
         self.host_endpoint = host_endpoint
         self.port_endpoint = port_endpoint
+        self.scheme_endpoint = scheme_endpoint
 
     def send(self, message):
         """
@@ -43,7 +50,7 @@ class HttpMessageSender(MessageSender):
         """
         return_value = False
         try:
-            server_address = "http://" + self.host_endpoint + ":" + self.port_endpoint
+            server_address = "%s://%s:%s" % (self.scheme_endpoint, self.host_endpoint, self.port_endpoint)
             status_code = post_with_retries(server_address, message)
             if status_code != 200:
                 logger.error("Error with a request %s and message not sent was %s",

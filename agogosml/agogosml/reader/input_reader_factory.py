@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 """ Factory for InputReader """
-from functools import lru_cache
-from typing import Dict
-from typing import Type
 
-from agogosml.common.abstract_streaming_client import AbstractStreamingClient
+from agogosml.common.abstract_streaming_client import create_streaming_client_from_config
 from agogosml.common.http_message_sender import HttpMessageSender
-from agogosml.utils.imports import find_implementations
 from agogosml.utils.logger import Logger
 
 from .input_reader import InputReader
-
-StreamingClientType = Type[AbstractStreamingClient]
 
 logger = Logger()
 
@@ -30,21 +24,7 @@ class InputReaderFactory:
         if InputReaderFactory.is_empty(config):
             raise Exception('No config were set for the InputReader manager')
 
-        if streaming_client is None:
-            try:
-                client_config = config['client']['config']
-                client_type = config['client']['type']
-            except KeyError:
-                raise Exception('client cannot be empty')
-
-            try:
-                client_class = find_streaming_clients()[client_type]
-            except KeyError:
-                raise Exception('Unknown client type')
-
-            client = client_class(client_config)
-        else:
-            client = streaming_client
+        client = streaming_client or create_streaming_client_from_config(config.get('client'))
 
         # host and port from the client
         app_host = config.get('APP_HOST')
@@ -65,16 +45,3 @@ class InputReaderFactory:
         :return: true if empty, false otherwise
         """
         return not bool(dictionary)
-
-
-@lru_cache(maxsize=1)
-def find_streaming_clients() -> Dict[str, StreamingClientType]:
-    """
-    >>> senders = find_streaming_clients()
-    >>> sorted(senders.keys())
-    ['eventhub', 'kafka', 'mock']
-    """
-    return {
-        client.__name__.replace('StreamingClient', '').lower(): client
-        for client in find_implementations(AbstractStreamingClient)
-    }

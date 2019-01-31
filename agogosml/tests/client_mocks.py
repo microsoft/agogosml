@@ -15,7 +15,7 @@ class StreamingClientMock(AbstractStreamingClient):
         pass
 
     def send(self, msg):
-        print('Streaming Client Mock send message: '+msg)
+        print('Streaming Client Mock send message:', msg)
         if self.should_fail_to_send:
             self.sent = False
             return False

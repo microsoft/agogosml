@@ -1,5 +1,7 @@
 import pytest
 import os
+
+from agogosml.common.broadcast_streaming_client import BroadcastStreamingClient
 from agogosml.writer.output_writer import OutputWriter
 from agogosml.writer.output_writer_factory import OutputWriterFactory
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
@@ -28,6 +30,41 @@ def test_on_message_received_sent_called(mock_streaming_client,
     ow = OutputWriter(mock_streaming_client, mock_listener_client)
     ow.on_message_received('test')
     assert mock_streaming_client.get_sent()
+
+
+def test_broadcast_success(*fixtures):
+    mock1 = StreamingClientMock()
+    mock2 = StreamingClientMock()
+    broadcast = BroadcastStreamingClient({'CLIENTS': [mock1, mock2]})
+
+    success = broadcast.send({'test': 'message'})
+
+    assert success
+    assert mock1.get_sent() and mock2.get_sent()
+
+
+def test_broadcast_failure(*fixtures):
+    mock1 = StreamingClientMock()
+    mock2 = StreamingClientMock()
+    mock3 = StreamingClientMock()
+    broadcast = BroadcastStreamingClient({'CLIENTS': [mock1, mock2, mock3]})
+
+    mock2.set_fail_send(True)
+    success = broadcast.send({'test': 'message'})
+
+    assert not success
+    assert mock1.get_sent() and not mock2.get_sent() and mock3.get_sent()
+
+
+def test_broadcast_create_from_config(*fixtures):
+    broadcast = BroadcastStreamingClient({'CLIENTS': [
+        {'type': 'mock', 'config': {}},
+        {'type': 'mock', 'config': {}},
+    ]})
+
+    success = broadcast.send({'test': 'message'})
+
+    assert success
 
 
 def test_on_listener_event_sent_called(mock_streaming_client,

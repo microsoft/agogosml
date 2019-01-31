@@ -8,8 +8,8 @@ from typing import IO
 from typing import Dict
 from typing import Tuple
 
-from agogosml.reader.input_reader_factory import StreamingClientType
-from agogosml.reader.input_reader_factory import find_streaming_clients
+from agogosml.common.abstract_streaming_client import StreamingClientType
+from agogosml.common.abstract_streaming_client import find_streaming_clients
 
 
 def key_value_arg(value: str) -> Tuple[str, str]:

@@ -38,9 +38,7 @@ class HttpMessageSender(MessageSender):
         if scheme_endpoint not in ('http', 'https'):
             raise ValueError('Scheme must be http or https')
 
-        self.host_endpoint = host_endpoint
-        self.port_endpoint = port_endpoint
-        self.scheme_endpoint = scheme_endpoint
+        self.server_address = "%s://%s:%s" % (scheme_endpoint, host_endpoint, port_endpoint)
 
     def send(self, message):
         """
@@ -50,8 +48,7 @@ class HttpMessageSender(MessageSender):
         """
         return_value = False
         try:
-            server_address = "%s://%s:%s" % (self.scheme_endpoint, self.host_endpoint, self.port_endpoint)
-            status_code = post_with_retries(server_address, message)
+            status_code = post_with_retries(self.server_address, message)
             if status_code != 200:
                 logger.error("Error with a request %s and message not sent was %s",
                              status_code, message)

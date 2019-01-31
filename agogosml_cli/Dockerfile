@@ -28,8 +28,9 @@ ENV PYTHONUNBUFFERED=1
 
 COPY --from=builder /usr/src/agogosml_cli/dist /dist
 
-RUN apk add --no-cache --update --virtual .build-deps \
-    make cmake g++
+# G++ is a runtime dependency if you want to be able to use this docker container
+RUN apk add --no-cache --update --virtual .build-deps make cmake && \
+    apk add --no-cache --update --virtual .rt-deps g++
 
 RUN pip install /dist/agogosml_cli-*.tar.gz
 

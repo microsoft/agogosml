@@ -30,11 +30,8 @@ class HttpMessageSender(MessageSender):
         logger.info("port: %s", port)
         logger.info("scheme: %s", scheme)
 
-        if host is None:
-            raise ValueError('Host endpoint cannot be None.')
-
-        if host == "":
-            raise ValueError('Host endpoint cannot be empty.')
+        if not host:
+            raise ValueError('Host endpoint must be provided.')
 
         if int(port) <= 0:
             raise ValueError('Port cannot be 0 or less.')

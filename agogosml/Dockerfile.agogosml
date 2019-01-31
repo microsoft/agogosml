@@ -38,14 +38,13 @@ RUN pipenv run make clean && \
     pipenv run make test && \
     # pipenv run make test-all && \ <- FIXME: Tox is broken.
     pipenv run make docs && \
+    pipenv lock --requirements | grep -v '^-i' > requirements.txt && \
     pipenv run make dist && \
-    pipenv lock --requirements > requirements.txt && \
     pipenv --rm
 
 FROM builder as agogosml
 
-RUN pip install -r requirements.txt && \
-    pip install /usr/src/agogosml/dist/agogosml-*.tar.gz && \
+RUN pip install /usr/src/agogosml/dist/agogosml-*.tar.gz && \
     rm -rf /usr/src/agogosml && \
     rm -rf /root/librdkafka && \
     apk del .build-deps

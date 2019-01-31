@@ -21,6 +21,7 @@ RUN pipenv run make clean && \
     pipenv run make test && \
     # pipenv run make test-all && \ <- FIXME: Tox is broken, no py3.5, 3.6 interpreter in image
     pipenv run make docs && \
+    pipenv lock --requirements | grep -v '^-i' > requirements.txt && \
     pipenv run make dist
 
 FROM python:${PYTHON_VERSION}

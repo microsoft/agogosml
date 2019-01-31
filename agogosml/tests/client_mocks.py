@@ -7,7 +7,7 @@ class StreamingClientMock(AbstractStreamingClient):
     """
     A class to mock functionality at the streaming client level.
     """
-    def __init__(self):
+    def __init__(self, config: dict = None):
         self.sent = False
         self.receiving = False
         self.last_message = None
@@ -15,7 +15,7 @@ class StreamingClientMock(AbstractStreamingClient):
         pass
 
     def send(self, msg):
-        print('Streaming Client Mock send message: '+msg)
+        print('Streaming Client Mock send message:', msg)
         if self.should_fail_to_send:
             self.sent = False
             return False

@@ -52,7 +52,7 @@ class HttpClientMock(ListenerClient):
     """
     A class to mock functionality at the http client level
     """
-    def __init__(self, port):
+    def __init__(self, config: dict):
         self.callback = None
         self.startCalled = False
         self.stopCalled = False

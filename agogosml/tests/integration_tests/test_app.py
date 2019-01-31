@@ -8,7 +8,7 @@ logger = Logger()
 class TestApp:
 
     def __init__(self, app_port, app_host, output_port, output_host):
-        self.listener = FlaskHttpListenerClient(app_port, app_host)
+        self.listener = FlaskHttpListenerClient({'PORT': app_port, 'HOST': app_host})
         self.sender = HttpMessageSender(output_host, output_port)
 
     def start(self):

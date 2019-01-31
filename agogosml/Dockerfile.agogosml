@@ -44,7 +44,7 @@ RUN pipenv run make clean && \
 
 FROM builder as agogosml
 
-RUN pip install /usr/src/agogosml/dist/agogosml-*.tar.gz && \
+RUN pip install --no-cache-dir /usr/src/agogosml/dist/agogosml-*.tar.gz && \
     rm -rf /usr/src/agogosml && \
     rm -rf /root/librdkafka && \
     apk del .build-deps

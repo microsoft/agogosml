@@ -33,7 +33,7 @@ COPY --from=builder /usr/src/agogosml_cli/dist /dist
 RUN apk add --no-cache --update --virtual .build-deps make cmake && \
     apk add --no-cache --update --virtual .rt-deps g++
 
-RUN pip install /dist/agogosml_cli-*.tar.gz
+RUN pip install --no-cache-dir /dist/agogosml_cli-*.tar.gz
 
 RUN apk del .build-deps
 

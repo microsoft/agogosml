@@ -10,9 +10,15 @@ DEFAULT_HOST = '127.0.0.1'
 
 
 class FlaskHttpListenerClient(ListenerClient):
-    def __init__(self, port, host=DEFAULT_HOST):
-        self.port = port
-        self.host = host
+    def __init__(self, config: dict):
+        """
+        Configuration keys:
+
+            PORT
+            HOST
+        """
+        self.port = int(config.get('PORT'))
+        self.host = config.get('HOST', DEFAULT_HOST)
 
     def thread_flask(self):
         app = Flask(__name__)
@@ -46,4 +52,4 @@ class FlaskHttpListenerClient(ListenerClient):
                 raise RuntimeError('Not running with the Werkzeug Server')
             func()
         except Exception as e:
-            print('error while shutting down flask server: ' + str(e))
+            print('error while shutting down flask server: %s' % e)

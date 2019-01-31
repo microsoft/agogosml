@@ -1,9 +1,8 @@
 """HttpMessageSender."""
 
-import requests
-
-from ..utils.logger import Logger
-from .message_sender import MessageSender
+from agogosml.common.message_sender import MessageSender
+from agogosml.utils.http_request import post_with_retries
+from agogosml.utils.logger import Logger
 
 logger = Logger()
 
@@ -11,26 +10,36 @@ logger = Logger()
 class HttpMessageSender(MessageSender):
     """HttpMessageSender."""
 
-    def __init__(self, host_endpoint, port_endpoint):
+    def __init__(self, config: dict):
         """
+        Configuration keys:
 
-        :param host_endpoint: Host endpoint.
-        :param port_endpoint: Port number.
+            HOST
+            PORT
+            SCHEME
+            RETRIES
+            BACKOFF
         """
-        logger.info("host_endpoint: {}".format(host_endpoint))
-        logger.info("port_endpoint: {}".format(port_endpoint))
+        host = config.get('HOST')
+        port = config.get('PORT')
+        scheme = config.get('SCHEME', 'http')
+        retries = config.get('RETRIES', 3)
+        backoff = config.get('BACKOFF', 1)
 
-        if host_endpoint is None:
-            raise ValueError('Host endpoint cannot be None.')
+        if not host:
+            raise ValueError('Host endpoint must be provided.')
 
-        if host_endpoint == "":
-            raise ValueError('Host endpoint cannot be empty.')
-
-        if int(port_endpoint) <= 0:
+        if int(port) <= 0:
             raise ValueError('Port cannot be 0 or less.')
 
-        self.host_endpoint = host_endpoint
-        self.port_endpoint = port_endpoint
+        if scheme not in ('http', 'https'):
+            raise ValueError('Scheme must be http or https')
+
+        self.server_address = "%s://%s:%s" % (scheme, host, port)
+        self.retries = retries
+        self.backoff = backoff
+
+        logger.info("server_address: %s", self.server_address)
 
     def send(self, message):
         """
@@ -40,19 +49,20 @@ class HttpMessageSender(MessageSender):
         """
         return_value = False
         try:
-            server_address = "http://" + self.host_endpoint + ":" + self.port_endpoint
-            # TODO: Add retries as some of the messages are failing to send
-            request = requests.post(server_address, data=message)
-            if request.status_code != 200:
-                logger.error(
-                    "Error with a request {} and message not sent was {}".
-                    format(request.status_code, message))
-                print("Error with a request {} and message not sent was {}".
-                      format(request.status_code, message))
+            status_code = post_with_retries(
+                self.server_address, message,
+                retries=self.retries,
+                backoff=self.backoff)
+
+            if status_code != 200:
+                logger.error("Error with a request %s and message not sent was %s",
+                             status_code, message)
+                print("Error with a request %s and message not sent was %s" %
+                      (status_code, message))
             else:
                 return_value = True
 
         except Exception as e_e:
-            logger.error('Failed to send request: ' + str(e_e))
+            logger.error('Failed to send request: %s', e_e)
 
         return return_value

@@ -8,7 +8,7 @@ class MessageSender(ABC):
     """Message Sender class."""
 
     @abstractmethod
-    def __init__(self):
+    def __init__(self, config: dict):
         pass
 
     @abstractmethod

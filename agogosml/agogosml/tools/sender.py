@@ -3,29 +3,29 @@
 from argparse import ArgumentParser
 from argparse import ArgumentTypeError
 from argparse import FileType
+from json import loads
 from sys import stdin
 from typing import IO
 from typing import Dict
-from typing import Tuple
 
-from agogosml.reader.input_reader_factory import StreamingClientType
-from agogosml.reader.input_reader_factory import find_streaming_clients
+from agogosml.common.abstract_streaming_client import StreamingClientType
+from agogosml.common.abstract_streaming_client import find_streaming_clients
 
 
-def key_value_arg(value: str) -> Tuple[str, str]:
+def json_arg(value: str):
     """
-    >>> key_value_arg('foo=bar')
-    ('foo', 'bar')
+    >>> json_arg('{"foo": "bar", "baz": [1, 2]}')
+    {'foo': 'bar', 'baz': [1, 2]}
 
-    >>> key_value_arg('badValue')
+    >>> json_arg('{')
     Traceback (most recent call last):
         ...
-    argparse.ArgumentTypeError: badValue is not in format key=value
+    argparse.ArgumentTypeError: { is not in JSON format
     """
-    parts = value.split('=')
-    if len(parts) != 2:
-        raise ArgumentTypeError('{} is not in format key=value'.format(value))
-    return parts[0], parts[1]
+    try:
+        return loads(value)
+    except ValueError:
+        raise ArgumentTypeError('%s is not in JSON format' % value)
 
 
 def main(messages: IO[str], sender_class: StreamingClientType, config: Dict[str, str]):
@@ -44,11 +44,11 @@ def cli():
     parser.add_argument('--sender', choices=sorted(streaming_clients),
                         required=True, default='kafka',
                         help='The sender to use')
-    parser.add_argument('config', nargs='*', type=key_value_arg,
-                        help='Key-value configuration passed to the sender')
+    parser.add_argument('config', type=json_arg,
+                        help='JSON configuration passed to the sender')
     args = parser.parse_args()
 
-    main(args.infile, streaming_clients[args.sender], dict(args.config))
+    main(args.infile, streaming_clients[args.sender], args.config)
 
 
 if __name__ == '__main__':

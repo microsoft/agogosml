@@ -24,7 +24,7 @@ class EventProcessor(AbstractEventProcessor):
         """
         Called by processor host to initialize the event processor.
         """
-        logger.info("Connection established {}".format(context.partition_id))
+        logger.info("Connection established %s", context.partition_id)
 
     async def close_async(self, context, reason):
         """
@@ -36,10 +36,8 @@ class EventProcessor(AbstractEventProcessor):
         :param reason: Reason for closing the async loop.
         :type reason: string
         """
-        logger.info(
-            "Connection closed (reason {}, id {}, offset {}, sq_number {})".
-            format(reason, context.partition_id, context.offset,
-                   context.sequence_number))
+        logger.info("Connection closed (reason %s, id %s, offset %s, sq_number %s)",
+                    reason, context.partition_id, context.offset, context.sequence_number)
 
     async def process_events_async(self, context, messages):
         """
@@ -55,8 +53,8 @@ class EventProcessor(AbstractEventProcessor):
             message_json = message.body_as_str(encoding='UTF-8')
             if self.on_message_received_callback is not None:
                 self.on_message_received_callback(message_json)
-                logger.debug("Received message: {}".format(message_json))
-        logger.info("Events processed {}".format(context.sequence_number))
+                logger.debug("Received message: %s", message_json)
+        logger.info("Events processed %s", context.sequence_number)
         await context.checkpoint_async()
 
     async def process_error_async(self, context, error):
@@ -69,4 +67,4 @@ class EventProcessor(AbstractEventProcessor):
         :type context: ~azure.eventprocessorhost.PartitionContext
         :param error: The error that occured.
         """
-        logger.error("Event Processor Error {!r}".format(error))
+        logger.error("Event Processor Error %s", error)

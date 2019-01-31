@@ -85,7 +85,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 self.sender = self.send_client.add_sender()
                 self.send_client.run()
             except Exception as e:
-                logger.error('Failed to init EH send client: ' + str(e))
+                logger.error('Failed to init EH send client: %s', e)
                 raise
 
     def start_receiving(self, on_message_received_callback):
@@ -119,17 +119,17 @@ class EventHubStreamingClient(AbstractStreamingClient):
         """
         try:
             self.sender.send(EventData(body=message))
-            logger.info('Sent message: {}'.format(message))
+            logger.info('Sent message: %s', message)
             return True
         except Exception as e:
-            logger.error('Failed to send message to EH: ' + str(e))
+            logger.error('Failed to send message to EH: %s', e)
             return False
 
     def stop(self):
         try:
             self.send_client.stop()
         except Exception as e:
-            logger.error('Failed to close send client: ' + str(e))
+            logger.error('Failed to close send client: %s', e)
 
     @staticmethod
     async def wait_and_close(host, timeout):

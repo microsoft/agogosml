@@ -11,7 +11,7 @@ from agogosml.utils.imports import find_implementations
 
 class AbstractStreamingClient(ABC):
     @abstractmethod
-    def __init__(self, config: Dict[str, str]):
+    def __init__(self, config: dict):
         """
         Abstract Streaming Client
 

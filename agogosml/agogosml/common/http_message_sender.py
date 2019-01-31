@@ -1,8 +1,8 @@
 """HttpMessageSender."""
 
+from agogosml.common.message_sender import MessageSender
 from agogosml.utils.http_request import post_with_retries
-from ..utils.logger import Logger
-from .message_sender import MessageSender
+from agogosml.utils.logger import Logger
 
 logger = Logger()
 

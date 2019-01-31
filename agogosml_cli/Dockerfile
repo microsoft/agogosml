@@ -31,11 +31,9 @@ COPY --from=builder /usr/src/agogosml_cli/dist /dist
 
 # G++ is a runtime dependency if you want to be able to use this docker container
 RUN apk add --no-cache --update --virtual .build-deps make cmake && \
-    apk add --no-cache --update --virtual .rt-deps g++
-
-RUN pip install --no-cache-dir /dist/agogosml_cli-*.tar.gz
-
-RUN apk del .build-deps
+    apk add --no-cache --update --virtual .rt-deps g++ && \
+    pip install --no-cache-dir /dist/agogosml_cli-*.tar.gz && \
+    apk del .build-deps
 
 WORKDIR /home
 

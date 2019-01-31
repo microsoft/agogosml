@@ -20,16 +20,11 @@ class OutputWriterFactory:
         streaming_client and listener.
         """
 
-        client = None
-
         if OutputWriterFactory.is_empty(config):
-            raise Exception('''
-            No config was set for the OutputWriterFactory
-            ''')
+            raise Exception('No config was set for the OutputWriterFactory')
 
         client = streaming_client or create_streaming_client_from_config(config)
 
-        listener = None
         if listener_client is None:
             port = config.get("OUTPUT_WRITER_PORT")
             host = config.get("OUTPUT_WRITER_HOST")

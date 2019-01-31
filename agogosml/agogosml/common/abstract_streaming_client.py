@@ -52,9 +52,10 @@ def find_streaming_clients() -> Dict[str, StreamingClientType]:
 
 
 def create_streaming_client_from_config(config: dict) -> AbstractStreamingClient:
+    config = config or {}
     try:
-        client_config = config['client']['config']
-        client_type = config['client']['type']
+        client_config = config['config']
+        client_type = config['type']
     except KeyError:
         raise Exception('client cannot be empty')
 

@@ -24,7 +24,7 @@ class InputReaderFactory:
         if InputReaderFactory.is_empty(config):
             raise Exception('No config were set for the InputReader manager')
 
-        client = streaming_client or create_streaming_client_from_config(config)
+        client = streaming_client or create_streaming_client_from_config(config.get('client'))
 
         # host and port from the client
         app_host = config.get('APP_HOST')

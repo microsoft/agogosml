@@ -17,10 +17,14 @@ class HttpMessageSender(MessageSender):
             HOST
             PORT
             SCHEME
+            RETRIES
+            BACKOFF
         """
         host = config.get('HOST')
         port = config.get('PORT')
         scheme = config.get('SCHEME', 'http')
+        retries = config.get('RETRIES', 3)
+        backoff = config.get('BACKOFF', 1)
 
         logger.info("host: %s", host)
         logger.info("port: %s", port)
@@ -39,6 +43,8 @@ class HttpMessageSender(MessageSender):
             raise ValueError('Scheme must be http or https')
 
         self.server_address = "%s://%s:%s" % (scheme, host, port)
+        self.retries = retries
+        self.backoff = backoff
 
     def send(self, message):
         """
@@ -48,7 +54,11 @@ class HttpMessageSender(MessageSender):
         """
         return_value = False
         try:
-            status_code = post_with_retries(self.server_address, message)
+            status_code = post_with_retries(
+                self.server_address, message,
+                retries=self.retries,
+                backoff=self.backoff)
+
             if status_code != 200:
                 logger.error("Error with a request %s and message not sent was %s",
                              status_code, message)

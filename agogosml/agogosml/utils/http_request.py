@@ -4,7 +4,7 @@ from requests.exceptions import RetryError
 from urllib3 import Retry
 
 
-def post_with_retries(url: str, data: dict, retries: int = 5, backoff: float = 1) -> int:
+def post_with_retries(url: str, data: dict, retries: int, backoff: float) -> int:
     """
     >>> post_with_retries('http://httpstat.us/503', {}, retries=1, backoff=0)
     500

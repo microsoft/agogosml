@@ -18,11 +18,6 @@ check_variable_exists () {
     fi
 }
 
-check_variable_exists "ARM_SUBSCRIPTION_ID"
-check_variable_exists "ARM_CLIENT_ID"
-check_variable_exists "ARM_CLIENT_SECRET"
-check_variable_exists "ARM_TENANT_ID"
-check_variable_exists "ARM_ENVIRONMENT"
 check_variable_exists "STORAGE_ACCOUNT_NAME"
 check_variable_exists "ARM_ACCESS_KEY"
 

@@ -29,7 +29,7 @@ class OutputWriterFactory:
             port = config.get("OUTPUT_WRITER_PORT")
             host = config.get("OUTPUT_WRITER_HOST")
 
-            listener = FlaskHttpListenerClient(port, host)
+            listener = FlaskHttpListenerClient({'PORT': port, 'HOST': host})
         else:
             listener = listener_client
 

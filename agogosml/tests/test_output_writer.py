@@ -17,7 +17,7 @@ def mock_streaming_client():
 
 @pytest.fixture
 def mock_listener_client():
-    return HttpClientMock(0)
+    return HttpClientMock({'PORT': 0})
 
 
 def test_when_ctor_instance_created(mock_streaming_client, mock_listener_client):

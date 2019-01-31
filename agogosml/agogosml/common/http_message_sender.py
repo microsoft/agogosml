@@ -1,7 +1,6 @@
 """HttpMessageSender."""
 
-import requests
-
+from agogosml.utils.http_request import post_with_retries
 from ..utils.logger import Logger
 from .message_sender import MessageSender
 
@@ -45,13 +44,12 @@ class HttpMessageSender(MessageSender):
         return_value = False
         try:
             server_address = "http://" + self.host_endpoint + ":" + self.port_endpoint
-            # TODO: Add retries as some of the messages are failing to send
-            request = requests.post(server_address, data=message)
-            if request.status_code != 200:
+            status_code = post_with_retries(server_address, message)
+            if status_code != 200:
                 logger.error("Error with a request %s and message not sent was %s",
-                             request.status_code, message)
+                             status_code, message)
                 print("Error with a request %s and message not sent was %s" %
-                      (request.status_code, message))
+                      (status_code, message))
             else:
                 return_value = True
 

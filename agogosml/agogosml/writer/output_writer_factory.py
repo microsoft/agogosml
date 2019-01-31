@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Factory for OutputWriter """
-
-from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
+from agogosml.common.abstract_streaming_client import create_streaming_client_from_config
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
-from agogosml.common.kafka_streaming_client import KafkaStreamingClient
 
 from .output_writer import OutputWriter
 
@@ -22,34 +20,11 @@ class OutputWriterFactory:
         streaming_client and listener.
         """
 
-        client = None
-
         if OutputWriterFactory.is_empty(config):
-            raise Exception('''
-            No config was set for the OutputWriterFactory
-            ''')
+            raise Exception('No config was set for the OutputWriterFactory')
 
-        if streaming_client is None:
-            if config.get("client") is None:
-                raise Exception('''
-                client cannot be empty
-                ''')
+        client = streaming_client or create_streaming_client_from_config(config.get('client'))
 
-            client_config = config.get("client")["config"]
-            if config.get("client")["type"] == "kafka":
-                client = KafkaStreamingClient(client_config)
-
-            if config.get("client")["type"] == "eventhub":
-                client = EventHubStreamingClient(client_config)
-
-            if client is None:
-                raise Exception('''
-                Unknown client type
-                ''')
-        else:
-            client = streaming_client
-
-        listener = None
         if listener_client is None:
             port = config.get("OUTPUT_WRITER_PORT")
             host = config.get("OUTPUT_WRITER_HOST")

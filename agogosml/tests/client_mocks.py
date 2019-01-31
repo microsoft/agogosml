@@ -7,7 +7,7 @@ class StreamingClientMock(AbstractStreamingClient):
     """
     A class to mock functionality at the streaming client level.
     """
-    def __init__(self):
+    def __init__(self, config: dict = None):
         self.sent = False
         self.receiving = False
         self.last_message = None

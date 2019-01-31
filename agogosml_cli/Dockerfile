@@ -36,4 +36,6 @@ RUN pip install /dist/agogosml_cli-*.tar.gz
 
 RUN apk del .build-deps
 
+WORKDIR /home
+
 ENTRYPOINT ["agogosml"]

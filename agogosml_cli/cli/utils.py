@@ -21,7 +21,7 @@ def get_template_full_filepath(file: Union[str, Path]) -> Path:
     return TEMPLATES_FOLDER / file
 
 
-def validate_manifest(manifest_json: object) -> None:
+def validate_manifest(manifest_json: object):
     """Validates a manifest file against
     the scheme Throws an error if invalid.
     Args:

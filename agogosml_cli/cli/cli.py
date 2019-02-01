@@ -10,7 +10,7 @@ import cli.init as init
 
 
 @click.group()
-def main() -> None:
+def main():
     """CLI and scaffold generation tool for agogosml"""
 
 

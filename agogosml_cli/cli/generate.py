@@ -146,7 +146,7 @@ def extractAzureTemplateVars(manifest):
     return template_vars
 
 
-def write_jsonnet(source_path: Path, target_path: Path, base_path: Path, template_vars: object) -> None:
+def write_jsonnet(source_path: Path, target_path: Path, base_path: Path, template_vars: object):
     """Writes out a pipeline json file
     Args:
         source_path (Path):  Name of the pipeline file in module

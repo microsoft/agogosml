@@ -3,7 +3,9 @@
 from abc import ABC
 from abc import abstractmethod
 from functools import lru_cache
+from typing import Callable
 from typing import Dict
+from typing import Optional
 from typing import Type
 
 from agogosml.utils.imports import find_implementations
@@ -20,17 +22,17 @@ class AbstractStreamingClient(ABC):
         pass
 
     @abstractmethod
-    def send(self, *args, **kwargs):
+    def send(self, message: str) -> bool:
         """Send method."""
         pass
 
     @abstractmethod
-    def stop(self, *args, **kwargs):
+    def stop(self):
         """Stop method."""
         pass
 
     @abstractmethod
-    def start_receiving(self, *args, **kwargs):
+    def start_receiving(self, on_message_received_callback: Callable[[str], bool]):
         """Start receiving messages from streaming client."""
         pass
 
@@ -51,7 +53,7 @@ def find_streaming_clients() -> Dict[str, StreamingClientType]:
     }
 
 
-def create_streaming_client_from_config(config: dict) -> AbstractStreamingClient:
+def create_streaming_client_from_config(config: Optional[dict]) -> AbstractStreamingClient:
     config = config or {}
     try:
         client_config = config['config']

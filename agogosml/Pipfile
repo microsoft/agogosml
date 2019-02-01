@@ -15,6 +15,7 @@ Sphinx = "*"
 twine = "*"
 pylint = "*"
 pytest-cov = "*"
+mypy = "*"
 
 [packages]
 confluent-kafka = "~=0.11"

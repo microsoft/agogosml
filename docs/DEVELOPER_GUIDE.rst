@@ -145,7 +145,6 @@ agogosml_cli is a cli tool developed with Python using the `Click\_ <https://cli
 Requirements to Run Locally
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Install `pipenv <https://pipenv.readthedocs.io/en/latest/>`__ 
 - `Python 3.7`_
 
 Local Installation
@@ -156,27 +155,28 @@ Installing Dependencies (and Dev Dependencies):
 .. code:: bash
 
     $ cd agogosml_cli/
-    $ pipenv install --dev
-    $ pipenv run make installedit
+    $ python3 -m venv venv
+    $ . venv/bin/activate
+    $ pip install -r requirements.txt
+    $ pip install -r requirements-dev.txt
+    $ make installedit
 
 Running Tests:
 
 .. code:: bash
 
-    $ pipenv run make test
+    $ make test
 
 Running Linter:
 
 .. code:: bash
 
-    $ pipenv run make lint
+    $ make lint
 
 
 Test the CLI and see generated output
 
 .. code:: bash
-
-    $ pipenv shell
 
     # Create a directory for your project
     $ mkdir hello-agogosml && cd hello-agogosml

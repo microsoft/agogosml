@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 ## assumes: TWINE_USERNAME, TWINE_PASSWORD, GITHUB_ACCESS_TOKEN are set as environment variables.
-## requires pipenv, jq and curl to be installed
+## requires pipenv, jq, curl and pipenv to be installed
 
 echo "Do you want to bump major, minor or patch version?"
 read versionbump
@@ -11,7 +11,8 @@ AGOGOSML_VERSION=$(python ./agogosml/agogosml/__init__.py)
 
 for i in agogosml*/ ; do
     cd $i
-    pipenv install --dev && \
+    pipenv install -r requirements-dev.txt && \
+    pipenv install -r requirements.txt && \
         pipenv run make clean && \
         pipenv run make lint && \
         pipenv run make test &&  \

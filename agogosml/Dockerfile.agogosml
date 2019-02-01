@@ -24,28 +24,27 @@ RUN /root/librdkafka/configure && make && make install
 FROM base-deps as builder
 
 WORKDIR /usr/src/agogosml
-COPY Pipfile Pipfile.lock ./
 
 ENV PYTHONUNBUFFERED=1
 
-RUN pip install pipenv && \
-    pipenv install --deploy --dev
+COPY requirements-dev.txt .
+RUN pip install --no-cache-dir -r requirements-dev.txt
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN pipenv run make clean && \
-    pipenv run make lint && \
-    pipenv run make test && \
-    # pipenv run make test-all && \ <- FIXME: Tox is broken.
-    pipenv run make docs && \
-    pipenv run make dist && \
-    pipenv lock --requirements > requirements.txt && \
-    pipenv --rm
+RUN make clean && \
+    make lint && \
+    make test && \
+    # make test-all && \ <- FIXME: Tox is broken.
+    make docs && \
+    make dist
 
 FROM builder as agogosml
 
-RUN pip install -r requirements.txt && \
-    pip install /usr/src/agogosml/dist/agogosml-*.tar.gz && \
+RUN pip install --no-cache-dir /usr/src/agogosml/dist/agogosml-*.tar.gz && \
     rm -rf /usr/src/agogosml && \
     rm -rf /root/librdkafka && \
     apk del .build-deps

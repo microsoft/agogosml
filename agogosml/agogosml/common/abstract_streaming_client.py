@@ -14,11 +14,7 @@ from agogosml.utils.imports import find_implementations
 class AbstractStreamingClient(ABC):
     @abstractmethod
     def __init__(self, config: dict):
-        """
-        Abstract Streaming Client
-
-        :param config: Dictionary file with all the relevant parameters.
-        """
+        """Abstract Streaming Client"""
         pass
 
     @abstractmethod
@@ -42,7 +38,8 @@ StreamingClientType = Type[AbstractStreamingClient]
 
 @lru_cache(maxsize=1)
 def find_streaming_clients() -> Dict[str, StreamingClientType]:
-    """
+    """Find the friendly-names and constructors of all the streaming clients.
+
     >>> senders = find_streaming_clients()
     >>> sorted(senders.keys())
     ['broadcast', 'eventhub', 'kafka', 'mock']
@@ -54,6 +51,7 @@ def find_streaming_clients() -> Dict[str, StreamingClientType]:
 
 
 def create_streaming_client_from_config(config: Optional[dict]) -> AbstractStreamingClient:
+    """Instantiate a streaming client from configuration."""
     config = config or {}
     try:
         client_config = config['config']

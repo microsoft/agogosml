@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Tests for `agogosml_cli` package."""
 
 import json
@@ -93,8 +91,7 @@ def test_init_folder():
 
 
 def _create_test_manifest(folder='.'):
-    """Utility method to write out a test manifest file
-    in a specified folder"""
+    """Output a test manifest file in a specified folder"""
     manifest_str = """
     {
         "name": "test manifest",

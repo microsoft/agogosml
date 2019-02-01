@@ -12,6 +12,8 @@ DEFAULT_HOST = '127.0.0.1'
 class FlaskHttpListenerClient(ListenerClient):
     def __init__(self, config: dict):
         """
+        Listener implementation that uses a flask server.
+
         Configuration keys:
 
             PORT
@@ -20,7 +22,8 @@ class FlaskHttpListenerClient(ListenerClient):
         self.port = int(config['PORT']) if 'PORT' in config else None
         self.host = config.get('HOST', DEFAULT_HOST)
 
-    def thread_flask(self):
+    def run_flask_server(self):
+        """Run the flask server"""
         app = Flask(__name__)
 
         @app.route("/", methods=["POST"])
@@ -37,15 +40,11 @@ class FlaskHttpListenerClient(ListenerClient):
 
     def start(self, on_message_received):
         self.on_message_received = on_message_received
-        self.t_flask = threading.Thread(name='agogosml', target=self.thread_flask)
+        self.t_flask = threading.Thread(name='agogosml', target=self.run_flask_server)
         self.t_flask.setDaemon(True)
         self.t_flask.start()
 
     def stop(self):
-        self.shutdown_server()
-        # self.t_flask.join()
-
-    def shutdown_server(self):
         try:
             func = request.environ.get('werkzeug.server.shutdown')
             if func is None:

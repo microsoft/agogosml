@@ -5,12 +5,10 @@ from .abstract_streaming_client import create_streaming_client_from_config
 class BroadcastStreamingClient(AbstractStreamingClient):
     def __init__(self, config: dict):
         """
-        Class to create a BroadcastStreamingClient instance.
+        Streaming client implementation that broadcases across multiple clients.
 
         Configuration keys:
           CLIENTS
-
-        :param config: Dictionary file with all the relevant parameters.
         """
 
         self.clients = [
@@ -20,19 +18,9 @@ class BroadcastStreamingClient(AbstractStreamingClient):
         ]
 
     def start_receiving(self, on_message_received_callback):
-        """
-        Receive messages from all the clients
-
-        :param on_message_received_callback: Callback function.
-        """
         raise NotImplementedError
 
     def send(self, message):
-        """
-        Send a message to all the clients
-
-        :param message: A string input to upload to event hub.
-        """
         success = True
         for client in self.clients:
             success &= client.send(message)

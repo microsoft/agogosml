@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
 """ OutputWriter class"""
+from typing import Callable
+from typing import Optional
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 from agogosml.common.listener_client import ListenerClient
@@ -9,27 +10,19 @@ logger = Logger()
 
 
 class OutputWriter:
-    """Accepts incoming messages and routes them to a configured output."""
-
     def __init__(self, streaming_client: AbstractStreamingClient,
                  listener: ListenerClient):
-        """
-        :param streaming_client: A client that can stream data in.
-        :param listener: A client that accepts incoming messages.
-        """
+        """Accepts incoming messages and routes them to a configured output."""
         self.messaging_client = streaming_client
         self.listener = listener
 
-    def on_message_received(self, message):
-        """Send messages onwards to a streaming client.
-
-        :param message: A message as a string to send onwards.
-        """
+    def on_message_received(self, message: str) -> bool:
+        """Send messages onwards to a streaming client."""
         success = self.messaging_client.send(message)
         logger.event('output.message.received', {'success': str(success)})
         return success
 
-    def start_incoming_messages(self, callback=None):
+    def start_incoming_messages(self, callback: Optional[Callable[[str], bool]] = None):
         """Start accepting messages."""
         logger.event('output.lifecycle.start')
         self.listener.start(callback or self.on_message_received)

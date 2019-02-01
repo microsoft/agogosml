@@ -1,37 +1,31 @@
-"""Abstract streaming client class"""
-
 from abc import ABC
 from abc import abstractmethod
 from functools import lru_cache
+from typing import Callable
 from typing import Dict
+from typing import Optional
 from typing import Type
 
 from agogosml.utils.imports import find_implementations
+
+Callback = Callable[[str], None]
 
 
 class AbstractStreamingClient(ABC):
     @abstractmethod
     def __init__(self, config: dict):
-        """
-        Abstract Streaming Client
-
-        :param config: Dictionary file with all the relevant parameters.
-        """
         pass
 
     @abstractmethod
-    def send(self, *args, **kwargs):
-        """Send method."""
+    def send(self, message: str):
         pass
 
     @abstractmethod
-    def stop(self, *args, **kwargs):
-        """Stop method."""
+    def stop(self):
         pass
 
     @abstractmethod
-    def start_receiving(self, *args, **kwargs):
-        """Start receiving messages from streaming client."""
+    def start_receiving(self, on_message_received: Callback):
         pass
 
 
@@ -51,7 +45,7 @@ def find_streaming_clients() -> Dict[str, StreamingClientType]:
     }
 
 
-def create_streaming_client_from_config(config: dict) -> AbstractStreamingClient:
+def create_streaming_client_from_config(config: Optional[dict]) -> AbstractStreamingClient:
     config = config or {}
     try:
         client_config = config['config']

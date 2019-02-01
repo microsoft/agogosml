@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-"""Console script for agogosml_cli."""
 import sys
 
 import click
@@ -10,7 +7,7 @@ import cli.init as init
 
 
 @click.group()
-def main() -> None:
+def main():
     """CLI and scaffold generation tool for agogosml"""
 
 

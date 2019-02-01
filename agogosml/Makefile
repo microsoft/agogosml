@@ -52,6 +52,7 @@ clean-test: ## remove test and coverage artifacts
 
 lint: ## check python style
 	flake8 agogosml tests
+	mypy agogosml
 	isort --check-only --recursive agogosml
 
 test:

@@ -1,5 +1,3 @@
-"""EventProcessor host class for Event Hub"""
-
 from azure.eventprocessorhost import AbstractEventProcessor
 
 from ..utils.logger import Logger
@@ -8,14 +6,7 @@ logger = Logger()
 
 
 class EventProcessor(AbstractEventProcessor):
-    """Example Implementation of AbstractEventProcessor."""
-
     def __init__(self, params):
-        """
-        Init Event processor.
-
-        :param params: List of params.
-        """
         super().__init__()
         self.on_message_received_callback = params[0]
         self._msg_counter = 0

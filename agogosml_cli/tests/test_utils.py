@@ -1,9 +1,3 @@
-
-# -*- coding: utf-8 -*-
-
-"""Test utility functions"""
-
-
 import hashlib
 from pathlib import Path
 from typing import Union

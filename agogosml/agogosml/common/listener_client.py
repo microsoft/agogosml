@@ -1,8 +1,7 @@
+"""Abstract listener client broker class"""
+
 from abc import ABC
 from abc import abstractmethod
-from typing import Callable
-
-Callback = Callable[[str], bool]
 
 
 class ListenerClient(ABC):
@@ -12,7 +11,7 @@ class ListenerClient(ABC):
         pass
 
     @abstractmethod
-    def start(self, on_message_received: Callback):
+    def start(self, on_message_received):
         pass
 
     @abstractmethod

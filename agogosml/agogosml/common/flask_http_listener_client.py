@@ -1,3 +1,4 @@
+""" Flask client to receive messages from customer app"""
 import threading
 
 from flask import Flask
@@ -16,7 +17,7 @@ class FlaskHttpListenerClient(ListenerClient):
             PORT
             HOST
         """
-        self.port = int(config['PORT']) if 'PORT' in config else None
+        self.port = int(config.get('PORT'))
         self.host = config.get('HOST', DEFAULT_HOST)
 
     def thread_flask(self):

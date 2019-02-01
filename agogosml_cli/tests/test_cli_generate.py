@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+"""Tests for `agogosml_cli` package."""
+
 import json
 from pathlib import Path
-from typing import Iterable
 
 from click.testing import CliRunner
 import cli.generate as generate
@@ -19,7 +21,7 @@ import tests.test_utils as test_utils
     * shoudl fail if any json file is not valid json.
 """
 
-EXPECTED_OUTPUT_PROJ_FILES = (
+EXPECTED_OUTPUT_PROJ_FILES = [
     'ci-app-pipeline.json',
     'ci-agogosml-pipeline.json',
     'cd-pipeline.json',
@@ -42,7 +44,7 @@ EXPECTED_OUTPUT_PROJ_FILES = (
     'testproject/testproject/datahelper.py',
     'testproject/testproject/schema_example.json',
     'testproject/testproject/testapp.py'
-)
+]
 
 
 def test_generate():
@@ -113,6 +115,7 @@ def test_generate():
 
 
 def test_generate_folder():
+    """Test of generate command with folder specified"""
     runner = CliRunner()
     """
     RUN: agogosml generate <folder>
@@ -259,7 +262,7 @@ def _create_dummy_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
             json.dump("test content", f, indent=4)
 
 
-def _get_md5_template_files(files: Iterable[str] = EXPECTED_OUTPUT_PROJ_FILES, folder: str = '.'):
+def _get_md5_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
     """Get the md5 hashes of the project files. Used to know if files were
     overwritten"""
     folder = Path(folder)

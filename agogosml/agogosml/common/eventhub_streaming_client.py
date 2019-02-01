@@ -1,3 +1,5 @@
+"""Event Hub streaming client"""
+
 import asyncio
 
 from azure.eventhub import EventData
@@ -17,6 +19,8 @@ logger = Logger()
 class EventHubStreamingClient(AbstractStreamingClient):
     def __init__(self, config):
         """
+        Class to create an EventHubStreamingClient instance.
+
         Configuration keys:
           AZURE_STORAGE_ACCESS_KEY
           AZURE_STORAGE_ACCOUNT
@@ -27,6 +31,8 @@ class EventHubStreamingClient(AbstractStreamingClient):
           EVENT_HUB_SAS_POLICY
           LEASE_CONTAINER_NAME
           TIMEOUT
+
+        :param config: Dictionary file with all the relevant parameters.
         """
 
         self.message_callback = None
@@ -82,14 +88,19 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 logger.error('Failed to init EH send client: %s', e)
                 raise
 
-    def start_receiving(self, on_message_received):
+    def start_receiving(self, on_message_received_callback):
+        """
+        Receive messages from an EventHubStreamingClient.
+
+        :param on_message_received_callback: Callback function.
+        """
         loop = asyncio.get_event_loop()
         try:
             host = EventProcessorHost(
                 EventProcessor,
                 self.eph_client,
                 self.storage_manager,
-                ep_params=[on_message_received],
+                ep_params=[on_message_received_callback],
                 eph_options=self.eh_options,
                 loop=loop)
 
@@ -100,7 +111,12 @@ class EventHubStreamingClient(AbstractStreamingClient):
         finally:
             loop.stop()
 
-    def send(self, message: str):
+    def send(self, message):
+        """
+        Send a message to an EventHubStreamingClient.
+
+        :param message: A string input to upload to event hub.
+        """
         try:
             self.sender.send(EventData(body=message))
             logger.info('Sent message: %s', message)

@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+"""Tests for `agogosml_cli` package."""
+
 import json
 from pathlib import Path
 from click.testing import CliRunner
@@ -6,6 +10,7 @@ import tests.test_utils as test_utils
 
 
 def test_init_generate_valid_json():
+    """Test of init command: generated manifest contains valid json"""
     runner = CliRunner()
     with runner.isolated_filesystem():
         manifest = Path('./manifest.json')
@@ -17,6 +22,7 @@ def test_init_generate_valid_json():
 
 
 def test_init():
+    """Tests of init command w/o <folder> specified"""
     runner = CliRunner()
     """
     RUN: agogosml init
@@ -51,6 +57,7 @@ def test_init():
 
 
 def test_init_folder():
+    """Tests of init command with <folder> specified"""
     runner = CliRunner()
     """
     RUN: agogosml init <folder>
@@ -85,7 +92,9 @@ def test_init_folder():
         assert prevmd5 == test_utils.md5('./folder/manifest.json')
 
 
-def _create_test_manifest(folder: str = '.'):
+def _create_test_manifest(folder='.'):
+    """Utility method to write out a test manifest file
+    in a specified folder"""
     manifest_str = """
     {
         "name": "test manifest",

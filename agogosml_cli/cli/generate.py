@@ -152,7 +152,7 @@ def write_jsonnet(source_path: Path, target_path: Path, base_path: Path, templat
         json.dump(pipeline_json, f, indent=4)
 
 
-def write_cookiecutter(source_path: Path, target_path: Path, template_vars: object, overwrite=False) -> None:
+def write_cookiecutter(source_path: Path, target_path: Path, template_vars: object, overwrite=False):
     return cookiecutter(str(source_path), extra_context=template_vars, no_input=True,
                         output_dir=str(target_path), overwrite_if_exists=overwrite)
 

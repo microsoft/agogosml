@@ -1,4 +1,3 @@
-""" Flask client to receive messages from customer app"""
 import threading
 
 from flask import Flask

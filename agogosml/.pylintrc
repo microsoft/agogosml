@@ -1,0 +1,10 @@
+[FORMAT]
+max-line-length=120
+
+[MESSAGES CONTROL]
+disable =
+  broad-except,
+  fixme,
+  protected-access,
+  super-init-not-called,
+  too-few-public-methods

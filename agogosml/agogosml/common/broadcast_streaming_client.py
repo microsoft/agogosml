@@ -1,8 +1,11 @@
-from .abstract_streaming_client import AbstractStreamingClient
-from .abstract_streaming_client import create_streaming_client_from_config
+"""Broadcast streaming client"""
+from agogosml.common.abstract_streaming_client import AbstractStreamingClient
+from agogosml.common.abstract_streaming_client import create_streaming_client_from_config
 
 
 class BroadcastStreamingClient(AbstractStreamingClient):
+    """Broadcast streaming client"""
+
     def __init__(self, config: dict):
         """
         Streaming client implementation that broadcases across multiple clients.

@@ -10,6 +10,8 @@ from .output_writer import OutputWriter
 
 
 class OutputWriterFactory:
+    """ Factory for OutputWriter """
+
     @staticmethod
     def create(config: dict,
                streaming_client: Optional[AbstractStreamingClient] = None,

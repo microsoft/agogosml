@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-"""Generate command module."""
-
 import json
 from pathlib import Path
 
@@ -147,12 +144,6 @@ def extractAzureTemplateVars(manifest):
 
 
 def write_jsonnet(source_path: Path, target_path: Path, base_path: Path, template_vars: object):
-    """Writes out a pipeline json file
-    Args:
-        source_path (Path):  Name of the pipeline file in module
-        target_path (Path): Name of the output folder
-        template_vars (object): Values to inject into jsonnet as extVars.
-    """
     pipeline_json = json.loads(_jsonnet.evaluate_file(
         filename=str(utils.get_template_full_filepath(source_path)),
         ext_vars=template_vars))
@@ -162,10 +153,6 @@ def write_jsonnet(source_path: Path, target_path: Path, base_path: Path, templat
 
 
 def write_cookiecutter(source_path: Path, target_path: Path, template_vars: object, overwrite=False) -> None:
-    """Outputs a cookiecutter template
-    Args:
-        target_path (Path): Name of the output folder
-    """
     return cookiecutter(str(source_path), extra_context=template_vars, no_input=True,
                         output_dir=str(target_path), overwrite_if_exists=overwrite)
 

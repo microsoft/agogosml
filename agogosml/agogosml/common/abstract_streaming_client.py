@@ -1,5 +1,3 @@
-"""Abstract streaming client class"""
-
 from abc import ABC
 from abc import abstractmethod
 from functools import lru_cache
@@ -12,26 +10,18 @@ from agogosml.utils.imports import find_implementations
 class AbstractStreamingClient(ABC):
     @abstractmethod
     def __init__(self, config: dict):
-        """
-        Abstract Streaming Client
-
-        :param config: Dictionary file with all the relevant parameters.
-        """
         pass
 
     @abstractmethod
     def send(self, *args, **kwargs):
-        """Send method."""
         pass
 
     @abstractmethod
     def stop(self, *args, **kwargs):
-        """Stop method."""
         pass
 
     @abstractmethod
     def start_receiving(self, *args, **kwargs):
-        """Start receiving messages from streaming client."""
         pass
 
 

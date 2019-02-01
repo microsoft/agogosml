@@ -1,4 +1,3 @@
-""" Logger """
 import logging
 import logging.config
 import os
@@ -27,8 +26,6 @@ class NullTelemetryClient:
 
 @singleton
 class Logger(object):
-    """A logger implementation."""
-
     def __init__(self,
                  name: str = __name__,
                  path: str = 'logging.yaml',
@@ -70,27 +67,12 @@ class Logger(object):
         return TelemetryClient(ikey, telemetry_channel=channel)
 
     def debug(self, message: str, *args):
-        """
-        Log debug message.
-
-        :param message: Debug message string.
-        """
         self._log(logging.DEBUG, message, *args)
 
     def info(self, message: str, *args):
-        """
-        Log info message
-
-        :param message: Info message string.
-        """
         self._log(logging.INFO, message, *args)
 
     def error(self, message: str, *args):
-        """
-        Log error message
-
-        :param message: Error message string.
-        """
         self._log(logging.ERROR, message, *args)
 
     def event(self, name: str, props: Optional[Dict[str, str]] = None):

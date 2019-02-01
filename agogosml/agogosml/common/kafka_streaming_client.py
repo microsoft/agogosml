@@ -1,5 +1,3 @@
-"""Kafka streaming client"""
-
 import datetime
 
 from confluent_kafka import Consumer
@@ -17,8 +15,6 @@ logger = Logger()
 class KafkaStreamingClient(AbstractStreamingClient):
     def __init__(self, config):
         """
-        Class to create a KafkaStreamingClient instance.
-
         Configuration keys:
           APP_HOST
           APP_PORT
@@ -26,8 +22,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
           KAFKA_CONSUMER_GROUP
           KAFKA_TOPIC
           TIMEOUT
-
-        :param config: Dictionary file with all the relevant parameters.
         """
 
         self.topic = config.get("KAFKA_TOPIC")
@@ -67,9 +61,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
     def delivery_report(self, err, msg):
         """ Called once for each message produced to indicate delivery result.
         Triggered by poll() or flush().
-
-        :param err: An error message.
-        :param msg: A string input to be uploaded to kafka.
         """
 
         if err is not None:
@@ -79,11 +70,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
                         msg.topic(), msg.partition())
 
     def send(self, message: str, *args, **kwargs):
-        """
-        Upload a message to a kafka topic.
-
-        :param message: A string input to upload to kafka.
-        """
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
         try:
@@ -100,7 +86,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
     def stop(self, *args, **kwargs):
         pass
 
-    def check_timeout(self, start):
+    def check_timeout(self, start: datetime.datetime):
         """
         Checks how much time has elapsed since the kafka client started running.
 
@@ -112,11 +98,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
                 raise KeyboardInterrupt
 
     def handle_kafka_error(self, msg):
-        """
-        Handle an error in kafka.
-
-        :param msg: Error message from kafka.
-        """
         if msg.error().code() == KafkaError._PARTITION_EOF:
             # End of partition event
             logger.error('%% %s [%d] reached end at offset %d\n',
@@ -126,16 +107,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             raise KafkaException(msg.error())
 
     def start_receiving(self, on_message_received_callback):
-        """
-        Receive messages from a kafka topic.
-
-        :param on_message_received_callback: Callback function.
-        """
-        '''
-        TODO:
-        We are going to need documentation for Kafka
-        to ensure proper syntax is clear
-        '''
+        # TODO: We are going to need documentation for Kafka to ensure proper syntax is clear
         try:
             self.subscribe_to_topic()
             start = datetime.datetime.now()

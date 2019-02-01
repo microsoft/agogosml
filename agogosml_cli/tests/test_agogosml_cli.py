@@ -1,14 +1,9 @@
-# -*- coding: utf-8 -*-
-
-"""Tests for `agogosml_cli` package."""
-
 from click.testing import CliRunner
 
 import cli.cli
 
 
 def test_command_line_interface():
-    """Test the CLI."""
     runner = CliRunner()
     result = runner.invoke(cli.cli.main)
     assert result.exit_code == 0

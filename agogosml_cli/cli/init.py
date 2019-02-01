@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-"""Init command module."""
-
 import json
 from pathlib import Path
 

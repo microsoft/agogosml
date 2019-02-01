@@ -82,14 +82,14 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 logger.error('Failed to init EH send client: %s', e)
                 raise
 
-    def start_receiving(self, on_message_received_callback):
+    def start_receiving(self, on_message_received):
         loop = asyncio.get_event_loop()
         try:
             host = EventProcessorHost(
                 EventProcessor,
                 self.eph_client,
                 self.storage_manager,
-                ep_params=[on_message_received_callback],
+                ep_params=[on_message_received],
                 eph_options=self.eh_options,
                 loop=loop)
 
@@ -100,7 +100,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
         finally:
             loop.stop()
 
-    def send(self, message):
+    def send(self, message: str):
         try:
             self.sender.send(EventData(body=message))
             logger.info('Sent message: %s', message)

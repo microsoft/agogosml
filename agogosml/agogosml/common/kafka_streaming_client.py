@@ -69,7 +69,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             logger.info('Message delivered to %s [%s]',
                         msg.topic(), msg.partition())
 
-    def send(self, message: str, *args, **kwargs):
+    def send(self, message: str):
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
         try:
@@ -83,7 +83,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             logger.error('Error sending message to kafka: %s', e)
             return False
 
-    def stop(self, *args, **kwargs):
+    def stop(self):
         pass
 
     def check_timeout(self, start: datetime.datetime):
@@ -106,7 +106,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             # Error
             raise KafkaException(msg.error())
 
-    def start_receiving(self, on_message_received_callback):
+    def start_receiving(self, on_message_received):
         # TODO: We are going to need documentation for Kafka to ensure proper syntax is clear
         try:
             self.subscribe_to_topic()
@@ -119,7 +119,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
                 # Poll messages from topic
                 msg = self.read_single_message()
                 if msg is not None:
-                    on_message_received_callback(msg)
+                    on_message_received(msg)
 
         except KeyboardInterrupt:
             logger.info('Aborting listener...')

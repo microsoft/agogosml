@@ -1,10 +1,13 @@
 from abc import ABC
 from abc import abstractmethod
 from functools import lru_cache
+from typing import Callable
 from typing import Dict
 from typing import Type
 
 from agogosml.utils.imports import find_implementations
+
+Callback = Callable[[str], None]
 
 
 class AbstractStreamingClient(ABC):
@@ -13,15 +16,15 @@ class AbstractStreamingClient(ABC):
         pass
 
     @abstractmethod
-    def send(self, *args, **kwargs):
+    def send(self, message: str):
         pass
 
     @abstractmethod
-    def stop(self, *args, **kwargs):
+    def stop(self):
         pass
 
     @abstractmethod
-    def start_receiving(self, *args, **kwargs):
+    def start_receiving(self, on_message_received: Callback):
         pass
 
 

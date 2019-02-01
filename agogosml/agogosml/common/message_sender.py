@@ -8,5 +8,5 @@ class MessageSender(ABC):
         pass
 
     @abstractmethod
-    def send(self, *args, **kwargs):
+    def send(self, message) -> bool:
         pass

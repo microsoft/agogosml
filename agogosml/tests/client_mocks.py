@@ -13,7 +13,7 @@ class StreamingClientMock(AbstractStreamingClient):
         self.last_message = None
         self.should_fail_to_send = False
 
-    def send(self, msg):
+    def send(self, msg: str):
         print('Streaming Client Mock send message: %s' % msg)
         if self.should_fail_to_send:
             self.sent = False
@@ -23,7 +23,7 @@ class StreamingClientMock(AbstractStreamingClient):
             self.last_message = msg
             return True
 
-    def stop(self, *args, **kwargs):
+    def stop(self):
         pass
 
     def start_receiving(self, callback):

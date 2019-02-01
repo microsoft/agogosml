@@ -15,7 +15,7 @@ class BroadcastStreamingClient(AbstractStreamingClient):
             for conf in config.get('CLIENTS', [])
         ]
 
-    def start_receiving(self, on_message_received_callback):
+    def start_receiving(self, on_message_received):
         raise NotImplementedError
 
     def send(self, message):

@@ -78,7 +78,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             logger.info('Message delivered to %s [%s]',
                         msg.topic(), msg.partition())
 
-    def send(self, message: str, *args, **kwargs):
+    def send(self, message: str):
         """
         Upload a message to a kafka topic.
 

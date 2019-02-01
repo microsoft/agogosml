@@ -29,7 +29,7 @@ class HttpMessageSender(MessageSender):
         if not host:
             raise ValueError('Host endpoint must be provided.')
 
-        if int(port) <= 0:
+        if not port or int(port) <= 0:
             raise ValueError('Port cannot be 0 or less.')
 
         if scheme not in ('http', 'https'):

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """ InputReader """
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
@@ -9,13 +8,8 @@ logger = Logger()
 
 
 class InputReader:
-    """Accepts incoming messages and routes them to a configured output"""
-
     def __init__(self, streaming_client: AbstractStreamingClient, message_sender: MessageSender):
-        """
-        :param streaming_client: A client that can stream data out
-        :param message_sender: A message sender that can send messages onwards
-        """
+        """Accepts incoming messages and routes them to a configured output"""
         self.message_sender = message_sender
         self.messaging_client = streaming_client
 
@@ -29,11 +23,8 @@ class InputReader:
         self.messaging_client.stop()
         logger.event('input.lifecycle.stop')
 
-    def on_message_received(self, message):
-        """Send messages onwards
-
-        :param message: a message to process
-        """
+    def on_message_received(self, message: str) -> bool:
+        """Send messages onwards"""
         result = self.message_sender.send(message)
         if result:
             success = True
@@ -43,6 +34,7 @@ class InputReader:
         logger.event('input.message.received', {'success': str(success)})
         return success
 
-    def handle_send_failure(self, message):
+    def handle_send_failure(self, message: str):
+        """Handle message send failure"""
         logger.error('Error while sending message to App')
-        # Notify...
+        # TODO: Notify...

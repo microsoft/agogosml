@@ -8,14 +8,8 @@ logger = Logger()
 
 
 class EventProcessor(AbstractEventProcessor):
-    """Example Implementation of AbstractEventProcessor."""
-
     def __init__(self, params):
-        """
-        Init Event processor.
-
-        :param params: List of params.
-        """
+        """Sample Event Hub event processor implementation"""
         super().__init__()
         self.on_message_received_callback = params[0]
         self._msg_counter = 0

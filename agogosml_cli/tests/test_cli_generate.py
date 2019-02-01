@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for `agogosml_cli` package."""
 
 import json
@@ -21,7 +20,7 @@ import tests.test_utils as test_utils
     * shoudl fail if any json file is not valid json.
 """
 
-EXPECTED_OUTPUT_PROJ_FILES = [
+EXPECTED_OUTPUT_PROJ_FILES = (
     'ci-app-pipeline.json',
     'ci-agogosml-pipeline.json',
     'cd-pipeline.json',
@@ -44,7 +43,7 @@ EXPECTED_OUTPUT_PROJ_FILES = [
     'testproject/testproject/datahelper.py',
     'testproject/testproject/schema_example.json',
     'testproject/testproject/testapp.py'
-]
+)
 
 
 def test_generate():
@@ -189,12 +188,14 @@ def test_generate_invalid_schema():
 
 
 def _assert_template_files_exist(folder='.'):
+    """Assert that an output template exists"""
     folder = Path(folder)
     for proj_file in EXPECTED_OUTPUT_PROJ_FILES:
         assert (folder / proj_file).exists()
 
 
 def _create_test_manifest_azure(folder='.'):
+    """Create valid manifest"""
     manifest_str = """
     {
         "name": "testproject",
@@ -222,6 +223,7 @@ def _create_test_manifest_azure(folder='.'):
 
 
 def _create_invalid_manifest_azure(folder='.'):
+    """Create invalid manifest"""
     manifest_str = """
     {
         "name": "testproject",
@@ -247,6 +249,7 @@ def _create_invalid_manifest_azure(folder='.'):
 
 
 def _create_dummy_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
+    """Create dummy template files."""
     folder = Path(folder)
     folder.mkdir(parents=True, exist_ok=True)
 
@@ -263,8 +266,7 @@ def _create_dummy_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
 
 
 def _get_md5_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
-    """Get the md5 hashes of the project files. Used to know if files were
-    overwritten"""
+    """Get the md5 hashes of the project files. Used to know if files were overwritten"""
     folder = Path(folder)
     allmd5 = []
     for proj_file in files:

@@ -8,10 +8,10 @@ logger = Logger()
 
 
 class HttpMessageSender(MessageSender):
-    """HttpMessageSender."""
-
     def __init__(self, config: dict):
         """
+        Message sender implementation that uses HTTP(S) to send messages.
+
         Configuration keys:
 
             HOST
@@ -42,11 +42,6 @@ class HttpMessageSender(MessageSender):
         logger.info("server_address: %s", self.server_address)
 
     def send(self, message):
-        """
-        Sends messages to specified address via HTTP.
-
-        :param message: JSON formatted message.
-        """
         return_value = False
         try:
             status_code = post_with_retries(

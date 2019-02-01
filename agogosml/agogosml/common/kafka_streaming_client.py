@@ -17,7 +17,7 @@ logger = Logger()
 class KafkaStreamingClient(AbstractStreamingClient):
     def __init__(self, config):
         """
-        Class to create a KafkaStreamingClient instance.
+        Streaming client implementation based on Kafka.
 
         Configuration keys:
           APP_HOST
@@ -26,8 +26,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
           KAFKA_CONSUMER_GROUP
           KAFKA_TOPIC
           TIMEOUT
-
-        :param config: Dictionary file with all the relevant parameters.
         """
 
         self.topic = config.get("KAFKA_TOPIC")
@@ -50,8 +48,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
             self.consumer = Consumer(kafka_config)
 
     @staticmethod
-    def create_kafka_config(user_config):
-
+    def create_kafka_config(user_config: dict) -> dict:
+        """Creates the kafka configuration"""
         config = {
             "bootstrap.servers": user_config.get("KAFKA_ADDRESS"),
             "enable.auto.commit": False,
@@ -79,11 +77,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
                         msg.topic(), msg.partition())
 
     def send(self, message: str):
-        """
-        Upload a message to a kafka topic.
-
-        :param message: A string input to upload to kafka.
-        """
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
         try:
@@ -100,23 +93,15 @@ class KafkaStreamingClient(AbstractStreamingClient):
     def stop(self, *args, **kwargs):
         pass
 
-    def check_timeout(self, start):
-        """
-        Checks how much time has elapsed since the kafka client started running.
-
-        :param start: Start time.
-        """
+    def check_timeout(self, start: datetime.datetime):
+        """Interrupts if too much time has elapsed since the kafka client started running."""
         if self.timeout is not None:
             elapsed = datetime.datetime.now() - start
             if elapsed.seconds >= self.timeout:
                 raise KeyboardInterrupt
 
     def handle_kafka_error(self, msg):
-        """
-        Handle an error in kafka.
-
-        :param msg: Error message from kafka.
-        """
+        """Handle an error in kafka."""
         if msg.error().code() == KafkaError._PARTITION_EOF:
             # End of partition event
             logger.error('%% %s [%d] reached end at offset %d\n',
@@ -126,16 +111,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             raise KafkaException(msg.error())
 
     def start_receiving(self, on_message_received_callback):
-        """
-        Receive messages from a kafka topic.
-
-        :param on_message_received_callback: Callback function.
-        """
-        '''
-        TODO:
-        We are going to need documentation for Kafka
-        to ensure proper syntax is clear
-        '''
+        # TODO: We are going to need documentation for Kafka to ensure proper syntax is clear
         try:
             self.subscribe_to_topic()
             start = datetime.datetime.now()
@@ -157,10 +133,11 @@ class KafkaStreamingClient(AbstractStreamingClient):
             self.consumer.close()
 
     def subscribe_to_topic(self):
+        """Subscribe to topic"""
         self.consumer.subscribe([self.topic])
 
     def read_single_message(self):
-        # Poll messages from topic
+        """Poll messages from topic"""
         msg = self.consumer.poll(0.000001)
         if msg is None:
             return None

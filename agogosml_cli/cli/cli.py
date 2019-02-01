@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Console script for agogosml_cli."""
 import sys
 

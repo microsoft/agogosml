@@ -18,22 +18,27 @@ from singleton_decorator import singleton
 
 
 class NullTelemetryClient:
+    def __init__(self):
+        """Null-object implementation of the TelemetryClient."""
+        pass
+
     def track_trace(self, name, properties=None, severity=None):
+        """Does nothing."""
         pass
 
     def track_event(self, name, properties=None, measurements=None):
+        """Does nothing."""
         pass
 
 
 @singleton
 class Logger(object):
-    """A logger implementation."""
-
     def __init__(self,
                  name: str = __name__,
                  path: str = 'logging.yaml',
                  env_key: str = 'LOG_CFG',
                  level: int = logging.INFO):
+        """A logger implementation."""
 
         self.level = level
         self.name = name
@@ -42,6 +47,7 @@ class Logger(object):
 
     @cached_property
     def _logger(self) -> logging.Logger:
+        """Create the logger."""
         value = os.getenv(self.env_key)
         path = Path(value or self.path)
 
@@ -58,6 +64,7 @@ class Logger(object):
 
     @cached_property
     def _telemetry(self) -> Union[TelemetryClient, NullTelemetryClient]:
+        """Create the telemetry client."""
         ikey = os.getenv('APPINSIGHTS_INSTRUMENTATIONKEY')
         if not ikey:
             return NullTelemetryClient()
@@ -70,35 +77,25 @@ class Logger(object):
         return TelemetryClient(ikey, telemetry_channel=channel)
 
     def debug(self, message: str, *args):
-        """
-        Log debug message.
-
-        :param message: Debug message string.
-        """
+        """Log debug message."""
         self._log(logging.DEBUG, message, *args)
 
     def info(self, message: str, *args):
-        """
-        Log info message
-
-        :param message: Info message string.
-        """
+        """Log info message"""
         self._log(logging.INFO, message, *args)
 
     def error(self, message: str, *args):
-        """
-        Log error message
-
-        :param message: Error message string.
-        """
+        """Log error message."""
         self._log(logging.ERROR, message, *args)
 
     def event(self, name: str, props: Optional[Dict[str, str]] = None):
+        """Log an event."""
         props = props or {}
         self._logger.info('Event %s: %r', name, props)
         self._telemetry.track_event(name, props)
 
     def _log(self, level: int, message: str, *args):
+        """Log a message."""
         if not self._logger.isEnabledFor(level):
             return
 

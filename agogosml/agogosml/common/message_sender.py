@@ -5,15 +5,12 @@ from abc import abstractmethod
 
 
 class MessageSender(ABC):
-    """Message Sender class."""
-
     @abstractmethod
     def __init__(self, config: dict):
+        """Message Sender."""
         pass
 
     @abstractmethod
-    def send(self, *args, **kwargs):
-        """
-        Sends message.
-        """
+    def send(self, message) -> bool:
+        """Sends message."""
         pass

@@ -1,6 +1,7 @@
 """Event Hub streaming client"""
 
 import asyncio
+from typing import Optional
 
 from azure.eventhub import EventData
 from azure.eventhub import EventHubClient
@@ -19,7 +20,7 @@ logger = Logger()
 class EventHubStreamingClient(AbstractStreamingClient):
     def __init__(self, config):
         """
-        Class to create an EventHubStreamingClient instance.
+        Azure EventHub streaming client implementation.
 
         Configuration keys:
           AZURE_STORAGE_ACCESS_KEY
@@ -31,8 +32,6 @@ class EventHubStreamingClient(AbstractStreamingClient):
           EVENT_HUB_SAS_POLICY
           LEASE_CONTAINER_NAME
           TIMEOUT
-
-        :param config: Dictionary file with all the relevant parameters.
         """
 
         self.message_callback = None
@@ -89,11 +88,6 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 raise
 
     def start_receiving(self, on_message_received_callback):
-        """
-        Receive messages from an EventHubStreamingClient.
-
-        :param on_message_received_callback: Callback function.
-        """
         loop = asyncio.get_event_loop()
         try:
             host = EventProcessorHost(
@@ -112,11 +106,6 @@ class EventHubStreamingClient(AbstractStreamingClient):
             loop.stop()
 
     def send(self, message):
-        """
-        Send a message to an EventHubStreamingClient.
-
-        :param message: A string input to upload to event hub.
-        """
         try:
             self.sender.send(EventData(body=message))
             logger.info('Sent message: %s', message)
@@ -132,13 +121,8 @@ class EventHubStreamingClient(AbstractStreamingClient):
             logger.error('Failed to close send client: %s', e)
 
     @staticmethod
-    async def wait_and_close(host, timeout):
-        """
-        Run EventProcessorHost indefinitely.
-
-        :param host: An EventProcessorHost instance.
-        :param timeout: Length of time to run the EventProcessorHost for.
-        """
+    async def wait_and_close(host: EventProcessorHost, timeout: Optional[float] = None):
+        """Run a host indefinitely or until the timeout is reached."""
         if timeout is None:
             while True:
                 await asyncio.sleep(1)

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Top-level package for agogosml_cli."""
 
 __author__ = """Rami Sayar"""

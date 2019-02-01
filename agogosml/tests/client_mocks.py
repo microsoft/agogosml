@@ -12,7 +12,6 @@ class StreamingClientMock(AbstractStreamingClient):
         self.receiving = False
         self.last_message = None
         self.should_fail_to_send = False
-        pass
 
     def send(self, msg):
         print('Streaming Client Mock send message: %s' % msg)
@@ -30,7 +29,6 @@ class StreamingClientMock(AbstractStreamingClient):
     def start_receiving(self, callback):
         self.receiving = True
         self.callback = callback
-        pass
 
     def get_sent(self):
         return self.sent
@@ -60,11 +58,9 @@ class HttpClientMock(ListenerClient):
     def start(self, on_message_received):
         self.callback = on_message_received
         self.startCalled = True
-        pass
 
     def stop(self):
         self.stopCalled = True
-        pass
 
     def mock_new_incoming_message(self):
         return self.callback("{'some':'json'}")
@@ -80,7 +76,6 @@ class MessageSenderMock(MessageSender):
     def __init__(self, config: dict = None):
         self.msg = None
         self.should_fail_to_send = None
-        pass
 
     def send(self, msg):
         if self.should_fail_to_send:

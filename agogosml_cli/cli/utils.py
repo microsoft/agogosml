@@ -30,4 +30,3 @@ def validate_manifest(manifest_json: object) -> None:
     with SCHEMA_FILE.open() as f:
         schema_json = json.load(f)
     validate(manifest_json, schema_json)
-    return

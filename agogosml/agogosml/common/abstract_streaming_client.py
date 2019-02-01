@@ -3,6 +3,7 @@ from abc import abstractmethod
 from functools import lru_cache
 from typing import Callable
 from typing import Dict
+from typing import Optional
 from typing import Type
 
 from agogosml.utils.imports import find_implementations
@@ -44,7 +45,7 @@ def find_streaming_clients() -> Dict[str, StreamingClientType]:
     }
 
 
-def create_streaming_client_from_config(config: dict) -> AbstractStreamingClient:
+def create_streaming_client_from_config(config: Optional[dict]) -> AbstractStreamingClient:
     config = config or {}
     try:
         client_config = config['config']

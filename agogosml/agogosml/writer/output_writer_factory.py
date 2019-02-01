@@ -18,12 +18,9 @@ class OutputWriterFactory:
 
         client = streaming_client or create_streaming_client_from_config(config.get('client'))
 
-        if listener_client is None:
-            port = config.get("OUTPUT_WRITER_PORT")
-            host = config.get("OUTPUT_WRITER_HOST")
-
-            listener = FlaskHttpListenerClient({'PORT': port, 'HOST': host})
-        else:
-            listener = listener_client
+        listener = listener_client or FlaskHttpListenerClient({
+            'PORT': config.get("OUTPUT_WRITER_PORT"),
+            'HOST': config.get("OUTPUT_WRITER_HOST"),
+        })
 
         return OutputWriter(client, listener)

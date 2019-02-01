@@ -16,7 +16,7 @@ class FlaskHttpListenerClient(ListenerClient):
             PORT
             HOST
         """
-        self.port = int(config.get('PORT'))
+        self.port = int(config['PORT']) if 'PORT' in config else None
         self.host = config.get('HOST', DEFAULT_HOST)
 
     def thread_flask(self):

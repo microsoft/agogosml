@@ -54,6 +54,7 @@ lint: ## check python style
 	flake8 agogosml tests
 	pylint agogosml
 	mypy agogosml
+	bandit -r agogosml
 	isort --check-only --recursive agogosml
 
 test:

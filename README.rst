@@ -24,9 +24,7 @@ Agogosml
     :alt: Agogosml CLI Documentation Status
 
 Agogosml is a data processing pipeline project that addresses the common
-need for operationalizing ML models. This covers the complete workflow
-of training, deploying, scoring and monitoring the models in production
-at scale.
+need for operationalizing ML models. The project enables you to deploy models in production at scale and aspires to provide scoring and monitoring of models on the same infrastructure (coming soon).
 
 
 Features

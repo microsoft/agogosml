@@ -21,7 +21,7 @@ class InputReaderFactory:
         :param streaming_client: Optional, an existing streaming client implementation to use.
         :return InputReader: An instance of an InputReader with streaming_client and message_sender
         """
-        if InputReaderFactory.is_empty(config):
+        if not config:
             raise Exception('No config were set for the InputReader manager')
 
         client = streaming_client or create_streaming_client_from_config(config.get('client'))
@@ -33,15 +33,3 @@ class InputReaderFactory:
         msg_sender = HttpMessageSender({'HOST': app_host, 'PORT': app_port})
 
         return InputReader(client, msg_sender)
-
-    @staticmethod
-    def is_empty(dictionary: dict) -> bool:
-        """
-        Checks if a dictionary is empty.
-        Empty dictionaries resolve to false when
-        converted to booleans in Python.
-
-        :param dictionary: a dictionary to test
-        :return: true if empty, false otherwise
-        """
-        return not bool(dictionary)

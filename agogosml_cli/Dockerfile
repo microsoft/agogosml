@@ -8,21 +8,20 @@ RUN apk add --update make \
 
 WORKDIR /usr/src/agogosml_cli
 
-COPY Pipfile Pipfile.lock ./
+COPY requirements-dev.txt .
+RUN pip install --no-cache-dir -r requirements-dev.txt
 
-RUN pip install pipenv && \
-    pipenv install --deploy --dev 
-    # --deploy causes pipenv to fail if the lock file is out of date
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN pipenv run make clean && \
-    pipenv run make lint && \
-    pipenv run make test && \
-    # pipenv run make test-all && \ <- FIXME: Tox is broken, no py3.5, 3.6 interpreter in image
-    pipenv run make docs && \
-    pipenv lock --requirements | grep -v '^-i' > requirements.txt && \
-    pipenv run make dist
+RUN make clean && \
+    make lint && \
+    make test && \
+    # make test-all && \ <- FIXME: Tox is broken, no py3.5, 3.6 interpreter in image
+    make docs && \
+    make dist
 
 FROM python:${PYTHON_VERSION}
 ENV PYTHONUNBUFFERED=1

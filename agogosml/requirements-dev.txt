@@ -1,0 +1,13 @@
+bumpversion
+wheel
+watchdog
+flake8
+isort
+tox
+pytest
+pytest-runner
+Sphinx
+twine
+pylint
+pytest-cov
+mypy

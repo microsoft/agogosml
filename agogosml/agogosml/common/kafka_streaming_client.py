@@ -1,6 +1,6 @@
 """Kafka streaming client"""
 
-import datetime
+from datetime import datetime
 
 from confluent_kafka import Consumer
 from confluent_kafka import KafkaError
@@ -8,13 +8,13 @@ from confluent_kafka import KafkaException
 from confluent_kafka import Producer
 from confluent_kafka import admin
 
-from ..utils.logger import Logger
-from .abstract_streaming_client import AbstractStreamingClient
-
-logger = Logger()
+from agogosml.common.abstract_streaming_client import AbstractStreamingClient
+from agogosml.utils.logger import Logger
 
 
 class KafkaStreamingClient(AbstractStreamingClient):
+    """Kafka streaming client"""
+
     def __init__(self, config):
         """
         Streaming client implementation based on Kafka.
@@ -43,9 +43,9 @@ class KafkaStreamingClient(AbstractStreamingClient):
         if config.get("KAFKA_CONSUMER_GROUP") is None:
             self.producer = Producer(kafka_config)
         else:
-            self.app_host = config.get("APP_HOST")
-            self.app_port = config.get("APP_PORT")
             self.consumer = Consumer(kafka_config)
+
+        self.logger = Logger()
 
     @staticmethod
     def create_kafka_config(user_config: dict) -> dict:
@@ -71,10 +71,10 @@ class KafkaStreamingClient(AbstractStreamingClient):
         """
 
         if err is not None:
-            logger.error('Message delivery failed: %s', err)
+            self.logger.error('Message delivery failed: %s', err)
         else:
-            logger.info('Message delivered to %s [%s]',
-                        msg.topic(), msg.partition())
+            self.logger.info('Message delivered to %s [%s]',
+                             msg.topic(), msg.partition())
 
     def send(self, message: str):
         if not isinstance(message, str):
@@ -86,17 +86,17 @@ class KafkaStreamingClient(AbstractStreamingClient):
                 self.topic, mutated_message, callback=self.delivery_report)
             self.producer.flush()
             return True
-        except Exception as e:
-            logger.error('Error sending message to kafka: %s', e)
+        except Exception as ex:
+            self.logger.error('Error sending message to kafka: %s', ex)
             return False
 
-    def stop(self, *args, **kwargs):
+    def stop(self):
         pass
 
-    def check_timeout(self, start: datetime.datetime):
+    def check_timeout(self, start: datetime):
         """Interrupts if too much time has elapsed since the kafka client started running."""
         if self.timeout is not None:
-            elapsed = datetime.datetime.now() - start
+            elapsed = datetime.now() - start
             if elapsed.seconds >= self.timeout:
                 raise KeyboardInterrupt
 
@@ -104,8 +104,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
         """Handle an error in kafka."""
         if msg.error().code() == KafkaError._PARTITION_EOF:
             # End of partition event
-            logger.error('%% %s [%d] reached end at offset %d\n',
-                         msg.topic(), msg.partition(), msg.offset())
+            self.logger.error('%% %s [%d] reached end at offset %d\n',
+                              msg.topic(), msg.partition(), msg.offset())
         else:
             # Error
             raise KafkaException(msg.error())
@@ -114,7 +114,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
         # TODO: We are going to need documentation for Kafka to ensure proper syntax is clear
         try:
             self.subscribe_to_topic()
-            start = datetime.datetime.now()
+            start = datetime.now()
 
             while True:
                 # Stop loop after timeout if exists
@@ -126,7 +126,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
                     on_message_received_callback(msg)
 
         except KeyboardInterrupt:
-            logger.info('Aborting listener...')
+            self.logger.info('Aborting listener...')
 
         finally:
             # Close down consumer to commit final offsets.
@@ -139,14 +139,16 @@ class KafkaStreamingClient(AbstractStreamingClient):
     def read_single_message(self):
         """Poll messages from topic"""
         msg = self.consumer.poll(0.000001)
+
         if msg is None:
             return None
+
         if msg.error():
             # Error or event
             self.handle_kafka_error(msg)
             return None
-        else:
-            # Proper message
-            # logger.info('kafka read message: %s, from topic: %s', msg.value(), msg.topic())
-            self.consumer.commit(msg)
-            return msg.value()
+
+        # Proper message
+        # self.logger.info('kafka read message: %s, from topic: %s', msg.value(), msg.topic())
+        self.consumer.commit(msg)
+        return msg.value()

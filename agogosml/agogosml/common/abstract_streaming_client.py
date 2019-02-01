@@ -1,4 +1,4 @@
-"""Abstract streaming client class"""
+"""Abstract streaming client interface"""
 
 from abc import ABC
 from abc import abstractmethod
@@ -12,25 +12,27 @@ from agogosml.utils.imports import find_implementations
 
 
 class AbstractStreamingClient(ABC):
+    """Abstract streaming client interface"""
+
     @abstractmethod
     def __init__(self, config: dict):
         """Abstract Streaming Client"""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def send(self, message: str) -> bool:
         """Send method."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def stop(self):
         """Stop method."""
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def start_receiving(self, on_message_received_callback: Callable[[str], bool]):
         """Start receiving messages from streaming client."""
-        pass
+        raise NotImplementedError
 
 
 StreamingClientType = Type[AbstractStreamingClient]

@@ -1,17 +1,16 @@
-""" Factory for InputReader """
+"""Factory for InputReader"""
 from typing import Optional
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 from agogosml.common.abstract_streaming_client import create_streaming_client_from_config
 from agogosml.common.http_message_sender import HttpMessageSender
-from agogosml.utils.logger import Logger
 
 from .input_reader import InputReader
 
-logger = Logger()
-
 
 class InputReaderFactory:
+    """Factory for InputReader"""
+
     @staticmethod
     def create(config: dict, streaming_client: Optional[AbstractStreamingClient] = None):
         """Factory and instance resolving for input reader"""

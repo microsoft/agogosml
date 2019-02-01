@@ -10,14 +10,14 @@ from azure.eventprocessorhost import EPHOptions
 from azure.eventprocessorhost import EventHubConfig
 from azure.eventprocessorhost import EventProcessorHost
 
-from ..utils.logger import Logger
-from .abstract_streaming_client import AbstractStreamingClient
-from .eventhub_processor_events import EventProcessor
-
-logger = Logger()
+from agogosml.common.abstract_streaming_client import AbstractStreamingClient
+from agogosml.common.eventhub_processor_events import EventProcessor
+from agogosml.utils.logger import Logger
 
 
 class EventHubStreamingClient(AbstractStreamingClient):
+    """Event Hub streaming client"""
+
     def __init__(self, config):
         """
         Azure EventHub streaming client implementation.
@@ -34,57 +34,52 @@ class EventHubStreamingClient(AbstractStreamingClient):
           TIMEOUT
         """
 
-        self.message_callback = None
-        self.config = config
-        self.storage_account_name = self.config.get("AZURE_STORAGE_ACCOUNT")
-        self.storage_key = self.config.get("AZURE_STORAGE_ACCESS_KEY")
-        self.lease_container_name = self.config.get("LEASE_CONTAINER_NAME")
-        self.namespace = self.config.get("EVENT_HUB_NAMESPACE")
-        self.eventhub = self.config.get("EVENT_HUB_NAME")
-        self.consumer_group = self.config.get("EVENT_HUB_CONSUMER_GROUP")
-        if self.consumer_group is None:
-            self.consumer_group = '$default'
+        storage_account_name = config.get("AZURE_STORAGE_ACCOUNT")
+        storage_key = config.get("AZURE_STORAGE_ACCESS_KEY")
+        lease_container_name = config.get("LEASE_CONTAINER_NAME")
+        namespace = config.get("EVENT_HUB_NAMESPACE")
+        eventhub = config.get("EVENT_HUB_NAME")
+        consumer_group = config.get("EVENT_HUB_CONSUMER_GROUP", '$default')
+        user = config.get("EVENT_HUB_SAS_POLICY")
+        key = config.get("EVENT_HUB_SAS_KEY")
 
-        self.user = self.config.get("EVENT_HUB_SAS_POLICY")
-        self.key = self.config.get("EVENT_HUB_SAS_KEY")
-        if self.config.get("TIMEOUT"):
-            try:
-                self.timeout = int(self.config.get("TIMEOUT"))
-            except ValueError:
-                self.timeout = None
-        else:
+        try:
+            self.timeout = int(config['TIMEOUT'])
+        except (KeyError, ValueError):
             self.timeout = None
 
+        self.logger = Logger()
+
         # Create EPH Client
-        if self.storage_account_name is not None and self.storage_key is not None:
+        if storage_account_name is not None and storage_key is not None:
             self.eph_client = EventHubConfig(
-                sb_name=self.namespace,
-                eh_name=self.eventhub,
-                policy=self.user,
-                sas_key=self.key,
-                consumer_group=self.consumer_group)
+                sb_name=namespace,
+                eh_name=eventhub,
+                policy=user,
+                sas_key=key,
+                consumer_group=consumer_group)
             self.eh_options = EPHOptions()
             self.eh_options.release_pump_on_timeout = True
             self.eh_options.auto_reconnect_on_error = False
             self.eh_options.debug_trace = False
             self.storage_manager = AzureStorageCheckpointLeaseManager(
-                self.storage_account_name, self.storage_key,
-                self.lease_container_name)
+                storage_account_name, storage_key,
+                lease_container_name)
 
         # Create Send client
         else:
-            address = "amqps://" + self.namespace + \
-                      ".servicebus.windows.net/" + self.eventhub
+            address = "amqps://" + namespace + \
+                      ".servicebus.windows.net/" + eventhub
             try:
                 self.send_client = EventHubClient(
                     address,
                     debug=False,
-                    username=self.user,
-                    password=self.key)
+                    username=user,
+                    password=key)
                 self.sender = self.send_client.add_sender()
                 self.send_client.run()
-            except Exception as e:
-                logger.error('Failed to init EH send client: %s', e)
+            except Exception as ex:
+                self.logger.error('Failed to init EH send client: %s', ex)
                 raise
 
     def start_receiving(self, on_message_received_callback):
@@ -108,17 +103,17 @@ class EventHubStreamingClient(AbstractStreamingClient):
     def send(self, message):
         try:
             self.sender.send(EventData(body=message))
-            logger.info('Sent message: %s', message)
+            self.logger.info('Sent message: %s', message)
             return True
-        except Exception as e:
-            logger.error('Failed to send message to EH: %s', e)
+        except Exception as ex:
+            self.logger.error('Failed to send message to EH: %s', ex)
             return False
 
     def stop(self):
         try:
             self.send_client.stop()
-        except Exception as e:
-            logger.error('Failed to close send client: %s', e)
+        except Exception as ex:
+            self.logger.error('Failed to close send client: %s', ex)
 
     @staticmethod
     async def wait_and_close(host: EventProcessorHost, timeout: Optional[float] = None):

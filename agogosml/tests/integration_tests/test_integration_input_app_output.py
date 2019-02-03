@@ -149,9 +149,10 @@ def test_when_messages_sent_to_kafka_then_all_messages_are_sent_via_output():
             'type': 'kafka',
             'config': {
                 "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC_INPUT"),
-                "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
                 "KAFKA_CONSUMER_GROUP": os.getenv("KAFKA_CONSUMER_GROUP"),
-                "TIMEOUT": os.getenv("KAFKA_TIMEOUT")
+                "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
+                "TIMEOUT": os.getenv("KAFKA_TIMEOUT"),
+                "EVENTHUB_KAFKA_CONNECTION_STRING": os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
             }
         },
         'APP_PORT': os.getenv("APP_PORT"),
@@ -210,9 +211,10 @@ def test_when_messages_sent_to_kafka_then_all_messages_are_sent_via_output():
 
 def send_message_to_kafka(msg):
     config = {
-        "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC_INPUT"),
+        "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC_OUTPUT"),
         "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
-        "TIMEOUT": os.getenv("KAFKA_TIMEOUT")
+        "TIMEOUT": os.getenv("KAFKA_TIMEOUT"),
+        "EVENTHUB_KAFKA_CONNECTION_STRING": os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
     }
     kafka = KafkaStreamingClient(config)
     val = kafka.send(msg)
@@ -221,10 +223,11 @@ def send_message_to_kafka(msg):
 
 def read_message_from_kafka():
     config = {
-        "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC_OUTPUT"),
+        "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC_INPUT"),
         "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
         "KAFKA_CONSUMER_GROUP": os.getenv("KAFKA_CONSUMER_GROUP"),
-        "TIMEOUT": os.getenv("KAFKA_TIMEOUT")
+        "TIMEOUT": os.getenv("KAFKA_TIMEOUT"),
+        "EVENTHUB_KAFKA_CONNECTION_STRING": os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
     }
     kafka = KafkaStreamingClient(config)
     kafka.start_receiving(on_msg)
@@ -253,3 +256,7 @@ my_msg = None
 def on_msg(msg):
     global my_msg
     my_msg = msg.decode('utf-8')
+
+
+if __name__ == "__main__":
+    test_when_messages_sent_to_kafka_then_all_messages_are_sent_via_output()

@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
     input-reader:
-        image: ${CONTAINER_REG}/input_reader:${TAG}
+        image: ${CONTAINER_REG}/input_reader10:${TAG}
         networks:
             mynet:
                 aliases:
@@ -19,13 +19,14 @@ services:
             AZURE_STORAGE_ACCESS_KEY:
             EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_INPUT}
             #kafka 
-            KAFKA_TOPIC: ${KAFKA_TOPIC}
+            KAFKA_TOPIC_INPUT: ${KAFKA_TOPIC_INPUT}
+            KAFKA_TIMEOUT: ${KAFKA_TIMEOUT}
             KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
             KAFKA_ADDRESS: ${KAFKA_ADDRESS}
             EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
 
     output-writer:
-        image: ${CONTAINER_REG}/output_writer:${TAG}
+        image: ${CONTAINER_REG}/output_writer10:${TAG}
         ports:
             - "127.0.0.1:6000:6000"
         networks:
@@ -44,14 +45,14 @@ services:
             OUTPUT_WRITER_HOST: output
             EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_OUTPUT}
             #kafka             
-            KAFKA_TOPIC: ${KAFKA_TOPIC}
-            KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
+            KAFKA_TOPIC_OUTPUT: ${KAFKA_TOPIC_OUTPUT}
+            KAFKA_TIMEOUT: ${KAFKA_TIMEOUT}
             KAFKA_ADDRESS: ${KAFKA_ADDRESS}
             EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
 
             
     sample-app:
-        image: ${CONTAINER_REG}/sample_app:${APP_TAG}
+        image: ${CONTAINER_REG}/sample_app10:${APP_TAG}
         ports:
             - "127.0.0.1:3000:3000"
         networks:

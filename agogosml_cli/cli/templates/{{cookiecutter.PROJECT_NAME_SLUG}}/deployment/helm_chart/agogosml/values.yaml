@@ -28,9 +28,11 @@ input_reader:
     EVENT_HUB_SAS_KEY: ""
     LEASE_CONTAINER_NAME: ""
     # kafka
-    KAFKA_TOPIC: ""
+    KAFKA_TOPIC_INPUT: ""
     KAFKA_CONSUMER_GROUP: ""
     KAFKA_ADDRESS: ""
+    KAFKA_TIMEOUT: ""
+    EVENTHUB_KAFKA_CONNECTION_STRING: ""
 
 
 output_writer:
@@ -46,8 +48,10 @@ output_writer:
     EVENT_HUB_SAS_POLICY: ""
     EVENT_HUB_SAS_KEY: ""
     # Kafka
-    KAFKA_TOPIC: ""
+    KAFKA_TOPIC_OUTPUT: ""
     KAFKA_ADDRESS: ""
+    KAFKA_TIMEOUT: ""
+    EVENTHUB_KAFKA_CONNECTION_STRING: ""
 
 main_app: app_0
 

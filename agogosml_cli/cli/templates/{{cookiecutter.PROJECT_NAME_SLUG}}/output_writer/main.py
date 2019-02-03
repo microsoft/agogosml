@@ -29,7 +29,7 @@ if __name__ == "__main__":
             'client': {
                 'type': 'kafka',
                 'config': {
-                    'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),
+                    'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC_OUTPUT"),
                     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
                 }
             },

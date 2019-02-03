@@ -54,16 +54,20 @@ class KafkaStreamingClient(AbstractStreamingClient):
         config = {
             "bootstrap.servers": user_config.get("KAFKA_ADDRESS"),
             "enable.auto.commit": False,
-            "auto.offset.reset": "earliest"
+            "auto.offset.reset": "earliest",
+            # 'request.timeout.ms': 60000,
+            # 'session.timeout.ms': 60000,
+            # 'default.topic.config': {'auto.offset.reset': 'smallest'},
         }
 
         if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'):
             eventhub_config = {
                 'security.protocol': "SASL_SSL",
                 'sasl.mechanism': "PLAIN",
-                'sasl.jaas.config': """org.apache.kafka.common.security.plain.PlainLoginModule required
-                                    username=$ConnectionString password="""
-                                    + user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'),
+                'ssl.ca.location': '/usr/local/etc/openssl/cert.pem',
+                'sasl.username': '$ConnectionString',
+                'sasl.password': user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'),
+                'client.id': 'agogosml',
             }
             config = {**config, **eventhub_config}
 

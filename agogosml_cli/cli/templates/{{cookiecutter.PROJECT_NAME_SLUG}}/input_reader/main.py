@@ -33,7 +33,7 @@ if __name__ == "__main__":
             'client': {
                 'type': 'kafka',
                 'config': {
-                    'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),
+                    'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC_INPUT"),
                     'KAFKA_CONSUMER_GROUP': os.getenv("KAFKA_CONSUMER_GROUP"),
                     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
                     'TIMEOUT': os.getenv('TIMEOUT'),

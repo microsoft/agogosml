@@ -91,7 +91,7 @@ def test_kafka_created_from_factory():
         'client': {
             'type': 'kafka',
             'config': {
-                "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC"),
+                "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC_INPUT"),
                 "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
                 "KAFKA_CONSUMER_GROUP": os.getenv("KAFKA_CONSUMER_GROUP"),
                 "TIMEOUT": 20,

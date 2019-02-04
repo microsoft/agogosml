@@ -1,35 +1,14 @@
 #!/usr/bin/env python3
 """Script to push inputs to an agogosml client."""
 from argparse import ArgumentParser
-from argparse import ArgumentTypeError
 from argparse import FileType
-from json import loads
 from sys import stdin
-from typing import IO
-from typing import Dict
 
-from agogosml.common.abstract_streaming_client import StreamingClientType
 from agogosml.common.abstract_streaming_client import find_streaming_clients
+from agogosml.utils.cli import json_arg
 
 
-def json_arg(value: str):
-    """Parse a JSON argument from the command line.
-
-    >>> json_arg('{"foo": "bar", "baz": [1, 2]}')
-    {'foo': 'bar', 'baz': [1, 2]}
-
-    >>> json_arg('{')
-    Traceback (most recent call last):
-        ...
-    argparse.ArgumentTypeError: { is not in JSON format
-    """
-    try:
-        return loads(value)
-    except ValueError:
-        raise ArgumentTypeError('%s is not in JSON format' % value)
-
-
-def main(messages: IO[str], sender_class: StreamingClientType, config: Dict[str, str]):
+def main(messages, sender_class, config):
     """Main entrypoint to the tool."""
     sender = sender_class(config)
     for message in messages:
@@ -42,7 +21,7 @@ def cli():
 
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('--infile', type=FileType('r', encoding='utf-8'),
-                        required=True, default=stdin,
+                        default=stdin,
                         help='File with events to send')
     parser.add_argument('--sender', choices=sorted(streaming_clients),
                         required=True, default='kafka',

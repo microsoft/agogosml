@@ -13,10 +13,6 @@ import cli.utils as utils
 
 # Project files to output with src and dst names.
 PROJ_FILES = {
-    'pipeline/azure-ci-agogosml-pipeline.jsonnet':
-        'ci-agogosml-pipeline.json',
-    'pipeline/azure-ci-app-pipeline.jsonnet':
-        'ci-app-pipeline.json',
     'pipeline/azure-cd-pipeline.jsonnet':
         'cd-pipeline.json',
     'pipeline/azure-ci-e2e-tests-pipeline.jsonnet':
@@ -142,8 +138,6 @@ def extract_azure_template_vars(manifest: dict) -> dict:
         template_vars['AZURE_CONTAINER_REGISTRY'] = acr
         if not acr.endswith('/'):
             acr += '/'
-        template_vars['AZURE_DOCKER_BUILDARGS'] = \
-            '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
     return template_vars
 
 

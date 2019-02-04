@@ -8,8 +8,8 @@ steps:
 - task: Docker@1
   displayName: 'Build an image'
   inputs:
-    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
-    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
+    azureContainerRegistry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
     dockerFile: agogosml/Dockerfile.agogosml
     imageName: 'agogosml:$(Build.BuildId)'
 
@@ -30,8 +30,8 @@ steps:
 - task: Docker@1
   displayName: 'Push base image'
   inputs:
-    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
-    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
+    azureContainerRegistry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
     command: 'Push an image'
     imageName: agogosml
 
@@ -41,10 +41,10 @@ steps:
 - task: Docker@1
   displayName: 'Build an image'
   inputs:
-    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
-    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
+    azureContainerRegistry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
     dockerFile: '**/input_reader/Dockerfile.input_reader'
-    arguments: {{cookiecutter.AZURE_DOCKER_BUILDARGS}}
+    arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
     useDefaultContext: false
     imageName: 'input_reader:$(Build.BuildId)'
 
@@ -63,8 +63,8 @@ steps:
 - task: Docker@1
   displayName: 'Push input reader app image'
   inputs:
-    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
-    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
+    azureContainerRegistry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
     command: 'Push an image'
     imageName: 'input_reader'
 
@@ -73,10 +73,10 @@ steps:
 - task: Docker@1
   displayName: 'Build an image'
   inputs:
-    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
-    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
+    azureContainerRegistry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
     dockerFile: '**/output_writer/Dockerfile.output_writer'
-    arguments: {{cookiecutter.AZURE_DOCKER_BUILDARGS}}
+    arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
     useDefaultContext: false
     imageName: 'output_writer:$(Build.BuildId)'
 
@@ -95,7 +95,7 @@ steps:
 - task: Docker@1
   displayName: 'Push output writer app image'
   inputs:
-    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
-    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
+    azureContainerRegistry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
     command: 'Push an image'
     imageName: 'output_writer'

@@ -21,8 +21,7 @@ import tests.test_utils as test_utils
 """
 
 EXPECTED_OUTPUT_PROJ_FILES = (
-    'ci-app-pipeline.json',
-    'ci-agogosml-pipeline.json',
+    'testproject/azure-ci-pipeline.yml',
     'cd-pipeline.json',
     'e2e-pipeline.json',
     'testproject/dockerbuild.sh',

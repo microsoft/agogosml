@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+    input-reader:
+        environment:
+            KAFKA_ADDRESS: broker:9092
+
+    output-writer:
+        environment:
+            KAFKA_ADDRESS: broker:9092
+
+    kafka:
+        image: spotify/kafka
+        ports:
+            - "127.0.0.1:9092:9092"
+            - "127.0.0.1:2181:2181"
+        networks:
+            mynet:
+                aliases:
+                    - broker
+        environment:
+            ADVERTISED_PORT: 9092

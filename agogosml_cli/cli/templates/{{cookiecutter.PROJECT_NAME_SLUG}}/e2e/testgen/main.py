@@ -31,7 +31,8 @@ eh_receive_config = {
 kafka_base_config = {
     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
     'TIMEOUT': os.getenv('TIMEOUT'),
-    'EVENTHUB_KAFKA_CONNECTION_STRING': os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
+    'EVENTHUB_KAFKA_CONNECTION_STRING': os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING'),
+    'SSL_CERT_LOCATION': os.getenv('SSL_CERT_LOCATION')
 }
 
 kafka_receive_config = {

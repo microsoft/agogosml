@@ -57,10 +57,13 @@ class KafkaStreamingClient(AbstractStreamingClient):
         }
 
         if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'):
+            ssl_location = user_config.get('SSL_CERT_LOCATION')
+            if user_config.get('SSL_CERT_LOCATION') is None:
+                ssl_location = '/usr/local/etc/openssl/cert.pem'
             eventhub_config = {
                 'security.protocol': "SASL_SSL",
                 'sasl.mechanism': "PLAIN",
-                'ssl.ca.location': '/usr/local/etc/openssl/cert.pem',
+                'ssl.ca.location': ssl_location,
                 'sasl.username': '$ConnectionString',
                 'sasl.password': user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'),
                 'client.id': 'agogosml',

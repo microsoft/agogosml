@@ -18,15 +18,10 @@ check_variable_exists () {
     fi
 }
 
-check_variable_exists "ARM_SUBSCRIPTION_ID"
-check_variable_exists "ARM_CLIENT_ID"
-check_variable_exists "ARM_CLIENT_SECRET"
-check_variable_exists "ARM_TENANT_ID"
-check_variable_exists "ARM_ENVIRONMENT"
 check_variable_exists "STORAGE_ACCOUNT_NAME"
 check_variable_exists "ARM_ACCESS_KEY"
 
-# The tfstate file will be upload to azure storage to maintain consistency and future destruction of the resources.
+# The tfstate file will be uploaded to the azure storage in order to maintain consistency and future destruction of the resources.
 az storage container create -n tfstate --account-name $STORAGE_ACCOUNT_NAME --account-key $ARM_ACCESS_KEY
 
 # Initializing and deploying terraform deployment

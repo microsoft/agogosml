@@ -82,6 +82,7 @@ def get_messages_from_client(msg_type: str):
 
     def receive_callback(message):
         received_messages.append(message)
+        return True
 
     asyncio.set_event_loop(asyncio.new_event_loop())
     receive_client.start_receiving(receive_callback)

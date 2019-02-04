@@ -6,7 +6,7 @@ jobs:
   displayName: Agogosml-Build-CI
   condition: succeeded()
   pool:
-    vmImage: Hosted Ubuntu 1604
+    vmImage: 'Ubuntu 16.04'
 
   steps:
   - task: Docker@1
@@ -25,8 +25,8 @@ jobs:
        else
          echo "Not a merge build, hence skipping 'latest' tag"
        fi
-       
-    displayName: 'Tag ''latest' tag'
+
+    displayName: 'Tag latest tag'
 
   - task: Docker@1
     displayName: 'Push base image'
@@ -42,7 +42,7 @@ jobs:
   dependsOn: Phase_1
   condition: succeeded()
   pool:
-    vmImage: Hosted Ubuntu 1604
+    vmImage: 'Ubuntu 16.04'
 
   steps:
   - task: Docker@1
@@ -63,8 +63,8 @@ jobs:
        else
          echo "Not a merge build, hence skipping 'latest' tag"
        fi
-       
-    displayName: 'Tag ''latest' tag'
+
+    displayName: 'Tag latest tag'
 
   - task: Docker@1
     displayName: 'Push input reader app image'
@@ -80,7 +80,7 @@ jobs:
   dependsOn: Phase_1
   condition: succeeded()
   pool:
-    vmImage: Hosted Ubuntu 1604
+    vmImage: 'Ubuntu 16.04'
 
   steps:
   - task: Docker@1
@@ -102,7 +102,7 @@ jobs:
          echo "Not a merge build, hence skipping 'latest' tag"
        fi
        
-    displayName: 'Tag ''latest' tag'
+    displayName: 'Tag latest tag'
 
   - task: Docker@1
     displayName: 'Push output writer app image'

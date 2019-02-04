@@ -1,0 +1,99 @@
+# Agogosml-Build-CI
+pool:
+  vmImage: 'Ubuntu 16.04'
+  
+steps:
+- task: Docker@1
+  displayName: 'Build an image'
+  inputs:
+    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
+    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    dockerFile: agogosml/Dockerfile.agogosml
+    imageName: 'agogosml:$(Build.BuildId)'
+
+
+#Your build pipeline references the ‘container_registry’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+steps:
+- bash: |
+   if [ $(Build.SourceBranchName) = "master" ]; then
+     echo "Since this is a merge build, we are creating a new 'latest' tag"
+     docker tag $(container_registry)/agogosml:$(Build.BuildId) $(container_registry)/agogosml:latest
+     echo "Done"
+   else
+     echo "Not a merge build, hence skipping 'latest' tag"
+   fi
+  displayName: 'Tag "latest" tag'
+
+steps:
+- task: Docker@1
+  displayName: 'Push base image'
+  inputs:
+    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
+    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    command: 'Push an image'
+    imageName: agogosml
+
+
+# Inputreader-Build-CI
+steps:
+- task: Docker@1
+  displayName: 'Build an image'
+  inputs:
+    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
+    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    dockerFile: '**/input_reader/Dockerfile.input_reader'
+    arguments: {{cookiecutter.AZURE_DOCKER_BUILDARGS}}
+    useDefaultContext: false
+    imageName: 'input_reader:$(Build.BuildId)'
+
+steps:
+- bash: |
+   if [ $(Build.SourceBranchName) = "master" ]; then
+     echo "Since this is a merge build, we are creating a new 'latest' tag"
+     docker tag $(container_registry)/input_reader:$(Build.BuildId) $(container_registry)/input_reader:latest
+     echo "Done"
+   else
+     echo "Not a merge build, hence skipping 'latest' tag"
+   fi
+  displayName: 'Tag "latest" tag'
+
+steps:
+- task: Docker@1
+  displayName: 'Push input reader app image'
+  inputs:
+    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
+    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    command: 'Push an image'
+    imageName: 'input_reader'
+
+# OutputWriter-Build-CI
+steps:
+- task: Docker@1
+  displayName: 'Build an image'
+  inputs:
+    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
+    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    dockerFile: '**/output_writer/Dockerfile.output_writer'
+    arguments: {{cookiecutter.AZURE_DOCKER_BUILDARGS}}
+    useDefaultContext: false
+    imageName: 'output_writer:$(Build.BuildId)'
+
+steps:
+- bash: |
+   if [ $(Build.SourceBranchName) = "master" ]; then
+     echo "Since this is a merge build, we are creating a new 'latest' tag"
+     docker tag $(container_registry)/output_writer:$(Build.BuildId) $(container_registry)/output_writer:latest
+     echo "Done"
+   else
+     echo "Not a merge build, hence skipping 'latest' tag"
+   fi
+  displayName: 'Tag "latest" tag'
+
+steps:
+- task: Docker@1
+  displayName: 'Push output writer app image'
+  inputs:
+    azureSubscriptionEndpoint: {{cookiecutter.SUBSCRIPTION_ID}}
+    azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+    command: 'Push an image'
+    imageName: 'output_writer'

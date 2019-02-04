@@ -14,7 +14,7 @@ jobs:
     inputs:
       azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
       azureContainerRegistry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
-      dockerFile: agogosml/Dockerfile.agogosml
+      dockerFile: '**/agogosml/Dockerfile.agogosml'
       imageName: 'agogosml:$(Build.BuildId)'
 
   - bash: |  

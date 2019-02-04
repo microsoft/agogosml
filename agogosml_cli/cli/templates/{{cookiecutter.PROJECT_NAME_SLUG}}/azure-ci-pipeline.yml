@@ -1,6 +1,16 @@
 resources:
 - repo: self
 
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - '**/agogosml'
+    - '**/input_reader'
+    - '**/output_writer'
+
 jobs:
 - job: Phase_1
   displayName: Agogosml-Build-CI

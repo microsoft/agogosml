@@ -6,6 +6,9 @@ FROM ${CONTAINER_REG}agogosml:${AGOGOSML_TAG} as builder
 WORKDIR /usr/src/agogosml
 COPY . ./input_reader
 
+# Add SSL Certificate 
+RUN apk add ca-certificates
+
 # Release
 FROM ${CONTAINER_REG}agogosml:${AGOGOSML_TAG} AS input_reader
 

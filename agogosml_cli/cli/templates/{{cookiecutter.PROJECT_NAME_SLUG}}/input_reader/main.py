@@ -33,10 +33,13 @@ if __name__ == "__main__":
             'client': {
                 'type': 'kafka',
                 'config': {
-                    'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),
+                    'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC_INPUT"),
                     'KAFKA_CONSUMER_GROUP': os.getenv("KAFKA_CONSUMER_GROUP"),
                     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
-                    'TIMEOUT': os.getenv('TIMEOUT')
+                    'TIMEOUT': os.getenv('TIMEOUT'),
+                    # Specific to Event Hub Head for Kafka
+                    'EVENTHUB_KAFKA_CONNECTION_STRING': os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING'),
+                    'SSL_CERT_LOCATION': os.getenv('SSL_CERT_LOCATION')
                 }
             },
             'APP_HOST': os.getenv("APP_HOST"),

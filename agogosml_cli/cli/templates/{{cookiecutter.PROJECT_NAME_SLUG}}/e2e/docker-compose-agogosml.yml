@@ -1,5 +1,15 @@
 version: "3.7"
 
+x-shared-environment:
+    &shared-environment
+    MESSAGING_TYPE: ${MESSAGING_TYPE}
+    AZURE_STORAGE_ACCOUNT: ${AZURE_STORAGE_ACCOUNT}
+    EVENT_HUB_NAMESPACE: ${EVENT_HUB_NAMESPACE}
+    EVENT_HUB_SAS_POLICY: ${EVENT_HUB_SAS_POLICY}
+    KAFKA_ADDRESS: ${KAFKA_ADDRESS}
+    KAFKA_TIMEOUT: ${KAFKA_TIMEOUT}
+    EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
+
 services:
     input-reader:
         image: ${CONTAINER_REG}/input_reader:${TAG}
@@ -8,17 +18,17 @@ services:
                 aliases:
                     - input
         environment:
-            MESSAGING_TYPE: ${MESSAGING_TYPE}
-            AZURE_STORAGE_ACCOUNT: ${AZURE_STORAGE_ACCOUNT}
-            EVENT_HUB_NAMESPACE: ${EVENT_HUB_NAMESPACE}
-            EVENT_HUB_NAME: ${EVENT_HUB_NAME_INPUT}
-            EVENT_HUB_SAS_POLICY: ${EVENT_HUB_SAS_POLICY}
+            << : *shared-environment
+            AZURE_STORAGE_ACCESS_KEY:
             LEASE_CONTAINER_NAME: ${LEASE_CONTAINER_NAME_INPUT}
             APP_HOST: sample
             APP_PORT: 3000
-            AZURE_STORAGE_ACCESS_KEY:
             EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_INPUT}
-
+            EVENT_HUB_NAME: ${EVENT_HUB_NAME_INPUT}
+            #kafka 
+            KAFKA_TOPIC_INPUT: ${KAFKA_TOPIC_INPUT}
+            KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
+            
     output-writer:
         image: ${CONTAINER_REG}/output_writer:${TAG}
         ports:
@@ -28,18 +38,16 @@ services:
                 aliases:
                     - output
         environment:
-            MESSAGING_TYPE: ${MESSAGING_TYPE}
-            AZURE_STORAGE_ACCOUNT: ${AZURE_STORAGE_ACCOUNT}
+            << : *shared-environment
             AZURE_STORAGE_ACCESS_KEY: ${AZURE_STORAGE_ACCESS_KEY}
             LEASE_CONTAINER_NAME: ${LEASE_CONTAINER_NAME_OUTPUT}
-            EVENT_HUB_NAMESPACE: ${EVENT_HUB_NAMESPACE}
-            EVENT_HUB_NAME: ${EVENT_HUB_NAME_OUTPUT}
-            EVENT_HUB_SAS_POLICY: ${EVENT_HUB_SAS_POLICY}
             OUTPUT_WRITER_PORT: 6000
             OUTPUT_WRITER_HOST: output
             EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_OUTPUT}
-
-            
+            EVENT_HUB_NAME: ${EVENT_HUB_NAME_OUTPUT}
+            #kafka             
+            KAFKA_TOPIC_OUTPUT: ${KAFKA_TOPIC_OUTPUT}
+          
     sample-app:
         image: ${CONTAINER_REG}/sample_app:${APP_TAG}
         ports:

@@ -129,7 +129,7 @@ def test_output_writer_factory_kafka():
         'client': {
             'type': 'kafka',
             'config': {
-                'KAFKA_TOPIC1': os.getenv("KAFKA_TOPIC"),
+                'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC_OUTPUT"),
                 'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
                 'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
             }
@@ -149,7 +149,7 @@ def test_output_writer_flask():
         'client': {
             'type': 'kafka',
             'config': {
-                'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC"),
+                'KAFKA_TOPIC': os.getenv("KAFKA_TOPIC_OUTPUT"),
                 'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
                 'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
                 'OUTPUT_WRITER_HOST': os.getenv("OUTPUT_WRITER_HOST"),

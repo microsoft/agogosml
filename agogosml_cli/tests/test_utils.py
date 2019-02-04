@@ -1,6 +1,3 @@
-
-# -*- coding: utf-8 -*-
-
 """Test utility functions"""
 
 
@@ -10,6 +7,7 @@ from typing import Union
 
 
 def md5(path: Union[Path, str]):
+    """Compute the md5 of a file"""
     path = Path(path)
     hash_md5 = hashlib.md5()
     with path.open("rb") as f:

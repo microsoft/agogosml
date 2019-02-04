@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """The setup script."""
 
 from setuptools import setup, find_packages
@@ -11,18 +9,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [
-    "applicationinsights==0.11.7",
-    "cached-property==1.5.1",
-    "singleton-decorator==1.0.0",
-    "confluent-kafka==0.11.6",
-    "azure-eventhub==1.2.0",
-    "requests==2.20.1",
-    "python-dotenv==0.9.1",
-    "flask==1.0.2",
-    "pyyaml>=4.2b1",
-    "jsonschema==2.6.0"
-]
+with open("requirements.txt") as requirements_file:
+    requirements = [line.strip() for line in requirements_file]
 
 setup_requirements = ['pytest-runner', ]
 

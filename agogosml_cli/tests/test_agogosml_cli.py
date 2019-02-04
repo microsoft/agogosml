@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Tests for `agogosml_cli` package."""
 
 from click.testing import CliRunner

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Init command module."""
 
 import json
@@ -35,8 +33,8 @@ def init(force, project_name, cloud_vendor, folder) -> int:
     # Create folder if not exists
     outfile.parent.mkdir(parents=True, exist_ok=True)
     manifest = build_manifest(project_name, cloud_vendor)
-    with outfile.open('w') as f:
-        json.dump(manifest, f, indent=4)
+    with outfile.open('w') as fobj:
+        json.dump(manifest, fobj, indent=4)
     return 0
 
 

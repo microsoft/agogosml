@@ -13,7 +13,8 @@ from agogosml.common.abstract_streaming_client import find_streaming_clients
 
 
 def json_arg(value: str):
-    """
+    """Parse a JSON argument from the command line.
+
     >>> json_arg('{"foo": "bar", "baz": [1, 2]}')
     {'foo': 'bar', 'baz': [1, 2]}
 
@@ -29,12 +30,14 @@ def json_arg(value: str):
 
 
 def main(messages: IO[str], sender_class: StreamingClientType, config: Dict[str, str]):
+    """Main entrypoint to the tool."""
     sender = sender_class(config)
     for message in messages:
         sender.send(message.rstrip('\r\n'))
 
 
 def cli():
+    """Command-line interface to the tool."""
     streaming_clients = find_streaming_clients()
 
     parser = ArgumentParser(description=__doc__)

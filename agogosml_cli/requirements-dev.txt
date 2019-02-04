@@ -1,0 +1,13 @@
+bandit
+bumpversion
+wheel
+watchdog
+flake8
+tox
+pytest
+pytest-runner
+Sphinx
+twine
+pylint
+pytest-cov
+rope

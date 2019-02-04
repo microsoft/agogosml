@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Generate command module."""
 
 import json
@@ -46,12 +45,12 @@ APP_TEMPLATES = {
     help='Path to manifest.json file')
 @click.option('--app-base', type=click.Choice(APP_TEMPLATES.keys()), default='simple')
 @click.argument('folder', type=click.Path(), default='.', required=False)
-def generate(force, config, app_base, folder) -> int:
+def generate(force, config, app_base, folder):
     """Generates an agogosml project"""
     template_vars = {}
     template_file = utils.get_template_full_filepath('cookiecutter.json')
-    with template_file.open() as f:
-        template_vars = json.load(f)
+    with template_file.open() as fobj:
+        template_vars = json.load(fobj)
 
     # Create folder if not exists
     folder = Path(folder)
@@ -63,11 +62,11 @@ def generate(force, config, app_base, folder) -> int:
         config_path = folder / config
 
     if config_path.is_file():
-        with config_path.open() as f:
-            manifest = json.load(f)
+        with config_path.open() as fobj:
+            manifest = json.load(fobj)
             utils.validate_manifest(manifest)
             # Retrieve values
-            template_vars = {**template_vars, **extractTemplateVarsFromManifest(manifest)}
+            template_vars = {**template_vars, **extract_template_vars_from_manifest(manifest)}
     else:
         click.echo('manifest.json not found. Please run agogosml init first.')
         raise click.Abort()
@@ -108,7 +107,8 @@ def generate(force, config, app_base, folder) -> int:
             write_jsonnet(Path(template_src), Path(template_dst), folder, template_vars)
 
 
-def extractTemplateVarsFromManifest(manifest):
+def extract_template_vars_from_manifest(manifest: dict) -> dict:
+    """Extract template variables from manifest"""
     template_vars = {
         'PROJECT_NAME': manifest['name'],
         'PROJECT_NAME_SLUG': safe_filename(manifest['name']),
@@ -117,7 +117,7 @@ def extractTemplateVarsFromManifest(manifest):
     }
 
     if manifest['cloud']['vendor'] == 'azure':
-        template_vars = {**template_vars, **extractAzureTemplateVars(manifest)}
+        template_vars = {**template_vars, **extract_azure_template_vars(manifest)}
 
     # Add git repository variables
     if 'repository' in manifest:
@@ -130,7 +130,8 @@ def extractTemplateVarsFromManifest(manifest):
     return template_vars
 
 
-def extractAzureTemplateVars(manifest):
+def extract_azure_template_vars(manifest: dict) -> dict:
+    """Extract Azure template variables from manifest"""
     template_vars = {}
     azure_props = manifest['cloud']['otherProperties']
     if 'azureContainerRegistry' not in azure_props:
@@ -146,30 +147,23 @@ def extractAzureTemplateVars(manifest):
     return template_vars
 
 
-def write_jsonnet(source_path: Path, target_path: Path, base_path: Path, template_vars: object) -> None:
-    """Writes out a pipeline json file
-    Args:
-        source_path (Path):  Name of the pipeline file in module
-        target_path (Path): Name of the output folder
-        template_vars (object): Values to inject into jsonnet as extVars.
-    """
+def write_jsonnet(source_path: Path, target_path: Path, base_path: Path, template_vars: object):
+    """Outputs a pipeline json file"""
     pipeline_json = json.loads(_jsonnet.evaluate_file(
         filename=str(utils.get_template_full_filepath(source_path)),
         ext_vars=template_vars))
     full_path = base_path / target_path
-    with full_path.open('w') as f:
-        json.dump(pipeline_json, f, indent=4)
+    with full_path.open('w') as fobj:
+        json.dump(pipeline_json, fobj, indent=4)
 
 
-def write_cookiecutter(source_path: Path, target_path: Path, template_vars: object, overwrite=False) -> None:
-    """Outputs a cookiecutter template
-    Args:
-        target_path (Path): Name of the output folder
-    """
+def write_cookiecutter(source_path: Path, target_path: Path, template_vars: object, overwrite=False):
+    """Outputs a cookiecutter template"""
     return cookiecutter(str(source_path), extra_context=template_vars, no_input=True,
                         output_dir=str(target_path), overwrite_if_exists=overwrite)
 
 
 def safe_filename(name: str) -> str:
+    """Make string safe for use as a filename"""
     keepcharacters = (' ', '.', '_')
     return "".join(c for c in name if c.isalnum() or c in keepcharacters).rstrip()

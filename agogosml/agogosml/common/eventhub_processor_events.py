@@ -2,29 +2,24 @@
 
 from azure.eventprocessorhost import AbstractEventProcessor
 
-from ..utils.logger import Logger
-
-logger = Logger()
+from agogosml.utils.logger import Logger
 
 
 class EventProcessor(AbstractEventProcessor):
-    """Example Implementation of AbstractEventProcessor."""
+    """EventProcessor host class for Event Hub"""
 
     def __init__(self, params):
-        """
-        Init Event processor.
-
-        :param params: List of params.
-        """
+        """Sample Event Hub event processor implementation"""
         super().__init__()
         self.on_message_received_callback = params[0]
         self._msg_counter = 0
+        self.logger = Logger()
 
     async def open_async(self, context):
         """
         Called by processor host to initialize the event processor.
         """
-        logger.info("Connection established %s", context.partition_id)
+        self.logger.info("Connection established %s", context.partition_id)
 
     async def close_async(self, context, reason):
         """
@@ -36,8 +31,8 @@ class EventProcessor(AbstractEventProcessor):
         :param reason: Reason for closing the async loop.
         :type reason: string
         """
-        logger.info("Connection closed (reason %s, id %s, offset %s, sq_number %s)",
-                    reason, context.partition_id, context.offset, context.sequence_number)
+        self.logger.info("Connection closed (reason %s, id %s, offset %s, sq_number %s)",
+                         reason, context.partition_id, context.offset, context.sequence_number)
 
     async def process_events_async(self, context, messages):
         """
@@ -53,8 +48,8 @@ class EventProcessor(AbstractEventProcessor):
             message_json = message.body_as_str(encoding='UTF-8')
             if self.on_message_received_callback is not None:
                 self.on_message_received_callback(message_json)
-                logger.debug("Received message: %s", message_json)
-        logger.info("Events processed %s", context.sequence_number)
+                self.logger.debug("Received message: %s", message_json)
+        self.logger.info("Events processed %s", context.sequence_number)
         await context.checkpoint_async()
 
     async def process_error_async(self, context, error):
@@ -67,4 +62,4 @@ class EventProcessor(AbstractEventProcessor):
         :type context: ~azure.eventprocessorhost.PartitionContext
         :param error: The error that occured.
         """
-        logger.error("Event Processor Error %s", error)
+        self.logger.error("Event Processor Error %s", error)

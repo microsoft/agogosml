@@ -2,7 +2,7 @@ resources:
 - repo: self
 
 variables:
-  container_registry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+  container_registry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}/'
 
 trigger:
   branches:
@@ -26,14 +26,14 @@ jobs:
     displayName: 'Build an image'
     inputs:
       azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: '$(container_registry)'
+      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
       dockerFile: '**/agogosml/Dockerfile.agogosml'
       imageName: 'agogosml:$(Build.BuildId)'
 
   - bash: |  
        if [ $(Build.SourceBranchName) = "master" ]; then
          echo "Since this is a merge build, we are creating a new 'latest' tag"
-         docker tag $(container_registry)/agogosml:$(Build.BuildId) $(container_registry)/agogosml:latest
+         docker tag $(container_registry)agogosml:$(Build.BuildId) $(container_registry)agogosml:latest
          echo "Done"
        else
          echo "Not a merge build, hence skipping 'latest' tag"
@@ -45,7 +45,7 @@ jobs:
     displayName: 'Push base image'
     inputs:
       azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: '$(container_registry)'
+      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
       command: 'Push an image'
       imageName: agogosml
 
@@ -62,7 +62,7 @@ jobs:
     displayName: 'Build an image'
     inputs:
       azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: '$(container_registry)'
+      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
       dockerFile: '**/input_reader/Dockerfile.input_reader'
       arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       useDefaultContext: false
@@ -71,7 +71,7 @@ jobs:
   - bash: |  
        if [ $(Build.SourceBranchName) = "master" ]; then
          echo "Since this is a merge build, we are creating a new 'latest' tag"
-         docker tag $(container_registry)/input_reader:$(Build.BuildId) $(container_registry)/input_reader:latest
+         docker tag $(container_registry)input_reader:$(Build.BuildId) $(container_registry)input_reader:latest
          echo "Done"
        else
          echo "Not a merge build, hence skipping 'latest' tag"
@@ -83,7 +83,7 @@ jobs:
     displayName: 'Push input reader app image'
     inputs:
       azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: '$(container_registry)'
+      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
       command: 'Push an image'
       imageName: 'input_reader'
 
@@ -100,7 +100,7 @@ jobs:
     displayName: 'Build an image'
     inputs:
       azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: '$(container_registry)'
+      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
       dockerFile: '**/output_writer/Dockerfile.output_writer'
       arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       useDefaultContext: false
@@ -109,7 +109,7 @@ jobs:
   - bash: |  
        if [ $(Build.SourceBranchName) = "master" ]; then
          echo "Since this is a merge build, we are creating a new 'latest' tag"
-         docker tag $(container_registry)/output_writer:$(Build.BuildId) $(container_registry)/output_writer:latest
+         docker tag $(container_registry)output_writer:$(Build.BuildId) $(container_registry)output_writer:latest
          echo "Done"
        else
          echo "Not a merge build, hence skipping 'latest' tag"
@@ -121,6 +121,6 @@ jobs:
     displayName: 'Push output writer app image'
     inputs:
       azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: '$(container_registry)'
+      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
       command: 'Push an image'
       imageName: 'output_writer'

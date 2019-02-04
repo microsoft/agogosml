@@ -135,9 +135,8 @@ def extract_azure_template_vars(manifest: dict) -> dict:
         raise click.Abort()
     else:
         acr = azure_props['azureContainerRegistry']
+        #TODO: NEED TO VALIDATE THAT THE ENDING OF THIS VARIABLE IS AZURECR.IO
         template_vars['AZURE_CONTAINER_REGISTRY'] = acr
-        if not acr.endswith('/'):
-            acr += '/'
     return template_vars
 
 

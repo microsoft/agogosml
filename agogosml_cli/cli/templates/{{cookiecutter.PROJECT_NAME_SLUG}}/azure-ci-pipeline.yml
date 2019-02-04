@@ -1,4 +1,6 @@
 # Agogosml-Build-CI
+queue: Hosted VS2017 
+
 pool:
   vmImage: 'Ubuntu 16.04'
   

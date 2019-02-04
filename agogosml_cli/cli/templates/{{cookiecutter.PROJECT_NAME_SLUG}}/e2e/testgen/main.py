@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import sys
 import time
 from multiprocessing.pool import ThreadPool
 
@@ -87,7 +88,7 @@ def get_messages_from_client(msg_type: str):
     return received_messages
 
 
-if __name__ == "__main__":
+def cli():
     msg_type = os.getenv("MESSAGING_TYPE")
     send = send_messages_to_client(msg_type)
     print(send)
@@ -95,6 +96,10 @@ if __name__ == "__main__":
     receive = receive_messages(msg_type)
     print(receive)
     if receive == "[]":
-        exit(1)
+        sys.exit(1)
     else:
-        exit(0)
+        sys.exit(0)
+
+
+if __name__ == "__main__":
+    cli()

@@ -21,7 +21,7 @@ def cli():
 
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('--infile', type=FileType('r', encoding='utf-8'),
-                        required=True, default=stdin,
+                        default=stdin,
                         help='File with events to send')
     parser.add_argument('--sender', choices=sorted(streaming_clients),
                         required=True, default='kafka',

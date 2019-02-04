@@ -51,3 +51,9 @@ docker-compose -f docker-compose-testgen.yml up
 
 The testgen app will generate and send events to EventHub that will be picked up by the input-reader and start the pipeline.
 At the end of the process the testgen app will also read the results sent to EventHub and print them for you to validate the process.
+
+The pipeline can also be run fully locally by using a containerized Kafka instance via:
+
+```bash
+docker-compose -f docker-compose-agogsml.yml -f docker-compose-agogosml.local.yml up
+```

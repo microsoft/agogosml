@@ -54,7 +54,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             "default.topic.config": {'auto.offset.reset': 'smallest'},
         }
 
-        if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'):
+        if 'EVENTHUB_KAFKA_CONNECTION_STRING' in user_config:
             ssl_location = user_config.get('SSL_CERT_LOCATION') or '/etc/ssl/ca-certificates.crt'
             eventhub_config = {
                 'security.protocol': "SASL_SSL",
@@ -64,11 +64,10 @@ class KafkaStreamingClient(AbstractStreamingClient):
                 'sasl.password': user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'),
                 'client.id': 'agogosml',
             }
-            config = config.update(eventhub_config)
+            config = {**config, **eventhub_config}
 
-        consumer_group = user_config.get("KAFKA_CONSUMER_GROUP")
-        if consumer_group is not None:
-            config["group.id"] = consumer_group
+        if 'KAFKA_CONSUMER_GROUP' in user_config:
+            config['group.id'] = user_config['KAFKA_CONSUMER_GROUP']
 
         return config
 

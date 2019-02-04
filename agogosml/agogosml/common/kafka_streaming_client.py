@@ -51,15 +51,11 @@ class KafkaStreamingClient(AbstractStreamingClient):
             "bootstrap.servers": user_config.get("KAFKA_ADDRESS"),
             "enable.auto.commit": False,
             "auto.offset.reset": "earliest",
-            # 'request.timeout.ms': 60000,
-            # 'session.timeout.ms': 60000,
-            # 'default.topic.config': {'auto.offset.reset': 'smallest'},
+            "default.topic.config": {'auto.offset.reset': 'smallest'},
         }
 
         if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'):
-            ssl_location = user_config.get('SSL_CERT_LOCATION')
-            if user_config.get('SSL_CERT_LOCATION') is None:
-                ssl_location = '/usr/local/etc/openssl/cert.pem'
+            ssl_location = user_config.get('SSL_CERT_LOCATION') or '/etc/ssl/ca-certificates.crt'
             eventhub_config = {
                 'security.protocol': "SASL_SSL",
                 'sasl.mechanism': "PLAIN",
@@ -68,7 +64,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
                 'sasl.password': user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'),
                 'client.id': 'agogosml',
             }
-            config = {**config, **eventhub_config}
+            config = config.update(eventhub_config)
 
         consumer_group = user_config.get("KAFKA_CONSUMER_GROUP")
         if consumer_group is not None:
@@ -125,7 +121,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
             raise KafkaException(msg.error())
 
     def start_receiving(self, on_message_received_callback):
-        # TODO: We are going to need documentation for Kafka to ensure proper syntax is clear
         try:
             self.subscribe_to_topic()
             start = datetime.datetime.now()

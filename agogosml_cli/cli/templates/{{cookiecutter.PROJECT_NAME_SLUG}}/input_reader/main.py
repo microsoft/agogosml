@@ -37,6 +37,7 @@ if __name__ == "__main__":
                     'KAFKA_CONSUMER_GROUP': os.getenv("KAFKA_CONSUMER_GROUP"),
                     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
                     'TIMEOUT': os.getenv('TIMEOUT'),
+                    # Specific to Event Hub Head for Kafka
                     'EVENTHUB_KAFKA_CONNECTION_STRING': os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING'),
                     'SSL_CERT_LOCATION': os.getenv('SSL_CERT_LOCATION')
                 }

@@ -18,6 +18,6 @@ def get_template_full_filepath(file: Union[str, Path]) -> Path:
 
 def validate_manifest(manifest_json: object):
     """Validates a manifest file against the scheme Throws an error if invalid."""
-    with SCHEMA_FILE.open() as f:
-        schema_json = json.load(f)
+    with SCHEMA_FILE.open() as fobj:
+        schema_json = json.load(fobj)
     validate(manifest_json, schema_json)

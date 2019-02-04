@@ -10,6 +10,8 @@ DEFAULT_HOST = '127.0.0.1'
 
 
 class FlaskHttpListenerClient(ListenerClient):
+    """ Flask client to receive messages from customer app"""
+
     def __init__(self, config: dict):
         """
         Listener implementation that uses a flask server.
@@ -21,19 +23,21 @@ class FlaskHttpListenerClient(ListenerClient):
         """
         self.port = int(config['PORT']) if 'PORT' in config else None
         self.host = config.get('HOST', DEFAULT_HOST)
+        self.on_message_received = None
+        self.t_flask = None
 
     def run_flask_server(self):
         """Run the flask server"""
         app = Flask(__name__)
 
         @app.route("/", methods=["POST"])
-        def on_input():
+        def on_input():  # pylint: disable=unused-variable
             msg = str(request.data, 'utf-8', 'ignore')
             if self.on_message_received(msg):
-                return 'msg:' + msg
-            else:
-                print('Error: The callback failed to process the message, returning 500')
-                return 'Error: The callback failed to process the message', 500
+                return 'msg: %s' % msg
+
+            print('Error: The callback failed to process the message, returning 500')
+            return 'Error: The callback failed to process the message', 500
 
         app.run(
             host=self.host, port=self.port, debug=False, use_reloader=False, threaded=True)
@@ -50,5 +54,5 @@ class FlaskHttpListenerClient(ListenerClient):
             if func is None:
                 raise RuntimeError('Not running with the Werkzeug Server')
             func()
-        except Exception as e:
-            print('error while shutting down flask server: %s' % e)
+        except Exception as ex:
+            print('error while shutting down flask server: %s' % ex)

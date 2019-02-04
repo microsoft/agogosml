@@ -11,5 +11,5 @@ variable agent_disk_size_gb {
 }
 
 variable kubernetes_version {
-  default = "1.11.4"
+  default = "1.11.5"
 }

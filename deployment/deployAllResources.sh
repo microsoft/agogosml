@@ -30,42 +30,22 @@ check_variable_exists "ARM_ACCESS_KEY"
 
 # The tfstate file will be upload to azure storage to maintain consistency and future destruction of the resources.
 az storage container create -n tfstate --account-name $STORAGE_ACCOUNT_NAME --account-key $ARM_ACCESS_KEY
-
 # Create ACR
 echo "About to create the ACR Terraform Plan"
-(cd ./acr && \ 
-terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" && \ 
-terraform workspace select acr || terraform workspace new acr && \
-terraform plan -out out.plan && \ 
-terraform apply out.plan)
+(cd ./acr && ./setup.sh)
 echo "Completed deploying ACR"
 
 # Create Azure Storage
 echo "About to create the Azure Storage Terraform Plan"
-(cd ./azurestorage && \ 
-terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" && \ 
-terraform workspace select storage || terraform workspace new storage && \
-terraform plan -out out.plan && \ 
-terraform apply out.plan)
+(cd ./azurestorage && ./setup.sh)
 echo "Completed deploying Azure Storage"
 
 # Create Event Hub
 echo "About to create the Eventhub Terraform Plan"
-(cd ./eventhub && \ 
-terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" && \ 
-terraform workspace select eventhub || terraform workspace new eventhub && \
-terraform plan -out out.plan && \ 
-terraform apply out.plan)
+(cd ./eventhub && ./setup.sh)
 echo "Completed deploying Eventhub"
 
 # Create AKS 
 echo "About to create the AKS Plan"
-(cd ./aks && \ 
-terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" && \ 
-terraform plan -out out.plan && \ 
-terraform apply out.plan)
-
-echo "$(terraform output kube_config)" > ./aks/azurek8s
-export KUBECONFIG=./aks/azurek8s
-kubectl get nodes
+(cd ./aks && ./setup.sh)
 echo "Completed deploying AKS"

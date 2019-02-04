@@ -2,6 +2,7 @@ include AUTHORS.rst
 include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
+include requirements.txt
 include README.md
 recursive-include cli/templates * 
 include cli/manifest.schema.json

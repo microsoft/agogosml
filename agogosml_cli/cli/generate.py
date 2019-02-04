@@ -49,8 +49,8 @@ def generate(force, config, app_base, folder):
     """Generates an agogosml project"""
     template_vars = {}
     template_file = utils.get_template_full_filepath('cookiecutter.json')
-    with template_file.open() as f:
-        template_vars = json.load(f)
+    with template_file.open() as fobj:
+        template_vars = json.load(fobj)
 
     # Create folder if not exists
     folder = Path(folder)
@@ -62,11 +62,11 @@ def generate(force, config, app_base, folder):
         config_path = folder / config
 
     if config_path.is_file():
-        with config_path.open() as f:
-            manifest = json.load(f)
+        with config_path.open() as fobj:
+            manifest = json.load(fobj)
             utils.validate_manifest(manifest)
             # Retrieve values
-            template_vars = {**template_vars, **extractTemplateVarsFromManifest(manifest)}
+            template_vars = {**template_vars, **extract_template_vars_from_manifest(manifest)}
     else:
         click.echo('manifest.json not found. Please run agogosml init first.')
         raise click.Abort()
@@ -107,7 +107,7 @@ def generate(force, config, app_base, folder):
             write_jsonnet(Path(template_src), Path(template_dst), folder, template_vars)
 
 
-def extractTemplateVarsFromManifest(manifest: dict) -> dict:
+def extract_template_vars_from_manifest(manifest: dict) -> dict:
     """Extract template variables from manifest"""
     template_vars = {
         'PROJECT_NAME': manifest['name'],
@@ -117,7 +117,7 @@ def extractTemplateVarsFromManifest(manifest: dict) -> dict:
     }
 
     if manifest['cloud']['vendor'] == 'azure':
-        template_vars = {**template_vars, **extractAzureTemplateVars(manifest)}
+        template_vars = {**template_vars, **extract_azure_template_vars(manifest)}
 
     # Add git repository variables
     if 'repository' in manifest:
@@ -130,7 +130,7 @@ def extractTemplateVarsFromManifest(manifest: dict) -> dict:
     return template_vars
 
 
-def extractAzureTemplateVars(manifest: dict) -> dict:
+def extract_azure_template_vars(manifest: dict) -> dict:
     """Extract Azure template variables from manifest"""
     template_vars = {}
     azure_props = manifest['cloud']['otherProperties']
@@ -153,8 +153,8 @@ def write_jsonnet(source_path: Path, target_path: Path, base_path: Path, templat
         filename=str(utils.get_template_full_filepath(source_path)),
         ext_vars=template_vars))
     full_path = base_path / target_path
-    with full_path.open('w') as f:
-        json.dump(pipeline_json, f, indent=4)
+    with full_path.open('w') as fobj:
+        json.dump(pipeline_json, fobj, indent=4)
 
 
 def write_cookiecutter(source_path: Path, target_path: Path, template_vars: object, overwrite=False):

@@ -3,7 +3,7 @@ variable prefix {
 }
 
 variable resource_group_name {
-    default = "agogosml-k8s-rg"
+    default = "agogosml_rg"
 }
 
 variable location {

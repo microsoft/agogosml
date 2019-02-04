@@ -1,5 +1,5 @@
 resource azurerm_resource_group k8s {
-  name     = "${var.prefix}-${var.resource_group_name}"
+  name     = "${var.prefix}_${var.resource_group_name}"
   location = "${var.location}"
 }
 

@@ -18,21 +18,21 @@ from singleton_decorator import singleton
 
 
 class NullTelemetryClient:
+    """Null-object implementation of the TelemetryClient."""
+
     def __init__(self):
         """Null-object implementation of the TelemetryClient."""
-        pass
 
     def track_trace(self, name, properties=None, severity=None):
         """Does nothing."""
-        pass
 
     def track_event(self, name, properties=None, measurements=None):
         """Does nothing."""
-        pass
 
 
 @singleton
-class Logger(object):
+class Logger:
+    """Logger"""
     def __init__(self,
                  name: str = __name__,
                  path: str = 'logging.yaml',
@@ -44,6 +44,7 @@ class Logger(object):
         self.name = name
         self.path = path
         self.env_key = env_key
+        self.ikey = os.getenv('APPINSIGHTS_INSTRUMENTATIONKEY')
 
     @cached_property
     def _logger(self) -> logging.Logger:
@@ -52,8 +53,8 @@ class Logger(object):
         path = Path(value or self.path)
 
         if path.is_file():
-            with path.open('rt') as f:
-                config = yaml.safe_load(f.read())
+            with path.open('rt') as fobj:
+                config = yaml.safe_load(fobj.read())
             logging.config.dictConfig(config)
         else:
             logging.basicConfig(
@@ -65,16 +66,15 @@ class Logger(object):
     @cached_property
     def _telemetry(self) -> Union[TelemetryClient, NullTelemetryClient]:
         """Create the telemetry client."""
-        ikey = os.getenv('APPINSIGHTS_INSTRUMENTATIONKEY')
-        if not ikey:
+        if not self.ikey:
             return NullTelemetryClient()
 
         sender = AsynchronousSender()
         queue = AsynchronousQueue(sender)
         context = TelemetryContext()
-        context.instrumentation_key = ikey
+        context.instrumentation_key = self.ikey
         channel = TelemetryChannel(context, queue)
-        return TelemetryClient(ikey, telemetry_channel=channel)
+        return TelemetryClient(self.ikey, telemetry_channel=channel)
 
     def debug(self, message: str, *args):
         """Log debug message."""

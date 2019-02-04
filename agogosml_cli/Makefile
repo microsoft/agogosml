@@ -52,6 +52,8 @@ clean-test: ## remove test and coverage artifacts
 
 lint: ## check python style
 	flake8 cli tests
+	pylint cli
+	bandit -c .banditrc -r cli
 	isort --skip-glob '**/cli/templates/**' --check-only --recursive cli
 
 test:

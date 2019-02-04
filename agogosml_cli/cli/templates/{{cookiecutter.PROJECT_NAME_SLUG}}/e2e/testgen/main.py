@@ -1,11 +1,11 @@
 import asyncio
 import json
 import os
+import sys
 import time
 from multiprocessing.pool import ThreadPool
 
-from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
-from agogosml.common.kafka_streaming_client import KafkaStreamingClient
+from agogosml.common.abstract_streaming_client import find_streaming_clients
 
 eh_base_config = {
     "EVENT_HUB_NAMESPACE": os.getenv("EVENT_HUB_NAMESPACE"),
@@ -48,6 +48,18 @@ kafka_send_config = {
 }
 
 
+def create_client(msg_type: str, client_type: str):
+    if client_type == 'send':
+        config = {**eh_send_config, **kafka_send_config}
+    elif client_type == 'receive':
+        config = {**eh_receive_config, **kafka_receive_config}
+    else:
+        raise ValueError(client_type)
+
+    client_class = find_streaming_clients()[msg_type]
+    return client_class(config)
+
+
 def receive_messages(msg_type: str):
     pool = ThreadPool(processes=1)
 
@@ -62,8 +74,7 @@ def send_messages_to_client(msg_type: str):
     with open('test_messages.json', encoding='utf-8') as f:
         test_messages = json.load(f)
 
-    send_client = EventHubStreamingClient(eh_send_config) if msg_type == 'eventhub' \
-        else KafkaStreamingClient(kafka_send_config)
+    send_client = create_client(msg_type, 'send')
 
     for message in test_messages:
         send_client.send(json.dumps(message))
@@ -73,21 +84,21 @@ def send_messages_to_client(msg_type: str):
 
 
 def get_messages_from_client(msg_type: str):
-    receive_client = EventHubStreamingClient(eh_receive_config) if msg_type == 'eventhub' \
-        else KafkaStreamingClient(kafka_receive_config)
+    receive_client = create_client(msg_type, 'receive')
 
     global received_messages
     received_messages = []
 
     def receive_callback(message):
         received_messages.append(message)
+        return True
 
     asyncio.set_event_loop(asyncio.new_event_loop())
     receive_client.start_receiving(receive_callback)
     return received_messages
 
 
-if __name__ == "__main__":
+def cli():
     msg_type = os.getenv("MESSAGING_TYPE")
     send = send_messages_to_client(msg_type)
     print(send)
@@ -95,6 +106,10 @@ if __name__ == "__main__":
     receive = receive_messages(msg_type)
     print(receive)
     if receive == "[]":
-        exit(1)
+        sys.exit(1)
     else:
-        exit(0)
+        sys.exit(0)
+
+
+if __name__ == "__main__":
+    cli()

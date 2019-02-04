@@ -20,8 +20,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
         Streaming client implementation based on Kafka.
 
         Configuration keys:
-          APP_HOST
-          APP_PORT
           KAFKA_ADDRESS
           KAFKA_CONSUMER_GROUP
           KAFKA_TOPIC
@@ -44,8 +42,6 @@ class KafkaStreamingClient(AbstractStreamingClient):
         if config.get("KAFKA_CONSUMER_GROUP") is None:
             self.producer = Producer(kafka_config)
         else:
-            self.app_host = config.get("APP_HOST")
-            self.app_port = config.get("APP_PORT")
             self.consumer = Consumer(kafka_config)
 
     @staticmethod

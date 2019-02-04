@@ -256,7 +256,3 @@ my_msg = None
 def on_msg(msg):
     global my_msg
     my_msg = msg.decode('utf-8')
-
-
-if __name__ == "__main__":
-    test_when_messages_sent_to_kafka_then_all_messages_are_sent_via_output()

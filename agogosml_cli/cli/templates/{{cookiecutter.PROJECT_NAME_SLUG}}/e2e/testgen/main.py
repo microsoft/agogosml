@@ -29,8 +29,6 @@ eh_receive_config = {
 }
 
 kafka_base_config = {
-    'APP_HOST': os.getenv("APP_HOST"),
-    'APP_PORT': os.getenv("APP_PORT"),
     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
     'TIMEOUT': os.getenv('TIMEOUT'),
     'EVENTHUB_KAFKA_CONNECTION_STRING': os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')

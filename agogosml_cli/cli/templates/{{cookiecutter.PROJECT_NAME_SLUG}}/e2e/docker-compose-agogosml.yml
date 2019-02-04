@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
     input-reader:
-        image: ${CONTAINER_REG}/input_reader10:${TAG}
+        image: ${CONTAINER_REG}/input_reader:${TAG}
         networks:
             mynet:
                 aliases:
@@ -26,7 +26,7 @@ services:
             EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
 
     output-writer:
-        image: ${CONTAINER_REG}/output_writer10:${TAG}
+        image: ${CONTAINER_REG}/output_writer:${TAG}
         ports:
             - "127.0.0.1:6000:6000"
         networks:
@@ -52,7 +52,7 @@ services:
 
             
     sample-app:
-        image: ${CONTAINER_REG}/sample_app10:${APP_TAG}
+        image: ${CONTAINER_REG}/sample_app:${APP_TAG}
         ports:
             - "127.0.0.1:3000:3000"
         networks:

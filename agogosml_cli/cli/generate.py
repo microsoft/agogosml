@@ -2,7 +2,7 @@
 
 import json
 from pathlib import Path
-
+import tldextract
 import click
 import giturlparse
 from cookiecutter.exceptions import OutputDirExistsException
@@ -135,8 +135,22 @@ def extract_azure_template_vars(manifest: dict) -> dict:
         raise click.Abort()
     else:
         acr = azure_props['azureContainerRegistry']
-        #TODO: NEED TO VALIDATE THAT THE ENDING OF THIS VARIABLE IS AZURECR.IO
-        template_vars['AZURE_CONTAINER_REGISTRY'] = acr
+        try:
+            extract_result = tldextract.extract(acr)
+        except ValueError:
+            # Handle situation where template folder exists and force is not set to true
+            click.echo('Azure Container Registry property is not parseable as a url. \
+                Valid property: nameacr.azurecr.io.')
+            raise click.Abort()
+
+        if extract_result.registered_domain != "azurecr.io":
+            click.echo('Azure Container Registry property is not set to an azurecr.io domain.')
+            raise click.Abort()
+        if len(extract_result.subdomain.split('.')) > 1:
+            click.echo('Azure Container Registry property contains multiple subdomains.')
+            raise click.Abort()
+        template_vars['AZURE_CONTAINER_REGISTRY'] = extract_result.subdomain + '.' + extract_result.registered_domain
+
     return template_vars
 
 

@@ -21,12 +21,12 @@ import tests.test_utils as test_utils
 """
 
 EXPECTED_OUTPUT_PROJ_FILES = (
-    'testproject/azure-ci-pipeline.yml',
     'cd-pipeline.json',
     'e2e-pipeline.json',
     'testproject/dockerbuild.sh',
     'testproject/.dockerignore',
     'testproject/README.md',
+    'testproject/agogosml-ci-pipeline.yml',
     'testproject/agogosml/Dockerfile.agogosml',
     'testproject/input_reader/Dockerfile.input_reader',
     'testproject/input_reader/logging.yaml',
@@ -179,8 +179,8 @@ def test_generate_invalid_schema():
         }
         """
         manifest = json.loads(manifest_str)
-        with open('manifest.json', 'w') as f:
-            json.dump(manifest, f, indent=4)
+        with open('manifest.json', 'w') as file:
+            json.dump(manifest, file, indent=4)
 
         result = runner.invoke(generate.generate)
         assert result.exit_code == 1
@@ -202,7 +202,7 @@ def _create_test_manifest_azure(folder='.'):
             "vendor": "azure",
             "subscriptionId": "123-123-123-123",
             "otherProperties": {
-                "azureContainerRegistry": "https://acr.acr.io",
+                "azureContainerRegistry": "acr.azurecr.io",
                 "azureResourceGroup": "agogosml-rg",
                 "kubernetesCluster": "agogosml-k"
             }
@@ -217,8 +217,8 @@ def _create_test_manifest_azure(folder='.'):
     folder = Path(folder)
     folder.mkdir(parents=True, exist_ok=True)
     outfile = folder / 'manifest.json'
-    with outfile.open('w') as f:
-        json.dump(manifest, f, indent=4)
+    with outfile.open('w') as file:
+        json.dump(manifest, file, indent=4)
 
 
 def _create_invalid_manifest_azure(folder='.'):
@@ -243,8 +243,8 @@ def _create_invalid_manifest_azure(folder='.'):
     folder = Path(folder)
     folder.mkdir(parents=True, exist_ok=True)
     outfile = folder / 'manifest.json'
-    with outfile.open('w') as f:
-        json.dump(manifest, f, indent=4)
+    with outfile.open('w') as file:
+        json.dump(manifest, file, indent=4)
 
 
 def _create_dummy_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
@@ -260,8 +260,8 @@ def _create_dummy_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):
     for proj_file in files:
         outfile = folder / proj_file
 
-        with outfile.open('w') as f:
-            json.dump("test content", f, indent=4)
+        with outfile.open('w') as file:
+            json.dump("test content", file, indent=4)
 
 
 def _get_md5_template_files(files=EXPECTED_OUTPUT_PROJ_FILES, folder='.'):

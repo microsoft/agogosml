@@ -14,11 +14,12 @@ trigger:
     
 jobs:
 - job: Phase_1
+  pool:
+    vmImage: 'Ubuntu 16.04'
+    
   steps:
   - task: Docker@1
     displayName: 'Build app image'
-    pool:
-      vmImage: 'Ubuntu 16.04'
     inputs:
       azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
       azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}

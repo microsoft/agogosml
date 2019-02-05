@@ -1,0 +1,47 @@
+resources:
+- repo: self
+
+variables:
+  container_registry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}/'
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - '{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}'
+    
+jobs:
+- job: Phase_1
+  steps:
+  - task: Docker@1
+    displayName: 'Build app image'
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    inputs:
+      azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
+      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+      dockerFile: '**/Dockerfile.{{cookiecutter.PROJECT_NAME_SLUG}}'
+      arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
+      useDefaultContext: false
+      buildContext: '{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}'
+      imageName: 'sample_app:$(Build.BuildId)'
+
+  - bash: |
+    if [ $(Build.SourceBranchName) = "master" ]; then
+      echo "Since this is a merge build, we are creating a new 'latest' tag"
+      docker tag $(container_registry)/sample_app:$(Build.BuildId) $(container_registry)/sample_app:latest
+      echo "Done"
+    else
+      echo "Not a merge build, hence skipping 'latest' tag"
+    fi
+    displayName: 'Tag Latest'
+
+  - task: Docker@1
+    displayName: 'Push app image'
+    inputs:
+      azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
+      azureContainerRegistry: {{cookiecutter.PROJECT_NAME_SLUG}}
+      command: 'Push an image'
+      imageName: 'sample_app'

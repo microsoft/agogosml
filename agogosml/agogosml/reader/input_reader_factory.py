@@ -4,8 +4,7 @@ from typing import Optional
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 from agogosml.common.abstract_streaming_client import create_streaming_client_from_config
 from agogosml.common.http_message_sender import HttpMessageSender
-
-from .input_reader import InputReader
+from agogosml.reader.input_reader import InputReader
 
 
 class InputReaderFactory:

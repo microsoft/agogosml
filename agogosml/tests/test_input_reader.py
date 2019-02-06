@@ -1,10 +1,13 @@
-import pytest
 import os
+
+import pytest
+
 from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
 from agogosml.reader.input_reader import InputReader
 from agogosml.reader.input_reader_factory import InputReaderFactory
-from .client_mocks import StreamingClientMock, MessageSenderMock
+from tests.client_mocks import MessageSenderMock
+from tests.client_mocks import StreamingClientMock
 
 
 @pytest.fixture

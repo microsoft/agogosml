@@ -11,13 +11,13 @@ class BroadcastStreamingClient(AbstractStreamingClient):
         Streaming client implementation that broadcases across multiple clients.
 
         Configuration keys:
-          CLIENTS
+          BROADCAST_CLIENTS
         """
 
         self.clients = [
             create_streaming_client_from_config(conf)
             if not isinstance(conf, AbstractStreamingClient) else conf
-            for conf in config.get('CLIENTS', [])
+            for conf in config.get('BROADCAST_CLIENTS', [])
         ]
 
     def start_receiving(self, on_message_received_callback):

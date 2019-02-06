@@ -4,13 +4,14 @@ Main entry point for input reader
 import os
 
 from agogosml.reader.input_reader_factory import InputReaderFactory
+from agogosml.utils.config import Config
 
 if __name__ == "__main__":
 
     CFG = {
         'client': {
             'type': os.getenv("MESSAGING_TYPE"),
-            'config': os.environ,
+            'config': Config(os.environ),
         },
         'APP_HOST': os.getenv('APP_HOST'),
         'APP_PORT': os.getenv('APP_PORT'),

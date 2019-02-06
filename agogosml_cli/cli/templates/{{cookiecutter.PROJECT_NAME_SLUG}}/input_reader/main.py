@@ -7,11 +7,14 @@ from agogosml.reader.input_reader_factory import InputReaderFactory
 from agogosml.utils.config import Config
 
 if __name__ == "__main__":
+    config = dict(os.environ)
+    if 'KAFKA_TOPIC_INPUT' in config:
+        config['KAFKA_TOPIC'] = config.pop('KAFKA_TOPIC_INPUT')
 
     CFG = {
         'client': {
             'type': os.getenv("MESSAGING_TYPE"),
-            'config': Config(os.environ),
+            'config': Config(config),
         },
         'APP_HOST': os.getenv('APP_HOST'),
         'APP_PORT': os.getenv('APP_PORT'),

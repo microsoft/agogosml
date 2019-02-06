@@ -7,11 +7,14 @@ from agogosml.utils.config import Config
 from agogosml.writer.output_writer_factory import OutputWriterFactory
 
 if __name__ == '__main__':
+    config = dict(os.environ)
+    if 'KAFKA_TOPIC_INPUT' in config:
+        config['KAFKA_TOPIC'] = config.pop('KAFKA_TOPIC_INPUT')
 
     CFG = {
         'client': {
             'type': os.getenv('MESSAGING_TYPE'),
-            'config': Config(os.environ),
+            'config': Config(config),
         },
         'OUTPUT_WRITER_PORT': os.getenv('OUTPUT_WRITER_PORT'),
         'OUTPUT_WRITER_HOST': os.getenv('OUTPUT_WRITER_HOST'),

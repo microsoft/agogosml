@@ -8,19 +8,25 @@ from agogosml.common.abstract_streaming_client import find_streaming_clients
 from agogosml.utils.cli import json_arg
 
 
-def main(outfile, receiver_class, config):
+def receive(outfile, receiver_class, config):
     """Main entrypoint to the tool."""
+    received_messages = []
+
     def on_message(message):
         try:
             message = message.decode('utf-8')
         except AttributeError:
             pass
 
+        received_messages.append(message)
         outfile.write(message.rstrip('\r\n') + '\n')
+
         return True
 
     receiver = receiver_class(config)
     receiver.start_receiving(on_message)
+
+    return received_messages
 
 
 def cli():
@@ -38,7 +44,7 @@ def cli():
                         help='JSON configuration passed to the receiver')
     args = parser.parse_args()
 
-    main(args.outfile, streaming_clients[args.receiver], args.config)
+    receive(args.outfile, streaming_clients[args.receiver], args.config)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Script to push inputs to an agogosml client."""
+import json
 from argparse import ArgumentParser
 from argparse import FileType
 from sys import stdin
@@ -8,11 +9,14 @@ from agogosml.common.abstract_streaming_client import find_streaming_clients
 from agogosml.utils.cli import json_arg
 
 
-def main(messages, sender_class, config):
+def send(messages, sender_class, config):
     """Main entrypoint to the tool."""
     sender = sender_class(config)
     for message in messages:
+        if not isinstance(message, str):
+            message = json.dumps(message)
         sender.send(message.rstrip('\r\n'))
+    sender.stop()
 
 
 def cli():
@@ -30,7 +34,7 @@ def cli():
                         help='JSON configuration passed to the sender')
     args = parser.parse_args()
 
-    main(args.infile, streaming_clients[args.sender], args.config)
+    send(args.infile, streaming_clients[args.sender], args.config)
 
 
 if __name__ == '__main__':

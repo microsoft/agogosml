@@ -9,7 +9,8 @@ x-shared-environment:
     KAFKA_ADDRESS: ${KAFKA_ADDRESS}
     KAFKA_TIMEOUT: ${KAFKA_TIMEOUT}
     EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
-
+    SSL_CERT_LOCATION: ${SSL_CERT_LOCATION}
+    
 services:
     input-reader:
         image: ${CONTAINER_REG}/input_reader:${TAG}

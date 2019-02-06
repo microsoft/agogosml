@@ -29,20 +29,22 @@ jobs:
       buildContext: '{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}'
       imageName: 'sample_app:$(Build.BuildId)'
 
-  - bash: |
-    if [ $(Build.SourceBranchName) = "master" ]; then
-      echo "Since this is a merge build, we are creating a new 'latest' tag"
-      docker tag $(container_registry)/sample_app:$(Build.BuildId) $(container_registry)/sample_app:latest
-      echo "Done"
-    else
-      echo "Not a merge build, hence skipping 'latest' tag"
-    fi
-    displayName: 'Tag Latest'
+  - bash: |  
+      if [ $(Build.SourceBranchName) = "master" ]; then
+        echo "Since this is a merge build, we are creating a new 'latest' tag"
+        docker tag $(container_registry)sample_app:$(Build.BuildId) $(container_registry)sample_app:latest
+        echo "Done"
+      else
+        echo "Not a merge build, hence skipping 'latest' tag"
+      fi
+
+    displayName: 'Tag latest tag'
+
 
   - task: Docker@1
     displayName: 'Push app image'
     inputs:
       azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: {{cookiecutter.PROJECT_NAME_SLUG}}
+      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
       command: 'Push an image'
       imageName: 'sample_app'

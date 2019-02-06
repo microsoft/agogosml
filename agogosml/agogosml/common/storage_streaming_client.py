@@ -47,14 +47,16 @@ class StorageStreamingClient(AbstractStreamingClient):
         driver_class = get_driver(provider)
         driver = driver_class(config['STORAGE_KEY'], config['STORAGE_SECRET'])
 
+        self.logger = Logger()
+
         try:
             self.container: Container = driver.create_container(config['STORAGE_CONTAINER'])
+            self.logger.info('Created container %s', config['STORAGE_CONTAINER'])
         except ContainerAlreadyExistsError:
             self.container: Container = driver.get_container(config['STORAGE_CONTAINER'])
+            self.logger.debug('Using existing container %s', config['STORAGE_CONTAINER'])
 
         self.timeslice_format = config.get('TIMESLICE_FORMAT', '%Y/%m/%d/%H/%M/%S')
-
-        self.logger = Logger()
 
     def start_receiving(self, on_message_received_callback):
         self.logger.error('Unexpectedly called %s on %s',

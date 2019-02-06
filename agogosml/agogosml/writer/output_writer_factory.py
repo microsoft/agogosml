@@ -5,8 +5,7 @@ from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 from agogosml.common.abstract_streaming_client import create_streaming_client_from_config
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.listener_client import ListenerClient
-
-from .output_writer import OutputWriter
+from agogosml.writer.output_writer import OutputWriter
 
 
 class OutputWriterFactory:

@@ -1,13 +1,15 @@
-import pytest
 import os
 
+import pytest
+
 from agogosml.common.broadcast_streaming_client import BroadcastStreamingClient
-from agogosml.writer.output_writer import OutputWriter
-from agogosml.writer.output_writer_factory import OutputWriterFactory
+from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
-from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
-from .client_mocks import StreamingClientMock, HttpClientMock
+from agogosml.writer.output_writer import OutputWriter
+from agogosml.writer.output_writer_factory import OutputWriterFactory
+from tests.client_mocks import HttpClientMock
+from tests.client_mocks import StreamingClientMock
 
 
 @pytest.fixture

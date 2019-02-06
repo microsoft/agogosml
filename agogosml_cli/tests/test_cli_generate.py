@@ -26,6 +26,7 @@ EXPECTED_OUTPUT_PROJ_FILES = (
     'testproject/dockerbuild.sh',
     'testproject/.dockerignore',
     'testproject/README.md',
+    'testproject/app-ci-pipeline.yml',
     'testproject/agogosml-ci-pipeline.yml',
     'testproject/agogosml/Dockerfile.agogosml',
     'testproject/input_reader/Dockerfile.input_reader',

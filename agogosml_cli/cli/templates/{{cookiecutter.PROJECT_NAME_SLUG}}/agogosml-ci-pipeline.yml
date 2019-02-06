@@ -124,11 +124,3 @@ jobs:
       azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
       command: 'Push an image'
       imageName: 'output_writer'
-
-- job: Phase_4
-  dependsOn: Phase_1
-  steps:
-  - task: PublishTestResults@2
-    displayName: 'Publish TRX / Test Results'
-    inputs:
-      testResultsFiles: '**/TEST-*.xml'

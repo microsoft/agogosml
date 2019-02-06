@@ -5,6 +5,7 @@ from flask import Flask
 from flask import request
 
 from agogosml.common.listener_client import ListenerClient
+from agogosml.utils.logger import Logger
 
 DEFAULT_HOST = '127.0.0.1'
 
@@ -25,6 +26,7 @@ class FlaskHttpListenerClient(ListenerClient):
         self.host = config.get('HOST', DEFAULT_HOST)
         self.on_message_received = None
         self.t_flask = None
+        self.logger = Logger()
 
     def run_flask_server(self):
         """Run the flask server"""
@@ -46,6 +48,7 @@ class FlaskHttpListenerClient(ListenerClient):
         self.on_message_received = on_message_received
         self.t_flask = threading.Thread(name='agogosml', target=self.run_flask_server)
         self.t_flask.setDaemon(True)
+        self.logger.event('flask.server.start', {'port': str(self.port), 'host': self.host})
         self.t_flask.start()
 
     def stop(self):

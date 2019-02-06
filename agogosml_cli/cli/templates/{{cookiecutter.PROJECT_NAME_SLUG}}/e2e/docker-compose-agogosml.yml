@@ -14,6 +14,8 @@ x-shared-environment:
 services:
     input-reader:
         image: ${CONTAINER_REG}/input_reader:${TAG}
+        depends_on:
+            - sample-app
         networks:
             mynet:
                 aliases:
@@ -48,11 +50,14 @@ services:
             EVENT_HUB_NAME: ${EVENT_HUB_NAME_OUTPUT}
             #kafka             
             KAFKA_TOPIC_OUTPUT: ${KAFKA_TOPIC_OUTPUT}
+            OUTPUT_TIMEOUT: ${OUTPUT_TIMEOUT}
           
     sample-app:
         image: ${CONTAINER_REG}/sample_app:${APP_TAG}
         ports:
             - "127.0.0.1:3000:3000"
+        depends_on:
+            - output-writer
         networks:
             mynet:
                 aliases:

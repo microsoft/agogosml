@@ -25,12 +25,13 @@ eh_receive_config = {
     "AZURE_STORAGE_ACCESS_KEY": os.getenv("AZURE_STORAGE_ACCESS_KEY"),
     "LEASE_CONTAINER_NAME": os.getenv("LEASE_CONTAINER_NAME_OUTPUT"),
     "EVENT_HUB_CONSUMER_GROUP": os.getenv("EVENT_HUB_CONSUMER_GROUP"),
-    "TIMEOUT": 10
+    "TIMEOUT": 10,
+    "OUTPUT_TIMEOUT": os.getenv("OUTPUT_TIMEOUT")
 }
 
 kafka_base_config = {
     'KAFKA_ADDRESS': os.getenv("KAFKA_ADDRESS"),
-    'TIMEOUT': os.getenv('TIMEOUT'),
+    'TIMEOUT': os.getenv('KAFKA_TIMEOUT'),
     # These configs are specific to Event Hub Head for Kafka
     'EVENTHUB_KAFKA_CONNECTION_STRING': os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING'),
     'SSL_CERT_LOCATION': os.getenv('SSL_CERT_LOCATION')  # /usr/local/etc/openssl/cert.pem
@@ -39,16 +40,16 @@ kafka_base_config = {
 kafka_receive_config = {
     **kafka_base_config,
     'KAFKA_CONSUMER_GROUP': os.getenv('KAFKA_CONSUMER_GROUP'),
-    'KAFKA_TOPIC': os.getenv('KAFKA_TOPIC_OUTPUT')
+    "OUTPUT_TIMEOUT": os.getenv("OUTPUT_TIMEOUT")
 }
 
 kafka_send_config = {
     **kafka_base_config,
-    'KAFKA_TOPIC': os.getenv('KAFKA_TOPIC_OUTPUT')
+    'KAFKA_TOPIC': os.getenv('KAFKA_TOPIC_INPUT')
 }
 
 
-def send_messages(msg_type: str):
+def put_messages_on_input_queue(msg_type: str):
     with open('test_messages.json', encoding='utf-8') as f:
         test_messages = json.load(f)
     send_client = find_streaming_clients()[msg_type]
@@ -56,24 +57,30 @@ def send_messages(msg_type: str):
     send(test_messages, send_client, send_config)
 
 
-def receive_messages(msg_type: str):
+def receive_messages_on_queue(kafka_topic: str, msg_type: str):
     receive_client = find_streaming_clients()[msg_type]
-    receive_config = {**eh_receive_config, **kafka_receive_config}
+    receive_config = {**eh_receive_config, **kafka_receive_config, **{'KAFKA_TOPIC': os.getenv(kafka_topic)}}
     return receive(sys.stdout, receive_client, receive_config)
 
 
 def cli():
     msg_type = os.getenv("MESSAGING_TYPE")
 
-    send_messages(msg_type)
+    put_messages_on_input_queue(msg_type)
 
-    time.sleep(10)
+    time.sleep(3)
 
-    received = receive_messages(msg_type)
+    input_received = receive_messages_on_queue('KAFKA_TOPIC_INPUT', msg_type)
 
-    print(received)
+    print(input_received)
 
-    if received == "[]":
+    time.sleep(20)
+
+    output_received = receive_messages_on_queue('KAFKA_TOPIC_OUTPUT', msg_type)
+
+    print(output_received)
+
+    if output_received == "[]":
         sys.exit(1)
     else:
         sys.exit(0)

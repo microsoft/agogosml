@@ -2,9 +2,10 @@
 
 import json
 from pathlib import Path
-import tldextract
+
 import click
 import giturlparse
+import tldextract
 from cookiecutter.exceptions import OutputDirExistsException
 from cookiecutter.main import cookiecutter
 

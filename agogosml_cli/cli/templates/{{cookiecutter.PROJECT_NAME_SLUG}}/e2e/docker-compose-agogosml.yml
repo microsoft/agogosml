@@ -10,7 +10,13 @@ x-shared-environment:
     KAFKA_TIMEOUT: ${KAFKA_TIMEOUT}
     EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
     SSL_CERT_LOCATION: ${SSL_CERT_LOCATION}
-    
+    KAFKA_TOPIC_INPUT: ${KAFKA_TOPIC_INPUT}
+    KAFKA_TOPIC_OUTPUT: ${KAFKA_TOPIC_OUTPUT} 
+    APP_HOST: sample
+    APP_PORT: 3000
+    OUTPUT_WRITER_PORT: 6000
+    OUTPUT_WRITER_HOST: output
+
 services:
     input-reader:
         image: ${CONTAINER_REG}/input_reader:${TAG}
@@ -22,12 +28,9 @@ services:
             << : *shared-environment
             AZURE_STORAGE_ACCESS_KEY:
             LEASE_CONTAINER_NAME: ${LEASE_CONTAINER_NAME_INPUT}
-            APP_HOST: sample
-            APP_PORT: 3000
             EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_INPUT}
             EVENT_HUB_NAME: ${EVENT_HUB_NAME_INPUT}
             #kafka 
-            KAFKA_TOPIC_INPUT: ${KAFKA_TOPIC_INPUT}
             KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
             
     output-writer:
@@ -42,15 +45,11 @@ services:
             << : *shared-environment
             AZURE_STORAGE_ACCESS_KEY: ${AZURE_STORAGE_ACCESS_KEY}
             LEASE_CONTAINER_NAME: ${LEASE_CONTAINER_NAME_OUTPUT}
-            OUTPUT_WRITER_PORT: 6000
-            OUTPUT_WRITER_HOST: output
             EVENT_HUB_SAS_KEY: ${EVENT_HUB_SAS_KEY_OUTPUT}
             EVENT_HUB_NAME: ${EVENT_HUB_NAME_OUTPUT}
-            #kafka             
-            KAFKA_TOPIC_OUTPUT: ${KAFKA_TOPIC_OUTPUT}
           
     sample-app:
-        image: ${CONTAINER_REG}/sample_app:${APP_TAG}
+        image: ${CONTAINER_REG}/sample_app:${TAG}
         ports:
             - "127.0.0.1:3000:3000"
         networks:
@@ -63,6 +62,29 @@ services:
             OUTPUT_URL: http://output:6000
             SCHEMA_FILEPATH: schema_example.json
             MODEL_PATH: /temp/assets/sample_model.zip
+
+    tester-gen:
+        build: 
+            context: testgen/.
+            dockerfile: Dockerfile
+            args:
+                CONTAINER_REG_AGOGOSML: ${CONTAINER_REG_AGOGOSML}
+                TAG: latest
+        ports:
+            - "127.0.0.1:2000:5000"
+        networks:
+            mynet:
+                aliases:
+                    - tester
+        environment:
+            << : *shared-environment
+            TEST_GEN_PORT: 2000
+            TEST_GEN_HOST: 127.0.0.1
+            KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
+            EVENT_HUB_NAME_INPUT: ${EVENT_HUB_NAME_INPUT}
+            EVENT_HUB_NAME_OUTPUT: ${EVENT_HUB_NAME_OUTPUT}
+            LEASE_CONTAINER_NAME_OUTPUT: ${LEASE_CONTAINER_NAME_OUTPUT}
+
 
 networks:
     mynet:

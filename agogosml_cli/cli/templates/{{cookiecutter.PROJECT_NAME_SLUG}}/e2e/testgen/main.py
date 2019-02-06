@@ -1,10 +1,7 @@
-import asyncio
 import json
 import os
 import sys
 import time
-from sys import stdout
-from multiprocessing.pool import ThreadPool
 
 from agogosml.common.abstract_streaming_client import find_streaming_clients
 from agogosml.tools.sender import send
@@ -60,10 +57,9 @@ def send_messages(msg_type: str):
 
 
 def receive_messages(msg_type: str):
-    # receive messages
     receive_client = find_streaming_clients()[msg_type]
     receive_config = {**eh_receive_config, **kafka_receive_config}
-    return receive(stdout, receive_client, receive_config)
+    return receive(sys.stdout, receive_client, receive_config)
 
 
 def cli():

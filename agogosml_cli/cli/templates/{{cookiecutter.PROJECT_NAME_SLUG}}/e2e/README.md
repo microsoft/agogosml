@@ -38,6 +38,7 @@ locally, they are still an end to end test and depend on deployed Azure resource
     KAFKA_CONSUMER_GROUP=
     # For Kafka Enabled Event Hubs
     EVENTHUB_KAFKA_CONNECTION_STRING=
+    # Local SSL Certificate - only necessary if running locally as it is set by default in Docker.
     SSL_CERT_LOCATION=
 ```
 

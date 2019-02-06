@@ -9,7 +9,6 @@ x-shared-environment:
     KAFKA_ADDRESS: ${KAFKA_ADDRESS}
     KAFKA_TIMEOUT: ${KAFKA_TIMEOUT}
     EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
-    SSL_CERT_LOCATION: ${SSL_CERT_LOCATION}
     KAFKA_TOPIC_INPUT: ${KAFKA_TOPIC_INPUT}
     KAFKA_TOPIC_OUTPUT: ${KAFKA_TOPIC_OUTPUT} 
     APP_HOST: sample
@@ -66,7 +65,6 @@ services:
     tester-gen:
         build: 
             context: testgen/.
-            dockerfile: Dockerfile
             args:
                 CONTAINER_REG_AGOGOSML: ${CONTAINER_REG_AGOGOSML}
                 TAG: latest

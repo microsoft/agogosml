@@ -44,7 +44,7 @@ def find_streaming_clients() -> Dict[str, StreamingClientType]:
 
     >>> senders = find_streaming_clients()
     >>> sorted(senders.keys())
-    ['broadcast', 'eventhub', 'kafka', 'mock']
+    ['broadcast', 'eventhub', 'kafka', 'mock', 'storage']
     """
     return {
         client.__name__.replace('StreamingClient', '').lower(): client

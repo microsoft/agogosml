@@ -8,3 +8,4 @@ jsonschema~=2.6
 applicationinsights~=0.11.7
 cached-property~=1.5.1
 singleton-decorator~=1.0.0
+apache-libcloud~=2.4.0

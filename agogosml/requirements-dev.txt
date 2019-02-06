@@ -11,4 +11,5 @@ Sphinx
 twine
 pylint
 pytest-cov
+lockfile
 mypy

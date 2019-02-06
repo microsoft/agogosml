@@ -8,8 +8,8 @@ from agogosml.writer.output_writer_factory import OutputWriterFactory
 
 if __name__ == '__main__':
     config = dict(os.environ)
-    if 'KAFKA_TOPIC_INPUT' in config:
-        config['KAFKA_TOPIC'] = config.pop('KAFKA_TOPIC_INPUT')
+    if 'KAFKA_TOPIC_OUTPUT' in config:
+        config['KAFKA_TOPIC'] = config.pop('KAFKA_TOPIC_OUTPUT')
 
     CFG = {
         'client': {

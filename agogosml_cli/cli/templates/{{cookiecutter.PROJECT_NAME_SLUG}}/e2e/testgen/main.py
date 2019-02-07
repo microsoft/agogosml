@@ -26,7 +26,6 @@ eh_receive_config = {
     "LEASE_CONTAINER_NAME": os.getenv("LEASE_CONTAINER_NAME_OUTPUT"),
     "EVENT_HUB_CONSUMER_GROUP": os.getenv("EVENT_HUB_CONSUMER_GROUP"),
     "TIMEOUT": 10,
-    "OUTPUT_TIMEOUT": os.getenv("OUTPUT_TIMEOUT")
 }
 
 kafka_base_config = {
@@ -40,7 +39,6 @@ kafka_base_config = {
 kafka_receive_config = {
     **kafka_base_config,
     'KAFKA_CONSUMER_GROUP': os.getenv('KAFKA_CONSUMER_GROUP'),
-    "OUTPUT_TIMEOUT": os.getenv("OUTPUT_TIMEOUT")
 }
 
 kafka_send_config = {

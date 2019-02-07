@@ -23,5 +23,6 @@ if __name__ == '__main__':
 
     OUTPUT = OutputWriterFactory.create(CFG)
     OUTPUT.start_incoming_messages()
-    time.sleep(int(os.getenv("OUTPUT_TIMEOUT")))
+    while True:
+        time.sleep(1000)
     print('Finished Receiving Messages')

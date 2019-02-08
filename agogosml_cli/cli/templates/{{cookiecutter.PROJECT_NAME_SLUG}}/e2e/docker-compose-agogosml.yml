@@ -19,6 +19,8 @@ x-shared-environment:
 services:
     input-reader:
         image: ${CONTAINER_REG}/input_reader:${TAG}
+        depends_on:
+            - sample-app
         networks:
             mynet:
                 aliases:
@@ -51,6 +53,8 @@ services:
         image: ${CONTAINER_REG}/sample_app:${TAG}
         ports:
             - "127.0.0.1:3000:3000"
+        depends_on:
+            - output-writer
         networks:
             mynet:
                 aliases:

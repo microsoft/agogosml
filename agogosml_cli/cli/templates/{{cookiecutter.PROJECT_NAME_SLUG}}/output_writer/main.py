@@ -2,6 +2,7 @@
 Main entry point for output writer
 """
 import os
+import time
 
 from agogosml.utils.config import Config
 from agogosml.writer.output_writer_factory import OutputWriterFactory
@@ -22,3 +23,6 @@ if __name__ == '__main__':
 
     OUTPUT = OutputWriterFactory.create(CFG)
     OUTPUT.start_incoming_messages()
+    while True:
+        time.sleep(1000)
+    print('Finished Receiving Messages')

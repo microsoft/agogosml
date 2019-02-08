@@ -1,13 +1,15 @@
-import pytest
 import os
 
+import pytest
+
 from agogosml.common.broadcast_streaming_client import BroadcastStreamingClient
-from agogosml.writer.output_writer import OutputWriter
-from agogosml.writer.output_writer_factory import OutputWriterFactory
+from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
 from agogosml.common.flask_http_listener_client import FlaskHttpListenerClient
 from agogosml.common.kafka_streaming_client import KafkaStreamingClient
-from agogosml.common.eventhub_streaming_client import EventHubStreamingClient
-from .client_mocks import StreamingClientMock, HttpClientMock
+from agogosml.writer.output_writer import OutputWriter
+from agogosml.writer.output_writer_factory import OutputWriterFactory
+from tests.client_mocks import HttpClientMock
+from tests.client_mocks import StreamingClientMock
 
 
 @pytest.fixture
@@ -35,7 +37,7 @@ def test_on_message_received_sent_called(mock_streaming_client,
 def test_broadcast_success(*fixtures):
     mock1 = StreamingClientMock()
     mock2 = StreamingClientMock()
-    broadcast = BroadcastStreamingClient({'CLIENTS': [mock1, mock2]})
+    broadcast = BroadcastStreamingClient({'BROADCAST_CLIENTS': [mock1, mock2]})
 
     success = broadcast.send({'test': 'message'})
 
@@ -47,7 +49,7 @@ def test_broadcast_failure(*fixtures):
     mock1 = StreamingClientMock()
     mock2 = StreamingClientMock()
     mock3 = StreamingClientMock()
-    broadcast = BroadcastStreamingClient({'CLIENTS': [mock1, mock2, mock3]})
+    broadcast = BroadcastStreamingClient({'BROADCAST_CLIENTS': [mock1, mock2, mock3]})
 
     mock2.set_fail_send(True)
     success = broadcast.send({'test': 'message'})
@@ -57,7 +59,7 @@ def test_broadcast_failure(*fixtures):
 
 
 def test_broadcast_create_from_config(*fixtures):
-    broadcast = BroadcastStreamingClient({'CLIENTS': [
+    broadcast = BroadcastStreamingClient({'BROADCAST_CLIENTS': [
         {'type': 'mock', 'config': {}},
         {'type': 'mock', 'config': {}},
     ]})

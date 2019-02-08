@@ -2,10 +2,20 @@ version: "3.7"
 
 services:
     input-reader:
+        depends_on:
+            - kafka
         environment:
             KAFKA_ADDRESS: broker:9092
 
     output-writer:
+        depends_on:
+            - kafka
+        environment:
+            KAFKA_ADDRESS: broker:9092
+
+    tester-gen:
+        depends_on:
+            - kafka
         environment:
             KAFKA_ADDRESS: broker:9092
 

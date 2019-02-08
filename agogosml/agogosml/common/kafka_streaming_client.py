@@ -26,6 +26,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
           TIMEOUT
           EVENTHUB_KAFKA_CONNECTION_STRING
         """
+        self.logger = Logger()
 
         self.topic = config.get("KAFKA_TOPIC")
         if config.get("TIMEOUT"):
@@ -40,11 +41,11 @@ class KafkaStreamingClient(AbstractStreamingClient):
         self.admin = admin.AdminClient(kafka_config)
 
         if config.get("KAFKA_CONSUMER_GROUP") is None:
+            self.logger.info('Creating Producer')
             self.producer = Producer(kafka_config)
         else:
+            self.logger.info('Creating Consumer')
             self.consumer = Consumer(kafka_config)
-
-        self.logger = Logger()
 
     @staticmethod
     def create_kafka_config(user_config: dict) -> dict:
@@ -56,8 +57,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
             "default.topic.config": {'auto.offset.reset': 'smallest'},
         }
 
-        if 'EVENTHUB_KAFKA_CONNECTION_STRING' in user_config:
-            ssl_location = user_config.get('SSL_CERT_LOCATION') or '/etc/ssl/ca-certificates.crt'
+        if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'):
+            ssl_location = user_config.get('SSL_CERT_LOCATION') or '/etc/ssl/certs/ca-certificates.crt'
             eventhub_config = {
                 'security.protocol': "SASL_SSL",
                 'sasl.mechanism': "PLAIN",
@@ -68,7 +69,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             }
             config = {**config, **eventhub_config}
 
-        if 'KAFKA_CONSUMER_GROUP' in user_config:
+        if user_config.get('KAFKA_CONSUMER_GROUP') is not None:
             config['group.id'] = user_config['KAFKA_CONSUMER_GROUP']
 
         return config
@@ -92,6 +93,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             raise TypeError('str type expected for message')
         try:
             mutated_message = message.encode('utf-8')
+            self.logger.info('Sending message to kafka topic: %s', self.topic)
             self.producer.poll(0)
             self.producer.produce(
                 self.topic, mutated_message, callback=self.delivery_report)
@@ -115,8 +117,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
         """Handle an error in kafka."""
         if msg.error().code() == KafkaError._PARTITION_EOF:
             # End of partition event
-            self.logger.error('%% %s [%d] reached end at offset %d\n',
-                              msg.topic(), msg.partition(), msg.offset())
+            self.logger.info('%% %s [%d] reached end at offset %d\n',
+                             msg.topic(), msg.partition(), msg.offset())
         else:
             # Error
             raise KafkaException(msg.error())

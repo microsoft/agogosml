@@ -1,11 +1,10 @@
 Developer Guide
 ===============
 
+This guide is for those that wish to develop on Agogosml. 
 We love pull requests from everyone. By participating in this project,
 you agree to abide by the `Microsoft Open Source Code of
 Conduct <https://opensource.microsoft.com/codeofconduct/>`__
-
-
 
 
 Setting up the Agogosml Library for Development
@@ -17,125 +16,115 @@ Requirements to Run Locally
 -  Make sure to run bash (Linux/MacOS) or `WSL`_
 -  Install `azure-cli`_
 -  `Python 3.7`_
--  `Terraform`_ to provision Azure resources such as AKS and EventHub
 -  `Docker`_
+-  Optional: `Terraform`_ to provision Azure resources such as AKS and EventHub
 
-Build with Docker and Test Your App
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Project Structure
+~~~~~~~~~~~~~~~~~
 
-Build the base image using:
+In ``agogosml_cli/`` is all code related to the CLI, i.e. generating the pipeline project locally for a user. 
+``agogosml/agogosml_cli/cli/templates/{{cookiecutter.PROJECT_NAME_SLUG}}/`` contains the structure that is generated. 
+The ``templates/apps/`` folder has the two sample applications, one of which will be selected to create the pipeline with.
+
+The pipeline generated simply uses a base image of Agogosml available in PyPi. You can use the commands in `dockerbuild.sh` to build
+the input, output, and application Docker containers. If changes are made within this CLI implementation, to test you can simply run 
+the end-to-end tests, using the docker-compose files we provide. These compose files spin up all three images, and send test messages
+from another ``testgen`` container that is built in the compose.  
+
+In the CLI we also have infrastructure deployment, Helm charts for Kubernetes orchestration, and end-to-end tests.
+
+The code for Agogosml lives in ``agogosml/agogosml/``. To test the pipeline with your local version, simply
+build ``agogosml/Dockerfile.agogosml`` as your base image before building the input, output, and app containers. The 
+instructions are in the below section.
+
+To test locally, create a virtual environment within agogosml and install the package.
+
+.. code:: bash
+
+    cd agogosml/agogosml
+    python3 -m venv venv
+    . venv/bin/activate
+    cd ..
+    pip install -e agogosml/
+
+The final step installs agogosml as if it were a remote package. This way you can locally
+test changes immediately.
+
+Build the Pipeline with Docker using your Local Version of Agogosml
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+From the top level directory, build the base image using. You can add a --build-arg CONTAINER_REG=
+to any of these commands, but unsure to tag your base image with the CONTAINER_REG/. 
 
 .. code:: bash
 
     docker build -t agogosml -f agogosml/Dockerfile.agogosml agogosml
 
-Then the input reader image:
+Now navigate to the CLI at ``agogosml/agogosml_cli/cli/templates/{{cookiecutter.PROJECT_NAME_SLUG}}/``
+Build the input reader and output writer image: 
 
 .. code:: bash
 
     docker build -t agogosml/input_reader -f input_reader/Dockerfile.input_reader input_reader/
-
-
-The app (replacing 'app' with your custom application name):
-
-.. code:: bash
-
-    docker build -t agogosml/app -f sample_app/Dockerfile.app app/
-
-And finally the output writer:
-
-.. code:: bash
-
     docker build -t agogosml/output_writer -f output_writer/Dockerfile.output_writer output_writer/
 
+
+Now navigate to the CLI at ``agogosml/agogosml_cli/cli/templates/{{cookiecutter.PROJECT_NAME_SLUG}}/``
+Build the custom application:
+
+.. code:: bash
+
+    docker build -t agogosml/{{cookiecutter.PROJECT_NAME_SLUG}} -f {{cookiecutter.PROJECT_NAME_SLUG}}/Dockerfile.{{cookiecutter.PROJECT_NAME_SLUG}} {{cookiecutter.PROJECT_NAME_SLUG}}/
 
 
 Run with Docker Locally
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-If you are building this locally add the following to each of the above commands:
+Set required environment variables in the PATH (You can see an example `env.example.sh <../env.example.sh>`__)
+
+Below are the required variables to run the ``docker-compose-agogosml.yml`` file locally. We hardcode
+some of the enviromment variables there, so if you want to run each container separately, please refer
+to ``env.example.sh``.
 
 .. code:: bash
 
-  --build-arg CONTAINER_REG=agogosml/
-
-Set required environment variables (You can see an example `env.example.sh <../env.example.sh>`__)
-
-.. code:: bash
-
-    export INPUT_READER_NAME=input-reader
-    export APP_NAME=app
-    export OUTPUT_WRITER_NAME=output-writer
-    export NETWORK_NAME=testnetwork       # Docker network name
     export MESSAGING_TYPE=eventhub        # eventhub/kafka
-    export AZURE_STORAGE_ACCOUNT=         # storage account name for EH processor
-    export AZURE_STORAGE_ACCESS_KEY=      # storage account key for EH processor
-    export LEASE_CONTAINER_NAME_INPUT=    # storage account container for EH processor
-    export LEASE_CONTAINER_NAME_OUTPUT=   # storage account container for EH processor
-    export EVENT_HUB_NAMESPACE=           # EH namespace
-    export EVENT_HUB_NAME_INPUT=          # input EH
-    export EVENT_HUB_SAS_POLICY_INPUT=    # input EH policy name
-    export EVENT_HUB_SAS_KEY_INPUT=       # input EH policy key
-    export EVENT_HUB_NAME_OUTPUT=         # output EH
-    export EVENT_HUB_SAS_POLICY_OUTPUT=   # output EH policy name
-    export EVENT_HUB_SAS_KEY_OUTPUT=      # output EH policy key
-    export APP_PORT=5000                  # app port
-    export OUTPUT_WRITER_PORT=8080        # output writer app port
 
+    # Event Hub Specific Variables 
 
-A Docker network must then be created with:
+    export MESSAGING_TYPE=                          # eventhub/kafka
+    export CONTAINER_REG=                           # this can be empty for local dev.
+    export TAG=                                     # latest
 
-.. code:: bash
+    # Fill out if using Event Hubs as messaging service.
+    export EVENT_HUB_NAMESPACE=
+    export EVENT_HUB_NAME_INPUT=                    # Event Hub to receive incoming messages
+    export EVENT_HUB_NAME_OUTPUT=                   # Event Hub to receive outgoing messages
+    export EVENT_HUB_SAS_POLICY=                    # SAS Policy created for both input and output
+    export EVENT_HUB_SAS_KEY_INPUT=                 # Key for input event hub SAS policy
+    export EVENT_HUB_SAS_KEY_OUTPUT=                # Key for output event hub SAS policy
 
-    docker network create $NETWORK_NAME
+    export AZURE_STORAGE_ACCOUNT=                   # Storage account for Event Hub
+    export AZURE_STORAGE_ACCESS_KEY=
+    export LEASE_CONTAINER_NAME_INPUT=              # Container for input events
+    export LEASE_CONTAINER_NAME_OUTPUT=             # Container for output events
+    export EVENT_HUB_CONSUMER_GROUP=                # Default is $default
 
-The four Docker images must then be run, prepending the parameter ``-e`` to any
-environment variables. An example of how to run one of these Docker images is:
+    # Fill out if using Kafka as messaging service, including Kafka with Event Hubs Integration
+    export KAFKA_ADDRESS=
+    export KAFKA_TIMEOUT=
+    export KAFKA_TOPIC_INPUT=
+    export KAFKA_TOPIC_OUTPUT=
+    export KAFKA_CONSUMER_GROUP=
 
-.. code:: bash
+    # Fill out the following if using Kafka Enabled Event Hubs Only. See instruction https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-create-kafka-enabled.
+    # Ensure that EVENTHUB_KAFKA_CONNECTION_STRING is NOT set if you are using pure Kafka.
 
-    # Run Input reader
-    docker run --rm --network $NETWORK_NAME --name $INPUT_READER_NAME -d \
-        -e MESSAGING_TYPE=$MESSAGING_TYPE \
-        -e AZURE_STORAGE_ACCOUNT=$AZURE_STORAGE_ACCOUNT \
-        -e AZURE_STORAGE_ACCESS_KEY=$AZURE_STORAGE_ACCESS_KEY \
-        -e LEASE_CONTAINER_NAME=$LEASE_CONTAINER_NAME \
-        -e EVENT_HUB_NAMESPACE=$EVENT_HUB_NAMESPACE \
-        -e EVENT_HUB_NAME=$EVENT_HUB_NAME_INPUT \
-        -e EVENT_HUB_SAS_POLICY=$EVENT_HUB_SAS_POLICY_INPUT \
-        -e EVENT_HUB_SAS_KEY=$EVENT_HUB_SAS_KEY_INPUT \
-        -e APP_HOST=$APP_NAME \
-        -e APP_PORT=$APP_PORT \
-        agogosml/input_reader:latest
+    export EVENTHUB_KAFKA_CONNECTION_STRING=        # Connection string-primary key in the Event Hub
 
-    # Run app
-    docker run --rm --name $APP_NAME -d --network $NETWORK_NAME \
-        -e HOST=$APP_NAME \
-        -e PORT=$APP_PORT \
-        -e OUTPUT_URL=http://$OUTPUT_WRITER_NAME:$OUTPUT_WRITER_PORT \
-        -e SCHEMA_FILEPATH=schema_example.json \
-        agogosml/app
-
-    # Run Output writer
-    docker run --rm --name $OUTPUT_WRITER_NAME -d --network $NETWORK_NAME \
-        -e MESSAGING_TYPE=$MESSAGING_TYPE \
-        -e EVENT_HUB_NAMESPACE=$EVENT_HUB_NAMESPACE \
-        -e EVENT_HUB_NAME=$EVENT_HUB_NAME_OUTPUT \
-        -e EVENT_HUB_SAS_POLICY=$EVENT_HUB_SAS_POLICY_OUTPUT \
-        -e EVENT_HUB_SAS_KEY=$EVENT_HUB_SAS_KEY_OUTPUT \
-        -e OUTPUT_WRITER_HOST=$OUTPUT_WRITER_NAME \
-        -e OUTPUT_WRITER_PORT=$OUTPUT_WRITER_PORT \
-        agogosml/output_writer:latest
-
-Now you can send a message to Event Hub with the following sample payload and check the output Event Hub for the transformed result:
-
-.. code:: json
-
-    {
-        "key": "SAMPLE_KEY",
-        "intValue": 40
-    }
-
+    # Local SSL Certificate - only necessary to define path to local cert if you are running locally. i.e. something like /usr/local/etc/openssl/cert.pem
+    
+    export SSL_CERT_LOCATION=
 
 Setting up the CLI for Development
 ----------------------------------

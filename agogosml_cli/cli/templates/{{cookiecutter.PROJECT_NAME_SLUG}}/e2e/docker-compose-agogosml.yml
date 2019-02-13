@@ -9,6 +9,7 @@ x-shared-environment:
     KAFKA_ADDRESS: ${KAFKA_ADDRESS}
     KAFKA_TIMEOUT: ${KAFKA_TIMEOUT}
     EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
+    SSL_CERT_LOCATION: ${SSL_CERT_LOCATION}
     KAFKA_TOPIC_INPUT: ${KAFKA_TOPIC_INPUT}
     KAFKA_TOPIC_OUTPUT: ${KAFKA_TOPIC_OUTPUT} 
     APP_HOST: sample
@@ -65,28 +66,6 @@ services:
             OUTPUT_URL: http://output:6000
             SCHEMA_FILEPATH: schema_example.json
             MODEL_PATH: /temp/assets/sample_model.zip
-
-    tester-gen:
-        build: 
-            context: testgen/.
-            args:
-                CONTAINER_REG_AGOGOSML: ${CONTAINER_REG_AGOGOSML}
-                TAG: latest
-        ports:
-            - "127.0.0.1:2000:5000"
-        networks:
-            mynet:
-                aliases:
-                    - tester
-        environment:
-            << : *shared-environment
-            TEST_GEN_PORT: 2000
-            TEST_GEN_HOST: 127.0.0.1
-            KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
-            EVENT_HUB_NAME_INPUT: ${EVENT_HUB_NAME_INPUT}
-            EVENT_HUB_NAME_OUTPUT: ${EVENT_HUB_NAME_OUTPUT}
-            LEASE_CONTAINER_NAME_OUTPUT: ${LEASE_CONTAINER_NAME_OUTPUT}
-
 
 networks:
     mynet:

@@ -58,3 +58,12 @@ The pipeline can also be run fully locally by using a containerized Kafka instan
 ```bash
 docker-compose -f docker-compose-agogosml.yml -f docker-compose-agogosml.local.yml up
 ```
+
+3. In order to execute the e-2-e test, a test generator app is required.
+   You can use the included testgen app `docker-compose-testgen.yml` to execute the test.
+
+Note: You have to run `docker-compose-agogosml.yml` before running `docker-compose-testgen.yml`
+
+```bash
+docker-compose -f docker-compose-testgen.yml up
+```

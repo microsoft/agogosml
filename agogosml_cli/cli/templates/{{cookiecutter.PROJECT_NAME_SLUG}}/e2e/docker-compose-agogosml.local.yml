@@ -13,12 +13,6 @@ services:
         environment:
             KAFKA_ADDRESS: broker:9092
 
-    tester-gen:
-        depends_on:
-            - kafka
-        environment:
-            KAFKA_ADDRESS: broker:9092
-
     kafka:
         image: spotify/kafka
         ports:

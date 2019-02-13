@@ -6,7 +6,7 @@ services:
       context: testgen/.
       dockerfile: Dockerfile
       args:
-        CONTAINER_REG: ${CONTAINER_REG}
+        CONTAINER_REG_AGOGOSML: ${CONTAINER_REG_AGOGOSML}
         TAG: latest
     ports:
      - "127.0.0.1:2000:5000"
@@ -38,6 +38,7 @@ services:
       KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
       KAFKA_ADDRESS: ${KAFKA_ADDRESS}
       EVENTHUB_KAFKA_CONNECTION_STRING: ${EVENTHUB_KAFKA_CONNECTION_STRING}
+      SSL_CERT_LOCATION: ${SSL_CERT_LOCATION}
 
 networks:
   mynet:

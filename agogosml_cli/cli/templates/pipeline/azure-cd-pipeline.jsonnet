@@ -201,6 +201,24 @@
                         },
                         {
                             "environment": {},
+                            "taskId": "79d92bb0-5cae-11e7-94c2-fff61a32ec2a",
+                            "version": "1.*",
+                            "name": "helm ",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "subCommand": "init",
+                                "arguments": ""
+                            }
+                        },
+                        {
+                            "environment": {},
                             "taskId": "cbc316a2-586f-4def-be79-488a1f503564",
                             "version": "0.*",
                             "name": "kubectl get",

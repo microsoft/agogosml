@@ -14,8 +14,6 @@ trigger:
     
 jobs:
 - job: Phase_1
-  pool:
-    vmImage: 'Ubuntu 16.04'
     
   steps:
   - task: Docker@1
@@ -29,16 +27,12 @@ jobs:
       buildContext: '{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}'
       imageName: 'sample_app:$(Build.BuildId)'
 
-  - bash: |  
-      if [ $(Build.SourceBranchName) = "master" ]; then
-        echo "Since this is a merge build, we are creating a new 'latest' tag"
-        docker tag $(container_registry)sample_app:$(Build.BuildId) $(container_registry)sample_app:latest
-        echo "Done"
-      else
-        echo "Not a merge build, hence skipping 'latest' tag"
-      fi
+  - bash: |
+      echo "Since this is a merge build, we are creating a new 'latest' tag"
+      docker tag $(container_registry)sample_app:$(Build.BuildId) $(container_registry)sample_app:latest
 
-    displayName: 'Tag latest tag'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Tag as "latest" tag'
 
 
   - task: Docker@1

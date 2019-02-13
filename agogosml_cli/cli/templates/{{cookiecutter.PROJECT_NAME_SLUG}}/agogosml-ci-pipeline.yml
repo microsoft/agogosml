@@ -18,8 +18,6 @@ jobs:
 - job: Phase_1
   displayName: Agogosml-Build-CI
   condition: succeeded()
-  pool:
-    vmImage: 'Ubuntu 16.04'
 
   steps:
   - task: Docker@1
@@ -31,15 +29,11 @@ jobs:
       imageName: 'agogosml:$(Build.BuildId)'
 
   - bash: |  
-       if [ $(Build.SourceBranchName) = "master" ]; then
-         echo "Since this is a merge build, we are creating a new 'latest' tag"
-         docker tag $(container_registry)agogosml:$(Build.BuildId) $(container_registry)agogosml:latest
-         echo "Done"
-       else
-         echo "Not a merge build, hence skipping 'latest' tag"
-       fi
+      echo "Since this is a merge build, we are creating a new 'latest' tag"
+      docker tag $(container_registry)agogosml:$(Build.BuildId) $(container_registry)agogosml:latest
 
-    displayName: 'Tag latest tag'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Tag as "latest" tag'
 
   - task: Docker@1
     displayName: 'Push base image'
@@ -54,8 +48,6 @@ jobs:
   displayName: InputReader-Build-CI
   dependsOn: Phase_1
   condition: succeeded()
-  pool:
-    vmImage: 'Ubuntu 16.04'
 
   steps:
   - task: Docker@1
@@ -68,16 +60,12 @@ jobs:
       useDefaultContext: false
       imageName: 'input_reader:$(Build.BuildId)'
 
-  - bash: |  
-       if [ $(Build.SourceBranchName) = "master" ]; then
-         echo "Since this is a merge build, we are creating a new 'latest' tag"
-         docker tag $(container_registry)input_reader:$(Build.BuildId) $(container_registry)input_reader:latest
-         echo "Done"
-       else
-         echo "Not a merge build, hence skipping 'latest' tag"
-       fi
+  - bash: |
+      echo "Since this is a merge build, we are creating a new 'latest' tag"
+      docker tag $(container_registry)input_reader:$(Build.BuildId) $(container_registry)input_reader:latest
 
-    displayName: 'Tag latest tag'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Tag as "latest" tag'
 
   - task: Docker@1
     displayName: 'Push input reader app image'
@@ -92,8 +80,6 @@ jobs:
   displayName: OutputWriter-Build-CI
   dependsOn: Phase_1
   condition: succeeded()
-  pool:
-    vmImage: 'Ubuntu 16.04'
 
   steps:
   - task: Docker@1
@@ -106,16 +92,12 @@ jobs:
       useDefaultContext: false
       imageName: 'output_writer:$(Build.BuildId)'
 
-  - bash: |  
-       if [ $(Build.SourceBranchName) = "master" ]; then
-         echo "Since this is a merge build, we are creating a new 'latest' tag"
-         docker tag $(container_registry)output_writer:$(Build.BuildId) $(container_registry)output_writer:latest
-         echo "Done"
-       else
-         echo "Not a merge build, hence skipping 'latest' tag"
-       fi
-       
-    displayName: 'Tag latest tag'
+  - bash: |
+      echo "Since this is a merge build, we are creating a new 'latest' tag"
+      docker tag $(container_registry)output_writer:$(Build.BuildId) $(container_registry)output_writer:latest
+
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Tag as "latest" tag'
 
   - task: Docker@1
     displayName: 'Push output writer app image'

@@ -33,6 +33,7 @@ input_reader:
     KAFKA_ADDRESS: ""
     KAFKA_TIMEOUT: ""
     EVENTHUB_KAFKA_CONNECTION_STRING: ""
+    SSL_CERT_LOCATION: ""
 
 
 output_writer:
@@ -42,6 +43,7 @@ output_writer:
   env:
     MESSAGING_TYPE: "" # kafka or eventhub
     OUTPUT_WRITER_PORT: ""
+    OUTPUT_WRITER_HOST: ""
     # eventhub
     EVENT_HUB_NAMESPACE: ""
     EVENT_HUB_NAME: ""
@@ -52,6 +54,7 @@ output_writer:
     KAFKA_ADDRESS: ""
     KAFKA_TIMEOUT: ""
     EVENTHUB_KAFKA_CONNECTION_STRING: ""
+    SSL_CERT_LOCATION: ""
 
 main_app: app_0
 

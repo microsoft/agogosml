@@ -60,6 +60,7 @@ test:
 	## Fail fast in CI, maxfail=1
 	py.test --maxfail=1 --cov=cli --cov-report term-missing \
 		--cov-report xml:tests_cov_output/coverage.xml \
+		--cov-report html:tests_cov_output/htmlcov \
 		--junitxml=tests_cov_output/TEST-cli.xml
 
 test-dev:

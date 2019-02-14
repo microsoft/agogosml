@@ -17,6 +17,7 @@ jobs:
       docker build --target builder -t agogosml_cli-builder:$(Build.BuildId) .
       docker run --name agogosml_cli -d agogosml_cli-builder:$(Build.BuildId)
       docker cp agogosml_cli:/usr/src/agogosml_cli/tests_cov_output $(System.DefaultWorkingDirectory)
+      docker cp agogosml_cli:/usr/src/agogosml_cli/dist $(System.DefaultWorkingDirectory)
       docker stop agogosml_cli
 
   - task: PublishTestResults@2
@@ -35,4 +36,3 @@ jobs:
     inputs:
       artifactName: 'Agogosml cli pip package and wheel files'
       targetPath: '$(System.DefaultWorkingDirectory)/dist'
-

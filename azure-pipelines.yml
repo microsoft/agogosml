@@ -27,5 +27,5 @@ jobs:
 
   - task: PublishCodeCoverageResults@1
     inputs:
-      summaryFileLocation: '**/coverage.xml'
+      summaryFileLocation: '$(System.DefaultWorkingDirectory)'
       failIfCoverageEmpty: true

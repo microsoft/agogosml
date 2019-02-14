@@ -9,6 +9,10 @@ data:
   EVENT_HUB_NAME: {{ quote .Values.output_writer.env.EVENT_HUB_NAME }}
   EVENT_HUB_SAS_POLICY: {{ quote .Values.output_writer.env.EVENT_HUB_SAS_POLICY }}
   EVENT_HUB_SAS_KEY: {{ quote .Values.output_writer.env.EVENT_HUB_SAS_KEY }}
-  KAFKA_TOPIC: {{ quote .Values.output_writer.env.KAFKA_TOPIC_OUTPUT }}
+  KAFKA_TOPIC_OUTPUT: {{ quote .Values.output_writer.env.KAFKA_TOPIC_OUTPUT }}
   KAFKA_ADDRESS: {{ quote .Values.output_writer.env.KAFKA_ADDRESS }}
   OUTPUT_WRITER_PORT: {{ quote .Values.output_writer.env.OUTPUT_WRITER_PORT }}
+  # OUTPUT_WRITER_HOST: {{ quote .Values.output_writer.env.OUTPUT_WRITER_HOST }}
+  EVENTHUB_KAFKA_CONNECTION_STRING: {{ quote .Values.output_writer.env.EVENTHUB_KAFKA_CONNECTION_STRING }}
+  KAFKA_TIMEOUT: {{ quote .Values.output_writer.env.KAFKA_TIMEOUT }}
+  SSL_CERT_LOCATION: {{ quote .Values.output_writer.env.SSL_CERT_LOCATION }}

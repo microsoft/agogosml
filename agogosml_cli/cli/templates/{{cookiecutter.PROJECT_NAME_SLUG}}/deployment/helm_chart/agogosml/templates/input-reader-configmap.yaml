@@ -13,6 +13,9 @@ data:
   LEASE_CONTAINER_NAME: {{ quote .Values.input_reader.env.LEASE_CONTAINER_NAME }}
   APP_HOST: {{ quote .Values.main_app }}
   APP_PORT: {{ quote (index .Values.instance_apps .Values.main_app).service.externalPort }}
-  KAFKA_TOPIC: {{ quote .Values.input_reader.env.KAFKA_TOPIC_INPUT }}
+  KAFKA_TOPIC_INPUT: {{ quote .Values.input_reader.env.KAFKA_TOPIC_INPUT }}
   KAFKA_CONSUMER_GROUP: {{ quote .Values.input_reader.env.KAFKA_CONSUMER_GROUP }}
   KAFKA_ADDRESS: {{ quote .Values.input_reader.env.KAFKA_ADDRESS }}
+  EVENTHUB_KAFKA_CONNECTION_STRING: {{ quote .Values.input_reader.env.EVENTHUB_KAFKA_CONNECTION_STRING }}
+  KAFKA_TIMEOUT: {{ quote .Values.input_reader.env.KAFKA_TIMEOUT }}
+  SSL_CERT_LOCATION: {{ quote .Values.input_reader.env.SSL_CERT_LOCATION }}

@@ -30,3 +30,9 @@ jobs:
       codeCoverageTool: 'cobertura'
       summaryFileLocation: '**/coverage.xml'
       failIfCoverageEmpty: true
+
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'Agogosml cli pip package and wheel files'
+      targetPath: '$(System.DefaultWorkingDirectory)/dist'
+

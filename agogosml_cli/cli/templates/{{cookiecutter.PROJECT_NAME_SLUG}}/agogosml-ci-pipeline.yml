@@ -57,7 +57,6 @@ jobs:
       azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
       dockerFile: '**/input_reader/Dockerfile.input_reader'
       arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
-      useDefaultContext: false
       imageName: 'input_reader:$(Build.BuildId)'
 
   - bash: |
@@ -89,7 +88,6 @@ jobs:
       azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
       dockerFile: '**/output_writer/Dockerfile.output_writer'
       arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
-      useDefaultContext: false
       imageName: 'output_writer:$(Build.BuildId)'
 
   - bash: |

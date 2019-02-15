@@ -51,7 +51,7 @@ services:
             EVENT_HUB_NAME: ${EVENT_HUB_NAME_OUTPUT}
           
     sample-app:
-        image: ${CONTAINER_REG}/sample_app:${TAG}
+        image: ${CONTAINER_REG}/{{cookiecutter.PROJECT_NAME_SLUG}}:${TAG}
         ports:
             - "127.0.0.1:3000:3000"
         depends_on:
@@ -65,7 +65,7 @@ services:
             PORT: 3000
             OUTPUT_URL: http://output:6000
             SCHEMA_FILEPATH: schema_example.json
-            MODEL_PATH: /temp/assets/sample_model.zip
+            MODEL_PATH: ${MODEL_PATH}
 
 networks:
     mynet:

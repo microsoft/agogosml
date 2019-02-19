@@ -19,7 +19,7 @@ jobs:
   steps:
   - script: |
       cd ./agogosml
-      docker build --target builder -t agogosml-builder:$(Build.BuildId) .
+      docker build --target builder -t agogosml-builder:$(Build.BuildId) Dockerfile.agogosml
       docker run --name agogosml -d agogosml-builder:$(Build.BuildId)
       docker cp agogosml:/usr/src/agogosml/tests_cov_output $(System.DefaultWorkingDirectory)
       docker cp agogosml:/usr/src/agogosml/dist $(System.DefaultWorkingDirectory)

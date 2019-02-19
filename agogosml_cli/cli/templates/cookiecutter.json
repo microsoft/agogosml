@@ -8,7 +8,7 @@
     "AZURE_CONTAINER_REGISTRY": "agogoscr.azurecr.io",
     "SUBSCRIPTION_ID": "",
     "_copy_without_render": [
-        "helm_chart/agogosml/templates/*.yaml",
+        "*/helm_chart/agogosml/templates/*.yaml",
         "*.tpl",
         "*.txt"
     ]

@@ -62,7 +62,7 @@ jobs:
   - task: Docker@1
     displayName: 'Push base image'
     inputs:
-      azureSubscriptionEndpoint: 6a98bbc0-8ba3-4a57-bbe9-ba2db95160f8
+      azureSubscriptionEndpoint: 'Strategic Engagements Developers Research'
       azureContainerRegistry: agogosacr.azurecr.io
       command: 'Push an image'
       imageName: agogosml

@@ -5,6 +5,7 @@ from pathlib import Path
 
 import click
 import giturlparse
+import tldextract
 from cookiecutter.exceptions import OutputDirExistsException
 from cookiecutter.main import cookiecutter
 
@@ -13,10 +14,6 @@ import cli.utils as utils
 
 # Project files to output with src and dst names.
 PROJ_FILES = {
-    'pipeline/azure-ci-agogosml-pipeline.jsonnet':
-        'ci-agogosml-pipeline.json',
-    'pipeline/azure-ci-app-pipeline.jsonnet':
-        'ci-app-pipeline.json',
     'pipeline/azure-cd-pipeline.jsonnet':
         'cd-pipeline.json',
     'pipeline/azure-ci-e2e-tests-pipeline.jsonnet':
@@ -139,11 +136,22 @@ def extract_azure_template_vars(manifest: dict) -> dict:
         raise click.Abort()
     else:
         acr = azure_props['azureContainerRegistry']
-        template_vars['AZURE_CONTAINER_REGISTRY'] = acr
-        if not acr.endswith('/'):
-            acr += '/'
-        template_vars['AZURE_DOCKER_BUILDARGS'] = \
-            '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
+        try:
+            extract_result = tldextract.extract(acr)
+        except ValueError:
+            # Handle situation where template folder exists and force is not set to true
+            click.echo('Azure Container Registry property is not parseable as a url. \
+                Valid property: nameacr.azurecr.io.')
+            raise click.Abort()
+
+        if extract_result.registered_domain != "azurecr.io":
+            click.echo('Azure Container Registry property is not set to an azurecr.io domain.')
+            raise click.Abort()
+        if len(extract_result.subdomain.split('.')) > 1:
+            click.echo('Azure Container Registry property contains multiple subdomains.')
+            raise click.Abort()
+        template_vars['AZURE_CONTAINER_REGISTRY'] = extract_result.subdomain + '.' + extract_result.registered_domain
+
     return template_vars
 
 

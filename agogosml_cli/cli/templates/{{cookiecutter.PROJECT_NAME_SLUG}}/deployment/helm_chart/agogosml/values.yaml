@@ -60,7 +60,7 @@ main_app: app_0
 
 instance_apps:
   app_0:
-    name: sample_app
+    name: {{cookiecutter.PROJECT_NAME_SLUG}}
     slot1_tag: latest
     slot2_tag: latest
     imagePullPolicy: IfNotPresent

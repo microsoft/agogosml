@@ -2,7 +2,8 @@ resources:
 - repo: self
 
 variables:
-  container_registry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}/'
+  container_registry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
+  azure_subscription: '{{cookiecutter.SUBSCRIPTION_ID}}'
 
 trigger:
   branches:
@@ -23,14 +24,14 @@ jobs:
   - task: Docker@1
     displayName: 'Build an image'
     inputs:
-      azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+      azureSubscriptionEndpoint: $(azure_subscription)
+      azureContainerRegistry: $(container_registry)
       dockerFile: '**/agogosml/Dockerfile.agogosml'
       imageName: 'agogosml:$(Build.BuildId)'
 
   - bash: |  
       echo "Since this is a merge build, we are creating a new 'latest' tag"
-      docker tag $(container_registry)agogosml:$(Build.BuildId) $(container_registry)agogosml:latest
+      docker tag $(container_registry)/agogosml:$(Build.BuildId) $(container_registry)/agogosml:latest
 
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Tag as "latest" tag'
@@ -38,8 +39,8 @@ jobs:
   - task: Docker@1
     displayName: 'Push base image'
     inputs:
-      azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+      azureSubscriptionEndpoint: $(azure_subscription)
+      azureContainerRegistry: $(container_registry)
       command: 'Push an image'
       imageName: agogosml
 
@@ -53,15 +54,15 @@ jobs:
   - task: Docker@1
     displayName: 'Build an image'
     inputs:
-      azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+      azureSubscriptionEndpoint: $(azure_subscription)
+      azureContainerRegistry: $(container_registry)
       dockerFile: '**/input_reader/Dockerfile.input_reader'
-      arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
+      arguments: '--build-arg CONTAINER_REG=$(container_registry)/ --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       imageName: 'input_reader:$(Build.BuildId)'
 
   - bash: |
       echo "Since this is a merge build, we are creating a new 'latest' tag"
-      docker tag $(container_registry)input_reader:$(Build.BuildId) $(container_registry)input_reader:latest
+      docker tag $(container_registry)/input_reader:$(Build.BuildId) $(container_registry)/input_reader:latest
 
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Tag as "latest" tag'
@@ -69,8 +70,8 @@ jobs:
   - task: Docker@1
     displayName: 'Push input reader app image'
     inputs:
-      azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+      azureSubscriptionEndpoint: $(azure_subscription)
+      azureContainerRegistry: $(container_registry)
       command: 'Push an image'
       imageName: 'input_reader'
 
@@ -84,15 +85,15 @@ jobs:
   - task: Docker@1
     displayName: 'Build an image'
     inputs:
-      azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+      azureSubscriptionEndpoint: $(azure_subscription)
+      azureContainerRegistry: $(container_registry)
       dockerFile: '**/output_writer/Dockerfile.output_writer'
-      arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
+      arguments: '--build-arg CONTAINER_REG=$(container_registry)/ --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       imageName: 'output_writer:$(Build.BuildId)'
 
   - bash: |
       echo "Since this is a merge build, we are creating a new 'latest' tag"
-      docker tag $(container_registry)output_writer:$(Build.BuildId) $(container_registry)output_writer:latest
+      docker tag $(container_registry)/output_writer:$(Build.BuildId) $(container_registry)/output_writer:latest
 
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Tag as "latest" tag'
@@ -100,7 +101,7 @@ jobs:
   - task: Docker@1
     displayName: 'Push output writer app image'
     inputs:
-      azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+      azureSubscriptionEndpoint: $(azure_subscription)
+      azureContainerRegistry: $(container_registry)
       command: 'Push an image'
       imageName: 'output_writer'

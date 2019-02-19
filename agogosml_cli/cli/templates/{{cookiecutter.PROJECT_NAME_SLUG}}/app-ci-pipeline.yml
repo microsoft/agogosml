@@ -2,7 +2,8 @@ resources:
 - repo: self
 
 variables:
-  container_registry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}/'
+  container_registry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
+  azure_subscription: '{{cookiecutter.SUBSCRIPTION_ID}}'
 
 trigger:
   branches:
@@ -19,16 +20,16 @@ jobs:
   - task: Docker@1
     displayName: 'Build app image'
     inputs:
-      azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+      azureSubscriptionEndpoint: $(azure_subscription)
+      azureContainerRegistry: $(container_registry)
       dockerFile: '**/Dockerfile.{{cookiecutter.PROJECT_NAME_SLUG}}'
-      arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
+      arguments: '--build-arg CONTAINER_REG=$(container_registry)/ --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       buildContext: '{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}'
       imageName: '{{cookiecutter.PROJECT_NAME_SLUG}}:$(Build.BuildId)'
 
   - bash: |
       echo "Since this is a merge build, we are creating a new 'latest' tag"
-      docker tag $(container_registry){{cookiecutter.PROJECT_NAME_SLUG}}:$(Build.BuildId) $(container_registry){{cookiecutter.PROJECT_NAME_SLUG}}:latest
+      docker tag $(container_registry)/{{cookiecutter.PROJECT_NAME_SLUG}}:$(Build.BuildId) $(container_registry)/{{cookiecutter.PROJECT_NAME_SLUG}}:latest
 
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Tag as "latest" tag'
@@ -37,7 +38,7 @@ jobs:
   - task: Docker@1
     displayName: 'Push app image'
     inputs:
-      azureSubscriptionEndpoint: '{{cookiecutter.SUBSCRIPTION_ID}}'
-      azureContainerRegistry: {{cookiecutter.AZURE_CONTAINER_REGISTRY}}
+      azureSubscriptionEndpoint: $(azure_subscription)
+      azureContainerRegistry: $(container_registry)
       command: 'Push an image'
       imageName: '{{cookiecutter.PROJECT_NAME_SLUG}}'

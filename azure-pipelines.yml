@@ -71,6 +71,7 @@ jobs:
     displayName: 'Push base image'
     inputs:
       azureContainerRegistry: $(container_registry)
+      azureSubscriptionEndpoint: $(azure_subscription)
       command: 'Push an image'
       imageName: agogosml
 
@@ -100,6 +101,7 @@ jobs:
     displayName: 'Push input reader app image'
     inputs:
       azureContainerRegistry: $(container_registry)_registry)
+      azureSubscriptionEndpoint: $(azure_subscription)
       command: 'Push an image'
       imageName: 'input_reader'
 
@@ -129,5 +131,6 @@ jobs:
     displayName: 'Push output writer app image'
     inputs:
       azureContainerRegistry: $(container_registry)
+      azureSubscriptionEndpoint: $(azure_subscription)
       command: 'Push an image'
       imageName: 'output_writer'

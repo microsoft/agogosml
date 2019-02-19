@@ -21,7 +21,7 @@ jobs:
     displayName: Container registry login
     inputs:
       command: login
-      azureSubscriptionEndpoint: csedevil-agogosml-04f7ec88-8e28-41ed-8537-5e17766001f5
+      azureSubscriptionEndpoint: 'Strategic Engagements Developers Research (04f7ec88-8e28-41ed-8537-5e17766001f5)'
       azureContainerRegistry: agogosacr.azurecr.io
 
   - script: |

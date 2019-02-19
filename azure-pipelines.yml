@@ -17,6 +17,13 @@ jobs:
   condition: succeeded()
 
   steps:
+  - task: Docker@1
+    displayName: Container registry login
+    inputs:
+      command: login
+      azureSubscriptionEndpoint: csedevil-agogosml-04f7ec88-8e28-41ed-8537-5e17766001f5
+      azureContainerRegistry: agogosacr.azurecr.io
+
   - script: |
       cd ./agogosml
       docker build --target builder -t agogosml-builder:$(Build.BuildId) -f Dockerfile.agogosml .
@@ -62,7 +69,6 @@ jobs:
   - task: Docker@1
     displayName: 'Push base image'
     inputs:
-      azureSubscriptionEndpoint: 'csedevil-agogosml-04f7ec88-8e28-41ed-8537-5e17766001f5'
       azureContainerRegistry: agogosacr.azurecr.io
       command: 'Push an image'
       imageName: agogosml

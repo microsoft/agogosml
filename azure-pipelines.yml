@@ -1,19 +1,125 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+variables:
+  container_registry: 'agogosacr.azurecr.io/'
 
 trigger:
-- master
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - '**/agogosml'
+    - '**/input_reader'
+    - '**/output_writer'
 
-pool:
-  vmImage: 'Ubuntu-16.04'
+jobs:
+- job: Phase_1
+  displayName: Agogosml-Build-CI
+  condition: succeeded()
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  steps:
+  - script: |
+      cd ./agogosml
+      docker build --target builder -t agogosml-builder:$(Build.BuildId) .
+      docker run --name agogosml -d agogosml-builder:$(Build.BuildId)
+      docker cp agogosml:/usr/src/agogosml/tests_cov_output $(System.DefaultWorkingDirectory)
+      docker cp agogosml:/usr/src/agogosml/dist $(System.DefaultWorkingDirectory)
+      docker stop agogosml
+    
+    displayName: Run Agogosml Builder
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - task: PublishTestResults@2
+    displayName: 'Publish TRX / Test Results'
+    inputs:
+      testResultsFiles: '**/TEST-*.xml'
+      failTaskOnFailedTests: true
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: 'cobertura'
+      summaryFileLocation: '**/coverage.xml'
+      reportDirectory: '**/htmlcov'
+      failIfCoverageEmpty: true
+
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'agogosml.tar.gz'
+      targetPath: '$(System.DefaultWorkingDirectory)/dist'
+
+  - task: Docker@1
+    displayName: 'Build final Agogosml image'
+    inputs:
+      azureContainerRegistry: agogosacr.azurecr.io
+      dockerFile: '**/agogosml/Dockerfile.agogosml'
+      imageName: 'agogosml:$(Build.BuildId)'
+
+  - bash: |  
+      echo "Since this is a merge build, we are creating a new 'latest' tag"
+      docker tag $(container_registry)agogosml:$(Build.BuildId) $(container_registry)agogosml:latest
+
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Tag as "latest" tag'
+
+  - task: Docker@1
+    displayName: 'Push base image'
+    inputs:
+      azureContainerRegistry: agogosacr.azurecr.io
+      command: 'Push an image'
+      imageName: agogosml
+
+
+- job: Phase_2
+  displayName: InputReader-Build-CI
+  dependsOn: Phase_1
+  condition: succeeded()
+
+  steps:
+  - task: Docker@1
+    displayName: 'Build an image'
+    inputs:
+      azureContainerRegistry: agogosacr.azurecr.io
+      dockerFile: '**/input_reader/Dockerfile.input_reader'
+      arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
+      imageName: 'input_reader:$(Build.BuildId)'
+
+  - bash: |
+      echo "Since this is a merge build, we are creating a new 'latest' tag"
+      docker tag $(container_registry)input_reader:$(Build.BuildId) $(container_registry)input_reader:latest
+
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Tag as "latest" tag'
+
+  - task: Docker@1
+    displayName: 'Push input reader app image'
+    inputs:
+      azureContainerRegistry: agogosacr.azurecr.io
+      command: 'Push an image'
+      imageName: 'input_reader'
+
+
+- job: Phase_3
+  displayName: OutputWriter-Build-CI
+  dependsOn: Phase_1
+  condition: succeeded()
+
+  steps:
+  - task: Docker@1
+    displayName: 'Build an image'
+    inputs:
+      azureContainerRegistry: agogosacr.azurecr.io
+      dockerFile: '**/output_writer/Dockerfile.output_writer'
+      arguments: '--build-arg CONTAINER_REG=$(container_registry) --build-arg AGOGOSML_TAG=$(Build.BuildId)'
+      imageName: 'output_writer:$(Build.BuildId)'
+
+  - bash: |
+      echo "Since this is a merge build, we are creating a new 'latest' tag"
+      docker tag $(container_registry)output_writer:$(Build.BuildId) $(container_registry)output_writer:latest
+
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Tag as "latest" tag'
+
+  - task: Docker@1
+    displayName: 'Push output writer app image'
+    inputs:
+      azureContainerRegistry: agogosacr.azurecr.io
+      command: 'Push an image'
+      imageName: 'output_writer'

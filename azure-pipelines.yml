@@ -19,7 +19,7 @@ jobs:
 
   steps:
   - task: Docker@1
-    displayName: Container registry login
+    displayName: 'Container registry login'
     inputs:
       command: login
       azureSubscriptionEndpoint: $(azure_subscription)
@@ -73,7 +73,7 @@ jobs:
       azureContainerRegistry: $(container_registry)
       azureSubscriptionEndpoint: $(azure_subscription)
       command: 'Push an image'
-      imageName: agogosml
+      imageName: 'agogosml:$(Build.BuildId)'
 
 
 - job: Phase_2
@@ -100,7 +100,7 @@ jobs:
   - task: Docker@1
     displayName: 'Push input reader app image'
     inputs:
-      azureContainerRegistry: $(container_registry)_registry)
+      azureContainerRegistry: $(container_registry)
       azureSubscriptionEndpoint: $(azure_subscription)
       command: 'Push an image'
       imageName: 'input_reader'

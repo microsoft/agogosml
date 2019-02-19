@@ -50,6 +50,7 @@ jobs:
     displayName: 'Build final Agogosml image'
     inputs:
       azureContainerRegistry: $(container_registry)
+      azureSubscriptionEndpoint: $(azure_subscription)
       dockerFile: '**/agogosml/Dockerfile.agogosml'
       imageName: 'agogosml:$(Build.BuildId)'
 
@@ -79,6 +80,7 @@ jobs:
     displayName: 'Build an image'
     inputs:
       azureContainerRegistry: $(container_registry)
+      azureSubscriptionEndpoint: $(azure_subscription)
       dockerFile: '**/input_reader/Dockerfile.input_reader'
       arguments: '--build-arg CONTAINER_REG=$(container_registry)/ --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       imageName: 'input_reader:$(Build.BuildId)'
@@ -109,6 +111,7 @@ jobs:
     displayName: 'Build an image'
     inputs:
       azureContainerRegistry: $(container_registry)
+      azureSubscriptionEndpoint: $(azure_subscription)
       dockerFile: '**/output_writer/Dockerfile.output_writer'
       arguments: '--build-arg CONTAINER_REG=$(container_registry)/ --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       imageName: 'output_writer:$(Build.BuildId)'

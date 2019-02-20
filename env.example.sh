@@ -1,19 +1,40 @@
 # Copy this file to env.private.sh, and change the variables appropriately
-export INPUT_READER_NAME=input-reader
-export APP_NAME=sample-app
-export OUTPUT_WRITER_NAME=output-writer
-export NETWORK_NAME=testnetwork
-export MESSAGING_TYPE=eventhub
-export AZURE_STORAGE_ACCOUNT=********
-export AZURE_STORAGE_ACCESS_KEY=****************************************************************************************
-export LEASE_CONTAINER_NAME_INPUT=lease
-export LEASE_CONTAINER_NAME_OUTPUT=leaseoutput
-export EVENT_HUB_NAMESPACE=agogos-eh
-export EVENT_HUB_NAME_INPUT=test-input
-export EVENT_HUB_SAS_POLICY_INPUT=<policy-name>
-export EVENT_HUB_SAS_KEY_INPUT=********************************************
-export EVENT_HUB_NAME_OUTPUT=test-output
-export EVENT_HUB_SAS_POLICY_OUTPUT=<policy-name>
-export EVENT_HUB_SAS_KEY_OUTPUT=********************************************
-export APP_PORT=5000
-export OUTPUT_WRITER_PORT=8080
+
+MESSAGING_TYPE=eventhub
+
+# port and host the custom app is running on
+APP_PORT=               
+APP_HOST=
+# port and host the output server is running on
+OUTPUT_WRITER_PORT=
+OUTPUT_WRITER_HOST=
+
+# To run the custom app
+HOST=                # Same as APP_PORT 
+PORT=                # Same as APP_HOST
+OUTPUT_URL=
+SCHEMA_FILEPATH=
+MODEL_PATH=
+
+# Event Hub Specific
+AZURE_STORAGE_ACCOUNT=
+AZURE_STORAGE_ACCESS_KEY=
+LEASE_CONTAINER_NAME_INPUT=
+LEASE_CONTAINER_NAME_OUTPUT=
+EVENT_HUB_NAMESPACE=
+EVENT_HUB_NAME_INPUT=
+EVENT_HUB_SAS_POLICY=       # SAS Policy for Both Input and Output EH
+EVENT_HUB_SAS_KEY_INPUT=
+EVENT_HUB_NAME_OUTPUT=
+EVENT_HUB_SAS_KEY_OUTPUT=
+
+# Kafka or Kafka with Event Hub Specific
+KAFKA_ADDRESS=
+KAFKA_TIMEOUT=
+KAFKA_TOPIC_INPUT=
+KAFKA_TOPIC_OUTPUT=
+KAFKA_CONSUMER_GROUP=
+
+# Kafka and Event Hub Specific
+EVENTHUB_KAFKA_CONNECTION_STRING=
+SSL_CERT_LOCATION= # Only needed if running locally without Docker

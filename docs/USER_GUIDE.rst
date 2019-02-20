@@ -9,7 +9,7 @@ Prerequisites
 -  Make sure to run bash (Linux/MacOS) or `WSL`_
 -  Install `azure-cli`_
 -  `Python 3.7`_
--  `Terraform`_ to provision Azure resources such as AKS and EventHub
+-  Optional: `Terraform`_ to provision Azure resources such as AKS and EventHub
 -  `Docker`_
 -  If you are on Linux/MacOS, please install GCC, Make, CMake and other relevant Python C Extension building tools.
 
@@ -27,10 +27,10 @@ Create a New Project
     # 3. Init the project
     agogosml init
 
-    # 4. Fill in the manifest.json (Docker Container Registry, Azure Subscription, etc).
+    # 4. Fill in the manifest.json (Docker or Azure Container Registry, Azure Subscription, etc).
     vi manifest.json
 
-    # 5. Generate the code for the projects
+    # 5. Generate the code for the projects. View options with the flag --help. 
     agogosml generate
 
 
@@ -41,18 +41,30 @@ The generated folder structure consists of the input reader, customer app and ou
 App/Model Integration with Agogosml
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Integrate your model in Agogosml by implementing a small HTTP service
-that accepts POST requests and can send the HTTP POST request to
-agogosml output writer. You can find an example
+When you generated the project above, we include starter code for your application in either Python or Scala. 
+To generate the project with a Scala application, run `agogosml generate --app-base mleap`. The default --app-base is `simple`,
+which scaffolds a Python application to build off of. 
+
+These base applications implement lightweight HTTP services that accept POST requests from the messaging service, and send the data via POST request to
+the output messaging service. In this application, you would load a model, or do any desired transformation of the data. For instance, 
+the Scala application loads in a sample Spark model using MLeap, and runs the incoming data through this model.  
+
+You can find an example application
 `here <https://github.com/Microsoft/agogosml/tree/master/agogosml_cli/cli/templates/apps/simple/%7B%7Bcookiecutter.PROJECT_NAME_SLUG%7D%7D>`__.
 
+Local Building and Testing 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Deployment and Provisionning to Azure
+As you customize the base application that your data will run through, you should continuously test. You can find documentation and scripts to build and test 
+this pipeline in the end to end testing folder, ``e2e/``. You will
+build the scripts in ``dockerbuild.sh`` and run a docker-compose file that spins up the pipeline, along with a test generator.
+
+
+Deployment and Provisioning with Azure
 --------------------------------------
 
-1. Create `Azure DevOps`_ account
-2. Create `Azure Kubernetes Service`_
-3. Create `Azure Event Hub`_
+This pipeline can easily be deployed to Azure using the Terraform plans we provide. Please refer to our `documentation <https://github.com/Microsoft/agogosml/tree/master/agogosml_cli/cli/templates/%7B%7Bcookiecutter.PROJECT_NAME_SLUG%7D%7D/deployment/terraform>`__. 
+for details on what to create and how. 
 
 .. _Framework: https://github.com/Microsoft/agogosml/tree/master/agogosml
 .. _CLI: https://github.com/Microsoft/agogosml/tree/master/agogosml_cli
@@ -109,24 +121,17 @@ scaffold will include the following files:
    ci/cd pipeline for an agogosml project.
 -  ``data-pipeline.yml`` - This yaml file will contain the Azure DevOps
    data pipeline for an agogosml project.
--  ``Pipfile`` - This file is the pipenv file used to configure the
-   included app. It may also contain runs scripts to simplify
-   deployment (coming soon).
--  ``YourApplicationName/`` - This folder is where you will develop your
+-  ``<YourApplicationName>/`` - This folder is where you will develop your
     custom application. Within it, we provide starter code, which contains a simple data 
     transformation app that demonstrates how to read from the InputReader and write to the 
     OutputWriter data pipeline components. We provide either a simple Python starter project,
     or a Scala project that loads a ML model using mleap. Specify which base you want to use
     by adding a flag ``agogosml generate --app-base BASE``. 
--  ``tests/e2e/`` - This a directory containing end to end integration
-   tests for your deployed data pipeline.
--  ``tests/validation/`` - This a directory containing various useful
-   validation tests.
+-  ``e2e/`` - This a directory containing end to end integration
+   tests for your data pipeline. Please refer to the README.md in this folder.
+-  ``deployment/helm_chart`` - Helm charts for deployment to Kubernetes.
+-  ``deployment/terraform`` - Terraform plans to scaffold the necessary elements of your project.  
 
-Install
-~~~~~~~
-
-Coming soon.
 
 CLI Commands
 ~~~~~~~~~~~~

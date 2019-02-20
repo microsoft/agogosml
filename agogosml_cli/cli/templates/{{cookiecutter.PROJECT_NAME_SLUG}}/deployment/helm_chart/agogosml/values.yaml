@@ -34,7 +34,8 @@ input_reader:
     KAFKA_TIMEOUT: ""
     EVENTHUB_KAFKA_CONNECTION_STRING: ""
     SSL_CERT_LOCATION: ""
-
+    # Application Insights
+    APPINSIGHTS_INSTRUMENTATIONKEY: ""
 
 output_writer:
   name: output_writer
@@ -55,6 +56,8 @@ output_writer:
     KAFKA_TIMEOUT: ""
     EVENTHUB_KAFKA_CONNECTION_STRING: ""
     SSL_CERT_LOCATION: ""
+    # Application Insights
+    APPINSIGHTS_INSTRUMENTATIONKEY: ""
 
 main_app: app_0
 
@@ -74,3 +77,5 @@ instance_apps:
       OUTPUT_URL: ""
       SCHEMA_FILEPATH: ""
       MODEL_PATH: ""
+      # Application Insights
+      APPINSIGHTS_INSTRUMENTATIONKEY: ""

@@ -17,6 +17,16 @@ jobs:
 - job: Phase_1
     
   steps:
+  - bash: |
+      if [ -z "$(azure_subscription)" ]; then
+        echo "azure_subscription not set in variables - exiting"
+        exit 1
+      else
+        echo "using azure_subscription - $(azure_subscription)"
+      fi
+
+    displayName: 'verify YAML variable set for azure_subscription'
+    
   - task: Docker@1
     displayName: 'Build app image'
     inputs:

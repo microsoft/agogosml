@@ -5,9 +5,10 @@
     "REPOSITORY_REPO": "agogosml",
     "PROJECT_NAME": "sample_agogosml_project",
     "PROJECT_NAME_SLUG": "sample_agogosml_project",
+    "AZURE_CONTAINER_REGISTRY": "agogoscr.azurecr.io",
     "SUBSCRIPTION_ID": "",
     "_copy_without_render": [
-        "*.yaml",
+        "deployment/helm_chart/agogosml/templates/*.yaml",
         "*.tpl",
         "*.txt"
     ]

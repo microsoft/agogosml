@@ -80,7 +80,18 @@ for details on what to create and how.
 .. _Azure DevOps: https://azure.microsoft.com/en-us/services/devops/
 .. _Azure Kubernetes Service: https://github.com/Microsoft/agogosml/tree/master/deployment/aks
 .. _Azure Event Hub: https://github.com/Microsoft/agogosml/tree/master/deployment/eventhub
+.. _Azure DevOps Variable Groups: https://docs.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups#use-a-variable-group
 
+
+Azure DevOps Variable Groups
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Azure DevOps Pipleline as defined in the ``YAML`` files ``./agogosml/azure-pipelines.yaml`` and 
+``./agogosml_cli/azure-pipelines.yaml`` depend upon a Build Pipeline Variable group that must contain the following
+
+- container_registry - this is the container registry DNS name
+- subscription_endpoint_name - this is a string that is defined in Azure DevOps Project Settings - Service Connecgtions.
+
+See `Azure DevOps Variable Groups`_ 
 
 CLI and Scaffolding Tools
 =========================

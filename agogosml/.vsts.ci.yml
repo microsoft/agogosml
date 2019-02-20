@@ -1,6 +1,5 @@
 variables:
-  container_registry: 'agogosacrdemo.azurecr.io'
-  azure_subscription: Lovelace
+- group: azure-subscription-1
 
 trigger:
   branches:
@@ -50,7 +49,7 @@ jobs:
     displayName: 'Build final Agogosml image'
     inputs:
       azureContainerRegistry: $(container_registry)
-      azureSubscriptionEndpoint: $(azure_subscription)
+      azureSubscriptionEndpoint: $(subscription_endpoint_name)
       dockerFile: '**/agogosml/Dockerfile.agogosml'
       imageName: 'agogosml:$(Build.BuildId)'
 
@@ -65,7 +64,7 @@ jobs:
     displayName: 'Push base image'
     inputs:
       azureContainerRegistry: $(container_registry)
-      azureSubscriptionEndpoint: $(azure_subscription)
+      azureSubscriptionEndpoint: $(subscription_endpoint_name)
       command: 'Push an image'
       imageName: 'agogosml'
 
@@ -80,7 +79,7 @@ jobs:
     displayName: 'Build an image'
     inputs:
       azureContainerRegistry: $(container_registry)
-      azureSubscriptionEndpoint: $(azure_subscription)
+      azureSubscriptionEndpoint: $(subscription_endpoint_name)
       dockerFile: '**/input_reader/Dockerfile.input_reader'
       arguments: '--build-arg CONTAINER_REG=$(container_registry)/ --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       imageName: 'input_reader:$(Build.BuildId)'
@@ -96,7 +95,7 @@ jobs:
     displayName: 'Push input reader app image'
     inputs:
       azureContainerRegistry: $(container_registry)
-      azureSubscriptionEndpoint: $(azure_subscription)
+      azureSubscriptionEndpoint: $(subscription_endpoint_name)
       command: 'Push an image'
       imageName: 'input_reader'
 
@@ -111,7 +110,7 @@ jobs:
     displayName: 'Build an image'
     inputs:
       azureContainerRegistry: $(container_registry)
-      azureSubscriptionEndpoint: $(azure_subscription)
+      azureSubscriptionEndpoint: $(subscription_endpoint_name)
       dockerFile: '**/output_writer/Dockerfile.output_writer'
       arguments: '--build-arg CONTAINER_REG=$(container_registry)/ --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       imageName: 'output_writer:$(Build.BuildId)'
@@ -127,6 +126,6 @@ jobs:
     displayName: 'Push output writer app image'
     inputs:
       azureContainerRegistry: $(container_registry)
-      azureSubscriptionEndpoint: $(azure_subscription)
+      azureSubscriptionEndpoint: $(subscription_endpoint_name)
       command: 'Push an image'
       imageName: 'output_writer'

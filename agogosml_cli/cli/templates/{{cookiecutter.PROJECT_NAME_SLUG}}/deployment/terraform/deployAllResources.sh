@@ -49,3 +49,8 @@ echo "Completed deploying Eventhub"
 echo "About to create the AKS Plan"
 (cd ./aks && ./setup.sh)
 echo "Completed deploying AKS"
+
+# Create Application Insights
+echo "About to create the Application Insights Plan"
+(cd ./appinsights && ./setup.sh)
+echo "Completed deploying Application Insights"

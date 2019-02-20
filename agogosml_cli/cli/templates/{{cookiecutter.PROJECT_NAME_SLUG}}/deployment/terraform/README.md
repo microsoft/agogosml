@@ -76,6 +76,7 @@ You can either deploy all the necessary Azure resources listed below at once, or
 * Azure Kubernetes Service (AKS)
 * Azure Storage 
 * Azure Event Hub
+* Azure Application Insights
 
 Update preferred values in `variables.tf`, such as resource group name, and resource naming conventions. You may also want to inspect resource specifics values and update them based on your requirements. 
 
@@ -96,6 +97,8 @@ Use the following command to destroy individual resources.
 - Azure Container Service (ACR): `(cd ./acr/ && terraform destroy -target=azurerm_container_registry.acr -auto-approve)`
 
 - Azure Kubernetes Service (AKS): `(cd ./aks/ && terraform destroy -target=azurerm_kubernetes_cluster.k8s -auto-approve)`
+
+- Azure Application Insights: `(cd ./appinsights/ && terraform destroy -target=azurerm_application_insights.appinsights -auto-approve)`
  
 # Troubleshooting 
 
@@ -107,6 +110,7 @@ Use the following command to destroy individual resources.
     * Azure Storage: `rm ./azurestorage/.terraform/terraform.tfstate` 
     * Azure Event Hub: `rm ./eventhub/.terraform/terraform.tfstate` 
     * Azure Kubernetes Service (AKS): `rm ./aks/.terraform/terraform.tfstate` 
+    * Azure Application Insights: `rm ./appinsights/.terraform/terraform.tfstate`
 
 # Configuration Values
 

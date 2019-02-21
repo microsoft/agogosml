@@ -30,7 +30,7 @@ jobs:
     inputs:
       azureSubscription: $(azure_subscription)
       azureContainerRegistry: $(container_registry)
-      dockerComposeFile: '**/docker-compose-agogosml.yml'
+      dockerComposeFile: '**/{{cookiecutter.PROJECT_NAME_SLUG}}/docker-compose-agogosml.yml'
       additionalDockerComposeFiles: 'docker-compose-testgen.yml'
       dockerComposeFileArgs: |
        CONTAINER_REG=$(container_registry)

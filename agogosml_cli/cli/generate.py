@@ -16,8 +16,6 @@ import cli.utils as utils
 PROJ_FILES = {
     'pipeline/azure-cd-pipeline.jsonnet':
         'cd-pipeline.json',
-    'pipeline/azure-ci-e2e-tests-pipeline.jsonnet':
-        'e2e-pipeline.json'
 }
 
 APP_TEMPLATES = {

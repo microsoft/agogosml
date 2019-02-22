@@ -9,14 +9,7 @@ import tldextract
 from cookiecutter.exceptions import OutputDirExistsException
 from cookiecutter.main import cookiecutter
 
-import _jsonnet
 import cli.utils as utils
-
-# Project files to output with src and dst names.
-PROJ_FILES = {
-    'pipeline/azure-cd-pipeline.jsonnet':
-        'cd-pipeline.json',
-}
 
 APP_TEMPLATES = {
     'simple': 'apps/simple',
@@ -87,20 +80,6 @@ def generate(force, config, app_base, folder):
 
     del template_vars['_copy_without_render']
 
-    for template_src, template_dst in PROJ_FILES.items():
-        template_src_filename = Path(template_src).name
-        # Check if files exists in dst
-        if (folder / template_dst).exists():
-            if not force:
-                click.echo('Files already exists in directory. Use --force to overwrite')
-                raise click.Abort()
-
-        # Must end w/ -pipeline.json
-        if 'CLOUD_VENDOR' in template_vars and template_vars['CLOUD_VENDOR'] == 'azure' \
-           and template_src_filename.startswith('azure') and template_src_filename.endswith('-pipeline.jsonnet'):
-            # Modify pipeline file from defaults
-            write_jsonnet(Path(template_src), Path(template_dst), folder, template_vars)
-
 
 def extract_template_vars_from_manifest(manifest: dict) -> dict:
     """Extract template variables from manifest"""
@@ -151,16 +130,6 @@ def extract_azure_template_vars(manifest: dict) -> dict:
         template_vars['AZURE_CONTAINER_REGISTRY'] = extract_result.subdomain + '.' + extract_result.registered_domain
 
     return template_vars
-
-
-def write_jsonnet(source_path: Path, target_path: Path, base_path: Path, template_vars: object):
-    """Outputs a pipeline json file"""
-    pipeline_json = json.loads(_jsonnet.evaluate_file(
-        filename=str(utils.get_template_full_filepath(source_path)),
-        ext_vars=template_vars))
-    full_path = base_path / target_path
-    with full_path.open('w') as fobj:
-        json.dump(pipeline_json, fobj, indent=4)
 
 
 def write_cookiecutter(source_path: Path, target_path: Path, template_vars: object, overwrite=False):

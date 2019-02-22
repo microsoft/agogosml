@@ -128,6 +128,7 @@ to ``env.example.sh``.
 
     # Application Insights telemetry
     export APPINSIGHTS_INSTRUMENTATIONKEY=
+    export APPINSIGHTS_ENDPOINT= # Only needed if using on-premises telemetry
 
 Setting up the CLI for Development
 ----------------------------------

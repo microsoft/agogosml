@@ -36,6 +36,7 @@ input_reader:
     SSL_CERT_LOCATION: ""
     # Application Insights
     APPINSIGHTS_INSTRUMENTATIONKEY: ""
+    APPINSIGHTS_ENDPOINT: ""
 
 output_writer:
   name: output_writer
@@ -58,6 +59,7 @@ output_writer:
     SSL_CERT_LOCATION: ""
     # Application Insights
     APPINSIGHTS_INSTRUMENTATIONKEY: ""
+    APPINSIGHTS_ENDPOINT: ""
 
 main_app: app_0
 
@@ -79,3 +81,4 @@ instance_apps:
       MODEL_PATH: ""
       # Application Insights
       APPINSIGHTS_INSTRUMENTATIONKEY: ""
+      APPINSIGHTS_ENDPOINT: ""

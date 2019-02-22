@@ -36,7 +36,8 @@ services:
             KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
             # Application Insights
             APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
-            
+            APPINSIGHTS_ENDPOINT: ${APPINSIGHTS_ENDPOINT}
+
     output-writer:
         image: ${CONTAINER_REG}/output_writer:${TAG}
         ports:
@@ -53,6 +54,7 @@ services:
             EVENT_HUB_NAME: ${EVENT_HUB_NAME_OUTPUT}
             # Application Insights
             APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
+            APPINSIGHTS_ENDPOINT: ${APPINSIGHTS_ENDPOINT}
 
     sample-app:
         image: ${CONTAINER_REG}/{{cookiecutter.PROJECT_NAME_SLUG}}:${TAG}
@@ -72,6 +74,7 @@ services:
             MODEL_PATH: ${MODEL_PATH}
             # Application Insights
             APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
+            APPINSIGHTS_ENDPOINT: ${APPINSIGHTS_ENDPOINT}
 
 networks:
     mynet:

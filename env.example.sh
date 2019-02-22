@@ -41,3 +41,4 @@ SSL_CERT_LOCATION= # Only needed if running locally without Docker
 
 # Application Insights telemetry
 APPINSIGHTS_INSTRUMENTATIONKEY=
+APPINSIGHTS_ENDPOINT= # Only needed if using on-premises telemetry

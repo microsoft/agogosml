@@ -15,7 +15,7 @@ from agogosml.utils.logger import Logger
 class KafkaStreamingClient(AbstractStreamingClient):
     """Kafka streaming client"""
 
-    def __init__(self, config):
+    def __init__(self, config):  # pragma: no cover
         """
         Streaming client implementation based on Kafka.
 
@@ -48,7 +48,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             self.consumer = Consumer(kafka_config)
 
     @staticmethod
-    def create_kafka_config(user_config: dict) -> dict:
+    def create_kafka_config(user_config: dict) -> dict:  # pragma: no cover
         """Creates the kafka configuration"""
         config = {
             "bootstrap.servers": user_config.get("KAFKA_ADDRESS"),
@@ -74,7 +74,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
 
         return config
 
-    def delivery_report(self, err, msg):
+    def delivery_report(self, err, msg):  # pragma: no cover
         """ Called once for each message produced to indicate delivery result.
         Triggered by poll() or flush().
 
@@ -88,7 +88,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             self.logger.info('Message delivered to %s [%s]',
                              msg.topic(), msg.partition())
 
-    def send(self, message: str):
+    def send(self, message: str):  # pragma: no cover
         if not isinstance(message, str):
             raise TypeError('str type expected for message')
         try:
@@ -103,17 +103,17 @@ class KafkaStreamingClient(AbstractStreamingClient):
             self.logger.error('Error sending message to kafka: %s', ex)
             return False
 
-    def stop(self):
+    def stop(self):  # pragma: no cover
         pass
 
-    def check_timeout(self, start: datetime):
+    def check_timeout(self, start: datetime):  # pragma: no cover
         """Interrupts if too much time has elapsed since the kafka client started running."""
         if self.timeout is not None:
             elapsed = datetime.now() - start
             if elapsed.seconds >= self.timeout:
                 raise KeyboardInterrupt
 
-    def handle_kafka_error(self, msg):
+    def handle_kafka_error(self, msg):  # pragma: no cover
         """Handle an error in kafka."""
         if msg.error().code() == KafkaError._PARTITION_EOF:
             # End of partition event
@@ -123,7 +123,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             # Error
             raise KafkaException(msg.error())
 
-    def start_receiving(self, on_message_received_callback):
+    def start_receiving(self, on_message_received_callback):  # pragma: no cover
         try:
             self.subscribe_to_topic()
             start = datetime.now()
@@ -144,11 +144,11 @@ class KafkaStreamingClient(AbstractStreamingClient):
             # Close down consumer to commit final offsets.
             self.consumer.close()
 
-    def subscribe_to_topic(self):
+    def subscribe_to_topic(self):  # pragma: no cover
         """Subscribe to topic"""
         self.consumer.subscribe([self.topic])
 
-    def read_single_message(self):
+    def read_single_message(self):  # pragma: no cover
         """Poll messages from topic"""
         msg = self.consumer.poll(0.000001)
 

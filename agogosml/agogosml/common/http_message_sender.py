@@ -8,7 +8,7 @@ from agogosml.utils.logger import Logger
 class HttpMessageSender(MessageSender):
     """HttpMessageSender."""
 
-    def __init__(self, config: dict):
+    def __init__(self, config: dict):  # pragma: no cover
         """
         Message sender implementation that uses HTTP(S) to send messages.
 
@@ -43,7 +43,7 @@ class HttpMessageSender(MessageSender):
 
         self.logger.info("server_address: %s", self.server_address)
 
-    def send(self, message):
+    def send(self, message):  # pragma: no cover
         return_value = False
         try:
             status_code = post_with_retries(

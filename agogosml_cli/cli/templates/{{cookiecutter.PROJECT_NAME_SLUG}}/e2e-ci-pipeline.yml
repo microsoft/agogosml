@@ -43,6 +43,8 @@ jobs:
        MESSAGING_TYPE=$(messaging_type)
        TAG=$(tag)
        APP_TAG=$(app_tag)
+       SCHEMA_FILEPATH=$(schema_filepath)
+       MODEL_PATH=$(model_path)
        CONTAINER_REG_AGOGOSML=$(container_registry)/
       dockerComposeCommand: 'up --exit-code-from tester-gen'
       requireAdditionalDockerComposeFiles: true

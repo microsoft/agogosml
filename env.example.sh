@@ -38,3 +38,7 @@ KAFKA_CONSUMER_GROUP=
 # Kafka and Event Hub Specific
 EVENTHUB_KAFKA_CONNECTION_STRING=
 SSL_CERT_LOCATION= # Only needed if running locally without Docker
+
+# Application Insights telemetry
+APPINSIGHTS_INSTRUMENTATIONKEY=
+APPINSIGHTS_ENDPOINT= # Only needed if using on-premises telemetry

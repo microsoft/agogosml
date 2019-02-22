@@ -126,6 +126,10 @@ to ``env.example.sh``.
     
     export SSL_CERT_LOCATION=
 
+    # Application Insights telemetry
+    export APPINSIGHTS_INSTRUMENTATIONKEY=
+    export APPINSIGHTS_ENDPOINT= # Only needed if using on-premises telemetry
+
 Setting up the CLI for Development
 ----------------------------------
 

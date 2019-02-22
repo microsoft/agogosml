@@ -6,7 +6,7 @@
 2. Kubernetes cluster
 3. Secret to the containers registry set as a [secret in kubernetes](https://kubernetes.io/docs/concepts/configuration/secret/)
 4. Initialize Helm and Tiller
-    - run: $helm init
+    - run: `$ helm init`
 
 ## Installation
 

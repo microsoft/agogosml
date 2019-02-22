@@ -45,6 +45,10 @@ testing option below.
 
     # Local SSL Certificate - only necessary to define path to local cert if you are running locally. i.e. something like /usr/local/etc/openssl/cert.pem
     export SSL_CERT_LOCATION=
+
+    # Application Insights telemetry
+    export APPINSIGHTS_INSTRUMENTATIONKEY=
+    export APPINSIGHTS_ENDPOINT= # Only needed if using on-premises telemetry
 ```
 
 2. Build the images for the base agogosml, input, output, and your application. We have provided a script for this named `dockerbuild.sh` in the root.

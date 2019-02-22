@@ -1,0 +1,50 @@
+resources:
+- repo: self
+
+variables:
+  container_registry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
+  azure_subscription: '{{cookiecutter.SUBSCRIPTION_ID}}'
+  tag: 'latest'
+  app_tag: 'latest'
+  messaging_type: 'kafka'
+  eventhub_kafka_connection_string: # TODO: THIS NEEDS TO BE TEMPLATIZED
+  kafka_address: 
+  kafka_consumer_group: '$Default'
+  kafka_timeout: '30'
+  kafka_topic_input: 'in'
+  kafka_topic_output: 'out'
+
+trigger:
+  branches:
+    include:
+    - master
+
+jobs:
+- job: Phase_1
+  displayName: 'Run End 2 End Tests'
+  condition: succeeded()
+
+  steps:
+  - task: DockerCompose@0
+    displayName: 'Run docker compose and test generator'
+    inputs:
+      azureSubscription: $(azure_subscription)
+      azureContainerRegistry: $(container_registry)
+      dockerComposeFile: '**/{{cookiecutter.PROJECT_NAME_SLUG}}/e2e/docker-compose-agogosml.yml'
+      additionalDockerComposeFiles: 'docker-compose-testgen.yml'
+      dockerComposeFileArgs: |
+       CONTAINER_REG=$(container_registry)
+       EVENTHUB_KAFKA_CONNECTION_STRING=$(eventhub_kafka_connection_string)
+       KAFKA_ADDRESS=$(kafka_address)
+       KAFKA_CONSUMER_GROUP=$(kafka_consumer_group)
+       KAFKA_TIMEOUT=$(kafka_timeout)
+       KAFKA_TOPIC_INPUT=$(kafka_topic_input)
+       KAFKA_TOPIC_OUTPUT=$(kafka_topic_output)
+       MESSAGING_TYPE=$(messaging_type)
+       TAG=$(tag)
+       APP_TAG=$(app_tag)
+       SCHEMA_FILEPATH=$(schema_filepath)
+       MODEL_PATH=$(model_path)
+       CONTAINER_REG_AGOGOSML=$(container_registry)/
+      dockerComposeCommand: 'up --exit-code-from tester-gen'
+      requireAdditionalDockerComposeFiles: true

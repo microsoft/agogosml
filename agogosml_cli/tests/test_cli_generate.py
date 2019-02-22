@@ -22,12 +22,12 @@ import tests.test_utils as test_utils
 
 EXPECTED_OUTPUT_PROJ_FILES = (
     'cd-pipeline.json',
-    'e2e-pipeline.json',
     'testproject/dockerbuild.sh',
     'testproject/.dockerignore',
     'testproject/README.md',
     'testproject/app-ci-pipeline.yml',
     'testproject/agogosml-ci-pipeline.yml',
+    'testproject/e2e-ci-pipeline.yml',
     'testproject/agogosml/Dockerfile.agogosml',
     'testproject/input_reader/Dockerfile.input_reader',
     'testproject/input_reader/logging.yaml',

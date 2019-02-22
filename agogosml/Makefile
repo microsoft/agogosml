@@ -61,6 +61,7 @@ test:
 	## Fail fast in CI maxfail=1
 	py.test --maxfail=1 -m "not integration" --cov=agogosml --cov-report term-missing \
 		--cov-report xml:tests_cov_output/coverage.xml \
+		--cov-fail-under=70 \
 		--junitxml=tests_cov_output/TEST-agogosml.xml
 
 test-dev:

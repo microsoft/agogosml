@@ -86,7 +86,7 @@ def extract_template_vars_from_manifest(manifest: dict) -> dict:
     template_vars = {
         'PROJECT_NAME': manifest['name'],
         'PROJECT_NAME_SLUG': safe_filename(manifest['name']),
-        'SUBSCRIPTION_ID': manifest['cloud']['subscriptionId'],
+        # TODO: remove as depends upon Variable Groups or manual override in YAML variables 'SUBSCRIPTION_ID': manifest['cloud']['subscriptionId'],
         'CLOUD_VENDOR': manifest['cloud']['vendor']
     }
 

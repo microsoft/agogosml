@@ -1,0 +1,39 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - '**/agogosml_cli'
+
+jobs:
+- job: Phase_1
+  displayName: Agogosml-CLI-Build-CI
+  condition: succeeded()
+
+  steps:
+  - script: |
+      cd ./agogosml_cli
+      docker build --target builder -t agogosml_cli-builder:$(Build.BuildId) .
+      docker run --name agogosml_cli -d agogosml_cli-builder:$(Build.BuildId)
+      docker cp agogosml_cli:/usr/src/agogosml_cli/tests_cov_output $(System.DefaultWorkingDirectory)
+      docker cp agogosml_cli:/usr/src/agogosml_cli/dist $(System.DefaultWorkingDirectory)
+      docker stop agogosml_cli
+
+  - task: PublishTestResults@2
+    displayName: 'Publish TRX / Test Results'
+    inputs:
+      testResultsFiles: '**/TEST-*.xml'
+      failTaskOnFailedTests: true
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: 'cobertura'
+      summaryFileLocation: '**/coverage.xml'
+      reportDirectory: '**/htmlcov'
+      failIfCoverageEmpty: true
+
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'agogosml_cli.tar.gz'
+      targetPath: '$(System.DefaultWorkingDirectory)/dist'

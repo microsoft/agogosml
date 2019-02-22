@@ -5,10 +5,7 @@ from pathlib import Path
 
 import click
 
-import _jsonnet
 import cli.utils as utils
-
-DEFAULT_MANIFEST_FILE = 'manifest/manifest.jsonnet'
 
 
 @click.command()
@@ -40,8 +37,13 @@ def init(force, project_name, cloud_vendor, folder) -> int:
 
 def build_manifest(project_name: str, cloud_vendor: str) -> object:
     """Builds the Manifest python object"""
-    manifest_json = json.loads(_jsonnet.evaluate_file(
-        filename=str(utils.get_template_full_filepath(DEFAULT_MANIFEST_FILE)),
-        ext_vars={'PROJECT_NAME': project_name, 'CLOUD_VENDOR': cloud_vendor}))
+    manifest_json = {
+        "name": project_name,
+        "cloud": {
+            "vendor": cloud_vendor,
+            "subscriptionId": "",
+            "otherProperties": {}
+        }
+    }
     utils.validate_manifest(manifest_json)
     return manifest_json

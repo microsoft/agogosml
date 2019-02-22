@@ -68,6 +68,10 @@ test-dev:
 		--cov-report html:tests_cov_output/htmlcov
 	$(BROWSER) ./tests_cov_output/htmlcov/index.html
 
+
+# for tox - see https://github.com/pyenv/pyenv-virtualenv/issues/202   for setup of pyenv and tox py versions
+# see https://github.com/samstav/circleci-python-sandbox/issues/1
+
 test-all: ## run tests on every Python version with tox
 	tox
 

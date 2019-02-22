@@ -48,6 +48,7 @@ testing option below.
 
     # Application Insights telemetry
     export APPINSIGHTS_INSTRUMENTATIONKEY=
+    export APPINSIGHTS_ENDPOINT= # Only needed if using on-premises telemetry
 ```
 
 2. Build the images for the base agogosml, input, output, and your application. We have provided a script for this named `dockerbuild.sh` in the root.

@@ -17,3 +17,4 @@ data:
   KAFKA_TIMEOUT: {{ quote .Values.output_writer.env.KAFKA_TIMEOUT }}
   SSL_CERT_LOCATION: {{ quote .Values.output_writer.env.SSL_CERT_LOCATION }}
   APPINSIGHTS_INSTRUMENTATIONKEY: {{ quote .Values.output_writer.env.APPINSIGHTS_INSTRUMENTATIONKEY }}
+  APPINSIGHTS_ENDPOINT: {{ quote .Values.output_writer.env.APPINSIGHTS_ENDPOINT }}

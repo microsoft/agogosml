@@ -45,6 +45,7 @@ class Logger:
         self.path = path
         self.env_key = env_key
         self.ikey = os.getenv('APPINSIGHTS_INSTRUMENTATIONKEY')
+        self.endpoint = os.getenv('APPINSIGHTS_ENDPOINT')
 
     @cached_property
     def _logger(self) -> logging.Logger:
@@ -69,7 +70,10 @@ class Logger:
         if not self.ikey:
             return NullTelemetryClient()
 
-        sender = AsynchronousSender()
+        if self.endpoint:
+            sender = AsynchronousSender(self.endpoint)
+        else:
+            sender = AsynchronousSender()
         queue = AsynchronousQueue(sender)
         context = TelemetryContext()
         context.instrumentation_key = self.ikey

@@ -18,14 +18,14 @@ from agogosml.utils.logger import Logger
 class EventProcessor(AbstractEventProcessor):
     """EventProcessor host class for Event Hub"""
 
-    def __init__(self, params):
+    def __init__(self, params):  # pragma: no cover
         """Sample Event Hub event processor implementation"""
         super().__init__()
         self.on_message_received_callback = params[0]
         self._msg_counter = 0
         self.logger = Logger()
 
-    async def open_async(self, context):
+    async def open_async(self, context):  # pragma: no cover
         """
         Called by processor host to initialize the event processor.
         """
@@ -41,10 +41,10 @@ class EventProcessor(AbstractEventProcessor):
         :param reason: Reason for closing the async loop.
         :type reason: string
         """
-        self.logger.info("Connection closed (reason %s, id %s, offset %s, sq_number %s)",
+        self.logger.info("Connection closed (reason %s, id %s, offset %s, sq_number %s)",  # pragma: no cover
                          reason, context.partition_id, context.offset, context.sequence_number)
 
-    async def process_events_async(self, context, messages):
+    async def process_events_async(self, context, messages):  # pragma: no cover
         """
         Called by the processor host when a batch of events has arrived.
         This is where the real work of the event processor is done.
@@ -62,7 +62,7 @@ class EventProcessor(AbstractEventProcessor):
         self.logger.info("Events processed %s", context.sequence_number)
         await context.checkpoint_async()
 
-    async def process_error_async(self, context, error):
+    async def process_error_async(self, context, error):  # pragma: no cover
         """
         Called when the underlying client experiences an error while receiving.
         EventProcessorHost will take care of recovering from the error and
@@ -78,7 +78,7 @@ class EventProcessor(AbstractEventProcessor):
 class EventHubStreamingClient(AbstractStreamingClient):
     """Event Hub streaming client"""
 
-    def __init__(self, config):
+    def __init__(self, config):  # pragma: no cover
         """
         Azure EventHub streaming client implementation.
 
@@ -142,7 +142,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 self.logger.error('Failed to init EH send client: %s', ex)
                 raise
 
-    def start_receiving(self, on_message_received_callback):
+    def start_receiving(self, on_message_received_callback):  # pragma: no cover
         loop = asyncio.get_event_loop()
         try:
             host = EventProcessorHost(
@@ -160,7 +160,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
         finally:
             loop.stop()
 
-    def send(self, message):
+    def send(self, message):  # pragma: no cover
         try:
             self.sender.send(EventData(body=message))
             self.logger.info('Sent message: %s', message)
@@ -169,14 +169,14 @@ class EventHubStreamingClient(AbstractStreamingClient):
             self.logger.error('Failed to send message to EH: %s', ex)
             return False
 
-    def stop(self):
+    def stop(self):  # pragma: no cover
         try:
             self.send_client.stop()
         except Exception as ex:
             self.logger.error('Failed to close send client: %s', ex)
 
     @staticmethod
-    async def wait_and_close(host: EventProcessorHost, timeout: Optional[float] = None):
+    async def wait_and_close(host: EventProcessorHost, timeout: Optional[float] = None):  # pragma: no cover
         """Run a host indefinitely or until the timeout is reached."""
         if timeout is None:
             while True:

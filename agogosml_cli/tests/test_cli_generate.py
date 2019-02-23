@@ -21,11 +21,11 @@ import tests.test_utils as test_utils
 """
 
 EXPECTED_OUTPUT_PROJ_FILES = (
-    'cd-pipeline.json',
     'testproject/dockerbuild.sh',
     'testproject/.dockerignore',
     'testproject/README.md',
     'testproject/app-ci-pipeline.yml',
+    'testproject/cd-pipeline.json',
     'testproject/agogosml-ci-pipeline.yml',
     'testproject/e2e-ci-pipeline.yml',
     'testproject/agogosml/Dockerfile.agogosml',

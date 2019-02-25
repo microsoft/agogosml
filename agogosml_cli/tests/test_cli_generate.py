@@ -201,7 +201,6 @@ def _create_test_manifest_azure(folder='.'):
         "name": "testproject",
         "cloud": {
             "vendor": "azure",
-            "subscriptionId": "123-123-123-123",
             "otherProperties": {
                 "azureContainerRegistry": "acr.azurecr.io",
                 "azureResourceGroup": "agogosml-rg",
@@ -229,7 +228,6 @@ def _create_invalid_manifest_azure(folder='.'):
         "name": "testproject",
         "cloud": {
             "vendor": "azure",
-            "subscriptionId": "123-123-123-123",
             "otherProperties": {
                 "azureContainerRegistry": "https://acr.acr.io"
             }

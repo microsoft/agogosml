@@ -32,7 +32,7 @@ jobs:
     inputs:
       azureSubscriptionEndpoint: $(azure_subscription)
       azureContainerRegistry: $(container_registry)
-      dockerFile: '**/Dockerfile.{{cookiecutter.PROJECT_NAME_SLUG}}'
+      dockerFile: '**{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}/Dockerfile.{{cookiecutter.PROJECT_NAME_SLUG}}'
       arguments: '--build-arg CONTAINER_REG=$(container_registry)/ --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       buildContext: '{{cookiecutter.PROJECT_NAME_SLUG}}/{{cookiecutter.PROJECT_NAME_SLUG}}'
       imageName: '{{cookiecutter.PROJECT_NAME_SLUG}}:$(Build.BuildId)'

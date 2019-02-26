@@ -17,8 +17,8 @@ setup_requirements = ['pytest-runner', ]
 test_requirements = ['pytest', ]
 
 setup(
-    author="Rami Sayar",
-    author_email='rami.sayar@microsoft.com',
+    author="Microsoft Corporation",
+    author_email='csenyc@microsoft.com',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',

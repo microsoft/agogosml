@@ -72,6 +72,9 @@ class KafkaStreamingClient(AbstractStreamingClient):
         if user_config.get('KAFKA_CONSUMER_GROUP') is not None:
             config['group.id'] = user_config['KAFKA_CONSUMER_GROUP']
 
+        if user_config.get('KAFKA_DEBUG') is not None:
+            config['debug'] = user_config['KAFKA_DEBUG']
+
         return config
 
     def delivery_report(self, err, msg):  # pragma: no cover

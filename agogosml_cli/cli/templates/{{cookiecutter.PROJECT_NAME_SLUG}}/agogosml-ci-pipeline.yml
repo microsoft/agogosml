@@ -2,8 +2,8 @@ resources:
 - repo: self
 
 variables:
-  container_registry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
-  azure_subscription: '{{cookiecutter.SUBSCRIPTION_ID}}'
+- group: azure-subscription-1
+  
 
 trigger:
   branches:

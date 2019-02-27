@@ -17,18 +17,13 @@
                     "description": "Cloud vendor used e.g. azure|aws|gcp",
                     "type": "string"
                 },
-                "subscriptionId": {
-                    "description": "Cloud vendor subscription id",
-                    "type": "string"
-                },
                 "otherProperties": {
                     "description": "Other properties to pass into the generator.",
                     "type": "object"
                 }
             },
             "required": [
-                "vendor", 
-                "subscriptionId"
+                "vendor"
             ]
         },
         "repository": {

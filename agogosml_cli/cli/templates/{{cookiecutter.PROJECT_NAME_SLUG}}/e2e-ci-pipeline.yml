@@ -2,17 +2,25 @@ resources:
 - repo: self
 
 variables:
-  container_registry: '{{cookiecutter.AZURE_CONTAINER_REGISTRY}}'
-  azure_subscription: '{{cookiecutter.SUBSCRIPTION_ID}}'
-  tag: 'latest'
-  app_tag: 'latest'
-  messaging_type: 'kafka'
-  eventhub_kafka_connection_string: # TODO: THIS NEEDS TO BE TEMPLATIZED
-  kafka_address: 
-  kafka_consumer_group: '$Default'
-  kafka_timeout: '30'
-  kafka_topic_input: 'in'
-  kafka_topic_output: 'out'
+- group: azure-subscription-1
+- name: tag
+  value: 'latest'
+- name: app_tag
+  value: 'latest'
+- name: messaging_type
+  value: 'kafka'
+- name: eventhub_kafka_connection_string
+  value: # TODO: THIS NEEDS TO BE TEMPLATIZED
+- name: kafka_address
+  value: 
+- name: kafka_consumer_group
+  value: '$Default'
+- name: kafka_timeout
+  value: '30'
+- name: kafka_topic_input
+  value: 'in'
+- name: kafka_topic_output
+  value: 'out'
 
 trigger:
   branches:

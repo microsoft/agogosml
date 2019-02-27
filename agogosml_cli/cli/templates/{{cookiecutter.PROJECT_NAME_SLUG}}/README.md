@@ -1,11 +1,42 @@
 # README
 
-### Importing Azure DevOps Pipelines
+### Azure DevOIps Project Setup
 
 1. Notice that there are three Azure DevOps pipeline files (.yml) that were generated for your project. You can use these pipelines
 to setup continuous integration, end-to-end testing and continuous deployment of your agogosml project. 
 
 2. Create an Azure DevOps project and a source control repository that can be accessed by your Azure DevOps instance.
+
+
+### Creating Variable Groups for Azure DevOps Pipelines
+
+1. The generated yaml file utilizes Variables that must be defined within a Variable group for the project. The variables used in the Variable Group canbe overriden using static variables - see [Variable Groups](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=yaml) for more information - and see ensure you understand the section [Use a Variable Group](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=yaml) for more details on overriding or removing a dependency on Variable groups
+
+2. The default name is set in the yaml under `variables - group` as below. 
+
+```yaml
+variables:
+- group: azure-subscription-1
+```
+
+3. When using groups additional pipeline variables need to be defined with the `name:... value:....` format as follows:
+
+```yaml
+variables:
+- group: azure-subscription-1
+- name: kafka_address
+  value: 
+- name: kafka_consumer_group
+  value: '$Default'
+- name: kafka_timeout
+  value: '30'
+- name: kafka_topic_input
+  value: 'in'
+- name: kafka_topic_output
+  value: 'out'
+```
+
+### Importing Azure DevOps Pipelines
 
 3. Use Azure DevOps 'New build pipeline' feature to import each of the pipelines (each yaml file). 
 You will need to repeat steps 3 to 8 for each pipeline file. ![import](docs/import_pipeline.png)

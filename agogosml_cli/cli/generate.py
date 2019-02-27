@@ -86,7 +86,6 @@ def extract_template_vars_from_manifest(manifest: dict) -> dict:
     template_vars = {
         'PROJECT_NAME': manifest['name'],
         'PROJECT_NAME_SLUG': safe_filename(manifest['name']),
-        'SUBSCRIPTION_ID': manifest['cloud']['subscriptionId'],
         'CLOUD_VENDOR': manifest['cloud']['vendor']
     }
 
@@ -109,25 +108,25 @@ def extract_azure_template_vars(manifest: dict) -> dict:
     template_vars = {}
     azure_props = manifest['cloud']['otherProperties']
     if 'azureContainerRegistry' not in azure_props:
-        click.echo('Azure property is missing or invalid.')
-        raise click.Abort()
-    else:
-        acr = azure_props['azureContainerRegistry']
-        try:
-            extract_result = tldextract.extract(acr)
-        except ValueError:
-            # Handle situation where template folder exists and force is not set to true
-            click.echo('Azure Container Registry property is not parseable as a url. \
-                Valid property: nameacr.azurecr.io.')
-            raise click.Abort()
+        click.echo('Azure property is missing or invalid. - not generating acr')
+        return template_vars
 
-        if extract_result.registered_domain != "azurecr.io":
-            click.echo('Azure Container Registry property is not set to an azurecr.io domain.')
-            raise click.Abort()
-        if len(extract_result.subdomain.split('.')) > 1:
-            click.echo('Azure Container Registry property contains multiple subdomains.')
-            raise click.Abort()
-        template_vars['AZURE_CONTAINER_REGISTRY'] = extract_result.subdomain + '.' + extract_result.registered_domain
+    acr = azure_props['azureContainerRegistry']
+    try:
+        extract_result = tldextract.extract(acr)
+    except ValueError:
+        # Handle situation where template folder exists and force is not set to true
+        click.echo('Azure Container Registry property is not parseable as a url. \
+            Valid property: nameacr.azurecr.io.')
+        raise click.Abort()
+
+    if extract_result.registered_domain != "azurecr.io":
+        click.echo('Azure Container Registry property is not set to an azurecr.io domain.')
+        raise click.Abort()
+    if len(extract_result.subdomain.split('.')) > 1:
+        click.echo('Azure Container Registry property contains multiple subdomains.')
+        raise click.Abort()
+    template_vars['AZURE_CONTAINER_REGISTRY'] = extract_result.subdomain + '.' + extract_result.registered_domain
 
     return template_vars
 

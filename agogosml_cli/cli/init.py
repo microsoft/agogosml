@@ -41,7 +41,6 @@ def build_manifest(project_name: str, cloud_vendor: str) -> object:
         "name": project_name,
         "cloud": {
             "vendor": cloud_vendor,
-            "subscriptionId": "",
             "otherProperties": {}
         }
     }

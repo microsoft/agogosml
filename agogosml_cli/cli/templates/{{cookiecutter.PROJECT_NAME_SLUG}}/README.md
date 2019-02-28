@@ -62,6 +62,10 @@ You will need to repeat steps 3 to 8 for each pipeline file. ![import](docs/impo
 2. Set all the correct environment variables
 3. Queue the pipeline for build.
 
+### Keeping the Project Up To Date
+
+All of the components of Agogosml use the same base Docker image (agogosml) which pins the version of the underlying library to the version of the CLI. To update the library used by the base image, simply go to `agogosml/Dockerfile.agogosml` and edit `RUN pip install agogosml==1.0.0`. Ideally, version updates should be handled via a service like pyup, synk or similar services.
+
 ### Alternative: Running the End to End Test Locally
 
 The following are instructions to run the end to end test locally. Even though you are running the tests

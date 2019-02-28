@@ -77,6 +77,7 @@ test-all: ## run tests on every Python version with tox
 	tox
 
 test-single: ## run tests on specific Python version with tox
+	echo "using tox and buidling $$TOX_VERSION"
 	tox -e ${TOX_VERSION}
 
 docs: ## generate Sphinx HTML documentation, including API docs

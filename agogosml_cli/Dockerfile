@@ -1,9 +1,9 @@
 ARG PYTHON_VERSION=3.7.2-alpine3.8
-ARG TOX_VERSION=py37
 
 FROM python:${PYTHON_VERSION} as builder
 
-RUN echo "using tox-version: "; echo ${TOX_VERSION}
+ARG TOX_VERSION=py37
+RUN echo "using tox-version: "; echo $TOX_VERSION
 
 RUN apk add --update make \ 
     cmake \
@@ -31,7 +31,6 @@ ENV HOME  /root
 ENV PYENV_ROOT $HOME/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 
-RUN echo $TOX_VERSION
 WORKDIR /usr/src/agogosml_cli
 
 #see https://www.loganasherjones.com/2018/03/setting-up-your-python-environment/

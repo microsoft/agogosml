@@ -3,7 +3,7 @@ ARG TOX_VERSION=py37
 
 FROM python:${PYTHON_VERSION} as builder
 
-RUN echo "using tox-version: ${TOX_VERSION}"
+RUN echo "using tox-version: "; echo ${TOX_VERSION}
 
 RUN apk add --update make \ 
     cmake \

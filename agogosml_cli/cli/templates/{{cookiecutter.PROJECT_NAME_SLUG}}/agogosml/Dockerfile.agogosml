@@ -24,7 +24,7 @@ FROM base-deps as agogosml
 
 ENV PYTHONUNBUFFERED=1
 
-RUN pip install agogosml
+RUN pip install agogosml=={{cookiecutter.AGOGOSML_CLI_VERSION}}
 
 # Clean Up
 RUN rm -rf /root/librdkafka && apk del .build-deps

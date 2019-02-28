@@ -10,6 +10,7 @@ from cookiecutter.exceptions import OutputDirExistsException
 from cookiecutter.main import cookiecutter
 
 import cli.utils as utils
+from cli import __version__
 
 APP_TEMPLATES = {
     'simple': 'apps/simple',
@@ -86,7 +87,8 @@ def extract_template_vars_from_manifest(manifest: dict) -> dict:
     template_vars = {
         'PROJECT_NAME': manifest['name'],
         'PROJECT_NAME_SLUG': safe_filename(manifest['name']),
-        'CLOUD_VENDOR': manifest['cloud']['vendor']
+        'CLOUD_VENDOR': manifest['cloud']['vendor'],
+        **add_agogosml_template_vars()
     }
 
     if manifest['cloud']['vendor'] == 'azure':
@@ -129,6 +131,13 @@ def extract_azure_template_vars(manifest: dict) -> dict:
     template_vars['AZURE_CONTAINER_REGISTRY'] = extract_result.subdomain + '.' + extract_result.registered_domain
 
     return template_vars
+
+
+def add_agogosml_template_vars() -> dict:
+    """Add agogosml-specific template variables"""
+    return {
+        'AGOGOSML_CLI_VERSION': __version__
+    }
 
 
 def write_cookiecutter(source_path: Path, target_path: Path, template_vars: object, overwrite=False):

@@ -26,23 +26,23 @@ RUN apk add \
 
 
 ENV HOME  /root
-ENV PYENV_ROOT $HOME/.pyenv
-ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+# ENV PYENV_ROOT $HOME/.pyenv
+# ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 
 RUN curl https://pyenv.run | bash
 #see https://www.loganasherjones.com/2018/03/setting-up-your-python-environment/
 
-RUN pyenv install 3.5.6
-RUN pyenv install 3.6.8
-RUN pyenv install 3.7.2
+# RUN pyenv install 3.5.6
+# RUN pyenv install 3.6.8
+# RUN pyenv install 3.7.2
 RUN pip install pytest tox
 RUN pip install tox-globinterpreter
 
 WORKDIR /usr/src/agogosml_cli
 
-RUN echo "3.5.6" >> .python-version
-RUN echo "3.6.8" >> .python-version
-RUN echo "3.7.2" >> .python-version
+# RUN echo "3.5.6" >> .python-version
+# RUN echo "3.6.8" >> .python-version
+# RUN echo "3.7.2" >> .python-version
 
 COPY requirements-dev.txt .
 RUN pip install --no-cache-dir -r requirements-dev.txt
@@ -55,7 +55,7 @@ COPY . .
 RUN make clean && \
     make lint && \
     make test && \
-    make test-all && \
+    # make test-all && \
     make docs && \
     make dist
 

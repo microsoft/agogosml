@@ -76,6 +76,10 @@ test-dev:
 test-all: ## run tests on every Python version with tox
 	tox
 
+test-single: ## run tests on specific Python version with tox
+	echo "using tox and buidling $$TOX_VERSION"
+	tox -e ${TOX_VERSION}
+
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/cli.rst
 	rm -f docs/modules.rst
@@ -102,4 +106,11 @@ installedit: clean ## install the package while dynamically picking up changes t
 	pip install --editable .
 
 dockerbuild: clean
-	docker build -t agogosml_cli .
+	echo "tox version set to ${TOX_VERSION}"
+	@if [ "${TOX_VERSION}" ]; then \
+		echo "buidling $$TOX_VERSION"; \
+		docker build -t agogosml_cli --no-cache --build-arg TOX_VERSION=${TOX_VERSION} . ; \
+	else \
+		echo "buidling py37"; \
+		docker build -t agogosml_cli --no-cache . ; \
+	fi

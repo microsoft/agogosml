@@ -1,6 +1,9 @@
-ARG PYTHON_VERSION=3.7.0-alpine3.8
+ARG PYTHON_VERSION=3.7.2-alpine3.8
 
 FROM python:${PYTHON_VERSION} as builder
+
+ARG TOX_VERSION=py37
+RUN echo "using tox-version: "; echo $TOX_VERSION
 
 RUN apk add --update make \ 
     cmake \
@@ -24,25 +27,25 @@ RUN apk add \
     xz-dev \
     zlib-dev
 
-
 ENV HOME  /root
 ENV PYENV_ROOT $HOME/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 
-RUN curl https://pyenv.run | bash
-#see https://www.loganasherjones.com/2018/03/setting-up-your-python-environment/
-
-RUN pyenv install 3.5.6
-RUN pyenv install 3.6.8
-RUN pyenv install 3.7.2
-RUN pip install pytest tox
-RUN pip install tox-globinterpreter
-
 WORKDIR /usr/src/agogosml_cli
 
-RUN echo "3.5.6" >> .python-version
-RUN echo "3.6.8" >> .python-version
-RUN echo "3.7.2" >> .python-version
+#see https://www.loganasherjones.com/2018/03/setting-up-your-python-environment/
+RUN if [[ "$TOX_VERSION" = "all" ]]; then \
+        curl https://pyenv.run | bash && \
+        pyenv install 3.5.6 && \
+        pyenv install 3.6.8 && \
+        pyenv install 3.7.2 && \
+        echo "3.5.6" >> .python-version && \
+        echo "3.6.8" >> .python-version && \
+        echo "3.7.2" >> .python-version; \
+    fi
+
+RUN pip install pytest tox
+RUN pip install tox-globinterpreter
 
 COPY requirements-dev.txt .
 RUN pip install --no-cache-dir -r requirements-dev.txt
@@ -55,7 +58,7 @@ COPY . .
 RUN make clean && \
     make lint && \
     make test && \
-    make test-all && \
+    make test-single && \
     make docs && \
     make dist
 

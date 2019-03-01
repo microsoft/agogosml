@@ -7,6 +7,7 @@
     "PROJECT_NAME_SLUG": "sample_agogosml_project",
     "AZURE_CONTAINER_REGISTRY": "agogoscr.azurecr.io",
     "SUBSCRIPTION_ID": "",
+    "AGOGOSML_CLI_VERSION": "0.1.0",
     "_copy_without_render": [
         "deployment/helm_chart/agogosml/templates/*.yaml",
         "*.tpl",

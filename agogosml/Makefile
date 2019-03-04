@@ -56,6 +56,7 @@ lint: ## check python style
 	mypy agogosml
 	bandit -r agogosml
 	isort --check-only --recursive agogosml
+	pydocstyle agogosml
 
 test:
 	## Fail fast in CI maxfail=1

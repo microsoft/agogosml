@@ -9,7 +9,7 @@ from agogosml.utils.cli import json_arg
 
 
 def receive(outfile, receiver_class, config):
-    """Main entrypoint to the tool."""
+    """Receive messages."""
     received_messages = []
 
     def on_message(message):

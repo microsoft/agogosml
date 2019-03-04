@@ -1,4 +1,4 @@
-"""Factory for InputReader"""
+"""Factory for InputReader."""
 from typing import Optional
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
@@ -8,11 +8,11 @@ from agogosml.reader.input_reader import InputReader
 
 
 class InputReaderFactory:
-    """Factory for InputReader"""
+    """Factory for InputReader."""
 
     @staticmethod
     def create(config: dict, streaming_client: Optional[AbstractStreamingClient] = None):
-        """Factory and instance resolving for input reader"""
+        """Resolve an input reader given the configuration."""
         if not config:
             raise Exception('No config were set for the InputReader manager')
 

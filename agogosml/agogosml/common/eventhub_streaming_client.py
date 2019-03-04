@@ -1,4 +1,4 @@
-"""Event Hub streaming client"""
+"""Event Hub streaming client."""
 
 import asyncio
 from typing import Optional
@@ -16,10 +16,10 @@ from agogosml.utils.logger import Logger
 
 
 class EventProcessor(AbstractEventProcessor):
-    """EventProcessor host class for Event Hub"""
+    """EventProcessor host class for Event Hub."""
 
     def __init__(self, params):  # pragma: no cover
-        """Sample Event Hub event processor implementation"""
+        """Sample Event Hub event processor implementation."""
         super().__init__()
         self.on_message_received_callback = params[0]
         self._msg_counter = 0
@@ -27,14 +27,17 @@ class EventProcessor(AbstractEventProcessor):
 
     async def open_async(self, context):  # pragma: no cover
         """
-        Called by processor host to initialize the event processor.
+        Initialize the event processor.
+
+        Called by the processor host.
         """
         self.logger.info("Connection established %s", context.partition_id)
 
     async def close_async(self, context, reason):
         """
-        Called by processor host to indicate that the event processor
-        is being stopped.
+        Stop the event processor.
+
+        Called by processor host.
 
         :param context: Information about the partition.
         :type context: ~azure.eventprocessorhost.PartitionContext
@@ -46,8 +49,9 @@ class EventProcessor(AbstractEventProcessor):
 
     async def process_events_async(self, context, messages):  # pragma: no cover
         """
+        Do the real work of the event processor.
+
         Called by the processor host when a batch of events has arrived.
-        This is where the real work of the event processor is done.
 
         :param context: Information about the partition.
         :type context: ~azure.eventprocessorhost.PartitionContext
@@ -64,9 +68,11 @@ class EventProcessor(AbstractEventProcessor):
 
     async def process_error_async(self, context, error):  # pragma: no cover
         """
+        Recover from an error.
+
         Called when the underlying client experiences an error while receiving.
-        EventProcessorHost will take care of recovering from the error and
-        continuing to pump messages, so no external action is required.
+        EventProcessorHost will take care of continuing to pump messages, so
+        no external action is required.
 
         :param context: Information about the partition.
         :type context: ~azure.eventprocessorhost.PartitionContext
@@ -76,7 +82,7 @@ class EventProcessor(AbstractEventProcessor):
 
 
 class EventHubStreamingClient(AbstractStreamingClient):
-    """Event Hub streaming client"""
+    """Event Hub streaming client."""
 
     def __init__(self, config):  # pragma: no cover
         """
@@ -92,8 +98,8 @@ class EventHubStreamingClient(AbstractStreamingClient):
           EVENT_HUB_SAS_POLICY
           LEASE_CONTAINER_NAME
           TIMEOUT
-        """
 
+        """
         storage_account_name = config.get("AZURE_STORAGE_ACCOUNT")
         storage_key = config.get("AZURE_STORAGE_ACCESS_KEY")
         lease_container_name = config.get("LEASE_CONTAINER_NAME")

@@ -1,4 +1,4 @@
-""" Logger """
+"""Logger."""
 import logging
 import logging.config
 import os
@@ -24,22 +24,22 @@ class NullTelemetryClient:
         """Null-object implementation of the TelemetryClient."""
 
     def track_trace(self, name, properties=None, severity=None):
-        """Does nothing."""
+        """Do nothing."""
 
     def track_event(self, name, properties=None, measurements=None):
-        """Does nothing."""
+        """Do nothing."""
 
 
 @singleton
 class Logger:
-    """Logger"""
+    """Logger."""
+
     def __init__(self,
                  name: str = __name__,
                  path: str = 'logging.yaml',
                  env_key: str = 'LOG_CFG',
                  level: int = logging.INFO):
-        """A logger implementation."""
-
+        """Implement trace and event logging functionality."""
         self.level = level
         self.name = name
         self.path = path
@@ -85,7 +85,7 @@ class Logger:
         self._log(logging.DEBUG, message, *args)
 
     def info(self, message: str, *args):
-        """Log info message"""
+        """Log info message."""
         self._log(logging.INFO, message, *args)
 
     def error(self, message: str, *args):

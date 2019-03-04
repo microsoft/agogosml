@@ -1,4 +1,4 @@
-""" OutputWriter class"""
+"""OutputWriter class."""
 from typing import Callable
 from typing import Optional
 
@@ -8,11 +8,11 @@ from agogosml.utils.logger import Logger
 
 
 class OutputWriter:
-    """ OutputWriter class"""
+    """OutputWriter class."""
 
     def __init__(self, streaming_client: AbstractStreamingClient,
                  listener: ListenerClient):
-        """Accepts incoming messages and routes them to a configured output."""
+        """Accept incoming messages and route them to a configured output."""
         self.messaging_client = streaming_client
         self.listener = listener
         self.logger = Logger()

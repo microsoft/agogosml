@@ -10,7 +10,7 @@ from agogosml.utils.cli import json_arg
 
 
 def send(messages, sender_class, config):
-    """Main entrypoint to the tool."""
+    """Send messages."""
     sender = sender_class(config)
     for message in messages:
         if not isinstance(message, str):

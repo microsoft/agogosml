@@ -1,4 +1,4 @@
-"""Utilities for imports"""
+"""Utilities for imports."""
 from importlib import import_module
 from inspect import getsourcefile
 from pathlib import Path

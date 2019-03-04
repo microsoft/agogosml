@@ -1,10 +1,11 @@
-"""Utilities for CLIs"""
+"""Utilities for CLIs."""
 from argparse import ArgumentTypeError
 from json import loads
 
 
 def json_arg(value: str):
-    """Parse a JSON argument from the command line.
+    """
+    Parse a JSON argument from the command line.
 
     >>> json_arg('{"foo": "bar", "baz": [1, 2]}')
     {'foo': 'bar', 'baz': [1, 2]}

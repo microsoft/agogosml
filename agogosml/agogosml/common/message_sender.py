@@ -1,11 +1,11 @@
-"""Abstract Message Sender interface"""
+"""Abstract Message Sender interface."""
 
 from abc import ABC
 from abc import abstractmethod
 
 
 class MessageSender(ABC):
-    """Abstract Message Sender interface"""
+    """Abstract Message Sender interface."""
 
     @abstractmethod
     def __init__(self, config: dict):
@@ -14,5 +14,5 @@ class MessageSender(ABC):
 
     @abstractmethod
     def send(self, message) -> bool:
-        """Sends message."""
+        """Send a message."""
         raise NotImplementedError

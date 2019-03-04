@@ -1,4 +1,4 @@
-"""Redis streaming client"""
+"""Redis streaming client."""
 from typing import Optional
 
 from redis import Redis
@@ -8,11 +8,11 @@ from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 
 
 class RedisStreamingClient(AbstractStreamingClient):
-    """Redis streaming client"""
+    """Redis streaming client."""
 
     def __init__(self, config):
         """
-        Redis streaming client implementation.
+        Use redis as the streaming client.
 
         Configuration keys:
             REDIS_URL

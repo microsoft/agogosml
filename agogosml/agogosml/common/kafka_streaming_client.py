@@ -1,4 +1,4 @@
-"""Kafka streaming client"""
+"""Kafka streaming client."""
 
 from datetime import datetime
 
@@ -13,7 +13,7 @@ from agogosml.utils.logger import Logger
 
 
 class KafkaStreamingClient(AbstractStreamingClient):
-    """Kafka streaming client"""
+    """Kafka streaming client."""
 
     def __init__(self, config):  # pragma: no cover
         """
@@ -49,7 +49,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
 
     @staticmethod
     def create_kafka_config(user_config: dict) -> dict:  # pragma: no cover
-        """Creates the kafka configuration"""
+        """Create the kafka configuration."""
         config = {
             "bootstrap.servers": user_config.get("KAFKA_ADDRESS"),
             "enable.auto.commit": False,
@@ -78,13 +78,14 @@ class KafkaStreamingClient(AbstractStreamingClient):
         return config
 
     def delivery_report(self, err, msg):  # pragma: no cover
-        """ Called once for each message produced to indicate delivery result.
-        Triggered by poll() or flush().
+        """
+        Indicate delivery result.
+
+        Called once for each message produced. Triggered by poll() or flush().
 
         :param err: An error message.
         :param msg: A string input to be uploaded to kafka.
         """
-
         if err is not None:
             self.logger.error('Message delivery failed: %s', err)
         else:
@@ -148,11 +149,11 @@ class KafkaStreamingClient(AbstractStreamingClient):
             self.consumer.close()
 
     def subscribe_to_topic(self):  # pragma: no cover
-        """Subscribe to topic"""
+        """Subscribe to topic."""
         self.consumer.subscribe([self.topic])
 
     def read_single_message(self):  # pragma: no cover
-        """Poll messages from topic"""
+        """Poll messages from topic."""
         msg = self.consumer.poll(0.000001)
 
         if msg is None:

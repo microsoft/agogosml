@@ -3,7 +3,8 @@ resources:
 
 variables:
 - group: azure-subscription-1
-  
+- name: project_name
+  value: '{{cookiecutter.PROJECT_NAME_SLUG}}'
 
 trigger:
   branches:
@@ -11,9 +12,9 @@ trigger:
     - master
   paths:
     include:
-    - '**{{cookiecutter.PROJECT_NAME_SLUG}}/agogosml'
-    - '**{{cookiecutter.PROJECT_NAME_SLUG}}/input_reader'
-    - '**{{cookiecutter.PROJECT_NAME_SLUG}}/output_writer'
+    - '**$(project_name)/agogosml'
+    - '**$(project_name)/input_reader'
+    - '**$(project_name)/output_writer'
 
 jobs:
 - job: Phase_1
@@ -36,7 +37,7 @@ jobs:
     inputs:
       azureSubscriptionEndpoint: $(azure_subscription)
       azureContainerRegistry: $(container_registry)
-      dockerFile: '**{{cookiecutter.PROJECT_NAME_SLUG}}/agogosml/Dockerfile.agogosml'
+      dockerFile: '**$(project_name)/agogosml/Dockerfile.agogosml'
       imageName: 'agogosml:$(Build.BuildId)'
 
   - bash: |  
@@ -66,7 +67,7 @@ jobs:
     inputs:
       azureSubscriptionEndpoint: $(azure_subscription)
       azureContainerRegistry: $(container_registry)
-      dockerFile: '**{{cookiecutter.PROJECT_NAME_SLUG}}/input_reader/Dockerfile.input_reader'
+      dockerFile: '**$(project_name)/input_reader/Dockerfile.input_reader'
       arguments: '--build-arg CONTAINER_REG=$(container_registry)/ --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       imageName: 'input_reader:$(Build.BuildId)'
 
@@ -97,7 +98,7 @@ jobs:
     inputs:
       azureSubscriptionEndpoint: $(azure_subscription)
       azureContainerRegistry: $(container_registry)
-      dockerFile: '**{{cookiecutter.PROJECT_NAME_SLUG}}/output_writer/Dockerfile.output_writer'
+      dockerFile: '**$(project_name)/output_writer/Dockerfile.output_writer'
       arguments: '--build-arg CONTAINER_REG=$(container_registry)/ --build-arg AGOGOSML_TAG=$(Build.BuildId)'
       imageName: 'output_writer:$(Build.BuildId)'
 

@@ -5,29 +5,17 @@ import os
 from pathlib import Path
 from typing import Dict
 from typing import Optional
-from typing import Union
 
 import yaml
 from applicationinsights import TelemetryClient
 from applicationinsights.channel import AsynchronousQueue
 from applicationinsights.channel import AsynchronousSender
+from applicationinsights.channel import NullSender
+from applicationinsights.channel import SynchronousQueue
 from applicationinsights.channel import TelemetryChannel
 from applicationinsights.channel import TelemetryContext
 from cached_property import cached_property
 from singleton_decorator import singleton
-
-
-class NullTelemetryClient:
-    """Null-object implementation of the TelemetryClient."""
-
-    def __init__(self):
-        """Null-object implementation of the TelemetryClient."""
-
-    def track_trace(self, name, properties=None, severity=None):
-        """Do nothing."""
-
-    def track_event(self, name, properties=None, measurements=None):
-        """Do nothing."""
 
 
 @singleton
@@ -65,20 +53,23 @@ class Logger:
         return logging.getLogger(self.name)
 
     @cached_property
-    def _telemetry(self) -> Union[TelemetryClient, NullTelemetryClient]:
+    def _telemetry(self) -> TelemetryClient:
         """Create the telemetry client."""
+        queue_class = AsynchronousQueue
         if not self.ikey:
-            return NullTelemetryClient()
-
-        if self.endpoint:
+            sender = NullSender()
+            # TODO: remove when https://github.com/Microsoft/ApplicationInsights-Python/pull/155 is merged
+            queue_class = SynchronousQueue
+        elif self.endpoint:
             sender = AsynchronousSender(self.endpoint)
         else:
             sender = AsynchronousSender()
-        queue = AsynchronousQueue(sender)
+        ikey = self.ikey or '00000000-0000-0000-0000-000000000000'
+        queue = queue_class(sender)
         context = TelemetryContext()
-        context.instrumentation_key = self.ikey
+        context.instrumentation_key = ikey
         channel = TelemetryChannel(context, queue)
-        return TelemetryClient(self.ikey, telemetry_channel=channel)
+        return TelemetryClient(ikey, telemetry_channel=channel)
 
     def debug(self, message: str, *args):
         """Log debug message."""

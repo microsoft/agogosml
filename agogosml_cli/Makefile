@@ -54,7 +54,7 @@ lint: ## check python style
 	flake8 cli tests
 	pylint cli
 	bandit -c .banditrc -r cli
-	isort --skip-glob '**/cli/templates/**' --check-only --recursive cli
+	isort --check-only --recursive cli
 
 test:
 	## Fail fast in CI, maxfail=1

@@ -1,0 +1,11 @@
+Data:
+  properties:
+    key:
+      description: The key of the input.
+      type: string
+    intValue:
+      description: The value of the input.
+      type: number
+  required:
+    - key
+    - intValue

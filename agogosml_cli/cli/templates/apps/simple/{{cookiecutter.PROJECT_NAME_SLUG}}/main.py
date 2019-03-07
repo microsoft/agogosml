@@ -1,94 +1,100 @@
-""" Entrypoint for customer application. Listens for HTTP requests from
-the input reader, and sends the transformed message to the output writer. """
-import json
-import logging
-import os
-from http.server import BaseHTTPRequestHandler
-from http.server import HTTPServer
+"""
+Entrypoint for customer application.
 
-import requests
+Listens for HTTP(S) requests from the input reader, transforms the message
+and sends the transformed message to the output writer.
 
-import datahelper
+You can view a specification for the API at /swagger.json as well as a testing
+console at /ui/.
 
-# HOST & PORT are the values used to run the current application
-HOST = os.getenv("HOST")
-PORT = os.getenv("PORT")
+All business logic for {{cookiecutter.PROJECT_NAME_SLUG}} should be included
+in `logic.py` and it is unlikely that changes to this `main.py` file will be
+required.
+"""
+from logging import getLogger
+from os import getenv
 
-# OUTPUT_URL is the url which receives all the output messages after they are processed by the app
-OUTPUT_URL = os.getenv("OUTPUT_URL")
+from logic import transform
 
-# Filepath for the JSON schema which represents
-# the schema for the expected input messages to the app
-SCHEMA_FILEPATH = os.getenv("SCHEMA_FILEPATH")
+from requests import post
 
 
-class Socket(BaseHTTPRequestHandler):
-    """Handles HTTP requests that come to the server."""
-
-    def _set_headers(self):
-        """Sets common headers when returning an OK HTTPStatus. """
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-
-    def do_POST(self):
-        """Handles a POST request to the server.
-        Sends 400 error if there is an issue, otherwise sends a success message.
-
-        Raises:
-          ValidationError: Returns when data given is not valid against schema
-          HTTPError: Returns when there is an error sending message to output url
-
-        """
-        content_length = int(self.headers['Content-Length'])
-        data = self.rfile.read(content_length)
-        data = data.decode("utf-8")
-
-        try:
-            datahelper.validate_schema(data, SCHEMA_FILEPATH)
-        except BaseException:
-            self.send_error(
-                400, 'Incorrect data format. Please check JSON schema.')
-            logging.error('Incorrect data format. Please check JSON schema.')
-            raise
-
-        try:
-            transformed_data = datahelper.transform(data)
-            output_message(transformed_data)
-            self._set_headers()
-            self.wfile.write(bytes("Data successfully consumed", 'utf8'))
-        except BaseException:
-            self.send_error(400, 'Error when sending output message')
-            logging.error('Error when sending output message')
-            raise
+LOG = getLogger(__name__)
 
 
-def output_message(data: object):
-    """Outputs the transformed payload to the specified HTTP endpoint
-
-    Args:
-      data: transformed json object to send to output writer
+class Config:
     """
-    request = requests.post(OUTPUT_URL, data=json.dumps(data))
-    if request.status_code != 200:
+    Class to hold all application configuration.
 
-        logging.error("Error with a request %s and message not sent was %s",
-                      request.status_code, data)
+    All environment variable access hould happen in this class only.
+    """
+
+    PORT = getenv('PORT', '8888')
+    HOST = getenv('HOST', '127.0.0.1')
+    DATA_SCHEMA = getenv('SCHEMA_FILEPATH', 'data.spec.yaml')
+    OUTPUT_URL = getenv('OUTPUT_URL', '')
+    LOG_LEVEL = getenv('LOG_LEVEL', 'INFO').upper()
+
+
+def main(data: dict):
+    """Transform the input and forward the transformed payload via HTTP(S)."""
+    data = transform(data)
+
+    if not Config.OUTPUT_URL:
+        LOG.warning('Not OUTPUT_URL specified, not forwarding data.')
+        return data, 500
+
+    response = post(Config.OUTPUT_URL, json=data)
+    if not response.ok:
+        LOG.error('Error %d with post to url %s and body %s.',
+                  response.status_code, Config.OUTPUT_URL, data)
+        return data, response.status_code
+
+    LOG.info('Response %d received from output writer.', response.status_code)
+    return data, 200
+
+
+def build_app(wsgi=False):
+    """Create the web server."""
+    from connexion import App
+
+    with open(Config.DATA_SCHEMA, encoding='utf-8') as fobj:
+        data_schema = '\n'.join('  {}'.format(line.rstrip('\r\n'))
+                                for line in fobj)
+
+    LOG.setLevel(Config.LOG_LEVEL)
+
+    app = App(__name__)
+    app.add_api('api.spec.yaml', arguments={'DATA_SCHEMA': data_schema})
+
+    return app.app if wsgi else app
+
+
+def cli():
+    """Command line interface for the web server."""
+    from argparse import ArgumentParser
+
+    from yaml import YAMLError
+
+    parser = ArgumentParser(description=__doc__)
+
+    for key, value in Config.__dict__.items():
+        if not key.startswith('_'):
+            parser.add_argument('--{}'.format(key.lower()), default=value)
+
+    args = parser.parse_args()
+
+    for key, value in args.__dict__.items():
+        setattr(Config, key.upper(), value)
+
+    try:
+        app = build_app()
+    except YAMLError as ex:
+        parser.error('Unable to parse {} as a Swagger spec.\n\n{}'
+                     .format(Config.DATA_SCHEMA, ex))
     else:
-        logging.info("%s Response received from output writer",
-                     request.status_code)
-
-
-def run(server_class=HTTPServer, handler_class=Socket):
-    """Run the server on specified host and port, using our
-    custom Socket class to receive and process requests.
-    """
-
-    server_address = (HOST, int(PORT))
-    httpd = server_class(server_address, handler_class)
-    logging.info('Running server on host ${HOST} and port ${PORT}')
-    httpd.serve_forever()
+        app.run(port=int(Config.PORT), host=Config.HOST)
 
 
 if __name__ == "__main__":
-    run()
+    cli()

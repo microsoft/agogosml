@@ -1,7 +1,2 @@
-hypothesis
-python-dotenv
-jsonschema
-pytest
 flake8
-isort
-requests
+pydocstyle

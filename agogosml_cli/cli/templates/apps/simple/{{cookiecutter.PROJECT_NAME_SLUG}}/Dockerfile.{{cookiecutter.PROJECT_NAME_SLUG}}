@@ -1,24 +1,36 @@
-ARG PYTHON_VERSION=3.7.0-alpine3.8
+ARG PYTHON_VERSION=3.7
 
-FROM python:${PYTHON_VERSION} as builder
+FROM python:${PYTHON_VERSION} AS builder
 
-WORKDIR /usr/src/{{cookiecutter.PROJECT_NAME_SLUG}}
+WORKDIR /src
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip wheel --no-cache-dir -r requirements.txt -w /deps
 
 COPY requirements-dev.txt .
 RUN pip install --no-cache-dir -r requirements-dev.txt
 
 COPY . .
 
-# Run tests, linter
-RUN pytest testapp.py \
- && isort --check-only *.py \
- && flake8 *.py
+RUN flake8 *.py \
+ && pydocstyle *.py \
+ && python -m doctest *.py
 
-# Release
-FROM python:${PYTHON_VERSION}
+FROM python:${PYTHON_VERSION}-slim AS runtime
 
-WORKDIR /{{cookiecutter.PROJECT_NAME_SLUG}}
-COPY --from=builder /usr/src/{{cookiecutter.PROJECT_NAME_SLUG}} /{{cookiecutter.PROJECT_NAME_SLUG}}
-RUN pip install -r requirements.txt
+WORKDIR /{{cookiecutter.PROJECT_NAME_SLUG}}/deps
+COPY --from=builder /deps .
+RUN pip install --no-cache-dir *.whl
 
-CMD ["python", "main.py"]
+WORKDIR /{{cookiecutter.PROJECT_NAME_SLUG}}/src
+COPY --from=builder /src .
+
+ENV HOST=0.0.0.0
+ENV PORT=80
+ENV WORKERS=4
+ENV LOG_LEVEL=info
+
+EXPOSE $PORT
+
+CMD gunicorn --log-level="$LOG_LEVEL" --bind="$HOST:$PORT" --workers="$WORKERS" "main:build_app(wsgi=True)"

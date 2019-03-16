@@ -1,45 +1,33 @@
-""" Logger """
+"""Logger."""
 import logging
 import logging.config
 import os
 from pathlib import Path
 from typing import Dict
 from typing import Optional
-from typing import Union
 
 import yaml
 from applicationinsights import TelemetryClient
 from applicationinsights.channel import AsynchronousQueue
 from applicationinsights.channel import AsynchronousSender
+from applicationinsights.channel import NullSender
+from applicationinsights.channel import SynchronousQueue
 from applicationinsights.channel import TelemetryChannel
 from applicationinsights.channel import TelemetryContext
 from cached_property import cached_property
 from singleton_decorator import singleton
 
 
-class NullTelemetryClient:
-    """Null-object implementation of the TelemetryClient."""
-
-    def __init__(self):
-        """Null-object implementation of the TelemetryClient."""
-
-    def track_trace(self, name, properties=None, severity=None):
-        """Does nothing."""
-
-    def track_event(self, name, properties=None, measurements=None):
-        """Does nothing."""
-
-
 @singleton
 class Logger:
-    """Logger"""
+    """Logger."""
+
     def __init__(self,
                  name: str = __name__,
                  path: str = 'logging.yaml',
                  env_key: str = 'LOG_CFG',
                  level: int = logging.INFO):
-        """A logger implementation."""
-
+        """Implement trace and event logging functionality."""
         self.level = level
         self.name = name
         self.path = path
@@ -65,27 +53,30 @@ class Logger:
         return logging.getLogger(self.name)
 
     @cached_property
-    def _telemetry(self) -> Union[TelemetryClient, NullTelemetryClient]:
+    def _telemetry(self) -> TelemetryClient:
         """Create the telemetry client."""
+        queue_class = AsynchronousQueue
         if not self.ikey:
-            return NullTelemetryClient()
-
-        if self.endpoint:
+            sender = NullSender()
+            # TODO: remove when https://github.com/Microsoft/ApplicationInsights-Python/pull/155 is merged
+            queue_class = SynchronousQueue
+        elif self.endpoint:
             sender = AsynchronousSender(self.endpoint)
         else:
             sender = AsynchronousSender()
-        queue = AsynchronousQueue(sender)
+        ikey = self.ikey or '00000000-0000-0000-0000-000000000000'
+        queue = queue_class(sender)
         context = TelemetryContext()
-        context.instrumentation_key = self.ikey
+        context.instrumentation_key = ikey
         channel = TelemetryChannel(context, queue)
-        return TelemetryClient(self.ikey, telemetry_channel=channel)
+        return TelemetryClient(ikey, telemetry_channel=channel)
 
     def debug(self, message: str, *args):
         """Log debug message."""
         self._log(logging.DEBUG, message, *args)
 
     def info(self, message: str, *args):
-        """Log info message"""
+        """Log info message."""
         self._log(logging.INFO, message, *args)
 
     def error(self, message: str, *args):

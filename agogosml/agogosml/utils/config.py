@@ -1,21 +1,23 @@
-"""Configuration utilities"""
+"""Configuration utilities."""
 from ast import literal_eval
 from json import JSONDecodeError
 from json import loads
 
 
 class Config:
-    """Dictionary wrapper that converts string values to Python objects"""
+    """Dictionary wrapper that converts string values to Python objects."""
+
     def __init__(self, config):
+        """Wrap the given configuration dictionary."""
         self.__config = config
 
     def __getitem__(self, item):
-        """Get a key"""
+        """Get a key."""
         value = self.__config[item]
         return to_python(value)
 
     def get(self, item, default=None):
-        """Get a key or the default value if the key doesn't exist"""
+        """Get a key or the default value if the key doesn't exist."""
         try:
             return self[item]
         except KeyError:
@@ -23,7 +25,8 @@ class Config:
 
 
 def to_python(value):
-    """Convert a string value to a python object.
+    """
+    Convert a string value to a python object.
 
     >>> json_value = '{"foo": "bar"}'
     >>> to_python(json_value)

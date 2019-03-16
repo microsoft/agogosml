@@ -1,4 +1,4 @@
-"""Abstract streaming client interface"""
+"""Abstract streaming client interface."""
 
 from abc import ABC
 from abc import abstractmethod
@@ -12,11 +12,11 @@ from agogosml.utils.imports import find_implementations
 
 
 class AbstractStreamingClient(ABC):
-    """Abstract streaming client interface"""
+    """Abstract streaming client interface."""
 
     @abstractmethod
     def __init__(self, config: dict):
-        """Abstract Streaming Client"""
+        """Abstract Streaming Client."""
         raise NotImplementedError
 
     @abstractmethod
@@ -40,7 +40,8 @@ StreamingClientType = Type[AbstractStreamingClient]
 
 @lru_cache(maxsize=1)
 def find_streaming_clients() -> Dict[str, StreamingClientType]:
-    """Find the friendly-names and constructors of all the streaming clients.
+    """
+    Find the friendly-names and constructors of all the streaming clients.
 
     >>> senders = find_streaming_clients()
     >>> sorted(senders.keys())

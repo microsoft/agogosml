@@ -1,4 +1,4 @@
-"""Storage streaming client"""
+"""Storage streaming client."""
 from datetime import datetime
 from io import BytesIO
 from uuid import uuid4
@@ -13,11 +13,11 @@ from agogosml.utils.logger import Logger
 
 
 class StorageStreamingClient(AbstractStreamingClient):
-    """Storage streaming client"""
+    """Storage streaming client."""
 
     def __init__(self, config: dict):
         """
-        Streaming client implementation that stores the events in a storage.
+        Store the events in a storage.
 
         Configuration keys:
           STORAGE_PROVIDER -- e.g. AZURE_BLOBS
@@ -31,18 +31,18 @@ class StorageStreamingClient(AbstractStreamingClient):
         >>> import tempfile
         >>> storage_folder = tempfile.mkdtemp()
         >>> storage_container = 'some-container'
-        >>> client = StorageStreamingClient({ \
-            'STORAGE_PROVIDER': 'LOCAL', \
-            'STORAGE_KEY': storage_folder, \
-            'STORAGE_SECRET': '', \
-            'STORAGE_CONTAINER': storage_container, \
-        })
+        >>> storage_config = dict()
+        >>> storage_config['STORAGE_PROVIDER'] = 'LOCAL'
+        >>> storage_config['STORAGE_KEY'] = storage_folder
+        >>> storage_config['STORAGE_SECRET'] = ''
+        >>> storage_config['STORAGE_CONTAINER'] = storage_container
+        >>> client = StorageStreamingClient(storage_config)
         >>> client.send('some-message')
         >>> len(os.listdir(os.path.join(storage_folder, storage_container)))
         1
         >>> shutil.rmtree(storage_folder)
-        """
 
+        """
         provider = getattr(Provider, config.get('STORAGE_PROVIDER', 'AZURE_BLOBS'))
         driver_class = get_driver(provider)
         driver = driver_class(config['STORAGE_KEY'], config['STORAGE_SECRET'])

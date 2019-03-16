@@ -1,11 +1,11 @@
-"""Broadcast streaming client"""
+"""Broadcast streaming client."""
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
 from agogosml.common.abstract_streaming_client import create_streaming_client_from_config
 from agogosml.utils.logger import Logger
 
 
 class BroadcastStreamingClient(AbstractStreamingClient):
-    """Broadcast streaming client"""
+    """Broadcast streaming client."""
 
     def __init__(self, config: dict):
         """
@@ -13,8 +13,8 @@ class BroadcastStreamingClient(AbstractStreamingClient):
 
         Configuration keys:
           BROADCAST_CLIENTS
-        """
 
+        """
         self.clients = [
             create_streaming_client_from_config(conf)
             if not isinstance(conf, AbstractStreamingClient) else conf

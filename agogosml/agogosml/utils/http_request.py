@@ -1,4 +1,4 @@
-"""Utilities for HTTP requests"""
+"""Utilities for HTTP requests."""
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.exceptions import RetryError
@@ -6,7 +6,8 @@ from urllib3 import Retry
 
 
 def post_with_retries(url: str, data: dict, retries: int, backoff: float) -> int:
-    """Make a POST request with retries.
+    """
+    Make a POST request with retries.
 
     >>> post_with_retries('http://httpstat.us/503', {}, retries=1, backoff=0)
     500

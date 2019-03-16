@@ -1,4 +1,4 @@
-""" Factory for OutputWriter """
+"""Factory for OutputWriter."""
 from typing import Optional
 
 from agogosml.common.abstract_streaming_client import AbstractStreamingClient
@@ -9,13 +9,13 @@ from agogosml.writer.output_writer import OutputWriter
 
 
 class OutputWriterFactory:
-    """ Factory for OutputWriter """
+    """Factory for OutputWriter."""
 
     @staticmethod
     def create(config: dict,
                streaming_client: Optional[AbstractStreamingClient] = None,
                listener_client: Optional[ListenerClient] = None):
-        """Creates a new instance of OutputWriter."""
+        """Create a new instance of OutputWriter."""
         if not config:
             raise Exception('No config was set for the OutputWriterFactory')
 

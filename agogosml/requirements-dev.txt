@@ -5,6 +5,7 @@ watchdog
 flake8
 isort
 tox
+pydocstyle
 pytest
 pytest-runner
 Sphinx

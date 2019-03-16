@@ -1,4 +1,4 @@
-""" Flask client to receive messages from customer app"""
+"""Flask client to receive messages from customer app."""
 import threading
 
 from flask import Flask
@@ -11,11 +11,11 @@ DEFAULT_HOST = '127.0.0.1'
 
 
 class FlaskHttpListenerClient(ListenerClient):
-    """ Flask client to receive messages from customer app"""
+    """Flask client to receive messages from customer app."""
 
     def __init__(self, config: dict):  # pragma: no cover
         """
-        Listener implementation that uses a flask server.
+        Use a flask server as the listener.
 
         Configuration keys:
 
@@ -29,7 +29,7 @@ class FlaskHttpListenerClient(ListenerClient):
         self.logger = Logger()
 
     def run_flask_server(self):  # pragma: no cover
-        """Run the flask server"""
+        """Run the flask server."""
         app = Flask(__name__)
 
         @app.route("/", methods=["POST"])

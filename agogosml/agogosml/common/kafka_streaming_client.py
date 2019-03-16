@@ -29,6 +29,12 @@ class KafkaStreamingClient(AbstractStreamingClient):
         self.logger = Logger()
 
         self.topic = config.get("KAFKA_TOPIC")
+        if not self.topic:
+            raise ValueError("KAFKA_TOPIC is not set in the config object.")
+
+        if not config.get("KAFKA_ADDRESS"):
+            raise ValueError("KAFKA_ADDRESS is not set in the config object.")
+
         if config.get("TIMEOUT"):
             try:
                 self.timeout = int(config.get("TIMEOUT"))

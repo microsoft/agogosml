@@ -105,7 +105,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
         lease_container_name = config.get("LEASE_CONTAINER_NAME")
         namespace = config.get("EVENT_HUB_NAMESPACE")
         eventhub = config.get("EVENT_HUB_NAME")
-        consumer_group = config.get("EVENT_HUB_CONSUMER_GROUP", '$default')
+        consumer_group = config.get("EVENT_HUB_CONSUMER_GROUP", '$Default')
         user = config.get("EVENT_HUB_SAS_POLICY")
         key = config.get("EVENT_HUB_SAS_KEY")
 

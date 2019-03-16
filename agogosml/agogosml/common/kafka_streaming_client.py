@@ -59,9 +59,15 @@ class KafkaStreamingClient(AbstractStreamingClient):
         config = {
             "bootstrap.servers": user_config.get("KAFKA_ADDRESS"),
             "enable.auto.commit": False,
-            "auto.offset.reset": "earliest",
-            "default.topic.config": {'auto.offset.reset': 'smallest'},
+            "auto.offset.reset": "latest",
+            "default.topic.config": {'auto.offset.reset': 'latest'},
         }
+
+        if user_config.get('KAFKA_CONSUMER_GROUP') is not None:
+            config['group.id'] = user_config['KAFKA_CONSUMER_GROUP']
+
+        if user_config.get('KAFKA_DEBUG') is not None:
+            config['debug'] = user_config['KAFKA_DEBUG']
 
         if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'):
             ssl_location = user_config.get('SSL_CERT_LOCATION') or '/etc/ssl/certs/ca-certificates.crt'
@@ -73,13 +79,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
                 'sasl.password': user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'),
                 'client.id': 'agogosml',
             }
+
             config = {**config, **eventhub_config}
-
-        if user_config.get('KAFKA_CONSUMER_GROUP') is not None:
-            config['group.id'] = user_config['KAFKA_CONSUMER_GROUP']
-
-        if user_config.get('KAFKA_DEBUG') is not None:
-            config['debug'] = user_config['KAFKA_DEBUG']
 
         return config
 

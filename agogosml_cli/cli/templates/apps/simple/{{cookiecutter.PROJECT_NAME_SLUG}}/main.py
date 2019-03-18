@@ -13,11 +13,10 @@ required.
 """
 from logging import getLogger
 
-from logic import transform
-import settings
-
 from requests import post
 
+import settings
+from logic import transform
 
 LOG = getLogger(__name__)
 

@@ -70,7 +70,7 @@ def cli():
         parser.error('Unable to parse {} as a Swagger spec.\n\n{}'
                      .format(settings.DATA_SCHEMA, ex))
     else:
-        app.run(port=int(settings.PORT), host=settings.HOST)
+        app.run(port=settings.PORT, host=settings.HOST)
 
 
 if __name__ == "__main__":

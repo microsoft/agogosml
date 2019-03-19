@@ -11,7 +11,6 @@ from applicationinsights import TelemetryClient
 from applicationinsights.channel import AsynchronousQueue
 from applicationinsights.channel import AsynchronousSender
 from applicationinsights.channel import NullSender
-from applicationinsights.channel import SynchronousQueue
 from applicationinsights.channel import TelemetryChannel
 from applicationinsights.channel import TelemetryContext
 from cached_property import cached_property
@@ -55,17 +54,12 @@ class Logger:
     @cached_property
     def _telemetry(self) -> TelemetryClient:
         """Create the telemetry client."""
-        queue_class = AsynchronousQueue
         if not self.ikey:
             sender = NullSender()
-            # TODO: remove when https://github.com/Microsoft/ApplicationInsights-Python/pull/155 is merged
-            queue_class = SynchronousQueue
-        elif self.endpoint:
-            sender = AsynchronousSender(self.endpoint)
         else:
-            sender = AsynchronousSender()
+            sender = AsynchronousSender(self.endpoint)
         ikey = self.ikey or '00000000-0000-0000-0000-000000000000'
-        queue = queue_class(sender)
+        queue = AsynchronousQueue(sender)
         context = TelemetryContext()
         context.instrumentation_key = ikey
         channel = TelemetryChannel(context, queue)

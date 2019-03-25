@@ -4,11 +4,12 @@ FROM ucalgary/python-librdkafka:${PYTHON_VERSION}-${LIBRDKAFKA_VERSION}
 
 ENV PYTHONUNBUFFERED=1
 
+ARG AGOGOSML_VERSION={{cookiecutter.AGOGOSML_CLI_VERSION}}
 RUN apk add --no-cache --update --virtual .build-deps \
     g++ \
     libffi-dev \
     libressl-dev \
     cmake \
     make \
- && pip install --no-cache-dir agogosml=={{cookiecutter.AGOGOSML_CLI_VERSION}} \
+ && pip install --no-cache-dir agogosml==${AGOGOSML_VERSION} \
  && apk del .build-deps

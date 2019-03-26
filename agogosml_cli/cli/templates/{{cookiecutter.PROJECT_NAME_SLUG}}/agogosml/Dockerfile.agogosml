@@ -1,30 +1,15 @@
-ARG PYTHON_VERSION=3.7.0-alpine3.8
-
-FROM python:${PYTHON_VERSION} as base-deps
-
-# Install librdkafka dependencies
-RUN apk add --no-cache --update --virtual .build-deps \
-    bash \
-    libressl-dev \
-    musl-dev \
-    zlib-dev \
-    git \
-    make\
-    cmake \
-    g++ \
-    libffi-dev
-
-# Install librdkafka
-WORKDIR /root
-RUN git clone -b v0.11.6 --single-branch https://github.com/edenhill/librdkafka.git
-WORKDIR /root/librdkafka
-RUN /root/librdkafka/configure && make && make install
-
-FROM base-deps as agogosml
+ARG PYTHON_VERSION=3.7.0
+ARG LIBRDKAFKA_VERSION=0.11.6
+FROM ucalgary/python-librdkafka:${PYTHON_VERSION}-${LIBRDKAFKA_VERSION}
 
 ENV PYTHONUNBUFFERED=1
 
-RUN pip install agogosml=={{cookiecutter.AGOGOSML_CLI_VERSION}}
-
-# Clean Up
-RUN rm -rf /root/librdkafka && apk del .build-deps
+ARG AGOGOSML_VERSION={{cookiecutter.AGOGOSML_CLI_VERSION}}
+RUN apk add --no-cache --update --virtual .build-deps \
+    g++ \
+    libffi-dev \
+    libressl-dev \
+    cmake \
+    make \
+ && pip install --no-cache-dir agogosml==${AGOGOSML_VERSION} \
+ && apk del .build-deps

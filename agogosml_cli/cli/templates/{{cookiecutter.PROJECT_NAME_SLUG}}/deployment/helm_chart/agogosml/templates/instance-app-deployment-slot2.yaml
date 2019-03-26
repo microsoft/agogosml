@@ -13,7 +13,7 @@ metadata:
     release: {{ quote $root.Release.Name }}
     heritage: {{ quote $root.Release.Service }}
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-slot2
@@ -39,6 +39,19 @@ spec:
               name: {{ $configName }}
       {{ if $root.Values.registry }}imagePullSecrets:
         - name: {{ $root.Values.imagePullSecret}}{{ end }}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+    name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-slot2
+spec:
+    maxReplicas: 9
+    minReplicas: 3
+    scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: {{ $root.Release.Name }}-{{ $appName | replace "_" "-" }}-slot2
+    targetCPUUtilizationPercentage: 75
 ---
 {{- end }}
 {{ end }}

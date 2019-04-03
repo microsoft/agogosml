@@ -1,5 +1,6 @@
 """Kafka streaming client."""
 
+import signal
 from datetime import datetime
 
 from confluent_kafka import Consumer
@@ -49,9 +50,12 @@ class KafkaStreamingClient(AbstractStreamingClient):
         if config.get("KAFKA_CONSUMER_GROUP") is None:
             self.logger.info('Creating Producer')
             self.producer = Producer(kafka_config)
+            self.run = False
         else:
             self.logger.info('Creating Consumer')
             self.consumer = Consumer(kafka_config)
+            self.run = True
+            signal.signal(signal.SIGTERM, self.exit_gracefully)
 
     @staticmethod
     def create_kafka_config(user_config: dict) -> dict:  # pragma: no cover
@@ -71,7 +75,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
 
         if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'):
             ssl_location = user_config.get('SSL_CERT_LOCATION') or '/etc/ssl/certs/ca-certificates.crt'
-            eventhub_config = {
+            kakfa_config = {
                 'security.protocol': "SASL_SSL",
                 'sasl.mechanism': "PLAIN",
                 'ssl.ca.location': ssl_location,
@@ -80,7 +84,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
                 'client.id': 'agogosml',
             }
 
-            config = {**config, **eventhub_config}
+            config = {**config, **kakfa_config}
 
         return config
 
@@ -114,8 +118,9 @@ class KafkaStreamingClient(AbstractStreamingClient):
             self.logger.error('Error sending message to kafka: %s', ex)
             return False
 
-    def stop(self):  # pragma: no cover
-        pass
+    def stop(self):
+        """Stop streaming client."""
+        self.run = False
 
     def check_timeout(self, start: datetime):  # pragma: no cover
         """Interrupts if too much time has elapsed since the kafka client started running."""
@@ -139,7 +144,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
             self.subscribe_to_topic()
             start = datetime.now()
 
-            while True:
+            while self.run:
                 # Stop loop after timeout if exists
                 self.check_timeout(start)
 
@@ -150,10 +155,16 @@ class KafkaStreamingClient(AbstractStreamingClient):
 
         except KeyboardInterrupt:
             self.logger.info('Aborting listener...')
+            raise
 
         finally:
             # Close down consumer to commit final offsets.
             self.consumer.close()
+
+    def exit_gracefully(self, signum, frame):  # pylint: disable=unused-argument
+        """Handle interrupt signal or calls to stop and exit gracefully."""
+        self.logger.info("Handling interrupt signal %s gracefully." % signum)
+        self.stop()
 
     def subscribe_to_topic(self):  # pragma: no cover
         """Subscribe to topic."""

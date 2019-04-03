@@ -1,5 +1,5 @@
 confluent-kafka~=0.11
-azure-eventhub~=1.2
+azure-eventhub~=1.3
 requests~=2.20
 redis~=3.1.0
 python-dotenv~=0.9

@@ -1,6 +1,7 @@
 """Event Hub streaming client."""
 
 import asyncio
+import signal
 from typing import Optional
 
 from azure.eventhub import EventData
@@ -81,7 +82,7 @@ class EventProcessor(AbstractEventProcessor):
         self.logger.error("Event Processor Error %s", error)
 
 
-class EventHubStreamingClient(AbstractStreamingClient):
+class EventHubStreamingClient(AbstractStreamingClient):  # pylint: disable=too-many-instance-attributes
     """Event Hub streaming client."""
 
     def __init__(self, config):  # pragma: no cover
@@ -115,6 +116,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
             self.timeout = None
 
         self.logger = Logger()
+        self.loop = None
 
         # Create EPH Client
         if storage_account_name is not None and storage_key is not None:
@@ -131,6 +133,9 @@ class EventHubStreamingClient(AbstractStreamingClient):
             self.storage_manager = AzureStorageCheckpointLeaseManager(
                 storage_account_name, storage_key,
                 lease_container_name)
+
+            self.tasks = None
+            signal.signal(signal.SIGTERM, self.exit_gracefully)
 
         # Create Send client
         else:
@@ -149,7 +154,7 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 raise
 
     def start_receiving(self, on_message_received_callback):  # pragma: no cover
-        loop = asyncio.get_event_loop()
+        self.loop = asyncio.get_event_loop()
         try:
             host = EventProcessorHost(
                 EventProcessor,
@@ -157,14 +162,28 @@ class EventHubStreamingClient(AbstractStreamingClient):
                 self.storage_manager,
                 ep_params=[on_message_received_callback],
                 eph_options=self.eh_options,
-                loop=loop)
+                loop=self.loop)
 
-            tasks = asyncio.gather(host.open_async(),
-                                   self.wait_and_close(host, self.timeout))
-            loop.run_until_complete(tasks)
-
+            self.tasks = asyncio.gather(host.open_async(),
+                                        self.wait_and_close(host, self.timeout))
+            self.loop.run_until_complete(self.tasks)
+        except KeyboardInterrupt:
+            self.logger.info("Handling keyboard interrupt or SIGINT gracefully.")
+            # Canceling pending tasks and stopping the loop
+            for task in asyncio.Task.all_tasks():
+                task.cancel()
+            self.loop.run_forever()
+            self.tasks.exception()
+            raise
         finally:
-            loop.stop()
+            if self.loop.is_running():
+                self.loop.stop()
+
+    def exit_gracefully(self, signum, frame):  # pylint: disable=unused-argument
+        """Handle signal interrupt (SIGTERM) gracefully."""
+        self.logger.info("Handling signal interrupt %s gracefully." % signum)
+        # Canceling pending tasks and stopping the loop
+        self.stop()
 
     def send(self, message):  # pragma: no cover
         try:
@@ -176,10 +195,19 @@ class EventHubStreamingClient(AbstractStreamingClient):
             return False
 
     def stop(self):  # pragma: no cover
-        try:
-            self.send_client.stop()
-        except Exception as ex:
-            self.logger.error('Failed to close send client: %s', ex)
+        if self.loop:  # Stop consumer
+            for task in asyncio.Task.all_tasks():
+                task.cancel()
+            self.loop.run_forever()
+            if self.tasks:
+                self.tasks.exception()
+            if self.loop.is_running():
+                self.loop.stop()
+        else:  # Stop producer
+            try:
+                self.send_client.stop()
+            except Exception as ex:
+                self.logger.error('Failed to close send client: %s', ex)
 
     @staticmethod
     async def wait_and_close(host: EventProcessorHost, timeout: Optional[float] = None):  # pragma: no cover
@@ -187,7 +215,6 @@ class EventHubStreamingClient(AbstractStreamingClient):
         if timeout is None:
             while True:
                 await asyncio.sleep(1)
-
         else:
             await asyncio.sleep(timeout)
             await host.close_async()

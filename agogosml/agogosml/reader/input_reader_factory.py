@@ -21,7 +21,9 @@ class InputReaderFactory:
         # host and port from the client
         app_host = config.get('APP_HOST')
         app_port = config.get('APP_PORT')
+        app_extra_urls = config.get('APP_EXTRA_URLS')
 
-        msg_sender = HttpMessageSender({'HOST': app_host, 'PORT': app_port})
+        msg_sender = HttpMessageSender({'HOST': app_host, 'PORT': app_port,
+                                        'EXTRA_URLS': app_extra_urls})
 
         return InputReader(client, msg_sender)

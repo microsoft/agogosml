@@ -25,7 +25,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
           KAFKA_CONSUMER_GROUP
           KAFKA_TOPIC
           TIMEOUT
-          EVENTHUB_KAFKA_CONNECTION_STRING
+          EVENT_HUB_KAFKA_CONNECTION_STRING
         """
         self.logger = Logger()
 
@@ -73,14 +73,14 @@ class KafkaStreamingClient(AbstractStreamingClient):
         if user_config.get('KAFKA_DEBUG') is not None:
             config['debug'] = user_config['KAFKA_DEBUG']
 
-        if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'):
+        if user_config.get('EVENT_HUB_KAFKA_CONNECTION_STRING'):
             ssl_location = user_config.get('SSL_CERT_LOCATION') or '/etc/ssl/certs/ca-certificates.crt'
             kakfa_config = {
                 'security.protocol': "SASL_SSL",
                 'sasl.mechanism': "PLAIN",
                 'ssl.ca.location': ssl_location,
                 'sasl.username': '$ConnectionString',
-                'sasl.password': user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'),
+                'sasl.password': user_config.get('EVENT_HUB_KAFKA_CONNECTION_STRING'),
                 'client.id': 'agogosml',
             }
 

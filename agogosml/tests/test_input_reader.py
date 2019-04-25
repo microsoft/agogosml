@@ -98,7 +98,7 @@ def test_kafka_created_from_factory():
                 "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
                 "KAFKA_CONSUMER_GROUP": os.getenv("KAFKA_CONSUMER_GROUP"),
                 "TIMEOUT": 20,
-                'EVENTHUB_KAFKA_CONNECTION_STRING': os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
+                'EVENT_HUB_KAFKA_CONNECTION_STRING': os.getenv('EVENT_HUB_KAFKA_CONNECTION_STRING')
             }
         },
         "APP_HOST": os.getenv("APP_HOST"),

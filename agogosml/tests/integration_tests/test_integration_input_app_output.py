@@ -152,7 +152,7 @@ def test_when_messages_sent_to_kafka_then_all_messages_are_sent_via_output():
                 "KAFKA_CONSUMER_GROUP": os.getenv("KAFKA_CONSUMER_GROUP"),
                 "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
                 "TIMEOUT": os.getenv("KAFKA_TIMEOUT"),
-                "EVENTHUB_KAFKA_CONNECTION_STRING": os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
+                "EVENT_HUB_KAFKA_CONNECTION_STRING": os.getenv('EVENT_HUB_KAFKA_CONNECTION_STRING')
             }
         },
         'APP_PORT': os.getenv("APP_PORT"),
@@ -176,7 +176,7 @@ def test_when_messages_sent_to_kafka_then_all_messages_are_sent_via_output():
                 "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC_OUTPUT"),
                 "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
                 "TIMEOUT": os.getenv("KAFKA_TIMEOUT"),
-                'EVENTHUB_KAFKA_CONNECTION_STRING': os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
+                'EVENT_HUB_KAFKA_CONNECTION_STRING': os.getenv('EVENT_HUB_KAFKA_CONNECTION_STRING')
             }
         },
         'OUTPUT_WRITER_PORT': os.getenv("OUTPUT_WRITER_PORT"),
@@ -214,7 +214,7 @@ def send_message_to_kafka(msg):
         "KAFKA_TOPIC": os.getenv("KAFKA_TOPIC_OUTPUT"),
         "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
         "TIMEOUT": os.getenv("KAFKA_TIMEOUT"),
-        "EVENTHUB_KAFKA_CONNECTION_STRING": os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
+        "EVENT_HUB_KAFKA_CONNECTION_STRING": os.getenv('EVENT_HUB_KAFKA_CONNECTION_STRING')
     }
     kafka = KafkaStreamingClient(config)
     val = kafka.send(msg)
@@ -227,7 +227,7 @@ def read_message_from_kafka():
         "KAFKA_ADDRESS": os.getenv("KAFKA_ADDRESS"),
         "KAFKA_CONSUMER_GROUP": os.getenv("KAFKA_CONSUMER_GROUP"),
         "TIMEOUT": os.getenv("KAFKA_TIMEOUT"),
-        "EVENTHUB_KAFKA_CONNECTION_STRING": os.getenv('EVENTHUB_KAFKA_CONNECTION_STRING')
+        "EVENT_HUB_KAFKA_CONNECTION_STRING": os.getenv('EVENT_HUB_KAFKA_CONNECTION_STRING')
     }
     kafka = KafkaStreamingClient(config)
     kafka.start_receiving(on_msg)

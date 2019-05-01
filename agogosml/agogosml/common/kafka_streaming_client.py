@@ -1,5 +1,6 @@
 """Kafka streaming client."""
 
+import json
 import signal
 from datetime import datetime
 
@@ -24,6 +25,8 @@ class KafkaStreamingClient(AbstractStreamingClient):
           KAFKA_ADDRESS
           KAFKA_CONSUMER_GROUP
           KAFKA_TOPIC
+          KAFKA_CONFIG: str|dict
+          KAFKA_DEBUB: str
           TIMEOUT
           EVENTHUB_KAFKA_CONNECTION_STRING
         """
@@ -44,7 +47,7 @@ class KafkaStreamingClient(AbstractStreamingClient):
         else:
             self.timeout = None
 
-        kafka_config = self.create_kafka_config(config)
+        kafka_config = self.create_kafka_config(config, self.logger)
         self.admin = admin.AdminClient(kafka_config)
 
         if config.get("KAFKA_CONSUMER_GROUP") is None:
@@ -58,13 +61,25 @@ class KafkaStreamingClient(AbstractStreamingClient):
             signal.signal(signal.SIGTERM, self.exit_gracefully)
 
     @staticmethod
-    def create_kafka_config(user_config: dict) -> dict:  # pragma: no cover
+    def create_kafka_config(user_config: dict, logger: Logger) -> dict:
         """Create the kafka configuration."""
+        if not user_config.get("KAFKA_ADDRESS"):
+            raise ValueError("KAFKA_ADDRESS is not set in the config object.")
+
+        base_config = user_config.get("KAFKA_CONFIG") or {}
+        if base_config and isinstance(base_config, str):
+            try:
+                base_config = json.loads(base_config)
+            except ValueError:
+                logger.warning("Could not parse Kafka Config provided as a string. Expecting JSON format.")
+                base_config = {}
+
         config = {
+            **base_config,
             "bootstrap.servers": user_config.get("KAFKA_ADDRESS"),
             "enable.auto.commit": False,
             "auto.offset.reset": "latest",
-            "default.topic.config": {'auto.offset.reset': 'latest'},
+            "default.topic.config": {'auto.offset.reset': 'latest'}
         }
 
         if user_config.get('KAFKA_CONSUMER_GROUP') is not None:
@@ -72,8 +87,9 @@ class KafkaStreamingClient(AbstractStreamingClient):
 
         if user_config.get('KAFKA_DEBUG') is not None:
             config['debug'] = user_config['KAFKA_DEBUG']
+            logger.debug("Kafka Debug set to: {}".format(config['debug']))
 
-        if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING'):
+        if user_config.get('EVENTHUB_KAFKA_CONNECTION_STRING') is not None:
             ssl_location = user_config.get('SSL_CERT_LOCATION') or '/etc/ssl/certs/ca-certificates.crt'
             kakfa_config = {
                 'security.protocol': "SASL_SSL",

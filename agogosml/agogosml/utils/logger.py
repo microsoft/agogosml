@@ -65,17 +65,21 @@ class Logger:
         channel = TelemetryChannel(context, queue)
         return TelemetryClient(ikey, telemetry_channel=channel)
 
-    def debug(self, message: str, *args):
+    def debug(self, message: str, *args, **kwargs):
         """Log debug message."""
-        self._log(logging.DEBUG, message, *args)
+        self._log(logging.DEBUG, message, *args, **kwargs)
 
-    def info(self, message: str, *args):
+    def info(self, message: str, *args, **kwargs):
         """Log info message."""
-        self._log(logging.INFO, message, *args)
+        self._log(logging.INFO, message, *args, **kwargs)
 
-    def error(self, message: str, *args):
+    def warning(self, message: str, *args, **kwargs):
+        """Log warning message."""
+        self._log(logging.WARNING, message, *args, **kwargs)
+
+    def error(self, message: str, *args, **kwargs):
         """Log error message."""
-        self._log(logging.ERROR, message, *args)
+        self._log(logging.ERROR, message, *args, **kwargs)
 
     def event(self, name: str, props: Optional[Dict[str, str]] = None):
         """Log an event."""
@@ -83,11 +87,11 @@ class Logger:
         self._logger.info('Event %s: %r', name, props)
         self._telemetry.track_event(name, props)
 
-    def _log(self, level: int, message: str, *args):
+    def _log(self, level: int, message: str, *args, **kwargs):
         """Log a message."""
         if not self._logger.isEnabledFor(level):
             return
 
-        self._logger.log(level, message, *args)
+        self._logger.log(level, message, *args, **kwargs)
         self._telemetry.track_trace(
             message, severity=logging.getLevelName(level))

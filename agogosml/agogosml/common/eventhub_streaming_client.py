@@ -1,6 +1,7 @@
 """Event Hub streaming client."""
 
 import asyncio
+import json
 import signal
 from typing import Optional
 
@@ -97,6 +98,8 @@ class EventHubStreamingClient(AbstractStreamingClient):  # pylint: disable=too-m
           EVENT_HUB_NAMESPACE
           EVENT_HUB_SAS_KEY
           EVENT_HUB_SAS_POLICY
+          EVENT_HUB_EPH_OPTIONS: str|dict|instanceof(EPHOptions) <- Accepts JSON str
+          EVENT_HUB_DEBUG <- Can be overwritten by EPH Options.
           LEASE_CONTAINER_NAME
           TIMEOUT
 
@@ -126,10 +129,9 @@ class EventHubStreamingClient(AbstractStreamingClient):  # pylint: disable=too-m
                 policy=user,
                 sas_key=key,
                 consumer_group=consumer_group)
-            self.eh_options = EPHOptions()
-            self.eh_options.release_pump_on_timeout = True
-            self.eh_options.auto_reconnect_on_error = False
-            self.eh_options.debug_trace = False
+
+            self.eh_options = self.create_eventhub_eph_options(config, self.logger)
+
             self.storage_manager = AzureStorageCheckpointLeaseManager(
                 storage_account_name, storage_key,
                 lease_container_name)
@@ -152,6 +154,47 @@ class EventHubStreamingClient(AbstractStreamingClient):  # pylint: disable=too-m
             except Exception as ex:
                 self.logger.error('Failed to init EH send client: %s', ex)
                 raise
+
+    @staticmethod
+    def create_eventhub_eph_options(user_config: dict, logger: Logger) -> dict:
+        """Create the Event Hub EPH Options class."""
+        eph_options = user_config.get("EVENT_HUB_EPH_OPTIONS")
+        if eph_options and isinstance(eph_options, str):
+            try:
+                eph_options = json.loads(eph_options)
+            except ValueError:
+                logger.warning("Could not parse EPH Options provided as a string. \
+                    Using default EPH Options. Expecting JSON format.", exc_info=True)
+                eph_options = None
+
+        if eph_options and isinstance(eph_options, dict):
+            # TODO: Submit a PR to EventHub SDK to handle serialized configuration.
+            typed_ephoptions = EPHOptions()
+            try:
+                typed_ephoptions.max_batch_size = int(eph_options.get('max_batch_size', 10))
+                typed_ephoptions.prefetch_count = int(eph_options.get('prefetch_count', 300))
+                typed_ephoptions.receive_timeout = int(eph_options.get('receive_timeout', 60))
+                keep_alive = eph_options.get('keep_alive_interval', None)
+                if keep_alive is not None:
+                    keep_alive = int(keep_alive)
+                typed_ephoptions.keep_alive_interval = keep_alive
+                typed_ephoptions.initial_offset_provider = eph_options.get('initial_offset_provider')
+                typed_ephoptions.debug_trace = bool(eph_options.get('debug_trace'))
+                typed_ephoptions.http_proxy = eph_options.get('http_proxy')
+                typed_ephoptions.auto_reconnect_on_error = bool(eph_options.get('auto_reconnect_on_error'))
+                return typed_ephoptions
+            except (TypeError, ValueError):
+                logger.warning("Could not parse EPH Options. Using default EPH Options.", exc_info=True)
+                eph_options = False
+
+        if eph_options and isinstance(eph_options, EPHOptions):
+            return eph_options
+
+        logger.info("Using default EPH Options.")
+        typed_ephoptions = EPHOptions()
+        typed_ephoptions.debug_trace = user_config.get("EVENT_HUB_DEBUG", False) == "True"
+        logger.debug("EPH Options Debug and Trace set to: {}".format(typed_ephoptions.debug_trace))
+        return typed_ephoptions
 
     def start_receiving(self, on_message_received_callback):  # pragma: no cover
         self.loop = asyncio.get_event_loop()

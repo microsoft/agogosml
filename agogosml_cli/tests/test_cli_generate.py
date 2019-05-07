@@ -35,14 +35,15 @@ EXPECTED_OUTPUT_PROJ_FILES = (
     'testproject/output_writer/Dockerfile.output_writer',
     'testproject/output_writer/logging.yaml',
     'testproject/output_writer/main.py',
+    'testproject/testproject/.dockerignore',
+    'testproject/testproject/api.spec.yaml',
+    'testproject/testproject/data.spec.yaml',
     'testproject/testproject/Dockerfile.testproject',
-    'testproject/testproject/logging.yaml',
+    'testproject/testproject/logic.py',
     'testproject/testproject/main.py',
-    'testproject/testproject/requirements-dev.txt',
     'testproject/testproject/requirements.txt',
-    'testproject/testproject/datahelper.py',
-    'testproject/testproject/schema_example.json',
-    'testproject/testproject/testapp.py'
+    'testproject/testproject/requirements-dev.txt',
+    'testproject/testproject/setup.cfg',
 )
 
 

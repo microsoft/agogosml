@@ -1,0 +1,32 @@
+swagger: '2.0'
+
+info:
+  title: Transformation API
+  version: '1.0'
+
+basePath: '/'
+
+paths:
+  '/':
+    post:
+      summary: Transform the data.
+      operationId: main.main
+      consumes:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/Data'
+      responses:
+        200:
+          description: The transformed data.
+
+parameters:
+  Data:
+    name: data
+    description: The data to transform.
+    in: body
+    schema:
+      $ref: '#/definitions/Data'
+    required: true
+
+definitions:
+{{DATA_SCHEMA}}

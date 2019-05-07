@@ -1,3 +1,4 @@
-python-dotenv
-jsonschema
+connexion[swagger-ui]
+environs
+gunicorn
 requests

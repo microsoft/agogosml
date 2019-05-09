@@ -9,7 +9,7 @@ metadata:
     release: {{ quote .Release.Name }}
     heritage: {{ quote .Release.Service }}
 spec:
-  replicas: {{ .Values.input_reader.replicaCount }}
+  replicas: 3
   selector:
     matchLabels:
       app: {{ quote $fullname }}
@@ -27,3 +27,16 @@ spec:
               name: {{ .Release.Name }}-input-reader-config
       {{ if .Values.registry }}imagePullSecrets:
         - name: {{ .Values.imagePullSecret}}{{ end }}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+    name: {{ $fullname }}
+spec:
+    maxReplicas: 9
+    minReplicas: 3
+    scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: {{ $fullname }}
+    targetCPUUtilizationPercentage: 75

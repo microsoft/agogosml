@@ -16,7 +16,6 @@ input_reader:
   name: input_reader
   # tag: 
   imagePullPolicy: IfNotPresent
-  replicaCount: 2
   env:
     MESSAGING_TYPE: "" # kafka or eventhub
     # eventhub

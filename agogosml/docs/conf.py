@@ -48,8 +48,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Agogosml'
-copyright = u"2018, Rami Sayar"
-author = u"Rami Sayar"
+copyright = u"2018, Microsoft Corporation"
+author = u"Microsoft Corporation"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -130,7 +130,7 @@ latex_elements = {
 latex_documents = [
     (master_doc, 'agogosml.tex',
      u'Agogosml Documentation',
-     u'Rami Sayar', 'manual'),
+     u'Microsoft Corporation', 'manual'),
 ]
 
 

@@ -17,8 +17,8 @@ setup_requirements = ['pytest-runner', ]
 test_requirements = ['pytest', ]
 
 setup(
-    author="Rami Sayar",
-    author_email='rami.sayar@microsoft.com',
+    author="Microsoft Corporation",
+    author_email='csenyc@microsoft.com',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
@@ -47,7 +47,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/Microsoft/agogosml/agogosml_cli',
+    url='https://github.com/Microsoft/agogosml',
     version='0.1.2',
     zip_safe=False,
 )

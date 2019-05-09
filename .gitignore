@@ -52,6 +52,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+tests_cov_output/
 
 # Translations
 *.mo
@@ -96,6 +97,10 @@ venv/
 .env/
 env/
 ENV/
+
+# pipenv
+Pipfile
+Pipfile.lock
 
 
 # Spyder project settings
